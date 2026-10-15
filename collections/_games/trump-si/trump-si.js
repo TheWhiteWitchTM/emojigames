@@ -43,12 +43,24 @@ class TrumpSI {
     if (!img) {
       img = document.createElement("img");
       img.id = "trump-face";
-      img.style.cssText = "display:block; max-width:220px; margin:0 auto 0.75rem; border-radius:8px;";
-      const game = document.getElementById("game");
-      game.insertBefore(img, game.firstChild);
+      img.style.cssText = `
+        position: absolute;
+        top: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 2px solid #39ff14;
+        z-index: 5;
+        pointer-events: none;
+      `;
+      this.term.wrap.style.position = "relative";
+      this.term.wrap.appendChild(img);
     }
     const file = this.faceMap[mood] || this.faceMap.neutral;
-    img.src = `{{ '/games/trump-si/' | relative_url }}${file}`;
+    img.src = "/emojigames/games/trump-si/" + file;
   }
 
   reply(input) {
@@ -75,6 +87,7 @@ class TrumpSI {
   redraw(latest) {
     this.showFace(this.mood);
     this.term.clear();
+    this.term.moveTo(0, 10);
     this.term.setFg(15);
     this.term.write("YOU: ");
     this.term.resetAttr();
@@ -98,6 +111,7 @@ class TrumpSI {
     this.mood = "happy";
     this.showFace(this.mood);
     this.term.clear();
+    this.term.moveTo(0, 10);
     this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
