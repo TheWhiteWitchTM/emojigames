@@ -61,6 +61,46 @@ class Terminal {
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
+    // Fullscreen button integrated into the terminal
+    const fsBtn = document.createElement('button');
+    fsBtn.textContent = '⛶';
+    fsBtn.title = 'Fullscreen (Esc to exit)';
+    fsBtn.style.cssText = `
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      z-index: 10;
+      background: ${this.bg};
+      color: ${this.fg};
+      border: 1px solid ${this.border};
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 11px;
+      font-family: ${this.font};
+      cursor: pointer;
+      line-height: 1.2;
+      opacity: 0.85;
+    `;
+    fsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!document.fullscreenElement) {
+        this.wrap.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    });
+    this.wrap.appendChild(fsBtn);
+
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement === this.wrap) {
+        fsBtn.textContent = '✕';
+        fsBtn.title = 'Exit fullscreen (Esc)';
+      } else {
+        fsBtn.textContent = '⛶';
+        fsBtn.title = 'Fullscreen (Esc to exit)';
+      }
+    });
+
     this.cellEls = [];
     this.buffer = [];
     this.displayed = [];
@@ -326,7 +366,7 @@ class Terminal {
         } else if (cmd === 'K') {
           this.clearLine();
         } else if (cmd === 'A') this.moveTo(this.cx, this.cy - (nums[0] || 1));
-        else if (cmd === 'B') this.moveTo(this.cx, this.cy + (nums[0] || 1));
+        else if (cmd === 'B') this.moveTo(this.cx, this.cy + (nums[0] || 1), this.cy);
         else if (cmd === 'C') this.moveTo(this.cx + (nums[0] || 1), this.cy);
         else if (cmd === 'D') this.moveTo(this.cx - (nums[0] || 1), this.cy);
 
