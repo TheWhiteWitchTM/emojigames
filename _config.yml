@@ -16,6 +16,15 @@ collections:
 plugins:
   - jekyll-feed
   - jekyll-sitemap
+  - jekyll-responsive-image
+
+responsive_image:
+  template: _includes/responsive-image.html
+  sizes:
+    - width: 240
+      height: 135
+    - width: 480
+      height: 270
 
 feed:
   path: /feed.xml
