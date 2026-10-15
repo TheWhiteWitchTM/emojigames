@@ -22,17 +22,19 @@ class Terminal {
       '#5555ff','#ff55ff','#55ffff','#ffffff'
     ];
 
-    // Outer container (games append this)
-    this.outer = document.createElement('div');
-    this.outer.className = 'terminal-outer';
-    this.outer.style.cssText = `
+    // this.wrap is the outer flex container (games append this)
+    this.wrap = document.createElement('div');
+    this.wrap.className = 'terminal-outer';
+    this.wrap.tabIndex = 0;
+    this.wrap.style.cssText = `
       display: flex;
       flex-direction: column;
       width: ${this.cols}ch;
       margin: 0 auto;
+      outline: none;
     `;
 
-    // TOP: title + button
+    // TOP
     this.titleBar = document.createElement('div');
     this.titleBar.style.cssText = `
       display: flex;
@@ -42,11 +44,12 @@ class Terminal {
       border: 2px solid ${this.border};
       border-bottom: none;
       border-radius: 4px 4px 0 0;
-      padding: 4px 10px;
+      padding: 6px 10px;
       font-family: system-ui, sans-serif;
       font-size: 1.25rem;
       font-weight: 600;
       color: #fff;
+      flex-shrink: 0;
     `;
 
     this.titleText = document.createElement('span');
@@ -71,13 +74,12 @@ class Terminal {
       this.toggleFullscreen();
     });
     this.titleBar.appendChild(this.fsBtn);
-    this.outer.appendChild(this.titleBar);
+    this.wrap.appendChild(this.titleBar);
 
-    // CENTER: the actual terminal
-    this.wrap = document.createElement('div');
-    this.wrap.className = 'terminal';
-    this.wrap.tabIndex = 0;
-    this.wrap.style.cssText = `
+    // CENTER (actual terminal)
+    this.screenWrap = document.createElement('div');
+    this.screenWrap.className = 'terminal';
+    this.screenWrap.style.cssText = `
       background: ${this.bg};
       color: ${this.fg};
       font-family: ${this.font};
@@ -92,22 +94,14 @@ class Terminal {
       border-top: none;
       box-shadow: 0 0 12px ${this.border}40;
       box-sizing: border-box;
-      outline: none;
       cursor: ${this.hideMouse ? 'none' : 'auto'};
+      flex-shrink: 0;
     `;
-    this.outer.appendChild(this.wrap);
+    this.wrap.appendChild(this.screenWrap);
 
     this.screen = document.createElement('div');
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
-    this.wrap.appendChild(this.screen);
-
-    // BOTTOM: optional footer (empty for now)
-    this.footer = document.createElement('div');
-    this.footer.style.cssText = `
-      height: 0;
-      overflow: hidden;
-    `;
-    this.outer.appendChild(this.footer);
+    this.screenWrap.appendChild(this.screen);
 
     document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement === this.wrap) {
@@ -184,7 +178,7 @@ class Terminal {
   }
 
   detectTitle() {
-    const game = this.outer.closest('#game') || this.outer.parentElement;
+    const game = this.wrap.closest('#game') || this.wrap.parentElement;
     let title = '';
     if (game) {
       const h = game.querySelector('h1, h2, h3');
@@ -321,7 +315,7 @@ class Terminal {
 
   setHideMouse(hide) {
     this.hideMouse = !!hide;
-    this.wrap.style.cursor = this.hideMouse ? 'none' : 'auto';
+    this.screenWrap.style.cursor = this.hideMouse ? 'none' : 'auto';
   }
 
   toggleHideMouse() { this.setHideMouse(!this.hideMouse); }
@@ -431,6 +425,6 @@ class Terminal {
 
   destroy() {
     clearInterval(this._blink);
-    this.outer.remove();
+    this.wrap.remove();
   }
 }
