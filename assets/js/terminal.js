@@ -22,6 +22,45 @@ class Terminal {
       '#5555ff','#ff55ff','#55ffff','#ffffff'
     ];
 
+    // Outer container so the button sits above the terminal without negative offsets
+    this.outer = document.createElement('div');
+    this.outer.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      width: ${this.cols}ch;
+      margin: 0 auto;
+    `;
+
+    // Button row ON TOP
+    const btnRow = document.createElement('div');
+    btnRow.style.cssText = `
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 4px;
+    `;
+
+    const fsBtn = document.createElement('button');
+    fsBtn.innerHTML = 'Fullscreen ⛶';
+    fsBtn.style.cssText = `
+      background: #111;
+      color: #fff;
+      border: 1px solid #39ff14;
+      border-radius: 4px;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-family: system-ui, sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+    `;
+    fsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.toggleFullscreen();
+    });
+    btnRow.appendChild(fsBtn);
+    this.fsBtn = fsBtn;
+    this.outer.appendChild(btnRow);
+
+    // Actual terminal
     this.wrap = document.createElement('div');
     this.wrap.className = 'terminal';
     this.wrap.tabIndex = 0;
@@ -31,54 +70,29 @@ class Terminal {
       font-family: ${this.font};
       font-size: ${this.fontSize};
       line-height: 1.25;
-      width: ${this.cols}ch;
+      width: 100%;
       height: ${this.rows * 1.25}em;
       padding: 8px;
       overflow: hidden;
       white-space: pre;
       border: 2px solid ${this.border};
       box-shadow: 0 0 12px ${this.border}40;
-      position: relative;
       box-sizing: border-box;
       outline: none;
       cursor: ${this.hideMouse ? 'none' : 'auto'};
     `;
+    this.outer.appendChild(this.wrap);
 
     this.screen = document.createElement('div');
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
-    const fsBtn = document.createElement('button');
-    fsBtn.innerHTML = 'F11 ⛶';
-    fsBtn.style.cssText = `
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      z-index: 50;
-      background: #111;
-      color: #fff;
-      border: 1px solid #39ff14;
-      border-radius: 4px;
-      padding: 4px 12px;
-      font-size: 14px;
-      font-family: system-ui, sans-serif;
-      font-weight: 600;
-      cursor: pointer;
-      line-height: 1.3;
-    `;
-    fsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      this.toggleFullscreen();
-    });
-    this.wrap.appendChild(fsBtn);
-    this.fsBtn = fsBtn;
-
     document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement === this.wrap) {
-        this.fsBtn.innerHTML = 'Esc ⤡';
+        this.fsBtn.innerHTML = 'Shrink ⤡';
         setTimeout(() => this.wrap.focus(), 50);
       } else {
-        this.fsBtn.innerHTML = 'F11 ⛶';
+        this.fsBtn.innerHTML = 'Fullscreen ⛶';
       }
     });
 
@@ -144,6 +158,9 @@ class Terminal {
 
     this.render();
   }
+
+  // Games that do document.getElementById('game').appendChild(term.wrap)
+  // need to append term.outer instead. See note below.
 
   toggleFullscreen() {
     if (!document.fullscreenElement) {
@@ -382,6 +399,6 @@ class Terminal {
 
   destroy() {
     clearInterval(this._blink);
-    this.wrap.remove();
+    this.outer.remove();
   }
 }
