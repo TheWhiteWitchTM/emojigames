@@ -54,20 +54,39 @@ class TrumpSI {
 
   redraw(latest) {
     window.TrumpFaces.draw(this.term, this.mood);
-    this.term.writeln(`\x1b[36mYOU:\x1b[0m ${this.history.at(-1)?.you || ""}`);
+    this.term.setFg(15); // white
+    this.term.write("YOU: ");
+    this.term.resetAttr();
+    this.term.writeln(this.history.at(-1)?.you || "");
     this.term.writeln("");
-    this.term.writeln(`\x1b[33;1mTRUMP SI:\x1b[0m ${latest}`);
+    this.term.setFg(3); // orange/yellow
+    this.term.setBright(true);
+    this.term.write("TRUMP SI: ");
+    this.term.resetAttr();
+    this.term.setFg(3);
+    this.term.writeln(latest);
+    this.term.resetAttr();
     this.term.writeln("");
-    this.term.write("\x1b[32m> \x1b[0m");
+    this.term.setFg(15);
+    this.term.write("> ");
+    this.term.resetAttr();
     this.inputBuffer = "";
   }
 
   start() {
     this.mood = "happy";
     window.TrumpFaces.draw(this.term, this.mood);
-    this.term.writeln(`\x1b[33;1mTRUMP SI:\x1b[0m ${this.pick(window.responses.greeting)}`);
+    this.term.setFg(3);
+    this.term.setBright(true);
+    this.term.write("TRUMP SI: ");
+    this.term.resetAttr();
+    this.term.setFg(3);
+    this.term.writeln(this.pick(window.responses.greeting));
+    this.term.resetAttr();
     this.term.writeln("");
-    this.term.write("\x1b[32m> \x1b[0m");
+    this.term.setFg(15);
+    this.term.write("> ");
+    this.term.resetAttr();
   }
 }
 window.TrumpSI = TrumpSI;
@@ -98,7 +117,9 @@ useEffect(() => {
     } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
       bot.inputBuffer += e.key;
+      term.setFg(15);
       term.write(e.key);
+      term.resetAttr();
     }
   }
 
