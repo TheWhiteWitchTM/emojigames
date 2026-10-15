@@ -64,7 +64,7 @@ class TrumpSI {
       img.id = "trump-face";
       img.style.cssText = `
         position: absolute;
-        top: 36px;
+        top: 52px;
         left: 50%;
         transform: translateX(-50%);
         width: 130px;
@@ -108,7 +108,7 @@ class TrumpSI {
   redraw(latest) {
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 11);
+    this.term.moveTo(0, 12);
     this.term.setFg(15);
     this.term.write("YOU: ");
     this.term.resetAttr();
@@ -132,7 +132,7 @@ class TrumpSI {
     this.mood = "happy";
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 11);
+    this.term.moveTo(0, 12);
     this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
@@ -155,6 +155,16 @@ useEffect(() => {
   const term = new Terminal({ border: '#ff8c00', fg: '#ffffff' });
   container.appendChild(term.wrap);
   term.wrap.focus();
+
+  // force cursor white
+  const origRender = term.render.bind(term);
+  term.render = function() {
+    origRender();
+    if (this.cursorOn && this._focused) {
+      const el = this.cellEls[this.cy]?.[this.cx];
+      if (el) el.style.color = '#ffffff';
+    }
+  };
 
   const bot = new TrumpSI(term);
   bot.start();
