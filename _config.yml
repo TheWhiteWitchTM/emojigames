@@ -3,3 +3,34 @@ description: A White Witch spinoff. Emoji games, no accounts, no tracking.
 url: "https://thewhitewitchtm.github.io"
 baseurl: "/emojigames"
 image: /assets/images/preview.jpg
+
+collections_dir: collections
+
+collections:
+  games:
+    output: true
+    permalink: /games/:path/
+  releases:
+    output: true
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+feed:
+  path: /feed.xml
+  posts_limit: 20
+  collections:
+    - releases
+
+defaults:
+  - scope:
+      path: ""
+      type: "games"
+    values:
+      layout: "game"
+  - scope:
+      path: ""
+      type: "releases"
+    values:
+      layout: "default"
