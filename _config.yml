@@ -12,6 +12,7 @@ collections:
     permalink: /games/:path/
   releases:
     output: true
+    permalink: /releases/:path/
 
 plugins:
   - jekyll-feed
