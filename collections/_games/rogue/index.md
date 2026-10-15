@@ -2,8 +2,9 @@
 layout: default
 title: Rogue
 description: A close terminal homage to the 1980 classic. Descend, fight, and find the Amulet.
-permalink: /games/rogue/
 image: /games/rogue/banner.jpg
+permalink: /games/rogue/
+tags: [terminal, roguelike]
 ---
 
 <div id="game">
