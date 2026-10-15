@@ -1,0 +1,6 @@
+<div class="release-list">
+{% assign sorted = site.releases | sort: "date" | reverse %}
+{% for item in sorted %}
+  {% include release-card.html post=item %}
+{% endfor %}
+</div>
