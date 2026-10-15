@@ -6,3 +6,44 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
   });
 });
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const game = document.getElementById('game');
+  if (!game) return;
+
+  // Create a small fullscreen button
+  const btn = document.createElement('button');
+  btn.textContent = '⛶';
+  btn.title = 'Fullscreen (Esc to exit)';
+  btn.style.cssText = `
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    z-index: 10;
+    background: #1a3a1a;
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    border-radius: 4px;
+    padding: 0.2rem 0.45rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: monospace;
+  `;
+  game.style.position = 'relative';
+  game.appendChild(btn);
+
+  btn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      game.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  // Escape already exits fullscreen; just update the button label
+  document.addEventListener('fullscreenchange', () => {
+    btn.textContent = document.fullscreenElement ? '✕' : '⛶';
+  });
+});
+</script>
