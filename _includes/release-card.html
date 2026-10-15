@@ -1,0 +1,21 @@
+<article class="release-item" data-url="{{ include.post.url | relative_url }}">
+  <h2 class="release-title">
+    <span class="release-emoji">▼</span>
+    <span class="title-text">{{ include.post.title }}</span>
+  </h2>
+
+  <div class="release-excerpt">
+    {{ include.post.content | strip_html | truncate: 200 }}
+  </div>
+
+  <div class="release-full" hidden></div>
+
+  {% if include.post.image %}
+    <img src="{{ include.post.image | relative_url }}" alt="" class="release-image" loading="lazy">
+  {% endif %}
+
+  <div class="release-actions">
+    <button class="release-expand" type="button">▼ Show more</button>
+    <button class="release-share" type="button" data-url="{{ include.post.url | absolute_url }}">📋 Share</button>
+  </div>
+</article>
