@@ -64,7 +64,7 @@ class TrumpSI {
       img.id = "trump-face";
       img.style.cssText = `
         position: absolute;
-        top: 52px;
+        top: 116px;
         left: 50%;
         transform: translateX(-50%);
         width: 130px;
@@ -80,7 +80,7 @@ class TrumpSI {
       this.term.wrap.appendChild(img);
     }
     const file = this.faceMap[mood] || this.faceMap.neutral;
-    img.src = "/emojigames/games/trump-si/" + file;
+    img.src = "/emojigames/games/trump-si/" + file + "?t=" + Date.now();
   }
 
   reply(input) {
@@ -108,7 +108,7 @@ class TrumpSI {
   redraw(latest) {
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 12);
+    this.term.moveTo(0, 14);
     this.term.setFg(15);
     this.term.write("YOU: ");
     this.term.resetAttr();
@@ -132,7 +132,7 @@ class TrumpSI {
     this.mood = "happy";
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 12);
+    this.term.moveTo(0, 14);
     this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
@@ -156,7 +156,6 @@ useEffect(() => {
   container.appendChild(term.wrap);
   term.wrap.focus();
 
-  // force cursor white
   const origRender = term.render.bind(term);
   term.render = function() {
     origRender();
