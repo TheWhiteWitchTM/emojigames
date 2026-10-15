@@ -1,7 +1,4 @@
-import { TrumpFaces } from './trump-faces.js';
-import { responses, triggers } from './responses.js';
-
-export class TrumpSI {
+class TrumpSI {
   constructor(term) {
     this.term = term;
     this.history = [];
@@ -16,7 +13,7 @@ export class TrumpSI {
     const lower = input.toLowerCase();
     let best = null;
     let score = 0;
-    for (const [key, words] of Object.entries(triggers)) {
+    for (const [key, words] of Object.entries(window.triggers)) {
       const hits = words.filter(w => lower.includes(w)).length;
       if (hits > score) {
         score = hits;
@@ -38,14 +35,14 @@ export class TrumpSI {
     this.mood = this.chooseMood(key);
 
     let line;
-    if (key && responses[key]) {
-      line = this.pick(responses[key]);
+    if (key && window.responses[key]) {
+      line = this.pick(window.responses[key]);
       if (key === "critical" && Math.random() < 0.45) {
-        line = this.pick(responses.rant);
+        line = this.pick(window.responses.rant);
         this.mood = "rant";
       }
     } else {
-      line = this.pick(responses.fallback);
+      line = this.pick(window.responses.fallback);
     }
 
     this.history.push({ you: input, trump: line });
@@ -55,7 +52,7 @@ export class TrumpSI {
   }
 
   redraw(latest) {
-    TrumpFaces.draw(this.term, this.mood);
+    window.TrumpFaces.draw(this.term, this.mood);
     this.term.writeln(`\x1b[36mYOU:\x1b[0m ${this.history.at(-1)?.you || ""}`);
     this.term.writeln("");
     this.term.writeln(`\x1b[33;1mTRUMP SI:\x1b[0m ${latest}`);
@@ -65,9 +62,36 @@ export class TrumpSI {
 
   start() {
     this.mood = "happy";
-    TrumpFaces.draw(this.term, this.mood);
-    this.term.writeln(`\x1b[33;1mTRUMP SI:\x1b[0m ${this.pick(responses.greeting)}`);
+    window.TrumpFaces.draw(this.term, this.mood);
+    this.term.writeln(`\x1b[33;1mTRUMP SI:\x1b[0m ${this.pick(window.responses.greeting)}`);
     this.term.writeln("");
     this.term.write("\x1b[32m> \x1b[0m");
   }
 }
+window.TrumpSI = TrumpSI;
+
+useEffect(() => {
+  const container = document.getElementById('game');
+  if (!container) return;
+
+  const term = new Terminal({ border: '#39ff14' });
+  container.appendChild(term.wrap);
+  term.wrap.focus();
+
+  const bot = new TrumpSI(term);
+  bot.start();
+
+  let buffer = "";
+  term.onKey(e => {
+    if (e.key === "Enter") {
+      if (buffer.trim()) {
+        bot.reply(buffer.trim());
+        buffer = "";
+      }
+    } else if (e.key === "Backspace") {
+      buffer = buffer.slice(0, -1);
+    } else if (e.key.length === 1) {
+      buffer += e.key;
+    }
+  });
+});
