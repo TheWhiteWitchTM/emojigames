@@ -47,7 +47,7 @@ class Terminal {
       width: ${this.cols}ch;
       height: ${this.rows * 1.25}em;
       padding: 8px;
-      overflow: hidden;
+      overflow: visible;
       white-space: pre;
       border: 2px solid ${this.border};
       box-shadow: 0 0 12px ${this.border}40;
@@ -61,55 +61,72 @@ class Terminal {
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
-    // Visible fullscreen button with hotkey text (no tooltip needed)
-    const fsBtn = document.createElement('button');
-    fsBtn.innerHTML = '⛶<br><span style="font-size:9px;font-weight:normal;">F11</span>';
-    fsBtn.style.cssText = `
+    // Title bar (left) + fullscreen button (right)
+    this.titleBar = document.createElement('div');
+    this.titleBar.style.cssText = `
       position: absolute;
-      top: -8px;
-      right: -8px;
-      z-index: 50;
-      width: 36px;
-      height: 36px;
-      background: #111;
-      color: #fff;
-      border: 2px solid #39ff14;
-      border-radius: 50%;
-      padding: 0;
-      font-size: 14px;
-      font-family: system-ui, sans-serif;
-      font-weight: 700;
-      cursor: pointer;
-      line-height: 1.1;
+      top: -22px;
+      left: -2px;
+      right: -2px;
+      height: 20px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 8px rgba(57, 255, 20, 0.8);
+      justify-content: space-between;
+      background: #111;
+      border: 2px solid ${this.border};
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      padding: 0 6px;
+      font-family: system-ui, sans-serif;
+      font-size: 13px;
+      color: #fff;
+      box-sizing: border-box;
+    `;
+    this.wrap.appendChild(this.titleBar);
+
+    this.titleText = document.createElement('span');
+    this.titleText.style.cssText = 'font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+    this.titleBar.appendChild(this.titleText);
+
+    const fsBtn = document.createElement('button');
+    fsBtn.innerHTML = '⛶ F11';
+    fsBtn.style.cssText = `
+      background: transparent;
+      color: #fff;
+      border: 1px solid #39ff14;
+      border-radius: 3px;
+      padding: 0 6px;
+      font-size: 11px;
+      font-family: system-ui, sans-serif;
+      cursor: pointer;
+      line-height: 1.4;
+      flex-shrink: 0;
     `;
     fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleFullscreen();
     });
-    this.wrap.appendChild(fsBtn);
+    this.titleBar.appendChild(fsBtn);
     this.fsBtn = fsBtn;
 
     document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement === this.wrap) {
-        this.fsBtn.innerHTML = '✕<br><span style="font-size:9px;font-weight:normal;">Esc</span>';
+        this.fsBtn.innerHTML = '✕ Esc';
         setTimeout(() => this.wrap.focus(), 50);
       } else {
-        this.fsBtn.innerHTML = '⛶<br><span style="font-size:9px;font-weight:normal;">F11</span>';
+        this.fsBtn.innerHTML = '⛶ F11';
       }
     });
 
-    // F11 hotkey (works even with mouse hidden)
     this.wrap.addEventListener('keydown', (e) => {
       if (e.key === 'F11') {
         e.preventDefault();
         this.toggleFullscreen();
       }
     });
+
+    // Pick up title from enclosing #game or nearest heading
+    setTimeout(() => this.detectTitle(), 0);
 
     this.cellEls = [];
     this.buffer = [];
@@ -165,6 +182,17 @@ class Terminal {
     }, 530);
 
     this.render();
+  }
+
+  detectTitle() {
+    const game = this.wrap.closest('#game') || this.wrap.parentElement;
+    let title = '';
+    if (game) {
+      const h = game.querySelector('h1, h2, h3');
+      if (h) title = h.textContent.trim();
+    }
+    if (!title) title = document.title || 'Terminal';
+    this.titleText.textContent = title;
   }
 
   toggleFullscreen() {
