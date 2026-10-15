@@ -2,8 +2,11 @@
 layout: default
 title: Pong
 description: Classic terminal Pong. First to 5 wins.
+mage: /games/pong/banner.jpg
 permalink: /games/pong/
-image: /games/pong/banner.jpg
+tags: [terminal, action]
+
+
 ---
 
 <div id="game">
