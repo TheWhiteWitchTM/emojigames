@@ -1,4 +1,4 @@
-export const responses = {
+const responses = {
   greeting: [
     "Hello, you're looking at the most intelligent person ever, frankly. Many people are saying it.",
     "Tremendous to meet you. I have the best words, everyone knows that."
@@ -25,10 +25,13 @@ export const responses = {
   ]
 };
 
-export const triggers = {
+const triggers = {
   greeting: ["hello", "hi", "hey", "how are you"],
   best: ["best", "greatest", "smartest", "winning"],
   fake: ["fake", "news", "media", "cnn", "witch hunt"],
   rant: ["why", "explain", "unfair", "rigged", "election"],
   critical: ["wrong", "lie", "false", "bad", "fail"]
 };
+
+window.responses = responses;
+window.triggers = triggers;
