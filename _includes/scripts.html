@@ -1,0 +1,8 @@
+<script>
+document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    btn.nextElementSibling.classList.toggle('open');
+  });
+});
+</script>
