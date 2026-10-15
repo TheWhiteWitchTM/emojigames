@@ -45,15 +45,16 @@ class TrumpSI {
       img.id = "trump-face";
       img.style.cssText = `
         position: absolute;
-        top: 28px;
+        top: 36px;
         left: 50%;
         transform: translateX(-50%);
-        width: 140px;
-        height: 140px;
+        width: 130px;
+        height: 130px;
         object-fit: cover;
-        border-radius: 12px;
-        border: 2px solid #39ff14;
-        z-index: 5;
+        border-radius: 14px;
+        border: 3px solid #ff8c00;
+        box-shadow: 0 0 12px #ff8c00;
+        z-index: 10;
         pointer-events: none;
       `;
       this.term.wrap.style.position = "relative";
@@ -87,7 +88,7 @@ class TrumpSI {
   redraw(latest) {
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 10);
+    this.term.moveTo(0, 11);
     this.term.setFg(15);
     this.term.write("YOU: ");
     this.term.resetAttr();
@@ -111,7 +112,7 @@ class TrumpSI {
     this.mood = "happy";
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 10);
+    this.term.moveTo(0, 11);
     this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
