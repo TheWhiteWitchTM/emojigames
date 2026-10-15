@@ -33,23 +33,23 @@ body {
   margin-right: -50vw;
 }
 
-/* Game breakout — text stays narrow, this jumps full width */
-.game-breakout {
-  width: 100vw;
+/* Game area breaks out to full width */
+#game {
+  width: 100vw !important;
+  max-width: none !important;
   position: relative;
   left: 50%;
   right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 0 1rem;
   box-sizing: border-box;
 }
 
-.game-breakout #game,
-.game-breakout textarea,
-.game-breakout .terminal-wrap {
+#game textarea,
+#game #output {
   max-width: none;
   width: 100%;
 }
