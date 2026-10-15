@@ -22,7 +22,7 @@ class Terminal {
       '#5555ff','#ff55ff','#55ffff','#ffffff'
     ];
 
-    // this.wrap is the outer flex container (games append this)
+    // Outer flex container (this is what games append)
     this.wrap = document.createElement('div');
     this.wrap.className = 'terminal-outer';
     this.wrap.tabIndex = 0;
@@ -34,16 +34,13 @@ class Terminal {
       outline: none;
     `;
 
-    // TOP
+    // TOP — title + button (no green border)
     this.titleBar = document.createElement('div');
     this.titleBar.style.cssText = `
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: #111;
-      border: 2px solid ${this.border};
-      border-bottom: none;
-      border-radius: 4px 4px 0 0;
       padding: 6px 10px;
       font-family: system-ui, sans-serif;
       font-size: 1.25rem;
@@ -57,7 +54,7 @@ class Terminal {
     this.titleBar.appendChild(this.titleText);
 
     this.fsBtn = document.createElement('button');
-    this.fsBtn.innerHTML = 'Fullscreen ⛶';
+    this.fsBtn.innerHTML = '<b>F11</b> Fullscreen ⛶';
     this.fsBtn.style.cssText = `
       background: #111;
       color: #fff;
@@ -76,7 +73,7 @@ class Terminal {
     this.titleBar.appendChild(this.fsBtn);
     this.wrap.appendChild(this.titleBar);
 
-    // CENTER (actual terminal)
+    // CENTER — actual terminal (green border only here)
     this.screenWrap = document.createElement('div');
     this.screenWrap.className = 'terminal';
     this.screenWrap.style.cssText = `
@@ -91,7 +88,6 @@ class Terminal {
       overflow: hidden;
       white-space: pre;
       border: 2px solid ${this.border};
-      border-top: none;
       box-shadow: 0 0 12px ${this.border}40;
       box-sizing: border-box;
       cursor: ${this.hideMouse ? 'none' : 'auto'};
@@ -105,10 +101,10 @@ class Terminal {
 
     document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement === this.wrap) {
-        this.fsBtn.innerHTML = 'Shrink ⤡';
+        this.fsBtn.innerHTML = '<b>Esc</b> Shrink ⤡';
         setTimeout(() => this.wrap.focus(), 50);
       } else {
-        this.fsBtn.innerHTML = 'Fullscreen ⛶';
+        this.fsBtn.innerHTML = '<b>F11</b> Fullscreen ⛶';
       }
     });
 
