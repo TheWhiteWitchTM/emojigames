@@ -3,6 +3,7 @@ class TrumpSI {
     this.term = term;
     this.history = [];
     this.mood = "neutral";
+    this.inputBuffer = "";
   }
 
   pick(arr) {
@@ -58,6 +59,7 @@ class TrumpSI {
     this.term.writeln(`\x1b[33;1mTRUMP SI:\x1b[0m ${latest}`);
     this.term.writeln("");
     this.term.write("\x1b[32m> \x1b[0m");
+    this.inputBuffer = "";
   }
 
   start() {
@@ -81,17 +83,24 @@ useEffect(() => {
   const bot = new TrumpSI(term);
   bot.start();
 
-  let buffer = "";
-  term.onKey(e => {
+  function onKey(e) {
     if (e.key === "Enter") {
-      if (buffer.trim()) {
-        bot.reply(buffer.trim());
-        buffer = "";
+      e.preventDefault();
+      if (bot.inputBuffer.trim()) {
+        bot.reply(bot.inputBuffer.trim());
       }
     } else if (e.key === "Backspace") {
-      buffer = buffer.slice(0, -1);
-    } else if (e.key.length === 1) {
-      buffer += e.key;
+      e.preventDefault();
+      if (bot.inputBuffer.length) {
+        bot.inputBuffer = bot.inputBuffer.slice(0, -1);
+        term.write("\b");
+      }
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      bot.inputBuffer += e.key;
+      term.write(e.key);
     }
-  });
+  }
+
+  term.wrap.addEventListener("keydown", onKey);
 });
