@@ -1,4 +1,4 @@
-export class TrumpFaces {
+class TrumpFaces {
   static faces = {
     happy: `
 \x1b[33;1m   ██████████████   
@@ -50,3 +50,4 @@ export class TrumpFaces {
     term.writeln("");
   }
 }
+window.TrumpFaces = TrumpFaces;
