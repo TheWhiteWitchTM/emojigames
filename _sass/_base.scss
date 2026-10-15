@@ -19,12 +19,13 @@ body {
 .site-banner {
   width: 100vw;
   max-width: 100vw;
-  height: auto;
+  height: 110px;
+  object-fit: cover;
+  object-position: center;
   display: block;
   margin: 0;
   padding: 0;
   border: none;
-  border-radius: 0;
   position: relative;
   left: 50%;
   right: 50%;
