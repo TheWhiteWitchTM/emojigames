@@ -47,7 +47,7 @@ class Terminal {
       width: ${this.cols}ch;
       height: ${this.rows * 1.25}em;
       padding: 8px;
-      overflow: visible;
+      overflow: hidden;
       white-space: pre;
       border: 2px solid ${this.border};
       box-shadow: 0 0 12px ${this.border}40;
@@ -61,52 +61,29 @@ class Terminal {
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
-    // Title bar (left) + fullscreen button (right)
-    this.titleBar = document.createElement('div');
-    this.titleBar.style.cssText = `
-      position: absolute;
-      top: -22px;
-      left: -2px;
-      right: -2px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #111;
-      border: 2px solid ${this.border};
-      border-bottom: none;
-      border-radius: 4px 4px 0 0;
-      padding: 0 6px;
-      font-family: system-ui, sans-serif;
-      font-size: 13px;
-      color: #fff;
-      box-sizing: border-box;
-    `;
-    this.wrap.appendChild(this.titleBar);
-
-    this.titleText = document.createElement('span');
-    this.titleText.style.cssText = 'font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
-    this.titleBar.appendChild(this.titleText);
-
+    // Corner button (always inside the terminal)
     const fsBtn = document.createElement('button');
     fsBtn.innerHTML = '⛶ F11';
     fsBtn.style.cssText = `
-      background: transparent;
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      z-index: 50;
+      background: #111;
       color: #fff;
       border: 1px solid #39ff14;
       border-radius: 3px;
-      padding: 0 6px;
-      font-size: 11px;
+      padding: 2px 8px;
+      font-size: 12px;
       font-family: system-ui, sans-serif;
       cursor: pointer;
-      line-height: 1.4;
-      flex-shrink: 0;
+      line-height: 1.3;
     `;
     fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleFullscreen();
     });
-    this.titleBar.appendChild(fsBtn);
+    this.wrap.appendChild(fsBtn);
     this.fsBtn = fsBtn;
 
     document.addEventListener('fullscreenchange', () => {
@@ -124,9 +101,6 @@ class Terminal {
         this.toggleFullscreen();
       }
     });
-
-    // Pick up title from enclosing #game or nearest heading
-    setTimeout(() => this.detectTitle(), 0);
 
     this.cellEls = [];
     this.buffer = [];
@@ -182,17 +156,6 @@ class Terminal {
     }, 530);
 
     this.render();
-  }
-
-  detectTitle() {
-    const game = this.wrap.closest('#game') || this.wrap.parentElement;
-    let title = '';
-    if (game) {
-      const h = game.querySelector('h1, h2, h3');
-      if (h) title = h.textContent.trim();
-    }
-    if (!title) title = document.title || 'Terminal';
-    this.titleText.textContent = title;
   }
 
   toggleFullscreen() {
