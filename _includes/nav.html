@@ -16,7 +16,13 @@
             </ul>
           </li>
         {% else %}
-          <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+          <li>
+            {% if item.url contains '://' %}
+              <a href="{{ item.url }}">{{ item.title }}</a>
+            {% else %}
+              <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            {% endif %}
+          </li>
         {% endif %}
       {% endfor %}
     </ul>
