@@ -13,6 +13,6 @@
         { "title": "🐍 Snake", "url": "/games/snake/" }
       ]
     },
-    { "title": "🔮 About", "url": "https://thewhitewitchtm.github.io/whitewitch/about/" }
+    { "title": "🔮 About", "url": "/about/" }
   ]
 }
