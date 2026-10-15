@@ -1,9 +1,8 @@
 ---
----
 layout: game
 title: 🌲 Adventureland
 description: 🌲 The classic text adventure. Explore, collect treasures, find the way out.
-image: /assets/images/preview.jpg
+image: /games/adventureland/box.jpg
 ---
 
 <div id="game"></div>
