@@ -1,14 +1,13 @@
 ---
 layout: default
-title: Galaxy Hunt
-description: A retro terminal space combat game. Destroy the raiders before time runs out.
-permalink: /games/galaxy-hunt/
-image: /games/galaxy-hunt/banner.jpg
+title: 🚀 Galaxy Hunt
+description: Classic space shooter. Clear the waves.
+image: /assets/images/preview.jpg
 ---
 
-# 🚀 Galaxy Hunt
-
 <div id="game"></div>
+
+A simple space shooter. Move, shoot, clear the wave.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
