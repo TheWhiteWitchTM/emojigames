@@ -61,47 +61,53 @@ class Terminal {
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
-    // Fullscreen button — corner style like a dialog close button
+    // Visible fullscreen button with hotkey text (no tooltip needed)
     const fsBtn = document.createElement('button');
-    fsBtn.textContent = '⛶';
-    fsBtn.title = 'Fullscreen (Esc to exit)';
+    fsBtn.innerHTML = '⛶<br><span style="font-size:9px;font-weight:normal;">F11</span>';
     fsBtn.style.cssText = `
       position: absolute;
-      top: -1px;
-      right: -1px;
-      z-index: 40;
+      top: -8px;
+      right: -8px;
+      z-index: 50;
+      width: 36px;
+      height: 36px;
       background: #111;
       color: #fff;
-      border: 1px solid #39ff14;
-      border-bottom-left-radius: 6px;
-      padding: 4px 10px 5px 8px;
-      font-size: 16px;
+      border: 2px solid #39ff14;
+      border-radius: 50%;
+      padding: 0;
+      font-size: 14px;
       font-family: system-ui, sans-serif;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      line-height: 1;
-      box-shadow: 0 0 6px rgba(57, 255, 20, 0.6);
+      line-height: 1.1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 8px rgba(57, 255, 20, 0.8);
     `;
     fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (!document.fullscreenElement) {
-        this.wrap.requestFullscreen().then(() => {
-          this.wrap.focus();
-        }).catch(() => {});
-      } else {
-        document.exitFullscreen();
-      }
+      this.toggleFullscreen();
     });
     this.wrap.appendChild(fsBtn);
+    this.fsBtn = fsBtn;
 
     document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement === this.wrap) {
-        fsBtn.textContent = '✕';
-        fsBtn.title = 'Exit fullscreen (Esc)';
+        this.fsBtn.innerHTML = '✕<br><span style="font-size:9px;font-weight:normal;">Esc</span>';
         setTimeout(() => this.wrap.focus(), 50);
       } else {
-        fsBtn.textContent = '⛶';
-        fsBtn.title = 'Fullscreen (Esc to exit)';
+        this.fsBtn.innerHTML = '⛶<br><span style="font-size:9px;font-weight:normal;">F11</span>';
+      }
+    });
+
+    // F11 hotkey (works even with mouse hidden)
+    this.wrap.addEventListener('keydown', (e) => {
+      if (e.key === 'F11') {
+        e.preventDefault();
+        this.toggleFullscreen();
       }
     });
 
@@ -159,6 +165,16 @@ class Terminal {
     }, 530);
 
     this.render();
+  }
+
+  toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      this.wrap.requestFullscreen().then(() => {
+        this.wrap.focus();
+      }).catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
   }
 
   put(ch, x = this.cx, y = this.cy) {
