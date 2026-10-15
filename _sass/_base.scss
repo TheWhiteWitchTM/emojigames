@@ -32,3 +32,24 @@ body {
   margin-left: -50vw;
   margin-right: -50vw;
 }
+
+/* Game breakout — text stays narrow, this jumps full width */
+.game-breakout {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+
+.game-breakout #game,
+.game-breakout textarea,
+.game-breakout .terminal-wrap {
+  max-width: none;
+  width: 100%;
+}
