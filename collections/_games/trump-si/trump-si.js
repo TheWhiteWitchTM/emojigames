@@ -4,6 +4,13 @@ class TrumpSI {
     this.history = [];
     this.mood = "neutral";
     this.inputBuffer = "";
+    this.faceMap = {
+      happy: "1.jpg",
+      smug: "2.jpg",
+      rant: "3.jpg",
+      winning: "4.jpg",
+      neutral: "5.jpg"
+    };
   }
 
   pick(arr) {
@@ -31,6 +38,19 @@ class TrumpSI {
     return "smug";
   }
 
+  showFace(mood) {
+    let img = document.getElementById("trump-face");
+    if (!img) {
+      img = document.createElement("img");
+      img.id = "trump-face";
+      img.style.cssText = "display:block; max-width:220px; margin:0 auto 0.75rem; border-radius:8px;";
+      const game = document.getElementById("game");
+      game.insertBefore(img, game.firstChild);
+    }
+    const file = this.faceMap[mood] || this.faceMap.neutral;
+    img.src = `{{ '/games/trump-si/' | relative_url }}${file}`;
+  }
+
   reply(input) {
     const key = this.analyze(input);
     this.mood = this.chooseMood(key);
@@ -53,13 +73,14 @@ class TrumpSI {
   }
 
   redraw(latest) {
-    window.TrumpFaces.draw(this.term, this.mood);
-    this.term.setFg(15); // white
+    this.showFace(this.mood);
+    this.term.clear();
+    this.term.setFg(15);
     this.term.write("YOU: ");
     this.term.resetAttr();
     this.term.writeln(this.history.at(-1)?.you || "");
     this.term.writeln("");
-    this.term.setFg(3); // orange/yellow
+    this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
     this.term.resetAttr();
@@ -75,7 +96,8 @@ class TrumpSI {
 
   start() {
     this.mood = "happy";
-    window.TrumpFaces.draw(this.term, this.mood);
+    this.showFace(this.mood);
+    this.term.clear();
     this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
