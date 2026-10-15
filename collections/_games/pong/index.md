@@ -1,8 +1,8 @@
 ---
 layout: default
-title: Pong
+title: 🏓Pong
 description: Classic terminal Pong. First to 5 wins.
-mage: /games/pong/banner.jpg
+image: /games/pong/banner.jpg
 permalink: /games/pong/
 tags: [terminal, action]
 
@@ -10,7 +10,7 @@ tags: [terminal, action]
 ---
 
 <div id="game">
-  <h1>🏓 Pong</h1>
+  <h1> Pong</h1>
   <textarea id="output" readonly rows="24" cols="80"></textarea>
   <div id="status">Player: 0  Computer: 0</div>
   <p style="color:#39ff14;font-family:monospace;margin-top:0.5rem;">W/S or ↑/↓ to move. R to restart.</p>
