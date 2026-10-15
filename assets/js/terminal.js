@@ -22,7 +22,6 @@ class Terminal {
       '#5555ff','#ff55ff','#55ffff','#ffffff'
     ];
 
-    // Outer flex container (this is what games append)
     this.wrap = document.createElement('div');
     this.wrap.className = 'terminal-outer';
     this.wrap.tabIndex = 0;
@@ -34,16 +33,15 @@ class Terminal {
       outline: none;
     `;
 
-    // TOP — title + button (no green border)
     this.titleBar = document.createElement('div');
     this.titleBar.style.cssText = `
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: #111;
-      padding: 6px 10px;
+      padding: 8px 12px;
       font-family: system-ui, sans-serif;
-      font-size: 1.25rem;
+      font-size: 1.75rem;
       font-weight: 600;
       color: #fff;
       flex-shrink: 0;
@@ -60,8 +58,8 @@ class Terminal {
       color: #fff;
       border: 1px solid #39ff14;
       border-radius: 4px;
-      padding: 4px 12px;
-      font-size: 0.9rem;
+      padding: 8px 18px;
+      font-size: 1.1rem;
       font-family: system-ui, sans-serif;
       font-weight: 600;
       cursor: pointer;
@@ -73,7 +71,6 @@ class Terminal {
     this.titleBar.appendChild(this.fsBtn);
     this.wrap.appendChild(this.titleBar);
 
-    // CENTER — actual terminal (green border only here)
     this.screenWrap = document.createElement('div');
     this.screenWrap.className = 'terminal';
     this.screenWrap.style.cssText = `
