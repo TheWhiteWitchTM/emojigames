@@ -1,10 +1,8 @@
 ---
-title: 🕹️ Games
+title: Games
 permalink: /games/
-description: Browse by category or tag.
+description: Browse terminal games.
 ---
-
-# 🕹️ Games
 
 <div id="storefront"></div>
 
@@ -18,50 +16,91 @@ useEffect(() => {
       title: {{ game.title | jsonify }},
       url: {{ game.url | relative_url | jsonify }},
       image: {{ game.image | default: "" | relative_url | jsonify }},
-      category: {{ game.category | default: "other" | jsonify }},
       tags: {% if game.tags %}{{ game.tags | jsonify }}{% else %}[]{% endif %},
-      description: {{ game.description | default: "" | jsonify }}
+      description: {{ game.description | default: "" | jsonify }},
+      style: {{ game.style | default: "terminal" | jsonify }}
     }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   ];
 
-  const categories = [...new Set(games.map(g => g.category))].sort();
-  const tags = [...new Set(games.flatMap(g => g.tags))].sort();
+  // Collect unique styles and tags
+  const styles = [...new Set(games.map(g => g.style))].sort();
+  const allTags = [...new Set(games.flatMap(g => g.tags))].sort();
 
-  let currentCat = categories[0] || 'other';
+  let query = '';
+  let currentStyle = null;
   let currentTag = null;
 
-  const catTabs = tabs(categories, 'store-tabs', (i) => {
-    currentCat = categories[i];
+  // Search
+  const search = input('Search games…', 'store-search', e => {
+    query = e.target.value.toLowerCase();
     render();
   });
 
-  const tagDrop = dropdown('All tags', ['All', ...tags], 'store-tags', (val) => {
+  // Style tabs
+  const styleTabs = tabs(['All', ...styles], 'store-tabs', i => {
+    currentStyle = i === 0 ? null : styles[i - 1];
+    render();
+  });
+
+  // Tag dropdown
+  const tagDrop = dropdown('All tags', ['All', ...allTags], 'store-tags', val => {
     currentTag = val === 'All' ? null : val;
     render();
   });
 
+  const controls = document.createElement('div');
+  controls.className = 'store-controls';
+  controls.append(search, styleTabs, tagDrop);
+
   const grid = document.createElement('div');
   grid.className = 'game-grid';
-  root.append(catTabs, tagDrop, grid);
+
+  root.append(controls, grid);
 
   function render() {
     grid.innerHTML = '';
-    games
-      .filter(g => g.category === currentCat)
-      .filter(g => !currentTag || g.tags.includes(currentTag))
-      .forEach(g => {
-        const c = card(`
-          <a href="${g.url}" class="game-card">
-            <img src="${g.image}" alt="" class="game-thumb" loading="lazy" width="240" height="135">
-            <div class="game-title">${g.title}</div>
-            <div class="game-desc">${g.description}</div>
-          </a>
-        `);
-        grid.appendChild(c);
-      });
+    const filtered = games.filter(g => {
+      const matchesQuery = !query ||
+        g.title.toLowerCase().includes(query) ||
+        g.description.toLowerCase().includes(query) ||
+        g.tags.some(t => t.toLowerCase().includes(query));
+      const matchesStyle = !currentStyle || g.style === currentStyle;
+      const matchesTag = !currentTag || g.tags.includes(currentTag);
+      return matchesQuery && matchesStyle && matchesTag;
+    });
+
+    if (!filtered.length) {
+      grid.innerHTML = '<p class="empty">No games match.</p>';
+      return;
+    }
+
+    filtered.forEach(g => {
+      const el = card(`
+        <a href="${g.url}" class="game-card">
+          <img src="${g.image}" alt="" class="game-thumb" loading="lazy" width="240" height="135">
+          <div class="game-title">${g.title}</div>
+          <div class="game-desc">${g.description}</div>
+          <div class="game-tags">${g.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        </a>
+      `, 'game-card-wrap');
+      grid.appendChild(el);
+    });
   }
 
-  if (categories.length) render();
+  render();
 });
 </script>
+
+<style>
+.store-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; align-items: center; }
+.store-search { flex: 1; min-width: 180px; }
+.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.game-card { display: block; text-decoration: none; color: inherit; }
+.game-thumb { width: 100%; height: auto; border-radius: 8px; background: #111; }
+.game-title { font-weight: 600; margin: 0.4rem 0 0.2rem; }
+.game-desc { font-size: 0.85rem; opacity: 0.8; }
+.game-tags { margin-top: 0.4rem; }
+.tag { display: inline-block; font-size: 0.7rem; padding: 0.15rem 0.4rem; margin-right: 0.25rem; border-radius: 4px; background: #1a3a1a; color: #39ff14; }
+.empty { opacity: 0.6; }
+</style>
