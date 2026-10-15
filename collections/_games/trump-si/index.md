@@ -9,12 +9,18 @@ tags: [terminal, joke]
 
 <div id="game"></div>
 
+<script src="{{ '/assets/js/components.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
-<script type="module">
-import { TrumpSI } from '{{ '/games/trump-si/trump-si.js' | relative_url }}';
-
+<script src="{{ '/games/trump-si/responses.js' | relative_url }}"></script>
+<script src="{{ '/games/trump-si/trump-faces.js' | relative_url }}"></script>
+<script src="{{ '/games/trump-si/trump-si.js' | relative_url }}"></script>
+<script>
 useEffect(() => {
   const container = document.getElementById('game');
+  if (!container || typeof Terminal === 'undefined' || typeof TrumpSI === 'undefined') {
+    container.innerHTML = '<p>Terminal or TrumpSI failed to load.</p>';
+    return;
+  }
   const term = new Terminal({ border: '#39ff14' });
   container.appendChild(term.wrap);
   term.wrap.focus();
