@@ -3,19 +3,6 @@
  * Compare-and-update rendering, natural emoji colors, optional focus hint.
  */
 class Terminal {
-  /**
-   * @param {object} [options]
-   * @param {number} [options.cols=80]
-   * @param {number} [options.rows=24]
-   * @param {string} [options.font]
-   * @param {string} [options.fontSize]
-   * @param {string} [options.fg='#39ff14']
-   * @param {string} [options.bg='#000000']
-   * @param {string} [options.border='#39ff14']
-   * @param {boolean} [options.hideMouse=true]
-   * @param {boolean} [options.autoRender=true]
-   * @param {boolean} [options.focusHint=true] - Show "click to continue" on blur
-   */
   constructor(options = {}) {
     this.cols = options.cols || 80;
     this.rows = options.rows || 24;
@@ -50,68 +37,40 @@ class Terminal {
       overflow: hidden;
       white-space: pre;
       border: 2px solid ${this.border};
-      border-top: none;
       box-shadow: 0 0 12px ${this.border}40;
       position: relative;
       box-sizing: border-box;
       outline: none;
       cursor: ${this.hideMouse ? 'none' : 'auto'};
-      margin-top: 28px;
     `;
 
     this.screen = document.createElement('div');
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
-    // Title bar sits above the terminal (## size)
-    this.titleBar = document.createElement('div');
-    this.titleBar.style.cssText = `
-      position: absolute;
-      top: -28px;
-      left: -2px;
-      right: -2px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #111;
-      border: 2px solid ${this.border};
-      border-bottom: none;
-      border-radius: 4px 4px 0 0;
-      padding: 0 8px;
-      font-family: system-ui, sans-serif;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #fff;
-      box-sizing: border-box;
-      line-height: 1.2;
-    `;
-    this.wrap.appendChild(this.titleBar);
-
-    this.titleText = document.createElement('span');
-    this.titleText.style.cssText = 'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
-    this.titleBar.appendChild(this.titleText);
-
     const fsBtn = document.createElement('button');
     fsBtn.innerHTML = 'F11 ⛶';
     fsBtn.style.cssText = `
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      z-index: 50;
       background: #111;
       color: #fff;
       border: 1px solid #39ff14;
       border-radius: 4px;
-      padding: 2px 10px;
-      font-size: 0.85rem;
+      padding: 4px 12px;
+      font-size: 14px;
       font-family: system-ui, sans-serif;
       font-weight: 600;
       cursor: pointer;
       line-height: 1.3;
-      flex-shrink: 0;
     `;
     fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleFullscreen();
     });
-    this.titleBar.appendChild(fsBtn);
+    this.wrap.appendChild(fsBtn);
     this.fsBtn = fsBtn;
 
     document.addEventListener('fullscreenchange', () => {
@@ -129,8 +88,6 @@ class Terminal {
         this.toggleFullscreen();
       }
     });
-
-    setTimeout(() => this.detectTitle(), 0);
 
     this.cellEls = [];
     this.buffer = [];
@@ -188,22 +145,9 @@ class Terminal {
     this.render();
   }
 
-  detectTitle() {
-    const game = this.wrap.closest('#game') || this.wrap.parentElement;
-    let title = '';
-    if (game) {
-      const h = game.querySelector('h1, h2, h3');
-      if (h) title = h.textContent.trim();
-    }
-    if (!title) title = document.title || 'Terminal';
-    this.titleText.textContent = title;
-  }
-
   toggleFullscreen() {
     if (!document.fullscreenElement) {
-      this.wrap.requestFullscreen().then(() => {
-        this.wrap.focus();
-      }).catch(() => {});
+      this.wrap.requestFullscreen().then(() => this.wrap.focus()).catch(() => {});
     } else {
       document.exitFullscreen();
     }
@@ -246,11 +190,7 @@ class Terminal {
   }
 
   writeln(text = '') { this.write(text + '\n'); }
-
-  writeAt(x, y, text) {
-    this.moveTo(x, y);
-    this.write(text);
-  }
+  writeAt(x, y, text) { this.moveTo(x, y); this.write(text); }
 
   fill(x, y, w, h, ch = ' ', fg = this.fgIdx, bg = this.bgIdx) {
     for (let yy = Math.max(0, y); yy < Math.min(this.rows, y + h); yy++) {
@@ -336,7 +276,6 @@ class Terminal {
   }
 
   toggleHideMouse() { this.setHideMouse(!this.hideMouse); }
-
   focus() { this.wrap.focus(); }
 
   onKey(handler) {
