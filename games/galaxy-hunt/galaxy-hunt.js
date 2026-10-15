@@ -1,301 +1,468 @@
-const output = document.getElementById('output');
-const form = document.getElementById('command-form');
-const input = document.getElementById('command');
+// Galaxy Hunt — full Super Star Trek mechanics
+// Classic green cursor prompt (same vibe as Adventureland / Pirate)
 
-window.onerror = function(msg) {
-  if (output) output.value += '\nERROR: ' + msg + '\n';
-};
+useEffect(() => {
+  const gameEl = document.getElementById('game');
+  if (!gameEl) return;
 
-let audioCtx;
-function beep(freq = 440, duration = 0.1, type = 'square') {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = type;
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.07, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  osc.stop(audioCtx.currentTime + duration);
-}
+  const term = new Terminal({
+    fontSize: '14px',
+    fg: '#39ff14',
+    bg: '#0a140a',
+    border: '#39ff14'
+  });
+  gameEl.appendChild(term.wrap);
+  term.wrap.focus();
 
-function print(text) {
-  output.value += text + '\n';
-  output.scrollTop = output.scrollHeight;
-}
+  let inputBuffer = '';
 
-function clear() { output.value = ''; }
-
-const systems = {
-  warp: 0, sensors: 0, beams: 0, missiles: 0, shields: 0, computer: 0
-};
-
-let energy, missiles, shields, quadX, quadY, secX, secY, date, timeLeft, docked, galaxy;
-
-function resetGame() {
-  energy = 3000;
-  missiles = 10;
-  shields = 0;
-  quadX = 4; quadY = 4;
-  secX = 4; secY = 4;
-  date = 3500;
-  timeLeft = 40;
-  docked = false;
-  Object.keys(systems).forEach(k => systems[k] = 0);
-
-  galaxy = Array.from({ length: 8 }, () =>
-    Array.from({ length: 8 }, () => ({ raiders: 0, outpost: false, stars: 1 + Math.floor(Math.random() * 8) }))
-  );
-  initGalaxy();
-
-  clear();
-  print('🚀 Galaxy Hunt — extended');
-  print('Destroy all raiders. Type help for commands.');
-  print('');
-  status();
-  print('');
-  try {
-    shortScan();
-  } catch (e) {
-    print('(short scan failed: ' + e.message + ')');
+  function print(text = '') {
+    term.writeln(text);
   }
-  input.disabled = false;
-  input.focus();
-}
-
-function initGalaxy() {
-  let raidersLeft = 12;
-  let outpostsLeft = 3;
-  while (raidersLeft > 0 || outpostsLeft > 0) {
-    const x = Math.floor(Math.random() * 8);
-    const y = Math.floor(Math.random() * 8);
-    if (raidersLeft > 0 && galaxy[y][x].raiders === 0 && Math.random() > 0.6) {
-      galaxy[y][x].raiders = 1 + Math.floor(Math.random() * 3);
-      raidersLeft -= galaxy[y][x].raiders;
-    } else if (outpostsLeft > 0 && !galaxy[y][x].outpost && Math.random() > 0.8) {
-      galaxy[y][x].outpost = true;
-      outpostsLeft--;
-    }
+  function printAnsi(text) {
+    term.writeAnsi(text);
   }
-}
+  function clearScreen() {
+    term.clear();
+  }
+  function prompt() {
+    term.resetAttr();
+    term.setFg(10);          // bright green
+    term.write('> ');
+  }
+  function beep(freq = 440, duration = 0.08) {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch (e) {}
+  }
 
-function totalRaiders() {
-  return galaxy.flat().reduce((s, q) => s + q.raiders, 0);
-}
+  // ---- Game state ----
+  const SYSTEMS = ['warp', 'srs', 'lrs', 'beams', 'missiles', 'damage', 'shields', 'computer'];
+  let energy, missiles, shields, date, timeLeft;
+  let quadX, quadY, secX, secY;
+  let docked = false;
+  let galaxy = [];
+  let current = null;
+  let damage = Array(8).fill(0);
+  let totalRaiders = 0;
+  let totalOutposts = 0;
+  let gameOver = false;
 
-function status() {
-  print(`\n🚀 Starship Status  (Stardate ${date.toFixed(1)})`);
-  print(`Energy: ${energy}   Missiles: ${missiles}   Shields: ${shields}`);
-  print(`Quadrant ${quadX},${quadY}  Sector ${secX},${secY}`);
-  print(`Raiders remaining: ${totalRaiders()}   Time left: ${timeLeft}`);
-  print(`Docked: ${docked ? 'yes' : 'no'}`);
-  const dmg = Object.entries(systems).filter(([, v]) => v > 0);
-  if (dmg.length) print('Damaged: ' + dmg.map(([k, v]) => `${k}(${v})`).join(', '));
-}
+  const COURSE = [
+    null,
+    {dx: 1, dy: 0},
+    {dx: 1, dy: -1},
+    {dx: 0, dy: -1},
+    {dx: -1, dy: -1},
+    {dx: -1, dy: 0},
+    {dx: -1, dy: 1},
+    {dx: 0, dy: 1},
+    {dx: 1, dy: 1},
+    {dx: 1, dy: 0}
+  ];
 
-function longScan() {
-  if (systems.sensors > 0) { print('Sensors damaged'); return; }
-  print(`\n📡 Long-range scan:`);
-  for (let dy = -1; dy <= 1; dy++) {
-    let line = '';
-    for (let dx = -1; dx <= 1; dx++) {
-      const y = quadY - 1 + dy, x = quadX - 1 + dx;
-      if (y < 0 || y > 7 || x < 0 || x > 7) line += '   ';
-      else {
-        const q = galaxy[y][x];
-        line += `${q.raiders}${q.outpost ? 'O' : '·'}${q.stars} `;
+  function rand(n) { return Math.floor(Math.random() * n); }
+  function randf() { return Math.random(); }
+
+  function resetGame() {
+    gameOver = false;
+    energy = 3000;
+    missiles = 10;
+    shields = 0;
+    date = 2000 + rand(2000);
+    timeLeft = 25 + rand(15);
+    quadX = 1 + rand(8);
+    quadY = 1 + rand(8);
+    secX = 1 + rand(8);
+    secY = 1 + rand(8);
+    docked = false;
+    damage.fill(0);
+
+    galaxy = Array.from({length: 8}, () =>
+      Array.from({length: 8}, () => ({raiders: 0, outpost: false, stars: 1 + rand(8), scanned: false}))
+    );
+
+    totalRaiders = 0;
+    totalOutposts = 0;
+    let rLeft = 15 + rand(8);
+    let oLeft = 2 + rand(3);
+    while (rLeft > 0 || oLeft > 0) {
+      const x = rand(8), y = rand(8);
+      if (rLeft > 0 && galaxy[y][x].raiders === 0 && randf() > 0.55) {
+        const n = 1 + rand(3);
+        galaxy[y][x].raiders = Math.min(n, rLeft);
+        rLeft -= galaxy[y][x].raiders;
+        totalRaiders += galaxy[y][x].raiders;
+      } else if (oLeft > 0 && !galaxy[y][x].outpost && randf() > 0.75) {
+        galaxy[y][x].outpost = true;
+        oLeft--;
+        totalOutposts++;
       }
     }
-    print(line);
-  }
-  beep(300, 0.08);
-}
 
-function shortScan() {
-  if (systems.sensors > 0) { print('Sensors damaged'); return; }
-  const q = galaxy[quadY - 1][quadX - 1];
-  print(`\n🔍 Short-range scan of quadrant ${quadX},${quadY}`);
-  print(`Raiders: ${q.raiders}  Outpost: ${q.outpost ? 'yes' : 'no'}  Stars: ${q.stars}`);
-  print(`You are in sector ${secX},${secY}`);
-  for (let y = 1; y <= 8; y++) {
-    let line = '';
-    for (let x = 1; x <= 8; x++) {
-      if (x === secX && y === secY) line += '🚀';
-      else if (q.raiders > 0 && Math.random() > 0.85) line += '👾';
-      else if (q.outpost && Math.random() > 0.9) line += '🛡️';
-      else if (Math.random() > 0.92) line += '⭐';
-      else line += '· ';
+    enterQuadrant();
+    clearScreen();
+    printAnsi('\x1b[1;32m╔══════════════════════════════════════════════════════════════╗\x1b[0m');
+    printAnsi('\x1b[1;32m║  GALAXY HUNT  —  Alliance Hunter vs. Raider Fleet           ║\x1b[0m');
+    printAnsi('\x1b[1;32m╚══════════════════════════════════════════════════════════════╝\x1b[0m');
+    print(`Mission: Destroy ${totalRaiders} raiders before stardate ${date + timeLeft}.`);
+    print(`Outposts available: ${totalOutposts}`);
+    print('Type HELP for commands and map legend.');
+    print('');
+    status();
+    shortScan(true);
+    prompt();
+  }
+
+  function enterQuadrant() {
+    const q = galaxy[quadY - 1][quadX - 1];
+    current = { raiders: [], outpost: null, stars: [], ship: {x: secX, y: secY} };
+    const occupied = new Set();
+    function place() {
+      let x, y;
+      do {
+        x = 1 + rand(8);
+        y = 1 + rand(8);
+      } while (occupied.has(`${x},${y}`));
+      occupied.add(`${x},${y}`);
+      return {x, y};
     }
-    print(line);
+    for (let i = 0; i < q.raiders; i++) {
+      const p = place();
+      current.raiders.push({...p, energy: 200 + rand(200)});
+    }
+    if (q.outpost) current.outpost = place();
+    for (let i = 0; i < q.stars; i++) current.stars.push(place());
+    if (occupied.has(`${secX},${secY}`)) {
+      const p = place();
+      secX = p.x; secY = p.y;
+    }
+    current.ship = {x: secX, y: secY};
+    q.scanned = true;
   }
-  beep(320, 0.08);
-}
 
-function navigate(course, warp) {
-  if (systems.warp > 0) { print('Warp engines damaged'); return; }
-  if (docked) { print('You must leave the outpost first'); return; }
-  if (warp < 0.1 || warp > 8) { print('Warp 0.1–8'); return; }
-  const cost = Math.floor(warp * 8 + Math.random() * 5);
-  if (energy < cost) { print('Insufficient energy'); return; }
-  energy -= cost;
-  const rad = (course - 1) * Math.PI / 4;
-  secX += Math.round(Math.cos(rad) * warp * 2);
-  secY += Math.round(Math.sin(rad) * warp * 2);
-  while (secX < 1) { secX += 8; quadX = Math.max(1, quadX - 1); }
-  while (secX > 8) { secX -= 8; quadX = Math.min(8, quadX + 1); }
-  while (secY < 1) { secY += 8; quadY = Math.max(1, quadY - 1); }
-  while (secY > 8) { secY -= 8; quadY = Math.min(8, quadY + 1); }
-  date += warp * 0.1;
-  timeLeft -= 1;
-  docked = false;
-  print(`Course ${course}, warp ${warp}… arrived at ${quadX},${quadY} / ${secX},${secY}`);
-  beep(180, 0.15);
-  const q = galaxy[quadY - 1][quadX - 1];
-  if (q.raiders > 0) print(`👾 ${q.raiders} raider(s) in this quadrant!`);
-  if (q.outpost) print('🛡️ Outpost in this quadrant. Dock to resupply.');
-  if (Math.random() < 0.08) damageRandom();
-}
-
-function damageRandom() {
-  const keys = Object.keys(systems);
-  const sys = keys[Math.floor(Math.random() * keys.length)];
-  systems[sys] += 1 + Math.floor(Math.random() * 3);
-  print(`⚠️ ${sys} damaged!`);
-  beep(120, 0.2, 'sawtooth');
-}
-
-function fireBeam(amount) {
-  if (systems.beams > 0) { print('Beam weapons damaged'); return; }
-  if (energy < amount) { print('Not enough energy'); return; }
-  energy -= amount;
-  const q = galaxy[quadY - 1][quadX - 1];
-  print(`💥 Beams (${amount})`);
-  beep(600, 0.1);
-  if (q.raiders > 0 && Math.random() > 0.35) {
-    q.raiders--;
-    print('👾 Raider destroyed!');
-    beep(800, 0.15);
-    if (q.raiders === 0) print('Quadrant clear.');
-  } else print('Miss or no effect.');
-  raiderReturnFire();
-}
-
-function fireMissile() {
-  if (systems.missiles > 0) { print('Missile systems damaged'); return; }
-  if (missiles < 1) { print('No missiles'); return; }
-  missiles--;
-  const q = galaxy[quadY - 1][quadX - 1];
-  print('🚀 Missile away');
-  beep(400, 0.12);
-  if (q.raiders > 0 && Math.random() > 0.25) {
-    q.raiders--;
-    print('💥 Hit! Raider destroyed!');
-    beep(750, 0.18);
-  } else print('Miss.');
-  raiderReturnFire();
-}
-
-function raiderReturnFire() {
-  const q = galaxy[quadY - 1][quadX - 1];
-  if (q.raiders === 0 || docked) return;
-  const hit = 50 + Math.floor(Math.random() * 150) * q.raiders;
-  if (shields >= hit) {
-    shields -= hit;
-    print(`🛡️ Shields absorbed ${hit}`);
-    beep(200, 0.08);
-  } else {
-    const overflow = hit - shields;
-    shields = 0;
-    energy = Math.max(0, energy - overflow);
-    print(`💥 Hit! Shields down, ${overflow} energy lost`);
-    beep(100, 0.25, 'sawtooth');
-    if (Math.random() < 0.3) damageRandom();
+  function totalRaidersLeft() {
+    return galaxy.flat().reduce((s, q) => s + q.raiders, 0);
   }
-}
 
-function setShields(pct) {
-  if (systems.shields > 0) { print('Shields damaged'); return; }
-  pct = Math.max(0, Math.min(100, pct));
-  const want = Math.floor(energy * pct / 100);
-  energy -= want;
-  shields = want;
-  print(`🛡️ Shields set to ${pct}% (${shields})`);
-  beep(280, 0.1);
-}
+  function status() {
+    printAnsi(`\x1b[1;36mStarship Status  (Stardate ${date.toFixed(1)})\x1b[0m`);
+    print('');   // <-- blank line after stardate
+    print(`Energy: ${Math.floor(energy)}   Missiles: ${missiles}   Shields: ${Math.floor(shields)}`);
+    print(`Quadrant ${quadX},${quadY}   Sector ${secX},${secY}`);
+    print(`Raiders remaining: ${totalRaidersLeft()}   Time left: ${timeLeft}`);
+    print(`Docked: ${docked ? 'YES' : 'no'}`);
+    const dmg = SYSTEMS.filter((_, i) => damage[i] > 0);
+    if (dmg.length) print('Damaged: ' + dmg.join(', '));
+  }
 
-function dock() {
-  const q = galaxy[quadY - 1][quadX - 1];
-  if (!q.outpost) { print('No outpost here'); return; }
-  docked = true;
-  energy = 3000;
-  missiles = 10;
-  shields = 0;
-  Object.keys(systems).forEach(k => systems[k] = 0);
-  print('🛡️ Docked at outpost. Energy, missiles and systems restored.');
-  beep(500, 0.2);
-}
+  function shortScan(silent = false) {
+    if (damage[1] > 0) { print('Short-range sensors damaged.'); return; }
+    if (!silent) print(`\nShort-range scan — Quadrant ${quadX},${quadY}`);
+    const map = Array.from({length: 8}, () => Array(8).fill('·'));
+    current.stars.forEach(s => { map[s.y-1][s.x-1] = '⭐'; });
+    if (current.outpost) map[current.outpost.y-1][current.outpost.x-1] = '🏢';
+    current.raiders.forEach(r => { map[r.y-1][r.x-1] = '👾'; });
+    map[secY-1][secX-1] = '🚀';
+    for (let y = 0; y < 8; y++) print(map[y].join(' '));
+    print(`Raiders: ${current.raiders.length}  Outpost: ${current.outpost ? 'yes' : 'no'}  Stars: ${current.stars.length}`);
+    beep(320);
+  }
 
-function computer() {
-  if (systems.computer > 0) { print('Computer damaged'); return; }
-  print('\n🖥️ Computer');
-  print(`Raiders remaining: ${totalRaiders()}`);
-  print(`Outposts: ${galaxy.flat().filter(q => q.outpost).length}`);
-  print(`Current date: ${date.toFixed(1)}`);
-  beep(350, 0.08);
-}
+  function longScan() {
+    if (damage[2] > 0) { print('Long-range sensors damaged.'); return; }
+    print('\nLong-range scan:');
+    for (let dy = -1; dy <= 1; dy++) {
+      let line = '';
+      for (let dx = -1; dx <= 1; dx++) {
+        const y = quadY - 1 + dy, x = quadX - 1 + dx;
+        if (y < 0 || y > 7 || x < 0 || x > 7) line += '   ';
+        else {
+          const q = galaxy[y][x];
+          line += `${q.raiders}${q.outpost ? 'O' : '·'}${q.stars} `;
+        }
+      }
+      print(line);
+    }
+    beep(300);
+  }
 
-function help() {
-  print(`\nCommands:`);
-  print(`  status`);
-  print(`  lscan          long-range scan`);
-  print(`  sscan          short-range scan`);
-  print(`  nav <1-8> <warp>`);
-  print(`  beam <energy>`);
-  print(`  missile`);
-  print(`  shields <0-100>`);
-  print(`  dock`);
-  print(`  computer`);
-  print(`  help`);
-  print(`  restart`);
-  print(`  quit`);
-}
+  function navigate(course, warp) {
+    if (damage[0] > 0) { print('Warp engines damaged.'); return; }
+    if (docked) { print('Undock first (move away from outpost).'); return; }
+    course = Math.round(course);
+    if (course < 1 || course > 9) { print('Course 1–9.'); return; }
+    if (warp < 0.1 || warp > 8) { print('Warp factor 0.1–8.'); return; }
+    const cost = Math.floor(warp * 8 + rand(5));
+    if (energy < cost) { print('Insufficient energy.'); return; }
 
-function gameOver(win) {
-  print(win ? '\n🏆 All raiders destroyed. Victory!' : '\n💀 Mission failed.');
-  print('Type restart to play again.');
-  beep(win ? 700 : 80, 0.5, win ? 'square' : 'sawtooth');
-  input.disabled = true;
-}
+    energy -= cost;
+    date += warp * 0.1;
+    timeLeft = Math.max(0, timeLeft - Math.ceil(warp * 0.2));
 
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const raw = input.value.trim().toLowerCase();
-  input.value = '';
-  if (!raw) return;
-  print(`> ${raw}`);
-  const p = raw.split(/\s+/);
-  const v = p[0];
+    const dir = COURSE[course];
+    let steps = Math.round(warp * 8);
+    let hitSomething = false;
 
-  if (v === 'status') status();
-  else if (v === 'lscan') longScan();
-  else if (v === 'sscan') shortScan();
-  else if (v === 'nav' && p.length >= 3) navigate(+p[1], +p[2]);
-  else if (v === 'beam' && p[1]) fireBeam(+p[1]);
-  else if (v === 'missile') fireMissile();
-  else if (v === 'shields' && p[1]) setShields(+p[1]);
-  else if (v === 'dock') dock();
-  else if (v === 'computer') computer();
-  else if (v === 'help') help();
-  else if (v === 'restart') resetGame();
-  else if (v === 'quit') gameOver(false);
-  else print('Unknown command. Type help.');
+    for (let s = 0; s < steps && !hitSomething; s++) {
+      secX += dir.dx;
+      secY += dir.dy;
+      let crossed = false;
+      if (secX < 1) { secX += 8; quadX = Math.max(1, quadX - 1); crossed = true; }
+      if (secX > 8) { secX -= 8; quadX = Math.min(8, quadX + 1); crossed = true; }
+      if (secY < 1) { secY += 8; quadY = Math.max(1, quadY - 1); crossed = true; }
+      if (secY > 8) { secY -= 8; quadY = Math.min(8, quadY + 1); crossed = true; }
+      if (crossed) enterQuadrant();
 
-  Object.keys(systems).forEach(k => { if (systems[k] > 0 && Math.random() < 0.15) systems[k]--; });
+      if (current.stars.some(st => st.x === secX && st.y === secY)) {
+        print('Collision with star! Movement stopped.');
+        energy -= 50 + rand(50);
+        hitSomething = true;
+      } else if (current.raiders.some(r => r.x === secX && r.y === secY)) {
+        print('Collision with raider! Both damaged.');
+        energy -= 100;
+        hitSomething = true;
+      } else if (current.outpost && current.outpost.x === secX && current.outpost.y === secY) {
+        docked = true;
+        print('Docked at outpost. Resupplying...');
+        energy = 3000;
+        missiles = 10;
+        shields = 0;
+        damage.fill(0);
+        hitSomething = true;
+      }
+    }
 
-  if (totalRaiders() <= 0) gameOver(true);
-  else if (timeLeft <= 0 || energy <= 0) gameOver(false);
+    if (!hitSomething) {
+      print(`Course ${course}, warp ${warp} — arrived at Q${quadX},${quadY} S${secX},${secY}`);
+    }
+    if (current.raiders.length) print('Raiders detected in this quadrant!');
+    if (current.outpost && !docked) print('Outpost present. Move onto its sector to dock.');
+    if (randf() < 0.05) damageRandom();
+    raiderTurn();
+    checkEnd();
+  }
+
+  function damageRandom() {
+    const idx = rand(8);
+    damage[idx] += 1 + rand(3);
+    print(`Damage to ${SYSTEMS[idx]}!`);
+  }
+
+  function raiderTurn() {
+    if (!current.raiders.length || docked) return;
+    current.raiders.forEach(r => {
+      if (r.energy <= 0) return;
+      const dist = Math.hypot(r.x - secX, r.y - secY) || 1;
+      const hit = Math.floor((r.energy / 2) * (randf() * 0.4 + 0.6) / dist);
+      shields -= hit;
+      if (shields < 0) {
+        energy += shields;
+        shields = 0;
+        if (randf() < 0.4) damageRandom();
+      }
+      print(`Raider fires — ${hit} damage. Shields now ${Math.floor(shields)}`);
+      r.energy -= 10;
+    });
+    current.raiders = current.raiders.filter(r => r.energy > 0);
+    galaxy[quadY-1][quadX-1].raiders = current.raiders.length;
+  }
+
+  function fireBeams(amount) {
+    if (damage[3] > 0) { print('Beam control damaged.'); return; }
+    if (!current.raiders.length) { print('No raiders in range.'); return; }
+    if (amount <= 0 || amount > energy) { print('Invalid energy.'); return; }
+    energy -= amount;
+    print(`Firing beams with ${amount} energy...`);
+    current.raiders.forEach(r => {
+      const dist = Math.hypot(r.x - secX, r.y - secY) || 1;
+      const dmg = Math.floor(amount * (randf() * 0.3 + 0.7) / (dist * current.raiders.length));
+      r.energy -= dmg;
+      print(`Raider at ${r.x},${r.y} takes ${dmg} damage (energy left: ${Math.max(0, r.energy)})`);
+    });
+    current.raiders = current.raiders.filter(r => r.energy > 0);
+    galaxy[quadY-1][quadX-1].raiders = current.raiders.length;
+    if (!current.raiders.length) print('All raiders in quadrant destroyed!');
+    raiderTurn();
+    checkEnd();
+  }
+
+  function fireMissile(course) {
+    if (damage[4] > 0) { print('Missile tubes damaged.'); return; }
+    if (missiles <= 0) { print('No missiles left.'); return; }
+    course = Math.round(course);
+    if (course < 1 || course > 9) { print('Course 1–9.'); return; }
+    missiles--;
+    const dir = COURSE[course];
+    let x = secX, y = secY;
+    print(`Missile launched on course ${course}...`);
+    for (let i = 0; i < 10; i++) {
+      x += dir.dx;
+      y += dir.dy;
+      if (x < 1 || x > 8 || y < 1 || y > 8) { print('Missile missed (left quadrant).'); break; }
+      if (current.stars.some(s => s.x === x && s.y === y)) { print('Missile absorbed by star.'); break; }
+      const hit = current.raiders.findIndex(r => r.x === x && r.y === y);
+      if (hit >= 0) {
+        print(`Missile hits raider at ${x},${y}! Destroyed.`);
+        current.raiders.splice(hit, 1);
+        galaxy[quadY-1][quadX-1].raiders = current.raiders.length;
+        break;
+      }
+      if (current.outpost && current.outpost.x === x && current.outpost.y === y) {
+        print('Missile hits outpost!');
+        current.outpost = null;
+        galaxy[quadY-1][quadX-1].outpost = false;
+        totalOutposts--;
+        break;
+      }
+    }
+    raiderTurn();
+    checkEnd();
+  }
+
+  function setShields(amt) {
+    if (damage[6] > 0) { print('Shield control damaged.'); return; }
+    amt = Math.max(0, Math.min(amt, energy + shields));
+    energy += shields - amt;
+    shields = amt;
+    print(`Shields set to ${Math.floor(shields)}. Energy remaining: ${Math.floor(energy)}`);
+  }
+
+  function computer() {
+    if (damage[7] > 0) { print('Library computer damaged.'); return; }
+    print('Computer functions:');
+    print('0 - Cumulative galactic record');
+    print('1 - Status report');
+    print('2 - Missile data');
+    print('3 - Navigation data');
+    print('4 - Direction/distance calculator');
+    print('5 - Galaxy map');
+    print('\n--- Galactic Record ---');
+    for (let y = 0; y < 8; y++) {
+      let line = '';
+      for (let x = 0; x < 8; x++) {
+        const q = galaxy[y][x];
+        line += q.scanned ? `${q.raiders}${q.outpost?'O':'·'}${q.stars} ` : '··· ';
+      }
+      print(line);
+    }
+    status();
+  }
+
+  function help() {
+    clearScreen();
+    printAnsi('\x1b[1;33m=== GALAXY HUNT COMMANDS ===\x1b[0m');
+    print('NAV <course 1-9> <warp 0.1-8>   Navigate');
+    print('SRS                             Short-range scan (map)');
+    print('LRS                             Long-range scan');
+    print('BEA <energy>                    Fire beams');
+    print('MIS <course 1-9>                Fire missile');
+    print('SHE <energy>                    Set shields');
+    print('DAM                             Damage report');
+    print('COM                             Library computer');
+    print('STA                             Status');
+    print('HELP                            This screen');
+    print('QUIT                            End game');
+    print('');
+    printAnsi('\x1b[1;36m=== MAP EMOJIS ===\x1b[0m');
+    print('🚀  Your Hunter');
+    print('👾  Raider warship');
+    print('⭐  Star (blocks movement/missiles)');
+    print('🏢  Alliance Outpost (dock here to resupply & repair)');
+    print('·   Empty sector');
+    print('');
+    print('Course rose:  3');
+    print('            4   2');
+    print('          5   *   1');
+    print('            6   8');
+    print('              7');
+    print('');
+    print('Dock by moving onto the outpost sector. Destroy all raiders before time expires.');
+  }
+
+  function checkEnd() {
+    if (energy <= 0) {
+      printAnsi('\x1b[1;31mHUNTER DESTROYED — Mission failed.\x1b[0m');
+      gameOver = true;
+    } else if (timeLeft <= 0) {
+      printAnsi('\x1b[1;31mTime expired — Mission failed.\x1b[0m');
+      gameOver = true;
+    } else if (totalRaidersLeft() <= 0) {
+      printAnsi('\x1b[1;32mAll raiders destroyed! Mission successful!\x1b[0m');
+      gameOver = true;
+    }
+  }
+
+  function handle(raw) {
+    if (gameOver) return;
+    const upper = raw.trim().toUpperCase();
+    if (!upper) return;
+    const parts = upper.split(/\s+/);
+    const cmd = parts[0];
+
+    switch (cmd) {
+      case 'NAV':
+        navigate(parseFloat(parts[1]), parseFloat(parts[2]));
+        break;
+      case 'SRS': shortScan(); break;
+      case 'LRS': longScan(); break;
+      case 'BEA': fireBeams(parseFloat(parts[1]) || 0); break;
+      case 'MIS': fireMissile(parseFloat(parts[1])); break;
+      case 'SHE': setShields(parseFloat(parts[1]) || 0); break;
+      case 'DAM':
+        print('Damage report:');
+        SYSTEMS.forEach((s, i) => print(`  ${s}: ${damage[i] > 0 ? damage[i] + ' (repairing)' : 'OK'}`));
+        break;
+      case 'COM': computer(); break;
+      case 'STA': status(); break;
+      case 'HELP': help(); break;
+      case 'QUIT':
+        print('Abandoning mission.');
+        gameOver = true;
+        break;
+      default:
+        print('Unknown command. Type HELP.');
+    }
+  }
+
+  function onKey(e) {
+    if (gameOver) return;
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      term.writeln('');
+      handle(inputBuffer);
+      inputBuffer = '';
+      if (!gameOver) prompt();
+    } else if (e.key === 'Backspace') {
+      e.preventDefault();
+      if (inputBuffer.length) {
+        inputBuffer = inputBuffer.slice(0, -1);
+        term.write('\b');
+      }
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      e.preventDefault();
+      inputBuffer += e.key;
+      term.setFg(10);          // bright green while typing
+      term.write(e.key);
+    }
+  }
+
+  term.wrap.addEventListener('keydown', onKey);
+
+  resetGame();
+
+  return () => {
+    term.wrap.removeEventListener('keydown', onKey);
+    term.destroy();
+  };
 });
-
-resetGame();
