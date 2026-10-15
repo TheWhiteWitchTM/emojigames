@@ -11,27 +11,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!game) return;
 
   const btn = document.createElement('button');
-  btn.innerHTML = '⛶ Fullscreen';
-  btn.title = 'Fullscreen — press Esc to exit';
+  btn.id = 'fs-btn';
+  btn.textContent = 'Fullscreen';
+  btn.title = 'Enter fullscreen mode. Press Esc or click again to exit.';
   btn.style.cssText = `
     position: absolute;
-    top: 0.35rem;
-    right: 0.35rem;
-    z-index: 20;
-    background: rgba(10, 20, 10, 0.85);
+    top: 6px;
+    right: 6px;
+    z-index: 30;
+    background: #0a140a;
     color: #39ff14;
     border: 1px solid #39ff14;
     border-radius: 4px;
-    padding: 0.25rem 0.6rem;
-    font-size: 0.8rem;
-    cursor: pointer;
+    padding: 4px 10px;
+    font-size: 13px;
     font-family: monospace;
+    cursor: pointer;
     white-space: nowrap;
   `;
   game.style.position = 'relative';
   game.appendChild(btn);
 
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
     if (!document.fullscreenElement) {
       game.requestFullscreen().catch(() => {});
     } else {
@@ -41,11 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('fullscreenchange', () => {
     if (document.fullscreenElement) {
-      btn.innerHTML = '✕ Exit';
-      btn.title = 'Exit fullscreen (Esc)';
+      btn.textContent = 'Exit Fullscreen';
+      btn.title = 'Exit fullscreen (Esc also works)';
     } else {
-      btn.innerHTML = '⛶ Fullscreen';
-      btn.title = 'Fullscreen — press Esc to exit';
+      btn.textContent = 'Fullscreen';
+      btn.title = 'Enter fullscreen mode. Press Esc or click again to exit.';
     }
   });
 });
