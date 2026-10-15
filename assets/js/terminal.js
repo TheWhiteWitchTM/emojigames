@@ -61,25 +61,25 @@ class Terminal {
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
-    // Fullscreen button integrated into the terminal
+    // Fullscreen button on the terminal border (top-right corner)
     const fsBtn = document.createElement('button');
     fsBtn.textContent = '⛶';
     fsBtn.title = 'Fullscreen (Esc to exit)';
     fsBtn.style.cssText = `
       position: absolute;
-      top: 2px;
-      right: 2px;
-      z-index: 10;
-      background: ${this.bg};
-      color: ${this.fg};
-      border: 1px solid ${this.border};
-      border-radius: 3px;
-      padding: 1px 6px;
-      font-size: 11px;
-      font-family: ${this.font};
+      top: 0;
+      right: 0;
+      z-index: 30;
+      background: #000;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      border-bottom-left-radius: 4px;
+      padding: 2px 8px;
+      font-size: 14px;
+      font-family: monospace;
+      font-weight: bold;
       cursor: pointer;
-      line-height: 1.2;
-      opacity: 0.85;
+      line-height: 1.1;
     `;
     fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -157,7 +157,6 @@ class Terminal {
     this.render();
   }
 
-  /** Write a single character at position (defaults to cursor). */
   put(ch, x = this.cx, y = this.cy) {
     if (x < 0 || x >= this.cols || y < 0 || y >= this.rows) return;
     const cell = this.buffer[y][x];
@@ -167,7 +166,6 @@ class Terminal {
     cell.bright = this.bright;
   }
 
-  /** Write text, handling \n \r \b and wrapping. */
   write(text) {
     const chars = [...text];
     for (const ch of chars) {
@@ -195,16 +193,13 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  /** Write text followed by newline. */
   writeln(text = '') { this.write(text + '\n'); }
 
-  /** Move cursor then write. */
   writeAt(x, y, text) {
     this.moveTo(x, y);
     this.write(text);
   }
 
-  /** Fill a rectangle. */
   fill(x, y, w, h, ch = ' ', fg = this.fgIdx, bg = this.bgIdx) {
     for (let yy = Math.max(0, y); yy < Math.min(this.rows, y + h); yy++) {
       for (let xx = Math.max(0, x); xx < Math.min(this.cols, x + w); xx++) {
@@ -218,22 +213,18 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  /** Read a cell. */
   getChar(x, y) {
     if (x < 0 || y < 0 || x >= this.cols || y >= this.rows) return null;
     return this.buffer[y][x];
   }
 
-  /** Move cursor (clamped). */
   moveTo(x, y) {
     this.cx = Math.max(0, Math.min(this.cols - 1, Math.floor(x)));
     this.cy = Math.max(0, Math.min(this.rows - 1, Math.floor(y)));
   }
 
-  /** Cursor to 0,0. */
   home() { this.moveTo(0, 0); }
 
-  /** Clear entire screen. */
   clear() {
     for (let y = 0; y < this.rows; y++) {
       for (let x = 0; x < this.cols; x++) {
@@ -249,7 +240,6 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  /** Clear from cursor to end of line. */
   clearLine() {
     for (let x = this.cx; x < this.cols; x++) {
       const cell = this.buffer[this.cy][x];
@@ -261,7 +251,6 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  /** Scroll up one line. */
   scroll() {
     this.buffer.shift();
     this.displayed.shift();
@@ -286,29 +275,18 @@ class Terminal {
     if (this.cy > 0) this.cy--;
   }
 
-  /** Hide the block cursor. */
   hideCursor() { this.cursorOn = false; this.render(); }
-
-  /** Show the block cursor. */
   showCursor() { this.cursorOn = true; this.render(); }
 
-  /** Hide or show the mouse cursor over the terminal. */
   setHideMouse(hide) {
     this.hideMouse = !!hide;
     this.wrap.style.cursor = this.hideMouse ? 'none' : 'auto';
   }
 
-  /** Toggle mouse cursor visibility. */
   toggleHideMouse() { this.setHideMouse(!this.hideMouse); }
 
-  /** Focus the terminal. */
   focus() { this.wrap.focus(); }
 
-  /**
-   * Register a key handler. Automatically prevents default on arrows and common game keys.
-   * @param {function} handler
-   * @returns {function} unbind function
-   */
   onKey(handler) {
     const wrapped = (e) => {
       const k = e.key;
@@ -323,19 +301,11 @@ class Terminal {
     return () => this.wrap.removeEventListener('keydown', wrapped);
   }
 
-  /** Set foreground color index (0-15). */
   setFg(n) { this.fgIdx = n & 15; }
-
-  /** Set background color index (0-15). */
   setBg(n) { this.bgIdx = n & 15; }
-
-  /** Enable/disable bright attribute. */
   setBright(b) { this.bright = !!b; }
-
-  /** Reset colors and bright. */
   resetAttr() { this.fgIdx = 2; this.bgIdx = 0; this.bright = false; }
 
-  /** Parse and execute a subset of ANSI escape sequences. */
   writeAnsi(text) {
     let i = 0;
     while (i < text.length) {
@@ -366,7 +336,7 @@ class Terminal {
         } else if (cmd === 'K') {
           this.clearLine();
         } else if (cmd === 'A') this.moveTo(this.cx, this.cy - (nums[0] || 1));
-        else if (cmd === 'B') this.moveTo(this.cx, this.cy + (nums[0] || 1), this.cy);
+        else if (cmd === 'B') this.moveTo(this.cx, this.cy + (nums[0] || 1));
         else if (cmd === 'C') this.moveTo(this.cx + (nums[0] || 1), this.cy);
         else if (cmd === 'D') this.moveTo(this.cx - (nums[0] || 1), this.cy);
 
@@ -379,7 +349,6 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  /** Render only cells that differ from what is currently displayed. */
   render() {
     for (let y = 0; y < this.rows; y++) {
       for (let x = 0; x < this.cols; x++) {
@@ -391,7 +360,6 @@ class Terminal {
         let bgIdx = cell.bg;
         let bright = cell.bright;
 
-        // Focus hint overlay on bottom line
         if (this._hintShown && y === this.rows - 1) {
           const hint = ' [ click terminal to continue ] ';
           const start = Math.floor((this.cols - hint.length) / 2);
@@ -421,7 +389,6 @@ class Terminal {
     }
   }
 
-  /** Clean up intervals and remove from DOM. */
   destroy() {
     clearInterval(this._blink);
     this.wrap.remove();
