@@ -1,5 +1,6 @@
 ---
 title: 🕹️ Games
+permalink: /games/
 description: Browse by category or tag.
 ---
 
@@ -16,9 +17,9 @@ useEffect(() => {
     {
       title: {{ game.title | jsonify }},
       url: {{ game.url | relative_url | jsonify }},
-      image: {{ game.image | relative_url | jsonify }},
+      image: {{ game.image | default: "" | relative_url | jsonify }},
       category: {{ game.category | default: "other" | jsonify }},
-      tags: {{ game.tags | default: [] | jsonify }},
+      tags: {% if game.tags %}{{ game.tags | jsonify }}{% else %}[]{% endif %},
       description: {{ game.description | default: "" | jsonify }}
     }{% unless forloop.last %},{% endunless %}
     {% endfor %}
@@ -42,7 +43,6 @@ useEffect(() => {
 
   const grid = document.createElement('div');
   grid.className = 'game-grid';
-
   root.append(catTabs, tagDrop, grid);
 
   function render() {
