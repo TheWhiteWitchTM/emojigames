@@ -10,27 +10,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const game = document.getElementById('game');
   if (!game) return;
 
+  // Prefer the actual terminal element
+  const terminal = game.querySelector('#output') || game.querySelector('textarea') || game.querySelector('.terminal-wrap') || game;
+
   const btn = document.createElement('button');
   btn.id = 'fs-btn';
   btn.textContent = 'Fullscreen';
   btn.title = 'Enter fullscreen mode. Press Esc or click again to exit.';
   btn.style.cssText = `
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 4px;
+    right: 4px;
     z-index: 30;
-    background: #0a140a;
+    background: rgba(10, 20, 10, 0.9);
     color: #39ff14;
     border: 1px solid #39ff14;
-    border-radius: 4px;
-    padding: 4px 10px;
-    font-size: 13px;
+    border-radius: 3px;
+    padding: 2px 8px;
+    font-size: 12px;
     font-family: monospace;
     cursor: pointer;
     white-space: nowrap;
   `;
-  game.style.position = 'relative';
-  game.appendChild(btn);
+
+  // Make sure the terminal can contain the absolute button
+  terminal.style.position = 'relative';
+  terminal.parentElement.style.position = 'relative';
+  terminal.parentElement.appendChild(btn);
 
   btn.addEventListener('click', e => {
     e.stopPropagation();
