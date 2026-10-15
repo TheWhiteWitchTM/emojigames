@@ -22,8 +22,9 @@ class Terminal {
       '#5555ff','#ff55ff','#55ffff','#ffffff'
     ];
 
-    // Outer container so the button sits above the terminal without negative offsets
+    // Outer container (games append this)
     this.outer = document.createElement('div');
+    this.outer.className = 'terminal-outer';
     this.outer.style.cssText = `
       display: flex;
       flex-direction: column;
@@ -31,36 +32,48 @@ class Terminal {
       margin: 0 auto;
     `;
 
-    // Button row ON TOP
-    const btnRow = document.createElement('div');
-    btnRow.style.cssText = `
+    // TOP: title + button
+    this.titleBar = document.createElement('div');
+    this.titleBar.style.cssText = `
       display: flex;
-      justify-content: flex-end;
-      margin-bottom: 4px;
+      align-items: center;
+      justify-content: space-between;
+      background: #111;
+      border: 2px solid ${this.border};
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      padding: 4px 10px;
+      font-family: system-ui, sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #fff;
     `;
 
-    const fsBtn = document.createElement('button');
-    fsBtn.innerHTML = 'Fullscreen ⛶';
-    fsBtn.style.cssText = `
+    this.titleText = document.createElement('span');
+    this.titleText.textContent = 'Terminal';
+    this.titleBar.appendChild(this.titleText);
+
+    this.fsBtn = document.createElement('button');
+    this.fsBtn.innerHTML = 'Fullscreen ⛶';
+    this.fsBtn.style.cssText = `
       background: #111;
       color: #fff;
       border: 1px solid #39ff14;
       border-radius: 4px;
-      padding: 6px 14px;
-      font-size: 14px;
+      padding: 4px 12px;
+      font-size: 0.9rem;
       font-family: system-ui, sans-serif;
       font-weight: 600;
       cursor: pointer;
     `;
-    fsBtn.addEventListener('click', (e) => {
+    this.fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleFullscreen();
     });
-    btnRow.appendChild(fsBtn);
-    this.fsBtn = fsBtn;
-    this.outer.appendChild(btnRow);
+    this.titleBar.appendChild(this.fsBtn);
+    this.outer.appendChild(this.titleBar);
 
-    // Actual terminal
+    // CENTER: the actual terminal
     this.wrap = document.createElement('div');
     this.wrap.className = 'terminal';
     this.wrap.tabIndex = 0;
@@ -76,6 +89,7 @@ class Terminal {
       overflow: hidden;
       white-space: pre;
       border: 2px solid ${this.border};
+      border-top: none;
       box-shadow: 0 0 12px ${this.border}40;
       box-sizing: border-box;
       outline: none;
@@ -86,6 +100,14 @@ class Terminal {
     this.screen = document.createElement('div');
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
+
+    // BOTTOM: optional footer (empty for now)
+    this.footer = document.createElement('div');
+    this.footer.style.cssText = `
+      height: 0;
+      overflow: hidden;
+    `;
+    this.outer.appendChild(this.footer);
 
     document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement === this.wrap) {
@@ -102,6 +124,8 @@ class Terminal {
         this.toggleFullscreen();
       }
     });
+
+    setTimeout(() => this.detectTitle(), 0);
 
     this.cellEls = [];
     this.buffer = [];
@@ -159,8 +183,16 @@ class Terminal {
     this.render();
   }
 
-  // Games that do document.getElementById('game').appendChild(term.wrap)
-  // need to append term.outer instead. See note below.
+  detectTitle() {
+    const game = this.outer.closest('#game') || this.outer.parentElement;
+    let title = '';
+    if (game) {
+      const h = game.querySelector('h1, h2, h3');
+      if (h) title = h.textContent.trim();
+    }
+    if (!title) title = document.title || 'Terminal';
+    this.titleText.textContent = title;
+  }
 
   toggleFullscreen() {
     if (!document.fullscreenElement) {
