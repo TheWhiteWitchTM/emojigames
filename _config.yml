@@ -9,7 +9,7 @@ collections_dir: collections
 collections:
   games:
     output: true
-    permalink: /games/:name/
+    permalink: /games/:path/
   releases:
     output: true
     permalink: /releases/:path/
