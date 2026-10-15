@@ -61,30 +61,33 @@ class Terminal {
     this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
     this.wrap.appendChild(this.screen);
 
-    // Fullscreen button on the terminal border (top-right corner)
+    // Fullscreen button — corner style like a dialog close button
     const fsBtn = document.createElement('button');
     fsBtn.textContent = '⛶';
     fsBtn.title = 'Fullscreen (Esc to exit)';
     fsBtn.style.cssText = `
       position: absolute;
-      top: 0;
-      right: 0;
-      z-index: 30;
-      background: #000;
-      color: #39ff14;
+      top: -1px;
+      right: -1px;
+      z-index: 40;
+      background: #111;
+      color: #fff;
       border: 1px solid #39ff14;
-      border-bottom-left-radius: 4px;
-      padding: 2px 8px;
-      font-size: 14px;
-      font-family: monospace;
-      font-weight: bold;
+      border-bottom-left-radius: 6px;
+      padding: 4px 10px 5px 8px;
+      font-size: 16px;
+      font-family: system-ui, sans-serif;
+      font-weight: 600;
       cursor: pointer;
-      line-height: 1.1;
+      line-height: 1;
+      box-shadow: 0 0 6px rgba(57, 255, 20, 0.6);
     `;
     fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       if (!document.fullscreenElement) {
-        this.wrap.requestFullscreen().catch(() => {});
+        this.wrap.requestFullscreen().then(() => {
+          this.wrap.focus();
+        }).catch(() => {});
       } else {
         document.exitFullscreen();
       }
@@ -95,6 +98,7 @@ class Terminal {
       if (document.fullscreenElement === this.wrap) {
         fsBtn.textContent = '✕';
         fsBtn.title = 'Exit fullscreen (Esc)';
+        setTimeout(() => this.wrap.focus(), 50);
       } else {
         fsBtn.textContent = '⛶';
         fsBtn.title = 'Fullscreen (Esc to exit)';
