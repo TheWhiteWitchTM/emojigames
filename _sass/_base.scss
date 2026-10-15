@@ -116,3 +116,13 @@ body {
   top: 10px;
   right: 10px;
 }
+
+#fs-btn:hover {
+  background: #39ff14;
+  color: #0a140a;
+}
+
+#game:fullscreen #fs-btn {
+  top: 6px;
+  right: 6px;
+}
