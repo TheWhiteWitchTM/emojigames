@@ -1,9 +1,12 @@
 ---
-layout: default
-title: Hack
+layout: game
+title:  Hack
 description: A close terminal homage to the original Hack roguelike.
+image: /games/hack/banner.jpg
 permalink: /games/hack/
-image: /games/hack/hack.jpg
+tags: [terminal, roguelike]
+
+
 ---
 
 # 🗡️ Hack
