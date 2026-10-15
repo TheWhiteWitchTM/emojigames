@@ -5,30 +5,28 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
     btn.nextElementSibling.classList.toggle('open');
   });
 });
-</script>
 
-<script>
 document.addEventListener('DOMContentLoaded', () => {
   const game = document.getElementById('game');
   if (!game) return;
 
-  // Create a small fullscreen button
   const btn = document.createElement('button');
-  btn.textContent = '⛶';
-  btn.title = 'Fullscreen (Esc to exit)';
+  btn.innerHTML = '⛶ Fullscreen';
+  btn.title = 'Fullscreen — press Esc to exit';
   btn.style.cssText = `
     position: absolute;
-    top: 0.4rem;
-    right: 0.4rem;
-    z-index: 10;
-    background: #1a3a1a;
+    top: 0.35rem;
+    right: 0.35rem;
+    z-index: 20;
+    background: rgba(10, 20, 10, 0.85);
     color: #39ff14;
     border: 1px solid #39ff14;
     border-radius: 4px;
-    padding: 0.2rem 0.45rem;
-    font-size: 0.9rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
     cursor: pointer;
     font-family: monospace;
+    white-space: nowrap;
   `;
   game.style.position = 'relative';
   game.appendChild(btn);
@@ -41,9 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Escape already exits fullscreen; just update the button label
   document.addEventListener('fullscreenchange', () => {
-    btn.textContent = document.fullscreenElement ? '✕' : '⛶';
+    if (document.fullscreenElement) {
+      btn.innerHTML = '✕ Exit';
+      btn.title = 'Exit fullscreen (Esc)';
+    } else {
+      btn.innerHTML = '⛶ Fullscreen';
+      btn.title = 'Fullscreen — press Esc to exit';
+    }
   });
 });
 </script>
