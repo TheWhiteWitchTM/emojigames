@@ -1,8 +1,10 @@
 ---
 layout: game
 title: 🏴‍☠️ Pirate Adventure
-description: 🏴‍☠️ Sail the seas, find treasure, avoid the monsters.
-image: /games/pirate/box.jpg
+description: Sail the seas, find treasure.
+image: /games/pirate/banner.jpg
+permalink: /games/pirate/
+tags: [terminal, adventure]
 ---
 
 <div id="game"></div>
