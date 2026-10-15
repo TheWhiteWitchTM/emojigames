@@ -101,3 +101,8 @@ body {
   font-size: clamp(0.8rem, 1.8vw, 1.15rem);
   line-height: 1.15;
 }
+
+#game:fullscreen button {
+  top: 0.6rem;
+  right: 0.6rem;
+}
