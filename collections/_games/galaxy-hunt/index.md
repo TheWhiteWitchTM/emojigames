@@ -2,7 +2,9 @@
 layout: default
 title: 🚀 Galaxy Hunt
 description: Classic space shooter. Clear the waves.
-image: /assets/images/preview.jpg
+image: /games/galaxy-hunt/banner.jpg
+permalink: /games/galaxy-hunt/
+tags: [terminal, action]
 ---
 
 <div id="game"></div>
