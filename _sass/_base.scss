@@ -126,3 +126,13 @@ body {
   top: 6px;
   right: 6px;
 }
+
+.terminal:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: none !important;
+  font-size: clamp(14px, 2vw, 20px) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
