@@ -11,6 +11,7 @@ class TrumpSI {
       winning: "4.jpg",
       neutral: "5.jpg"
     };
+    this.audioCtx = null;
   }
 
   pick(arr) {
@@ -36,6 +37,24 @@ class TrumpSI {
     if (key === "best" || key === "winning") return "winning";
     if (key === "greeting" || key === "fake") return "happy";
     return "smug";
+  }
+
+  playBrainSound() {
+    try {
+      if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = this.audioCtx;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(180, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(90, ctx.currentTime + 0.18);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.2);
+    } catch (e) {}
   }
 
   showFace(mood) {
@@ -82,6 +101,7 @@ class TrumpSI {
     this.history.push({ you: input, trump: line });
     if (this.history.length > 6) this.history.shift();
 
+    this.playBrainSound();
     this.redraw(line);
   }
 
@@ -132,7 +152,7 @@ useEffect(() => {
   const container = document.getElementById('game');
   if (!container) return;
 
-  const term = new Terminal({ border: '#39ff14' });
+  const term = new Terminal({ border: '#ff8c00', fg: '#ffffff' });
   container.appendChild(term.wrap);
   term.wrap.focus();
 
