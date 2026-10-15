@@ -2,8 +2,11 @@
 layout: default
 title: Snake
 description: Classic terminal Snake. Eat, grow, don’t crash.
-permalink: /games/snake/
 image: /games/snake/banner.jpg
+permalink: /games/snake/
+tags: [terminal, action]
+
+
 ---
 
 <div id="game">
