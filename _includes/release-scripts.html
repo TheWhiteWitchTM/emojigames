@@ -1,0 +1,61 @@
+<script>
+document.querySelectorAll('.release-item').forEach(item => {
+  const title = item.querySelector('.release-title');
+  const emoji = item.querySelector('.release-emoji');
+  const expandBtn = item.querySelector('.release-expand');
+  const excerpt = item.querySelector('.release-excerpt');
+  const full = item.querySelector('.release-full');
+  const url = item.dataset.url;
+
+  if (!title || !expandBtn) return;
+
+  const collapse = () => {
+    full.setAttribute('hidden', '');
+    if (excerpt) excerpt.classList.remove('hidden');
+    expandBtn.textContent = '▼ Show more';
+    if (emoji) emoji.textContent = '▼';
+  };
+
+  const expand = async () => {
+    if (!full.dataset.loaded) {
+      expandBtn.textContent = 'Loading…';
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const html = await res.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        let content = doc.querySelector('.content-area') || doc.querySelector('main') || doc.body;
+        full.innerHTML = content.innerHTML;
+        full.dataset.loaded = 'true';
+      } catch (e) {
+        full.innerHTML = '<p>Could not load release.</p>';
+      }
+    }
+    full.removeAttribute('hidden');
+    if (excerpt) excerpt.classList.add('hidden');
+    expandBtn.textContent = '▲ Show less';
+    if (emoji) emoji.textContent = '▲';
+  };
+
+  const toggle = () => {
+    if (full.hasAttribute('hidden')) expand();
+    else collapse();
+  };
+
+  title.addEventListener('click', toggle);
+  expandBtn.addEventListener('click', toggle);
+});
+
+document.querySelectorAll('.release-share').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(btn.dataset.url);
+      const orig = btn.textContent;
+      btn.textContent = '✅ Copied';
+      setTimeout(() => btn.textContent = orig, 1500);
+    } catch (e) {
+      btn.textContent = '❌ Failed';
+    }
+  });
+});
+</script>
