@@ -29,7 +29,6 @@ class Terminal {
     this.hideMouse = options.hideMouse !== undefined ? options.hideMouse : true;
     this.autoRender = options.autoRender !== undefined ? options.autoRender : true;
     this.focusHint = options.focusHint !== undefined ? options.focusHint : true;
-    // Data flag. A method is also named showCursor, so this cannot use that name.
     this.cursorEnabled = options.showCursor !== false;
 
     this.charW = 10;
@@ -51,30 +50,42 @@ class Terminal {
       margin: 0 auto; outline: none;
     `;
 
+    // ===== Header =====
     this.titleBar = document.createElement('div');
     this.titleBar.style.cssText = `
       display: flex; align-items: center; justify-content: space-between;
       background: #111; padding: 8px 12px; font-family: system-ui, sans-serif;
-      font-size: 1.75rem; font-weight: 600; color: #fff;
+      font-size: 1.75rem; font-weight: 600; color: #fff; gap: 12px;
     `;
+
     this.titleText = document.createElement('span');
     this.titleText.textContent = 'Terminal';
-    this.titleBar.appendChild(this.titleText);
+    this.titleText.style.flex = '0 0 auto';
+
+    this.headerMiddle = document.createElement('div');
+    this.headerMiddle.style.cssText = `
+      flex: 1 1 auto; text-align: center; font-size: 1.1rem; font-weight: 500;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    `;
 
     this.fsBtn = document.createElement('button');
     this.fsBtn.innerHTML = '<b>F11</b> Fullscreen ⛶';
     this.fsBtn.style.cssText = `
       background: #111; color: #fff; border: 1px solid #39ff14; border-radius: 4px;
       padding: 8px 18px; font-size: 1.1rem; font-family: system-ui, sans-serif;
-      font-weight: 600; cursor: pointer;
+      font-weight: 600; cursor: pointer; flex: 0 0 auto;
     `;
     this.fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.toggleFullscreen();
     });
+
+    this.titleBar.appendChild(this.titleText);
+    this.titleBar.appendChild(this.headerMiddle);
     this.titleBar.appendChild(this.fsBtn);
     this.wrap.appendChild(this.titleBar);
 
+    // ===== Canvas =====
     this.canvas = document.createElement('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.canvas.style.cssText = `
@@ -84,6 +95,14 @@ class Terminal {
       display: block;
     `;
     this.wrap.appendChild(this.canvas);
+
+    // ===== Footer (plain) =====
+    this.footer = document.createElement('div');
+    this.footer.style.cssText = `
+      background: #111; padding: 6px 12px; font-family: system-ui, sans-serif;
+      font-size: 1rem; color: #fff; flex-shrink: 0;
+    `;
+    this.wrap.appendChild(this.footer);
 
     this._onFullscreen = () => {
       if (document.fullscreenElement === this.wrap) {
@@ -144,9 +163,6 @@ class Terminal {
     this.wrap.addEventListener('keydown', (e) => this._keysDown.add(e.key));
     this.wrap.addEventListener('keyup', (e) => this._keysDown.delete(e.key));
 
-    // Games listen on the terminal element. A page load often cannot keep
-    // that element focused, so keys typed at the page never arrived.
-    // Forward those keys here unless the user is in another control.
     this._onDocKeyDown = (e) => this._forwardKey(e);
     document.addEventListener('keydown', this._onDocKeyDown, true);
 
@@ -159,6 +175,10 @@ class Terminal {
 
     this.render();
   }
+
+  // ===== Getters =====
+  get headerMiddleEl() { return this.headerMiddle; }
+  get footerEl() { return this.footer; }
 
   /** @private */
   _buildXterm256() {
@@ -344,7 +364,7 @@ class Terminal {
     return !!el.isContentEditable;
   }
 
-  /** @private Deliver a page-level key to listeners on the terminal. */
+  /** @private */
   _forwardKey(e) {
     if (this._destroyed || e.__fromTerminal) return;
     if (e.target && this.wrap.contains(e.target)) return;
@@ -363,7 +383,6 @@ class Terminal {
     fwd.__fromTerminal = true;
     this.wrap.dispatchEvent(fwd);
     if (fwd.defaultPrevented) e.preventDefault();
-    // Focus after this event so the browser does not also deliver it natively.
     if (document.activeElement !== this.wrap) setTimeout(() => this.focus(), 0);
   }
 
@@ -429,170 +448,4 @@ class Terminal {
             else if (n >= 100 && n <= 107) { this.bgIdx = n - 100; this.bgRgb = null; }
             else if (n === 38 && nums[k + 1] === 5) { this.fgIdx = nums[k + 2]; this.fgRgb = null; k += 2; }
             else if (n === 48 && nums[k + 1] === 5) { this.bgIdx = nums[k + 2]; this.bgRgb = null; k += 2; }
-            else if (n === 38 && nums[k + 1] === 2) {
-              this.fgRgb = { r: nums[k + 2], g: nums[k + 3], b: nums[k + 4] };
-              this.fgIdx = null;
-              k += 4;
-            } else if (n === 48 && nums[k + 1] === 2) {
-              this.bgRgb = { r: nums[k + 2], g: nums[k + 3], b: nums[k + 4] };
-              this.bgIdx = null;
-              k += 4;
-            }
-            k++;
-          }
-        } else if (cmd === 'H' || cmd === 'f') {
-          this.moveTo((nums[1] || 1) - 1, (nums[0] || 1) - 1);
-        } else if (cmd === 'J' && (nums[0] === 2 || nums[0] === 0)) {
-          this.clear();
-        } else if (cmd === 'K') {
-          this.clearLine();
-        } else if (cmd === 'A') this.moveTo(this.cx, this.cy - (nums[0] || 1));
-        else if (cmd === 'B') this.moveTo(this.cx, this.cy + (nums[0] || 1));
-        else if (cmd === 'C') this.moveTo(this.cx + (nums[0] || 1), this.cy);
-        else if (cmd === 'D') this.moveTo(this.cx - (nums[0] || 1), this.cy);
-        i = j + 1;
-      } else {
-        this.write(text[i]);
-        i++;
-      }
-    }
-    if (this.autoRender) this.render();
-  }
-
-  setFg256(n) { this.fgIdx = n; this.fgRgb = null; }
-  setBg256(n) { this.bgIdx = n; this.bgRgb = null; }
-  setFgRGB(r, g, b) { this.fgRgb = { r, g, b }; this.fgIdx = null; }
-  setBgRGB(r, g, b) { this.bgRgb = { r, g, b }; this.bgIdx = null; }
-
-  rect(x, y, w, h, opts = {}) {
-    const fill = !!opts.fill;
-    const ch = opts.ch || '█';
-    const fg = opts.fg;
-    const bg = opts.bg;
-    for (let yy = y; yy < y + h; yy++) {
-      for (let xx = x; xx < x + w; xx++) {
-        if (!fill && yy !== y && yy !== y + h - 1 && xx !== x && xx !== x + w - 1) continue;
-        this.set(xx, yy, { ch, fg, bg });
-      }
-    }
-    if (this.autoRender) this.render();
-  }
-
-  circle(cx, cy, r, opts = {}) {
-    const fill = !!opts.fill;
-    const ch = opts.ch || '█';
-    const fg = opts.fg;
-    const bg = opts.bg;
-    const plot = (x, y) => this.set(x, y, { ch, fg, bg });
-    let x = r, y = 0, err = 1 - r;
-    while (x >= y) {
-      if (fill) {
-        for (let i = cx - x; i <= cx + x; i++) {
-          plot(i, cy + y);
-          plot(i, cy - y);
-        }
-        for (let i = cx - y; i <= cx + y; i++) {
-          plot(i, cy + x);
-          plot(i, cy - x);
-        }
-      } else {
-        plot(cx + x, cy + y); plot(cx - x, cy + y);
-        plot(cx + x, cy - y); plot(cx - x, cy - y);
-        plot(cx + y, cy + x); plot(cx - y, cy + x);
-        plot(cx + y, cy - x); plot(cx - y, cy - x);
-      }
-      y++;
-      if (err < 0) err += 2 * y + 1;
-      else { x--; err += 2 * (y - x) + 1; }
-    }
-    if (this.autoRender) this.render();
-  }
-
-  drawBox(x, y, w, h, style = 'single') {
-    const borders = {
-      single: ['┌', '─', '┐', '│', '└', '┘'],
-      double: ['╔', '═', '╗', '║', '╚', '╝'],
-      ascii:  ['+', '-', '+', '|', '+', '+']
-    };
-    const b = borders[style] || borders.single;
-    this.set(x, y, { ch: b[0] });
-    this.set(x + w - 1, y, { ch: b[2] });
-    this.set(x, y + h - 1, { ch: b[4] });
-    this.set(x + w - 1, y + h - 1, { ch: b[5] });
-    for (let i = 1; i < w - 1; i++) {
-      this.set(x + i, y, { ch: b[1] });
-      this.set(x + i, y + h - 1, { ch: b[1] });
-    }
-    for (let i = 1; i < h - 1; i++) {
-      this.set(x, y + i, { ch: b[3] });
-      this.set(x + w - 1, y + i, { ch: b[3] });
-    }
-    if (this.autoRender) this.render();
-  }
-
-  isKeyDown(key) { return this._keysDown.has(key); }
-
-  getKey() {
-    return new Promise(resolve => {
-      const unsub = this.onKey(e => { unsub(); resolve(e); });
-    });
-  }
-
-  beginFrame() { this.autoRender = false; }
-  endFrame() { this.autoRender = true; this.render(); }
-
-  /** @private */
-  _resolveColor(idx, rgb) {
-    if (rgb) return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-    if (idx == null) return null;
-    if (idx < 16) return this.colors[idx];
-    return this.xterm256[idx] || this.colors[7];
-  }
-
-  render() {
-    const ctx = this.ctx;
-    const w = this.cols * this.charW;
-    const h = this.rows * this.charH;
-
-    ctx.fillStyle = this.bg;
-    ctx.fillRect(0, 0, w, h);
-
-    for (let y = 0; y < this.rows; y++) {
-      for (let x = 0; x < this.cols; x++) {
-        const cell = this.buffer[y][x];
-        const px = x * this.charW;
-        const py = y * this.charH;
-
-        const bg = this._resolveColor(cell.bg, cell.bgRgb);
-        if (bg) {
-          ctx.fillStyle = bg;
-          ctx.fillRect(px, py, this.charW, this.charH);
-        }
-
-        if (cell.ch && cell.ch !== ' ') {
-          let fgIdx = cell.fg;
-          if (cell.bright && fgIdx != null && fgIdx < 8) fgIdx += 8;
-          ctx.font = `${cell.bright ? 'bold ' : ''}${this.fontSize} ${this.font}`;
-          ctx.fillStyle = this._resolveColor(fgIdx, cell.fgRgb) || this.fg;
-          ctx.fillText(cell.ch, px, py);
-        }
-      }
-    }
-
-    // Cursor
-    if (this.cursorEnabled && this.cursorOn && this._focused && this.cx >= 0 && this.cy >= 0 && this.cx < this.cols && this.cy < this.rows) {
-      ctx.fillStyle = '#ffff00';
-      ctx.fillRect(this.cx * this.charW, this.cy * this.charH, this.charW, this.charH);
-    }
-
-    // Focus hint
-    if (this._hintShown) {
-      ctx.fillStyle = '#000';
-      ctx.fillRect(0, (this.rows - 1) * this.charH, w, this.charH);
-      ctx.fillStyle = '#ffff55';
-      ctx.fillText(' [ click terminal to continue ] ', 10, (this.rows - 1) * this.charH);
-    }
-  }
-}
-
-if (typeof module !== 'undefined') module.exports = Terminal;
+            else if (n === 
