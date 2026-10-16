@@ -1,9 +1,7 @@
 /**
- * Lightweight VT100-style terminal emulator.
- * Supports 16/256/truecolor, dirty-row rendering, optional canvas mode,
- * and game-oriented cell get/set + primitive drawing.
- *
- * Backward compatible with previous public API.
+ * Full-canvas VT100-style terminal emulator.
+ * Cell buffer is the single source of truth. No per-cell DOM spans.
+ * Supports 16/256/truecolor, optional cursor, scrolling, get/set, and primitives.
  */
 class Terminal {
   /**
@@ -11,14 +9,14 @@ class Terminal {
    * @param {number} [options.cols=80]
    * @param {number} [options.rows=24]
    * @param {string} [options.font]
-   * @param {string} [options.fontSize]
+   * @param {string} [options.fontSize='15px']
    * @param {string} [options.fg='#39ff14']
    * @param {string} [options.bg='#000000']
    * @param {string} [options.border='#39ff14']
    * @param {boolean} [options.hideMouse=true]
    * @param {boolean} [options.autoRender=true]
    * @param {boolean} [options.focusHint=true]
-   * @param {boolean} [options.useCanvas=false]
+   * @param {boolean} [options.showCursor=true]
    */
   constructor(options = {}) {
     this.cols = options.cols || 80;
@@ -31,7 +29,10 @@ class Terminal {
     this.hideMouse = options.hideMouse !== undefined ? options.hideMouse : true;
     this.autoRender = options.autoRender !== undefined ? options.autoRender : true;
     this.focusHint = options.focusHint !== undefined ? options.focusHint : true;
-    this.useCanvas = options.useCanvas || false;
+    this.showCursor = options.showCursor !== undefined ? options.showCursor : true;
+
+    this.charW = 10;
+    this.charH = 18;
 
     this.colors = [
       '#000000','#aa0000','#00aa00','#aa5500',
@@ -45,7 +46,7 @@ class Terminal {
     this.wrap.className = 'terminal-outer';
     this.wrap.tabIndex = 0;
     this.wrap.style.cssText = `
-      display: flex; flex-direction: column; width: ${this.cols}ch;
+      display: flex; flex-direction: column; width: fit-content;
       margin: 0 auto; outline: none;
     `;
 
@@ -53,7 +54,7 @@ class Terminal {
     this.titleBar.style.cssText = `
       display: flex; align-items: center; justify-content: space-between;
       background: #111; padding: 8px 12px; font-family: system-ui, sans-serif;
-      font-size: 1.75rem; font-weight: 600; color: #fff; flex-shrink: 0;
+      font-size: 1.75rem; font-weight: 600; color: #fff;
     `;
     this.titleText = document.createElement('span');
     this.titleText.textContent = 'Terminal';
@@ -73,28 +74,15 @@ class Terminal {
     this.titleBar.appendChild(this.fsBtn);
     this.wrap.appendChild(this.titleBar);
 
-    this.screenWrap = document.createElement('div');
-    this.screenWrap.className = 'terminal';
-    this.screenWrap.style.cssText = `
-      background: ${this.bg}; color: ${this.fg}; font-family: ${this.font};
-      font-size: ${this.fontSize}; line-height: 1.25; width: 100%;
-      height: ${this.rows * 1.25}em; padding: 8px; overflow: hidden;
-      white-space: pre; border: 2px solid ${this.border};
-      box-shadow: 0 0 12px ${this.border}40; box-sizing: border-box;
-      cursor: ${this.hideMouse ? 'none' : 'auto'}; flex-shrink: 0;
+    this.canvas = document.createElement('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.canvas.style.cssText = `
+      border: 2px solid ${this.border};
+      box-shadow: 0 0 12px ${this.border}40;
+      cursor: ${this.hideMouse ? 'none' : 'auto'};
+      display: block;
     `;
-    this.wrap.appendChild(this.screenWrap);
-
-    if (this.useCanvas) {
-      this.canvas = document.createElement('canvas');
-      this.ctx = this.canvas.getContext('2d');
-      this.screenWrap.appendChild(this.canvas);
-      this._setupCanvas();
-    } else {
-      this.screen = document.createElement('div');
-      this.screen.style.cssText = 'width:100%;height:100%;overflow:hidden;';
-      this.screenWrap.appendChild(this.screen);
-    }
+    this.wrap.appendChild(this.canvas);
 
     document.addEventListener('fullscreenchange', () => {
       if (document.fullscreenElement === this.wrap) {
@@ -114,34 +102,13 @@ class Terminal {
 
     setTimeout(() => this.detectTitle(), 0);
 
-    this.cellEls = [];
     this.buffer = [];
-    this.displayed = [];
-    this.dirtyRows = new Set();
-
     for (let y = 0; y < this.rows; y++) {
       const row = [];
-      const dispRow = [];
-      const rowEls = [];
-      if (!this.useCanvas) {
-        const rowDiv = document.createElement('div');
-        rowDiv.style.whiteSpace = 'pre';
-        for (let x = 0; x < this.cols; x++) {
-          const span = document.createElement('span');
-          span.textContent = ' ';
-          rowDiv.appendChild(span);
-          rowEls.push(span);
-        }
-        this.screen.appendChild(rowDiv);
-      }
       for (let x = 0; x < this.cols; x++) {
         row.push({ ch: ' ', fg: 2, bg: 0, bright: false, fgRgb: null, bgRgb: null });
-        dispRow.push({ ch: ' ', fg: 2, bg: 0, bright: false, isCursor: false, fgRgb: null, bgRgb: null });
       }
-      this.cellEls.push(rowEls);
       this.buffer.push(row);
-      this.displayed.push(dispRow);
-      this.dirtyRows.add(y);
     }
 
     this.cx = 0;
@@ -160,7 +127,6 @@ class Terminal {
       this._focused = true;
       if (this._hintShown) {
         this._hintShown = false;
-        this.markDirty(this.rows - 1);
         this.render();
       }
     });
@@ -168,7 +134,6 @@ class Terminal {
       this._focused = false;
       if (this.focusHint) {
         this._hintShown = true;
-        this.markDirty(this.rows - 1);
         this.render();
       }
     });
@@ -177,9 +142,10 @@ class Terminal {
     this.wrap.addEventListener('keydown', (e) => this._keysDown.add(e.key));
     this.wrap.addEventListener('keyup', (e) => this._keysDown.delete(e.key));
 
+    this._setupCanvas();
+
     this._blink = setInterval(() => {
       this.cursorOn = !this.cursorOn;
-      this.markDirty(this.cy);
       if (this.autoRender) this.render();
     }, 530);
 
@@ -209,29 +175,17 @@ class Terminal {
   /** @private */
   _setupCanvas() {
     const dpr = window.devicePixelRatio || 1;
-    const charW = 10, charH = 18;
-    this.canvas.width = this.cols * charW * dpr;
-    this.canvas.height = this.rows * charH * dpr;
-    this.canvas.style.width = (this.cols * charW) + 'px';
-    this.canvas.style.height = (this.rows * charH) + 'px';
+    const w = this.cols * this.charW;
+    const h = this.rows * this.charH;
+    this.canvas.width = w * dpr;
+    this.canvas.height = h * dpr;
+    this.canvas.style.width = w + 'px';
+    this.canvas.style.height = h + 'px';
     this.ctx.scale(dpr, dpr);
     this.ctx.font = `${this.fontSize} ${this.font}`;
     this.ctx.textBaseline = 'top';
   }
 
-  /** @private */
-  markDirty(y) {
-    if (y >= 0 && y < this.rows) this.dirtyRows.add(y);
-  }
-
-  // ── Cell get / set (preferred for primitives) ──────────────────────────
-
-  /**
-   * Get the cell at (x, y). Returns a copy.
-   * @param {number} x
-   * @param {number} y
-   * @returns {{ch:string, fg:number|null, bg:number|null, fgRgb:object|null, bgRgb:object|null, bright:boolean}|null}
-   */
   get(x, y) {
     if (x < 0 || y < 0 || x >= this.cols || y >= this.rows) return null;
     const c = this.buffer[y][x];
@@ -245,18 +199,6 @@ class Terminal {
     };
   }
 
-  /**
-   * Set a cell at (x, y). Only provided fields are overwritten.
-   * @param {number} x
-   * @param {number} y
-   * @param {object} data
-   * @param {string} [data.ch]
-   * @param {number|null} [data.fg]
-   * @param {number|null} [data.bg]
-   * @param {{r:number,g:number,b:number}|null} [data.fgRgb]
-   * @param {{r:number,g:number,b:number}|null} [data.bgRgb]
-   * @param {boolean} [data.bright]
-   */
   set(x, y, data = {}) {
     if (x < 0 || y < 0 || x >= this.cols || y >= this.rows) return;
     const cell = this.buffer[y][x];
@@ -266,10 +208,7 @@ class Terminal {
     if (data.fgRgb !== undefined) cell.fgRgb = data.fgRgb;
     if (data.bgRgb !== undefined) cell.bgRgb = data.bgRgb;
     if (data.bright !== undefined) cell.bright = !!data.bright;
-    this.markDirty(y);
   }
-
-  // ── Existing public API (unchanged behavior) ───────────────────────────
 
   detectTitle() {
     const game = this.wrap.closest('#game') || this.wrap.parentElement;
@@ -307,7 +246,10 @@ class Terminal {
       if (ch === '\n') {
         this.cx = 0;
         this.cy++;
-        if (this.cy >= this.rows) this.scroll();
+        if (this.cy >= this.rows) {
+          this.scroll();
+          this.cy = this.rows - 1;
+        }
       } else if (ch === '\r') {
         this.cx = 0;
       } else if (ch === '\b') {
@@ -319,7 +261,10 @@ class Terminal {
         if (this.cx >= this.cols) {
           this.cx = 0;
           this.cy++;
-          if (this.cy >= this.rows) this.scroll();
+          if (this.cy >= this.rows) {
+            this.scroll();
+            this.cy = this.rows - 1;
+          }
         }
         this.put(ch);
         this.cx++;
@@ -372,27 +317,19 @@ class Terminal {
 
   scroll() {
     this.buffer.shift();
-    this.displayed.shift();
-    this.cellEls.shift();
     const newRow = [];
-    const newDisp = [];
     for (let x = 0; x < this.cols; x++) {
       newRow.push({ ch: ' ', fg: 2, bg: 0, bright: false, fgRgb: null, bgRgb: null });
-      newDisp.push({ ch: ' ', fg: 2, bg: 0, bright: false, isCursor: false, fgRgb: null, bgRgb: null });
     }
     this.buffer.push(newRow);
-    this.displayed.push(newDisp);
-    this.cellEls.push([]);
-    if (this.cy > 0) this.cy--;
-    for (let y = 0; y < this.rows; y++) this.markDirty(y);
   }
 
-  hideCursor() { this.cursorOn = false; this.markDirty(this.cy); this.render(); }
-  showCursor() { this.cursorOn = true; this.markDirty(this.cy); this.render(); }
+  hideCursor() { this.showCursor = false; this.render(); }
+  showCursor() { this.showCursor = true; this.render(); }
 
   setHideMouse(hide) {
     this.hideMouse = !!hide;
-    this.screenWrap.style.cursor = this.hideMouse ? 'none' : 'auto';
+    this.canvas.style.cursor = this.hideMouse ? 'none' : 'auto';
   }
   toggleHideMouse() { this.setHideMouse(!this.hideMouse); }
 
@@ -473,33 +410,16 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  // ── Color helpers ──────────────────────────────────────────────────────
-
   setFg256(n) { this.fgIdx = n; this.fgRgb = null; }
   setBg256(n) { this.bgIdx = n; this.bgRgb = null; }
   setFgRGB(r, g, b) { this.fgRgb = { r, g, b }; this.fgIdx = null; }
   setBgRGB(r, g, b) { this.bgRgb = { r, g, b }; this.bgIdx = null; }
 
-  // ── Drawing primitives (use get/set internally) ────────────────────────
-
-  /**
-   * Draw a rectangle. Outline only by default.
-   * @param {number} x
-   * @param {number} y
-   * @param {number} w
-   * @param {number} h
-   * @param {object} [opts]
-   * @param {boolean} [opts.fill=false]
-   * @param {string} [opts.ch='█']
-   * @param {number|null} [opts.fg]
-   * @param {number|null} [opts.bg]
-   */
   rect(x, y, w, h, opts = {}) {
     const fill = !!opts.fill;
     const ch = opts.ch || '█';
     const fg = opts.fg;
     const bg = opts.bg;
-
     for (let yy = y; yy < y + h; yy++) {
       for (let xx = x; xx < x + w; xx++) {
         if (!fill && yy !== y && yy !== y + h - 1 && xx !== x && xx !== x + w - 1) continue;
@@ -509,25 +429,12 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  /**
-   * Draw a circle (midpoint algorithm). Outline only by default.
-   * @param {number} cx
-   * @param {number} cy
-   * @param {number} r
-   * @param {object} [opts]
-   * @param {boolean} [opts.fill=false]
-   * @param {string} [opts.ch='█']
-   * @param {number|null} [opts.fg]
-   * @param {number|null} [opts.bg]
-   */
   circle(cx, cy, r, opts = {}) {
     const fill = !!opts.fill;
     const ch = opts.ch || '█';
     const fg = opts.fg;
     const bg = opts.bg;
-
     const plot = (x, y) => this.set(x, y, { ch, fg, bg });
-
     let x = r, y = 0, err = 1 - r;
     while (x >= y) {
       if (fill) {
@@ -552,14 +459,6 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  /**
-   * Draw a box using border characters.
-   * @param {number} x
-   * @param {number} y
-   * @param {number} w
-   * @param {number} h
-   * @param {string} [style='single']
-   */
   drawBox(x, y, w, h, style = 'single') {
     const borders = {
       single: ['┌', '─', '┐', '│', '└', '┘'],
@@ -582,8 +481,6 @@ class Terminal {
     if (this.autoRender) this.render();
   }
 
-  // ── Input helpers ──────────────────────────────────────────────────────
-
   isKeyDown(key) { return this._keysDown.has(key); }
 
   getKey() {
@@ -595,8 +492,6 @@ class Terminal {
   beginFrame() { this.autoRender = false; }
   endFrame() { this.autoRender = true; this.render(); }
 
-  // ── Rendering ──────────────────────────────────────────────────────────
-
   /** @private */
   _resolveColor(idx, rgb) {
     if (rgb) return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
@@ -606,84 +501,44 @@ class Terminal {
   }
 
   render() {
-    if (this.useCanvas) {
-      this._renderCanvas();
-      this.dirtyRows.clear();
-      return;
-    }
-
-    for (const y of this.dirtyRows) {
-      if (y < 0 || y >= this.rows) continue;
-      for (let x = 0; x < this.cols; x++) {
-        const cell = this.buffer[y][x];
-        const disp = this.displayed[y][x];
-        const isCursor = this.cursorOn && y === this.cy && x === this.cx && this._focused;
-        const ch = isCursor ? '█' : (cell.ch || ' ');
-
-        if (ch !== disp.ch || cell.fg !== disp.fg || cell.bg !== disp.bg ||
-            cell.bright !== disp.bright || isCursor !== disp.isCursor ||
-            (cell.fgRgb || disp.fgRgb) && JSON.stringify(cell.fgRgb) !== JSON.stringify(disp.fgRgb) ||
-            (cell.bgRgb || disp.bgRgb) && JSON.stringify(cell.bgRgb) !== JSON.stringify(disp.bgRgb)) {
-
-          const span = this.cellEls[y][x];
-          if (!span) continue;
-          span.textContent = ch;
-          const fg = this._resolveColor(cell.fg, cell.fgRgb);
-          const bg = this._resolveColor(cell.bg, cell.bgRgb);
-          span.style.color = fg || '';
-          span.style.backgroundColor = bg || '';
-          span.style.fontWeight = cell.bright ? 'bold' : 'normal';
-
-          disp.ch = ch;
-          disp.fg = cell.fg;
-          disp.bg = cell.bg;
-          disp.fgRgb = cell.fgRgb ? { ...cell.fgRgb } : null;
-          disp.bgRgb = cell.bgRgb ? { ...cell.bgRgb } : null;
-          disp.bright = cell.bright;
-          disp.isCursor = isCursor;
-        }
-      }
-    }
-    this.dirtyRows.clear();
-
-    if (this._hintShown) {
-      const hint = ' [ click terminal to continue ] ';
-      const start = Math.floor((this.cols - hint.length) / 2);
-      const y = this.rows - 1;
-      for (let i = 0; i < hint.length; i++) {
-        const x = start + i;
-        if (x >= 0 && x < this.cols && this.cellEls[y][x]) {
-          const span = this.cellEls[y][x];
-          span.textContent = hint[i];
-          span.style.color = '#ffff55';
-          span.style.backgroundColor = '#000000';
-        }
-      }
-    }
-  }
-
-  /** @private */
-  _renderCanvas() {
     const ctx = this.ctx;
-    const charW = 10, charH = 18;
-    ctx.fillStyle = this.bg;
-    ctx.fillRect(0, 0, this.cols * charW, this.rows * charH);
+    const w = this.cols * this.charW;
+    const h = this.rows * this.charH;
 
-    for (const y of this.dirtyRows) {
+    ctx.fillStyle = this.bg;
+    ctx.fillRect(0, 0, w, h);
+
+    for (let y = 0; y < this.rows; y++) {
       for (let x = 0; x < this.cols; x++) {
         const cell = this.buffer[y][x];
-        const isCursor = this.cursorOn && y === this.cy && x === this.cx && this._focused;
-        const ch = isCursor ? '█' : (cell.ch || ' ');
-        const fg = this._resolveColor(cell.fg, cell.fgRgb) || this.fg;
-        const bg = this._resolveColor(cell.bg, cell.bgRgb);
+        const px = x * this.charW;
+        const py = y * this.charH;
 
+        const bg = this._resolveColor(cell.bg, cell.bgRgb);
         if (bg) {
           ctx.fillStyle = bg;
-          ctx.fillRect(x * charW, y * charH, charW, charH);
+          ctx.fillRect(px, py, this.charW, this.charH);
         }
-        ctx.fillStyle = fg;
-        ctx.fillText(ch, x * charW, y * charH);
+
+        if (cell.ch && cell.ch !== ' ') {
+          ctx.fillStyle = this._resolveColor(cell.fg, cell.fgRgb) || this.fg;
+          ctx.fillText(cell.ch, px, py);
+        }
       }
+    }
+
+    // Cursor
+    if (this.showCursor && this.cursorOn && this._focused && this.cx >= 0 && this.cy >= 0 && this.cx < this.cols && this.cy < this.rows) {
+      ctx.fillStyle = '#ffff00';
+      ctx.fillRect(this.cx * this.charW, this.cy * this.charH, this.charW, this.charH);
+    }
+
+    // Focus hint
+    if (this._hintShown) {
+      ctx.fillStyle = '#000';
+      ctx.fillRect(0, (this.rows - 1) * this.charH, w, this.charH);
+      ctx.fillStyle = '#ffff55';
+      ctx.fillText(' [ click terminal to continue ] ', 10, (this.rows - 1) * this.charH);
     }
   }
 }
