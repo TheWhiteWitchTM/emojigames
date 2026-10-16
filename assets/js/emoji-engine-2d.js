@@ -351,10 +351,12 @@ var EmojiEngine = (() => {
         }
       }
       ctx.globalAlpha = 1;
-      const barX = this.cursor.col * width;
-      const barY = (this.cursor.row + 1) * height - 2;
-      ctx.fillStyle = "#9ee";
-      ctx.fillRect(barX, barY, width, 2);
+      if (this.cursorLit !== false) {
+        const barX = this.cursor.col * width;
+        const barY = (this.cursor.row + 1) * height - 3;
+        ctx.fillStyle = this.cursorColor || "#9ee";
+        ctx.fillRect(barX, barY, width, 3);
+      }
       ctx.restore();
     }
     paintCell(ctx, cell, x, y, width, height, size) {

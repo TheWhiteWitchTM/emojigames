@@ -1,33 +1,41 @@
 # Witch ][
 
-The glass is 40 columns by 24 rows. The prompt is READY. The language is WASIC. She has 666 lines of memory, and the dialect next door can sit down.
+The glass is 40 columns by 24 rows. The prompt is SPEAK. READY is a word from the machines next door, and she does not keep their hours. The language is WASIC. She has 666 lines of memory, and the dialect next door can sit down.
 
 A line with a number is stored. A line without one runs now. The words are the same either way.
 
 ## When she wakes
 
-The count climbs to 666. Then the glass says:
+The glass stays black. A pale bar blinks at the top left, and nothing else is on it. Then she bothers to arrive. The count climbs to 666. The glass says:
 
 ```
+☾
+
 WITCH ][
+
+THE GLASS IS BLACK.
+
 MEMORY 666
 
 SHE WOKE UP.
+THE CIRCLE HOLDS.
 WASIC SPEAKS.
-BASIC CAN SIT DOWN.
+BASIC CAN SIT IN THE DARK.
 
 666 LINES FREE.
-READY.
+SPEAK.
 ```
 
-Click the glass once if the two notes stay silent. The browser holds the sound until a hand arrives.
+The moon is a faint purple. The name is white. The line about the glass is faint. The count is the color of a low candle. The line about BASIC is dark red. The rest is ash. SPEAK is white. What you type after that is ash, until a program runs.
+
+Click the glass once if the two notes stay silent. They are low, a fifth apart. The browser holds the sound until a hand arrives.
 
 The bezel under the glass names the mood, then the lines in use.
 
 | Bezel | Mood |
 | --- | --- |
 | WAKING | Still counting |
-| READY n/666 | Waiting for you |
+| SPEAK n/666 | Waiting for you |
 | LINE n | Running that line |
 | RUNNING | Running, between lines |
 | WAITING | DEMAND wants an answer |
@@ -36,11 +44,11 @@ The bezel under the glass names the mood, then the lines in use.
 
 ## Typing
 
-The pale bar is the caret. Backspace, Delete, the arrows, Home, and End edit the line. Up and Down walk the last 32 lines you sent. A line holds 255 characters. Past that she rings the bell and takes no more.
+The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, the arrows, Home, and End edit the line. Up and Down walk the last 32 lines you sent. A line holds 255 characters. Past that she rings the bell and takes no more.
 
-Enter stores a numbered line, or runs a bare one. An empty Enter at READY prints READY. again.
+Enter stores a numbered line, or runs a bare one. An empty Enter at SPEAK prints SPEAK. again.
 
-Escape at READY clears the line you have not sent. Escape while she runs, or while she waits for an answer, stops her. Ctrl-C does that too. She says:
+Escape at SPEAK clears the line you have not sent. Escape while she runs, or while she waits for an answer, stops her. Ctrl-C does that too. She says:
 
 ```
 ENOUGH.
@@ -72,7 +80,7 @@ FULL. 666 LINES. STOP.
 
 She will store a line she intends to refuse later. PRINT can sit in the program. It fails when she reaches it. She likes to wait.
 
-## At READY
+## At SPEAK
 
 These words work from the prompt. Inside a program they are `NO. NOT FROM IN HERE.`
 
@@ -97,10 +105,10 @@ These words work from the prompt. Inside a program they are `NO. NOT FROM IN HER
 | SEAL "NAME" | Keep the program here. She says SEALED. |
 | UNSEAL "NAME" | Load it. She says UNSEALED. She does not run it |
 | UNSEAL "shelf:NAME" | Load a program from the box |
-| UPLOAD | Read a text file. Cancel returns to READY with no speech |
+| UPLOAD | Read a text file. Cancel returns to SPEAK with no speech |
 | DOWNLOAD "NAME" | Save NAME.wasic. She says TAKE IT. |
 | GRIMOIRE | The short list of words |
-| HELP | She says GRIMOIRE. NOT HELP. Then the list |
+| HELP | She says GRIMOIRE. NOT HELP. Then the list. She says it again at the end, because the glass scrolls |
 
 An empty REVEAL prints nothing. OBLITERATE with no range is `NO. SAY IT AGAIN.`
 
@@ -108,7 +116,7 @@ RENUMBER rewrites line numbers in FLYTO, SUMMON, REWIND, a THEN that is only a n
 
 VANISH says GONE. The variables go with the program.
 
-AUTO prints the next number and waits. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line she refuses to store keeps the same number. From READY, AUTO OFF stops it too. RENUMBER that would push a line past 255 characters says TOO LONG. and leaves the numbers alone.
+AUTO prints the next number and waits. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line she refuses to store keeps the same number. From SPEAK, AUTO OFF stops it too. RENUMBER that would push a line past 255 characters says TOO LONG. and leaves the numbers alone.
 
 A file name is a letter, then up to 15 letters, digits, or hyphens. She folds the case. No name:
 
@@ -132,11 +140,11 @@ DOWNLOAD of an empty program says NOTHING TO RUN. SEAL of an empty program seals
 
 ## Running
 
-RUN clears the variables, the loops, the calls, the offering pointer, the watch, and the minions. The pen returns to green on black. The letters already on the glass stay until SCRUB, or until they scroll off.
+RUN clears the variables, the loops, the calls, the offering pointer, the watch, and the minions. The pen turns green on black for the working. The letters already on the glass stay until SCRUB, or until they scroll off. When she stops, the pen returns to ash.
 
-A bare FLYTO or SUMMON at READY walks into the program and leaves the variables where they sit.
+A bare FLYTO or SUMMON at SPEAK walks into the program and leaves the variables where they sit.
 
-DISPEL ends a run and says nothing. An error returns to READY. The variables survive both. The next RUN does not spare them. VANISH does not either.
+DISPEL ends a run and says nothing. An error returns to SPEAK. The variables survive both. The next RUN does not spare them. VANISH does not either.
 
 No lines:
 
@@ -370,7 +378,7 @@ COLOR fg, bg sets the pen. Leave the bg off and the old background stays. The nu
 | 6 | teal | 14 | cyan |
 | 7 | gray | 15 | white |
 
-She wakes in COLOR 10, 0. Green on black.
+She wakes in COLOR 7, 0. Ash on black. SPEAK is written in white. RUN sets the pen to COLOR 10, 0 for the working. When she stops, the ash returns.
 
 SCRUB clears the letters and sends the caret home. Minions stay.
 
@@ -614,7 +622,7 @@ The third one does not stop. Escape is the door.
 | DOWNLOAD | TAKE IT. |
 | Left AUTO | AUTO OFF. |
 
-READY.
+SPEAK.
 
 ## Limits, in one place
 

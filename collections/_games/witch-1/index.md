@@ -12,17 +12,17 @@ tags: [terminal, computer]
   .ee-wrap {
     width: 100% !important;
     max-width: 820px;
-    background: #1a1714 !important;
-    color: #d7ccb2 !important;
+    background: #0b090a !important;
+    color: #cbbfa6 !important;
     border-radius: 18px;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, .45);
+    box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
     font-family: ui-monospace, "Courier New", monospace !important;
   }
-  .ee-header { border-bottom: 1px solid #3a332c; }
-  .ee-title { letter-spacing: .14em; color: #c8e6b0; }
+  .ee-header { border-bottom: 1px solid #2a211c; }
+  .ee-title { letter-spacing: .22em; color: #d7c7a2; font-weight: 500; }
   .ee-fullscreen {
-    color: #d7ccb2 !important;
-    border-color: #5c5348 !important;
+    color: #cbbfa6 !important;
+    border-color: #4a3b32 !important;
   }
   .crt {
     position: relative;
@@ -30,7 +30,9 @@ tags: [terminal, computer]
     background: #000;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: inset 0 0 0 2px #0c140c, inset 0 0 40px rgba(40, 80, 30, .25);
+    box-shadow:
+      inset 0 0 0 1px #1a1012,
+      inset 0 0 80px rgba(36, 0, 12, .55);
   }
   .crt canvas {
     display: block;
@@ -44,15 +46,15 @@ tags: [terminal, computer]
     inset: 0;
     background: repeating-linear-gradient(
       to bottom,
-      rgba(0, 0, 0, .12),
-      rgba(0, 0, 0, .12) 1px,
+      rgba(0, 0, 0, .18),
+      rgba(0, 0, 0, .18) 1px,
       transparent 2px,
-      transparent 4px
+      transparent 3px
     );
     mix-blend-mode: multiply;
   }
-  .ee-footer { color: #9d8; }
-  .led { color: #39ff14; text-shadow: 0 0 6px #39ff14; }
+  .ee-footer { color: #8d7b68; letter-spacing: .08em; }
+  .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
   .ee-wrap:fullscreen {
     width: 100% !important;
     height: 100% !important;
@@ -68,11 +70,13 @@ tags: [terminal, computer]
 
 <div id="game"></div>
 
-A 40-column machine. It speaks WASIC.
+Forty columns, twenty-four rows. The glass is black. She speaks WASIC.
 
-Type a line number, then the words. `RUN` starts at the top. `SHELF` lists the programs in the box. `UNSEAL "shelf:GUESS"` loads one. `GRIMOIRE` prints the words she accepts. Escape stops a running program.
+A line with a number is stored. A line without one runs now. `RUN` starts at the top. `SHELF` lists what shipped in the box. `UNSEAL "shelf:GUESS"` takes one down and leaves it sitting there, which is as much initiative as she offers. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. She does not answer to READY. When the glass says SPEAK, the turn is yours.
 
-Click the glass if the sound stays quiet.
+Escape ends a working that will not end. Ctrl-C does too, if you were raised on the other machines. The pale bar blinks from the moment the glass is dark, before she bothers to introduce herself.
+
+Click the glass once if the two notes stay buried. The browser holds sound until a hand arrives.
 
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
 <script src="{{ '/games/witch-1/wasic.js' | relative_url }}"></script>

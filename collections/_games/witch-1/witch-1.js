@@ -23,6 +23,8 @@
     cellHeight: CH,
     canvas: canvas
   });
+  term.cursorColor = "#e6d3b0";
+  term.cursorLit = true;
   var engine = new E.Engine({ canvas: canvas });
 
   var ui = E.Utilities.wrap(term, { title: "WITCH ][", footer: true });
@@ -72,13 +74,13 @@
 
   function updateFooter() {
     var used = wasic ? wasic.lines.size : 0;
-    var state = "READY";
+    var state = "SPEAK";
     if (mode === "boot") state = "WAKING";
     else if (mode === "run") state = wasic && wasic.currentLine != null ? "LINE " + wasic.currentLine : "RUNNING";
     else if (mode === "demand") state = "WAITING";
     else if (mode === "freeze") state = "FROZEN";
     else if (mode === "auto") state = "AUTO " + auto.num;
-    statusEl.textContent = state + "  " + used + "/666";
+    statusEl.textContent = state + " " + used + "/666";
   }
 
   function writeRaw(text) {
@@ -190,9 +192,10 @@
   function promptReady() {
     auto.on = false;
     mode = "ready";
-    term.color(10, 0);
     if (term.cursor.col !== 0) writeRaw("\n");
-    writeRaw("READY.\n");
+    term.color(15, 0);
+    writeRaw("SPEAK.\n");
+    term.color(7, 0);
     beginEntry("");
     updateFooter();
   }
@@ -349,8 +352,10 @@
     }
   });
 
-  var lastFrame = performance.now();
+  var wokeAt = performance.now();
+  var lastFrame = wokeAt;
   function frame(t) {
+    term.cursorLit = Math.floor((t - wokeAt) / 500) % 2 === 0;
     var dt = Math.min(0.05, Math.max(0.001, (t - lastFrame) / 1000));
     lastFrame = t;
     framePairs = new Set();
@@ -440,7 +445,7 @@
 
   function printGrimoire() {
     var lines = [
-      "FINE. THE WORDS.",
+      "THE SHORT LIST. SHE IS NOT YOUR TUTOR.",
       "",
       "CHANT DEMAND CONJURE FLYTO",
       "SUMMON BANISH IF CURSE BREAK",
@@ -450,15 +455,16 @@
       "SEND WATCH DESTROY CIRCLE",
       "LINE FILL",
       "",
-      "DIRECT:",
+      "FROM OUT HERE:",
       "RUN REVEAL OBLITERATE",
       "RENUMBER VANISH AUTO",
       "SEAL UNSEAL UPLOAD",
       "DOWNLOAD SHELF GRIMOIRE",
       "",
       "UNSEAL \"shelf:GUESS\" THEN RUN.",
-      "ESCAPE STOPS A RUNNING MOUTH.",
-      "BASIC IS A DIALECT SHE REFUSES."
+      "ESCAPE LEAVES A CIRCLE THAT WILL NOT.",
+      "BASIC MAY SIT IN A LINE.",
+      "IT FALLS OVER WHEN SHE REACHES IT."
     ];
     for (var i = 0; i < lines.length; i += 1) writeRaw(lines[i] + "\n");
   }
@@ -473,7 +479,12 @@
     };
     if (!known[word]) return false;
     var rest = (m[2] || "").trim();
-    if (word === "HELP") { writeRaw("GRIMOIRE. NOT HELP.\n"); printGrimoire(); return true; }
+    if (word === "HELP") {
+      writeRaw("GRIMOIRE. NOT HELP.\n");
+      printGrimoire();
+      writeRaw("GRIMOIRE. NOT HELP.\n");
+      return true;
+    }
     if (word === "GRIMOIRE") { printGrimoire(); return true; }
     if (word === "RUN") { return doRun(rest); }
     if (word === "REVEAL") {
@@ -498,7 +509,7 @@
     if (word === "VANISH") {
       wasic.clearProgram();
       clearMinions();
-      term.color(10, 0);
+      term.color(7, 0);
       term.clear();
       writeRaw("GONE.\n");
       return true;
@@ -714,7 +725,9 @@
         entry = "";
         caret = 0;
         painted = 0;
-        writeRaw("READY.\n");
+        term.color(15, 0);
+        writeRaw("SPEAK.\n");
+        term.color(7, 0);
         beginEntry("");
         updateFooter();
         return;
@@ -900,36 +913,40 @@
 
   crt.addEventListener("pointerdown", unlock);
 
-  function center(text) {
-    var pad = Math.max(0, Math.floor((COLS - cp(text).length) / 2));
-    writeRaw(" ".repeat(pad) + text + "\n");
+  function sleep(ms) {
+    return new Promise(function (r) { setTimeout(r, ms); });
   }
 
   async function boot() {
     mode = "boot";
-    term.color(10, 0);
     term.clear();
+    term.cursor.col = 0;
+    term.cursor.row = 0;
+    term.cursorLit = true;
+    term.flush();
     updateFooter();
-    writeRaw("\n");
-    center("WITCH ][");
-    writeRaw("\n");
+    await sleep(1200);
+    term.write("\x1b[2;35m☾\x1b[0m\n\n");
+    term.write("\x1b[97mWITCH ][\x1b[0m\n\n");
+    term.write("\x1b[2;37mTHE GLASS IS BLACK.\x1b[0m\n\n");
+    term.write("\x1b[33m");
     var marks = [111, 222, 333, 444, 555, 666];
     for (var i = 0; i < marks.length; i += 1) {
-      writeRaw("\rMEMORY " + String(marks[i]).padStart(3, "0"));
-      await new Promise(function (r) { setTimeout(r, 45); });
+      term.write("\rMEMORY " + String(marks[i]).padStart(3, "0"));
+      await sleep(70);
     }
-    writeRaw("\n\n");
-    center("SHE WOKE UP.");
-    center("WASIC SPEAKS.");
-    center("BASIC CAN SIT DOWN.");
-    writeRaw("\n");
-    center("666 LINES FREE.");
-    writeRaw("\n");
+    term.write("\x1b[0m\n\n");
+    term.write("\x1b[37mSHE WOKE UP.\n");
+    term.write("THE CIRCLE HOLDS.\n");
+    term.write("WASIC SPEAKS.\x1b[0m\n");
+    term.write("\x1b[31mBASIC CAN SIT IN THE DARK.\x1b[0m\n\n");
+    term.write("\x1b[33m666 LINES FREE.\x1b[0m\n\n");
+    term.write("\x1b[0m");
     unlock();
-    try { engine.beep(196, 70); } catch (err) {}
-    await new Promise(function (r) { setTimeout(r, 90); });
-    try { engine.beep(392, 110); } catch (err) {}
-    await new Promise(function (r) { setTimeout(r, 140); });
+    try { engine.beep(98, 160); } catch (err) {}
+    await sleep(200);
+    try { engine.beep(146, 260); } catch (err) {}
+    await sleep(180);
     promptReady();
   }
 
