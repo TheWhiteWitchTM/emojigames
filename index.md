@@ -15,7 +15,7 @@ From [The White Witch™](https://thewhitewitchtm.github.io/whitewitch/)
 Politics broke me, so I started porting old games.  
 Then I got bored of *those* too and decided the emojis needed their own corner.
 
-This is that corner. It opened on 12 October 2026. Nine games are playable.
+This is that corner. It opened on 12 October 2026.
 
 ---
 
@@ -40,6 +40,7 @@ Click one and play it in the browser. The [catalog]({{ '/games/' | relative_url 
 - [🗡️ Hack]({{ '/games/hack/' | relative_url }}) — rooms, corridors, and things that walk toward you.
 - [🤖 Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}) — a chatbot with a face and a lot of opinions.
 - [🐂 The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}) — five names, a wagon, and the road to the Willamette.
+- [🖥️ Witch \][]({{ '/games/witch-1/' | relative_url }}) — a 40-column machine. It speaks WASIC.
 
 ## Elsewhere
 
