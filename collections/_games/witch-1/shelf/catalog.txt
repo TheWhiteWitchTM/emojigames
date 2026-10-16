@@ -1,0 +1,11 @@
+# Witch I shelf. One name per line. The file is the name, lower case, with .wasic.
+HELLO-WITCH
+HELLO-DEMON
+GUESS
+DICE
+OMEN
+CIRCLES
+MINIONS
+KEYS
+CAROL
+FAMILIAR

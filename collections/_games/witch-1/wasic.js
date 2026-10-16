@@ -2,47 +2,54 @@
 "use strict";
 (function (root) {
   var MESSAGES = {
-    syntax: "NO. SAY IT AGAIN.",
-    basic: "NO. SHE DOES NOT SPEAK THAT.",
-    peek: "STOP PEEKING.",
-    poke: "DON'T POKE ME.",
-    sys: "NO SYS. I WOKE ON MY OWN.",
-    wait: "I DO NOT WAIT ON THAT WIRE.",
-    usr: "USR. I AM NOT A HOOK.",
-    call: "DO NOT CALL ME THAT WAY.",
-    wire: "NO. THAT WIRE IS DEAD.",
-    noline: "NO LINE.",
-    type: "NO. WRONG KIND OF THING.",
-    full: "FULL. 666 LINES. STOP.",
-    div0: "CUTE. DIVIDE BY NOTHING.",
-    sprite: "NO. THAT MINION IS GONE.",
-    long: "TOO LONG.",
-    nofor: "BREAK, AND NOTHING TO BREAK.",
-    noreturn: "BANISH, AND NOBODY CALLED.",
-    nodata: "THE OFFERING IS GONE.",
-    redo: "AGAIN.",
-    redonum: "AGAIN. A NUMBER.",
-    big: "TOO BIG.",
-    deep: "TOO DEEP.",
-    direct: "NO. NOT FROM IN HERE.",
-    empty: "NOTHING TO RUN.",
-    step: "STEP OF NOTHING. NO.",
-    dim: "NO. IT HAS NO ROOM.",
-    index: "NO. OUTSIDE THE ROOM.",
-    many: "NO. TOO MANY MINIONS.",
-    taken: "NO. THAT WORD IS TAKEN.",
-    label: "NO. THAT NAME IS TAKEN.",
-    high: "NO. LINES STOP AT 63999."
+    syntax: "❓ NO. SAY IT AGAIN.",
+    basic: "🙊 NO. SHE DOES NOT SPEAK THAT.",
+    peek: "👀 STOP PEEKING.",
+    poke: "👉 DON'T POKE ME.",
+    sys: "🛑 NO SYS. I WOKE ON MY OWN.",
+    wait: "⏳ I DO NOT WAIT ON THAT WIRE.",
+    usr: "🪝 USR. I AM NOT A HOOK.",
+    call: "📞 DO NOT CALL ME THAT WAY.",
+    wire: "🔌 NO. THAT WIRE IS DEAD.",
+    noline: "🚫 NO LINE.",
+    type: "🎭 NO. WRONG KIND OF THING.",
+    full: "🛑 FULL. 666 LINES. STOP.",
+    div0: "➗ CUTE. DIVIDE BY NOTHING.",
+    sprite: "👻 NO. THAT MINION IS GONE.",
+    long: "📏 TOO LONG.",
+    string: "🧵 TOO LONG A STRING.",
+    nofor: "➰ BREAK, AND NOTHING TO BREAK.",
+    noreturn: "📭 BANISH, AND NOBODY CALLED.",
+    nodata: "📜 THE OFFERING IS GONE.",
+    redo: "🔁 AGAIN.",
+    redonum: "🔢 AGAIN. A NUMBER.",
+    big: "💥 TOO BIG.",
+    deep: "📚 TOO DEEP.",
+    direct: "🚪 NO. NOT FROM IN HERE.",
+    empty: "📭 NOTHING TO RUN.",
+    step: "🚫 STEP OF NOTHING. NO.",
+    dim: "📦 NO. IT HAS NO ROOM.",
+    index: "📐 NO. OUTSIDE THE ROOM.",
+    many: "👻 NO. TOO MANY MINIONS.",
+    taken: "🔒 NO. THAT WORD IS TAKEN.",
+    label: "🔖 NO. THAT NAME IS TAKEN.",
+    high: "🔢 NO. LINES STOP AT 63999.",
+    break: "✋ ENOUGH.",
+    nameit: "🔖 NAME IT.",
+    missing: "🌑 NO. IT IS NOT THERE.",
+    shut: "📦 THE BOX IS SHUT."
   };
 
   var MAX_LINE = 63999;
   var MAX_LINES = 666;
   var MAX_STACK = 32;
   var MAX_CELLS = 20000;
+  var MAX_CHARS = 255;
+  var MAX_INDEX = 2000;
 
   function WasicFail(code) {
     this.code = code;
-    this.message = MESSAGES[code] || "NO.";
+    this.message = MESSAGES[code] || "❓ NO.";
     this.name = "WasicFail";
   }
   WasicFail.prototype = Object.create(Error.prototype);
@@ -58,6 +65,11 @@
   }
   WasicEnd.prototype = Object.create(Error.prototype);
 
+  function span(text) { return Array.from(String(text)).length; }
+  function fitString(text) {
+    if (span(text) > MAX_CHARS) throw new WasicFail("string");
+    return text;
+  }
   function isFail(err) { return err instanceof WasicFail || (err && err.name === "WasicFail"); }
   function isBreak(err) { return err instanceof WasicBreak || (err && err.name === "WasicBreak"); }
   function isEnd(err) { return err instanceof WasicEnd || (err && err.name === "WasicEnd"); }
@@ -720,6 +732,7 @@
       return;
     }
     var clean = String(source).trim();
+    if (span(String(lineNo) + " " + clean) > MAX_CHARS) throw new WasicFail("long");
     if (!this.lines.has(lineNo) && this.lines.size >= MAX_LINES) throw new WasicFail("full");
     this.lines.set(lineNo, clean);
     this.dirty = true;
@@ -758,7 +771,7 @@
     for (var i = 0; i < raws.length; i += 1) {
       var raw = raws[i].replace(/\s+$/, "");
       if (!raw.trim()) continue;
-      if (raw.length > 255) {
+      if (span(raw) > MAX_CHARS) {
         this.currentLine = null;
         throw new WasicFail("long");
       }
@@ -805,7 +818,7 @@
         var text = String(map.get(spans[k].value));
         out = out.slice(0, spans[k].from) + text + out.slice(spans[k].to);
       }
-      if ((String(map.get(nums[n])) + " " + out).length > 255) throw new WasicFail("long");
+      if (span(String(map.get(nums[n])) + " " + out) > MAX_CHARS) throw new WasicFail("long");
       next.set(map.get(nums[n]), out);
     }
     this.lines = next;
@@ -865,6 +878,7 @@
     var want = name.slice(-1) === "$" ? "s" : "n";
     if (!val || val.t !== want) throw new WasicFail("type");
     if (val.t === "n" && !Number.isFinite(val.v)) throw new WasicFail("big");
+    if (val.t === "s") fitString(val.v);
     this.vars.set(name, val.t === "n" ? num(val.v) : str(val.v));
   };
   Wasic.prototype.dimArray = function (name, sizes) {
@@ -873,7 +887,7 @@
     var count = 1;
     for (var i = 0; i < sizes.length; i += 1) {
       var n = Math.floor(asNum(sizes[i]));
-      if (n < 0 || n > 2000) throw new WasicFail("dim");
+      if (n < 0 || n > MAX_INDEX) throw new WasicFail("dim");
       dims.push(n);
       count *= n + 1;
       if (count > MAX_CELLS) throw new WasicFail("dim");
@@ -905,6 +919,7 @@
     if (!arr) throw new WasicFail("dim");
     var want = name.slice(-1) === "$" ? "s" : "n";
     if (!val || val.t !== want) throw new WasicFail("type");
+    if (want === "s") fitString(val.v);
     arr.data[this.addr(arr, indexes)] = val.v;
   };
   Wasic.prototype.assignLvalue = function (lv, val) {
@@ -950,7 +965,7 @@
     var r = this.eval(node.right);
     if (l.t === "s" || r.t === "s") {
       if (l.t !== "s" || r.t !== "s") throw new WasicFail("type");
-      return str(l.v + r.v);
+      return str(fitString(l.v + r.v));
     }
     var v = l.v + r.v;
     if (!Number.isFinite(v)) throw new WasicFail("big");
@@ -1116,9 +1131,14 @@
   };
   Wasic.prototype.report = function (err) {
     if (isEnd(err)) return;
-    var msg = isBreak(err) ? "ENOUGH." : (err && err.message ? err.message : "NO.");
-    this.host.write(msg + this.where() + "\n");
-    if (this.host.bell) this.host.bell();
+    var stop = isBreak(err);
+    var msg = stop ? MESSAGES.break : (err && err.message ? err.message : MESSAGES.syntax);
+    var line = msg + this.where();
+    if (this.host.fault) this.host.fault(line, stop ? "stop" : "error");
+    else {
+      this.host.write(line + "\n");
+      if (this.host.bell) this.host.bell();
+    }
   };
 
   Wasic.prototype.lineAt = function (index) {
@@ -1250,7 +1270,7 @@
         raw = raw == null ? "" : String(raw);
         var parts = stmt.vars.length === 1 ? [raw] : raw.split(",").map(function (s) { return s.trim(); });
         if (parts.length !== stmt.vars.length) {
-          self.host.write("AGAIN.\n");
+          self.report(new WasicFail("redo"));
           return once();
         }
         try {
@@ -1268,7 +1288,7 @@
           for (var a = 0; a < stmt.vars.length; a += 1) self.assignLvalue(stmt.vars[a], values[a]);
         } catch (err) {
           if (isFail(err) && (err.code === "redonum" || err.code === "type" || err.code === "index" || err.code === "dim")) {
-            self.host.write(err.message + "\n");
+            self.report(err);
             return once();
           }
           throw err;
@@ -1621,8 +1641,7 @@
       return Promise.resolve();
     }
     if (!this.prog.length) {
-      this.host.write(MESSAGES.empty + "\n");
-      if (this.host.bell) this.host.bell();
+      this.report(new WasicFail("empty"));
       return Promise.resolve();
     }
     var index = 0;
@@ -1632,8 +1651,7 @@
         if (this.prog[i].num >= start) { index = i; break; }
       }
       if (index < 0) {
-        this.host.write(MESSAGES.noline + "\n");
-        if (this.host.bell) this.host.bell();
+        this.report(new WasicFail("noline"));
         return Promise.resolve();
       }
     }
@@ -1645,4 +1663,25 @@
   root.Wasic = Wasic;
   root.WasicFail = WasicFail;
   root.WASIC_MESSAGES = MESSAGES;
+  root.WASIC_LIMITS = {
+    cols: 40,
+    rows: 24,
+    maxLine: MAX_LINE,
+    maxLines: MAX_LINES,
+    maxChars: MAX_CHARS,
+    maxStack: MAX_STACK,
+    maxCells: MAX_CELLS,
+    maxIndex: MAX_INDEX,
+    maxAxes: 2,
+    maxMinions: 32,
+    maxHits: 8,
+    maxHistory: 32,
+    maxKeys: 32,
+    toneMin: 20,
+    toneMax: 8000,
+    toneMs: 8000,
+    freezeMs: 60000,
+    minionSize: 180,
+    colors: 16
+  };
 })(typeof globalThis !== "undefined" ? globalThis : this);

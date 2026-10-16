@@ -68,17 +68,20 @@ tags: [terminal, computer]
   }
 </style>
 
-<div id="game"></div>
+<div id="game" data-shelf="{{ '/games/witch-1/shelf/' | relative_url }}" data-witch="{{ '/assets/images/site.jpg' | relative_url }}"></div>
 
 Forty columns, twenty-four rows. The glass is black. She speaks WASIC.
 
-A line with a number is stored. A line without one runs now. That is the C64 way, and she kept it. `RUN` starts at the top. `SHELF` lists what shipped in the box. `UNSEAL "shelf:GUESS"` takes one down and leaves it sitting there, which is as much initiative as she offers. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. `LIST` is REVEAL, and she will say so. PEEK, POKE, and SYS sit in a line if you type them. When she reaches them she complains. She does not answer to READY. When the glass says SPEAK, the turn is yours.
+When she wakes, the white witch from the banner stands in the glass. The count climbs to 666. Then she steps back, the words roll to the top, and the glass says SPEAK.
+
+A line with a number is stored. A line without one runs now. That is the C64 way, and she kept it. `RUN` starts at the top. The programs live in `shelf/`, and the names end in `.wasic`. `SHELF` lists them. `UNSEAL "shelf:HELLO-WITCH"` takes the hello down and leaves it sitting there. `HELLO-DEMON` is the other one. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. `LIST` is REVEAL, and she will say so. PEEK, POKE, and SYS sit in a line if you type them. When she reaches them she complains, in red, with a mark, and the glass rings. She does not answer to READY. When the glass says SPEAK, the turn is yours.
 
 Escape ends a working that will not end. Ctrl-C does too, if you were raised on the other machines. The pale bar blinks from the moment the glass is dark, before she bothers to introduce herself.
 
-Click the glass once if the two notes stay buried. The browser holds sound until a hand arrives.
+Click the glass once if the two notes stay buried. They are low, a fifth apart. The browser holds sound until a hand arrives. A refusal is two notes going down.
+
+The walls are written in [SYSTEM.md]({{ '/SYSTEM.md' | relative_url }}). She keeps them.
 
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
 <script src="{{ '/games/witch-1/wasic.js' | relative_url }}"></script>
-<script src="{{ '/games/witch-1/shelf.js' | relative_url }}"></script>
 <script src="{{ '/games/witch-1/witch-1.js' | relative_url }}"></script>

@@ -6,7 +6,14 @@
   var CW = 18;
   var CH = 24;
   var MAX_LINE = 63999;
+  var LINE_CHARS = 255;
+  var HIST_MAX = 32;
+  var KEY_MAX = 32;
+  var MINIONS = 32;
+  var HITS = 8;
   var INDEX_KEY = "emojigames-witch1-seals";
+  // The white witch in assets/images/site.jpg (1168×784). Hat through the wand, not the title.
+  var WITCH_CROP = { x: 58, y: 236, w: 204, h: 268 };
 
   var mount = document.getElementById("game");
   if (!mount || !globalThis.EmojiEngine) {
@@ -16,6 +23,22 @@
 
   var E = globalThis.EmojiEngine;
   var canvas = new E.Canvas({ width: COLS * CW, height: ROWS * CH });
+  var portrait = {
+    image: null,
+    alpha: 0,
+    target: 0,
+    draw: function (ctx) {
+      var image = this.image;
+      if (!image || !image.complete || !image.naturalWidth || this.alpha < 0.012) return;
+      var box = witchBox();
+      ctx.save();
+      ctx.imageSmoothingEnabled = false;
+      ctx.globalAlpha = this.alpha;
+      ctx.drawImage(image, WITCH_CROP.x, WITCH_CROP.y, WITCH_CROP.w, WITCH_CROP.h, box.dx, box.dy, box.dw, box.dh);
+      ctx.restore();
+    }
+  };
+  canvas.add(portrait, "witch");
   var term = new E.Terminal({
     cols: COLS,
     rows: ROWS,
@@ -49,6 +72,13 @@
   ui.footer.append(led, statusEl);
 
   var mode = "boot";
+  var shelfState = "";
+  var shelfBase = mount.getAttribute("data-shelf") || "shelf/";
+  if (shelfBase.slice(-1) !== "/") shelfBase += "/";
+  var catalog = [];
+  var catalogPromise = null;
+  var shelfCache = {};
+  var spark = null;
   var auto = { on: false, num: 10, step: 10 };
   var entry = "";
   var caret = 0;
@@ -76,6 +106,7 @@
     var used = wasic ? wasic.lines.size : 0;
     var state = "SPEAK";
     if (mode === "boot") state = "WAKING";
+    else if (shelfState) state = shelfState;
     else if (mode === "run") state = wasic && wasic.currentLine != null ? "LINE " + wasic.currentLine : "RUNNING";
     else if (mode === "demand") state = "WAITING";
     else if (mode === "freeze") state = "FROZEN";
@@ -108,9 +139,57 @@
     term.endFrame();
   }
 
-  function fault(msg) {
+  function say(code) {
+    var book = globalThis.WASIC_MESSAGES;
+    return (book && book[code]) || "❓ NO.";
+  }
+
+  function tone(freq, ms, level) {
+    unlock();
+    var audio = engine.audio;
+    if (!audio) return;
+    try {
+      var osc = audio.createOscillator();
+      var gain = audio.createGain();
+      osc.type = "square";
+      osc.frequency.value = freq;
+      gain.gain.value = level == null ? 0.05 : level;
+      osc.connect(gain);
+      gain.connect(audio.destination);
+      var stopAt = audio.currentTime + ms / 1000;
+      gain.gain.exponentialRampToValueAtTime(0.0001, stopAt);
+      osc.start();
+      osc.stop(stopAt);
+    } catch (err) {}
+  }
+
+  function errorSound() {
+    tone(440, 70, 0.06);
+    setTimeout(function () { tone(220, 150, 0.055); }, 75);
+  }
+
+  function stopSound() {
+    tone(330, 55, 0.045);
+    setTimeout(function () { tone(247, 100, 0.04); }, 65);
+  }
+
+  function flashLed(stop) {
+    led.style.color = stop ? "#e2b657" : "#ff5544";
+    led.style.textShadow = stop ? "0 0 8px #e2b657" : "0 0 10px #ff5544";
+    setTimeout(function () {
+      led.style.color = "";
+      led.style.textShadow = "";
+    }, 220);
+  }
+
+  function fault(msg, kind) {
+    var stop = kind === "stop";
+    term.color(stop ? 11 : 9, 0);
     writeRaw(msg + "\n");
-    try { term.bell(); } catch (err) {}
+    term.color(7, 0);
+    flashLed(stop);
+    if (stop) stopSound();
+    else errorSound();
   }
 
   function scrollOne() {
@@ -172,8 +251,8 @@
   }
 
   function entryLimit() {
-    if (mode === "demand") return 255;
-    return Math.max(0, 255 - cp(promptText).length);
+    if (mode === "demand") return LINE_CHARS;
+    return Math.max(0, LINE_CHARS - cp(promptText).length);
   }
 
   function insertText(text) {
@@ -287,7 +366,7 @@
       engine.beep(freq, ms);
     },
     minion: function (emoji, x, y, size) {
-      if (living() >= 32) return null;
+      if (living() >= MINIONS) return null;
       var id = nextId++;
       var sprite = engine.sprite(emoji || "●", (x + 0.5) * CW, (y + 0.5) * CH, size, "minions");
       sprite.data.id = id;
@@ -345,6 +424,7 @@
     },
     trace: function () { updateFooter(); },
     bell: function () { try { term.bell(); } catch (err) {} },
+    fault: fault,
     begin: function () { term.beginFrame(); },
     end: function () { term.endFrame(); }
   };
@@ -359,7 +439,7 @@
     framePairs.add(key);
     if (!touching.has(key)) {
       touching.add(key);
-      if (wasic.watchName && wasic.pendingHits.length < 8) wasic.pendingHits.push({ a: ida, b: idb });
+      if (wasic.watchName && wasic.pendingHits.length < HITS) wasic.pendingHits.push({ a: ida, b: idb });
     }
   });
 
@@ -375,7 +455,17 @@
       s.vx = (s.data.cvx || 0) * CW * dt;
       s.vy = (s.data.cvy || 0) * CH * dt;
     });
+    if (spark && spark.alive) {
+      spark.vx = 0;
+      spark.vy = 0;
+    }
     try { engine.update(); } catch (err) {}
+    if (spark && spark.alive) {
+      spark.x = spark.data.hx + Math.sin(t / 160) * 2.5;
+      spark.y = spark.data.hy + Math.sin(t / 210) * 3.5;
+    }
+    portrait.alpha += (portrait.target - portrait.alpha) * Math.min(1, dt * 8);
+    if (Math.abs(portrait.target - portrait.alpha) < 0.01) portrait.alpha = portrait.target;
     touching.forEach(function (key) { if (!framePairs.has(key)) touching.delete(key); });
     try { canvas.draw(); } catch (err) {}
     requestAnimationFrame(frame);
@@ -383,15 +473,15 @@
   requestAnimationFrame(frame);
 
   function storeUserLine(trimmed) {
-    if (trimmed.length > 255) { fault("TOO LONG."); return false; }
+    if (cp(trimmed).length > LINE_CHARS) { fault(say("long")); return false; }
     var m = trimmed.match(/^(\d+)\s*(.*)$/);
-    if (!m) { fault("NO. SAY IT AGAIN."); return false; }
+    if (!m) { fault(say("syntax")); return false; }
     var num = Number(m[1]);
     try {
       wasic.store(num, m[2]);
       return true;
     } catch (err) {
-      fault(err.message || "NO.");
+      fault(err.message || say("syntax"));
       return false;
     }
   }
@@ -472,7 +562,8 @@
       "SEAL UNSEAL UPLOAD",
       "DOWNLOAD SHELF GRIMOIRE",
       "",
-      "UNSEAL \"shelf:GUESS\" THEN RUN.",
+      "UNSEAL \"shelf:HELLO-WITCH\"",
+      "THEN RUN. HELLO-DEMON TOO.",
       "ESCAPE LEAVES A CIRCLE THAT WILL NOT.",
       "A NUMBER STORES THE LINE. RUN LATER.",
       "BASIC MAY SIT IN A LINE.",
@@ -528,19 +619,19 @@
     if (word === "RUN") { return doRun(rest); }
     if (word === "REVEAL") {
       var range = rest ? parseRange(rest) : { from: 0, to: MAX_LINE };
-      if (!range) { fault("NO. SAY IT AGAIN."); return true; }
+      if (!range) { fault(say("syntax")); return true; }
       var text = wasic.listing(range.from, range.to);
       if (text) writeRaw(text + "\n");
       return true;
     }
     if (word === "OBLITERATE") {
       var gone = parseRange(rest);
-      if (!gone) { fault("NO. SAY IT AGAIN."); return true; }
+      if (!gone) { fault(say("syntax")); return true; }
       wasic.deleteRange(gone.from, gone.to);
       return true;
     }
     if (word === "RENUMBER") {
-      if (rest) { fault("NO. SAY IT AGAIN."); return true; }
+      if (rest) { fault(say("syntax")); return true; }
       try { wasic.renumber(); writeRaw("RENUMBERED.\n"); }
       catch (err) { fault(err.message || "NO."); }
       return true;
@@ -564,7 +655,7 @@
 
   function doRun(rest) {
     if (!rest) return wasic.run(null).then(function () { return true; });
-    if (!/^\d+$/.test(rest) || Number(rest) > MAX_LINE) { fault("NO. SAY IT AGAIN."); return true; }
+    if (!/^\d+$/.test(rest) || Number(rest) > MAX_LINE) { fault(say("syntax")); return true; }
     return wasic.run(Number(rest)).then(function () { return true; });
   }
 
@@ -574,10 +665,10 @@
     var step = 10;
     if (rest) {
       var m = rest.match(/^(\d+)(?:\s*,\s*(\d+))?$/);
-      if (!m) { fault("NO. SAY IT AGAIN."); return true; }
+      if (!m) { fault(say("syntax")); return true; }
       start = Number(m[1]);
       step = m[2] ? Number(m[2]) : 10;
-      if (step <= 0 || start > MAX_LINE) { fault("NO. SAY IT AGAIN."); return true; }
+      if (step <= 0 || start > MAX_LINE) { fault(say("syntax")); return true; }
     } else if (wasic.lines.size) {
       start = Math.max.apply(null, Array.from(wasic.lines.keys())) + 10;
       if (start > MAX_LINE) start = MAX_LINE;
@@ -590,46 +681,101 @@
 
   function doSeal(rest) {
     var parsed = parseName(rest, false);
-    if (parsed.error === "name") { fault("NAME IT."); return true; }
-    if (parsed.error) { fault("NO. SAY IT AGAIN."); return true; }
+    if (parsed.error === "name") { fault(say("nameit")); return true; }
+    if (parsed.error) { fault(say("syntax")); return true; }
     try {
       var index = readIndex();
       localStorage.setItem(sealKey(parsed.name), wasic.listing());
       if (index.indexOf(parsed.name) < 0) index.push(parsed.name);
       localStorage.setItem(INDEX_KEY, JSON.stringify(index));
       writeRaw("SEALED.\n");
-    } catch (err) { fault("THE BOX IS SHUT."); }
+    } catch (err) { fault(say("shut")); }
     return true;
+  }
+
+  function loadCatalog() {
+    if (catalogPromise) return catalogPromise;
+    catalogPromise = fetch(shelfBase + "catalog.txt").then(function (res) {
+      if (!res.ok) throw new Error("shut");
+      return res.text();
+    }).then(function (text) {
+      var names = [];
+      text.split(/\r?\n/).forEach(function (line) {
+        var name = line.trim().toUpperCase();
+        if (!name || name.charAt(0) === "#") return;
+        if (!/^[A-Z][A-Z0-9-]{0,15}$/.test(name)) return;
+        if (names.indexOf(name) < 0) names.push(name);
+      });
+      catalog = names;
+      return true;
+    }).catch(function () {
+      catalogPromise = null;
+      catalog = [];
+      return false;
+    });
+    return catalogPromise;
+  }
+
+  function fetchShelf(name) {
+    if (Object.prototype.hasOwnProperty.call(shelfCache, name)) {
+      return Promise.resolve(shelfCache[name]);
+    }
+    return fetch(shelfBase + name.toLowerCase() + ".wasic").then(function (res) {
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error("shut");
+      return res.text();
+    }).then(function (text) {
+      if (text == null) return null;
+      shelfCache[name] = text;
+      return text;
+    });
   }
 
   function doUnseal(rest) {
     var parsed = parseName(rest, true);
-    if (parsed.error === "name") { fault("NAME IT."); return true; }
-    if (parsed.error) { fault("NO. SAY IT AGAIN."); return true; }
-    var text = null;
-    if (parsed.shelf) {
-      var shelf = globalThis.WITCH_SHELF || {};
-      if (!Object.prototype.hasOwnProperty.call(shelf, parsed.name)) { fault("NO. IT IS NOT THERE."); return true; }
-      text = shelf[parsed.name];
-    } else {
-      try { text = localStorage.getItem(sealKey(parsed.name)); }
-      catch (err) { fault("THE BOX IS SHUT."); return true; }
-      if (text == null) { fault("NO. IT IS NOT THERE."); return true; }
+    if (parsed.error === "name") { fault(say("nameit")); return true; }
+    if (parsed.error) { fault(say("syntax")); return true; }
+    if (!parsed.shelf) {
+      var kept = null;
+      try { kept = localStorage.getItem(sealKey(parsed.name)); }
+      catch (err) { fault(say("shut")); return true; }
+      if (kept == null) { fault(say("missing")); return true; }
+      try {
+        wasic.load(kept);
+        clearMinions();
+        writeRaw("UNSEALED.\n");
+      } catch (err) { fault(err.message || say("syntax")); }
+      return true;
     }
-    try {
-      wasic.load(text);
-      clearMinions();
-      writeRaw("UNSEALED.\n");
-    } catch (err) { fault(err.message || "NO."); }
-    return true;
+    shelfState = "READING";
+    updateFooter();
+    term.color(10, 0);
+    writeRaw("☾ THE SHELF CREAKS.\n");
+    writeRaw(parsed.name + ".WASIC\n");
+    term.color(7, 0);
+    tone(392, 45, 0.03);
+    return fetchShelf(parsed.name).then(function (text) {
+      shelfState = "";
+      if (text == null) { fault(say("missing")); return true; }
+      try {
+        wasic.load(text);
+        clearMinions();
+        writeRaw("UNSEALED.\n");
+      } catch (err) { fault(err.message || say("syntax")); }
+      return true;
+    }).catch(function () {
+      shelfState = "";
+      fault(say("shut"));
+      return true;
+    });
   }
 
   function doDownload(rest) {
     var parsed = parseName(rest, false);
-    if (parsed.error === "name") { fault("NAME IT."); return true; }
-    if (parsed.error) { fault("NO. SAY IT AGAIN."); return true; }
+    if (parsed.error === "name") { fault(say("nameit")); return true; }
+    if (parsed.error) { fault(say("syntax")); return true; }
     var text = wasic.listing();
-    if (!text) { fault("NOTHING TO RUN."); return true; }
+    if (!text) { fault(say("empty")); return true; }
     var blob = new Blob([text + "\n"], { type: "text/plain" });
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
@@ -667,7 +813,7 @@
       if (!file) { settle(null); return; }
       var reader = new FileReader();
       reader.onload = function () { settle(String(reader.result || "")); };
-      reader.onerror = function () { fault("NO. IT IS NOT THERE."); settle(null); };
+      reader.onerror = function () { fault(say("missing")); settle(null); };
       reader.readAsText(file);
     });
     window.addEventListener("focus", function onFocus() {
@@ -684,15 +830,17 @@
 
   function doShelf() {
     writeRaw("SHELF:\n");
-    var shelf = globalThis.WITCH_SHELF || {};
-    writeWords(Object.keys(shelf).sort());
-    var sealed = [];
-    try { sealed = readIndex(); } catch (err) { sealed = []; }
-    if (sealed.length) {
-      writeRaw("SEALED:\n");
-      writeWords(sealed);
-    }
-    return true;
+    return loadCatalog().then(function (ok) {
+      if (!ok || !catalog.length) { fault(say("shut")); return true; }
+      writeWords(catalog);
+      var sealed = [];
+      try { sealed = readIndex(); } catch (err) { sealed = []; }
+      if (sealed.length) {
+        writeRaw("SEALED:\n");
+        writeWords(sealed);
+      }
+      return true;
+    });
   }
 
   async function handleLine(line, flags) {
@@ -727,6 +875,7 @@
     } catch (err) {
       fault(err && err.message ? err.message : "NO.");
     } finally {
+      wasic.breakRequested = false;
       if (holdPrompt) return;
       if (stayAuto) {
         mode = "auto";
@@ -776,7 +925,7 @@
       finishEntryLine();
       if (typed.trim()) {
         hist.push(typed);
-        if (hist.length > 32) hist.shift();
+        if (hist.length > HIST_MAX) hist.shift();
       }
       histAt = -1;
       var line = mode === "auto" ? (promptText + typed) : typed;
@@ -841,7 +990,7 @@
     }
     if (event.key === "Shift" || event.key === "Control" || event.key === "Alt" || event.key === "Meta") return;
     if (event.key.length === 1 || event.key.indexOf("Arrow") === 0) {
-      if (inkeyQueue.length < 32) inkeyQueue.push(event.key);
+      if (inkeyQueue.length < KEY_MAX) inkeyQueue.push(event.key);
       event.preventDefault();
     }
   }
@@ -958,7 +1107,65 @@
     return new Promise(function (r) { setTimeout(r, ms); });
   }
 
+  function witchBox() {
+    var dh = 210;
+    var dw = Math.round(dh * WITCH_CROP.w / WITCH_CROP.h);
+    return { dx: Math.round((COLS * CW - dw) / 2), dy: 4, dw: dw, dh: dh };
+  }
+
+  function centerOf(text) {
+    return Math.max(0, Math.floor((COLS - Array.from(text).length) / 2));
+  }
+
+  function cup(row, col, text, sgr) {
+    term.write("\x1b[" + (row + 1) + ";" + (col + 1) + "H\x1b[" + sgr + "m" + text + "\x1b[0m");
+  }
+
+  function lightSpark() {
+    if (spark || !portrait.image) return;
+    var box = witchBox();
+    var x = box.dx + box.dw * 0.78;
+    var y = box.dy + box.dh * 0.44;
+    spark = engine.sprite("✨", x, y, 26, "spark");
+    spark.data.cvx = 0;
+    spark.data.cvy = 0;
+    spark.data.hx = x;
+    spark.data.hy = y;
+  }
+
+  function dropSpark() {
+    if (!spark) return;
+    killSprite(spark);
+    spark = null;
+  }
+
+  function rollUp(rows) {
+    var i = 0;
+    function step() {
+      if (i >= rows) return Promise.resolve();
+      scrollOne();
+      i += 1;
+      return sleep(20).then(step);
+    }
+    return step();
+  }
+
+  var waking = true;
+  var witchSrc = mount.getAttribute("data-witch");
+  if (witchSrc) {
+    var witchImg = new Image();
+    witchImg.onload = function () {
+      portrait.image = witchImg;
+      if (waking) {
+        portrait.target = 1;
+        lightSpark();
+      }
+    };
+    witchImg.src = witchSrc;
+  }
+
   async function boot() {
+    var SIGN = 10;
     mode = "boot";
     term.clear();
     term.cursor.col = 0;
@@ -966,28 +1173,56 @@
     term.cursorLit = true;
     term.flush();
     updateFooter();
-    await sleep(1200);
-    term.write("\x1b[2;35m☾\x1b[0m\n\n");
-    term.write("\x1b[97mWITCH I\x1b[0m\n\n");
-    term.write("\x1b[2;37mTHE GLASS IS BLACK.\x1b[0m\n\n");
-    term.write("\x1b[33m");
+    loadCatalog();
+    await sleep(280);
+    if (portrait.image) {
+      portrait.target = 1;
+      lightSpark();
+    }
+    await sleep(240);
+    var boxCol = centerOf("┌────────────────────┐");
+    var box = [
+      ["┌────────────────────┐", "92"],
+      ["│ **** WITCH I ****  │", "1;97"],
+      ["│    WASIC · ONE     │", "92"],
+      ["└────────────────────┘", "92"]
+    ];
+    for (var b = 0; b < box.length; b += 1) cup(SIGN + b, boxCol, box[b][0], box[b][1]);
+    await sleep(90);
+    var glass = "40 COLUMN GLASS";
+    cup(SIGN + 5, centerOf(glass), glass, "2;37");
     var marks = [111, 222, 333, 444, 555, 666];
     for (var i = 0; i < marks.length; i += 1) {
-      term.write("\rMEMORY " + String(marks[i]).padStart(3, "0"));
-      await sleep(70);
+      var mem = "MEMORY " + String(marks[i]).padStart(3, "0");
+      cup(SIGN + 6, centerOf(mem), mem, "93");
+      await sleep(50);
     }
-    term.write("\x1b[0m\n\n");
-    term.write("\x1b[37mSHE WOKE UP.\n");
-    term.write("THE CIRCLE HOLDS.\n");
-    term.write("WASIC SPEAKS.\x1b[0m\n");
-    term.write("\x1b[31mBASIC CAN SIT IN THE DARK.\x1b[0m\n\n");
-    term.write("\x1b[33m666 LINES FREE.\x1b[0m\n\n");
-    term.write("\x1b[0m");
+    var spoken = [
+      [8, "SHE WOKE UP.", "37"],
+      [9, "THE CIRCLE HOLDS.", "37"],
+      [10, "WASIC SPEAKS.", "37"],
+      [11, "BASIC CAN SIT IN THE DARK.", "31"]
+    ];
+    for (var n = 0; n < spoken.length; n += 1) {
+      await sleep(65);
+      cup(SIGN + spoken[n][0], centerOf(spoken[n][1]), spoken[n][1], spoken[n][2]);
+    }
+    await sleep(65);
+    var free = "666 LINES FREE.";
+    var last = SIGN + 13;
+    cup(last, centerOf(free), free, "93");
     unlock();
     try { engine.beep(98, 160); } catch (err) {}
-    await sleep(200);
+    await sleep(190);
     try { engine.beep(146, 260); } catch (err) {}
-    await sleep(180);
+    await sleep(240);
+    waking = false;
+    portrait.target = 0;
+    dropSpark();
+    await rollUp(SIGN);
+    term.cursor.row = last - SIGN + 1;
+    term.cursor.col = 0;
+    term.write("\x1b[0m");
     promptReady();
   }
 

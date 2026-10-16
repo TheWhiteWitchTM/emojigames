@@ -6,35 +6,38 @@ A line with a number is stored. A line without one runs now. The words are the s
 
 ## When she wakes
 
-The glass stays black. A pale bar blinks at the top left, and nothing else is on it. Then she bothers to arrive. The count climbs to 666. The glass says:
+The glass stays black. A pale bar blinks at the top left. Then the white witch from the banner stands in the upper glass, pixel for pixel, and a spark sits on the wand. Under her, the count climbs to 666. The glass says:
 
 ```
-☾
+         ┌────────────────────┐
+         │ **** WITCH I ****  │
+         │    WASIC · ONE     │
+         └────────────────────┘
 
-WITCH I
+            40 COLUMN GLASS
+               MEMORY 666
 
-THE GLASS IS BLACK.
+              SHE WOKE UP.
+           THE CIRCLE HOLDS.
+             WASIC SPEAKS.
+       BASIC CAN SIT IN THE DARK.
 
-MEMORY 666
-
-SHE WOKE UP.
-THE CIRCLE HOLDS.
-WASIC SPEAKS.
-BASIC CAN SIT IN THE DARK.
-
-666 LINES FREE.
+            666 LINES FREE.
 SPEAK.
 ```
 
-The moon is a faint purple. The name is white. The line about the glass is faint. The count is the color of a low candle. The line about BASIC is dark red. The rest is ash. SPEAK is white. What you type after that is ash, until a program runs.
+The frame is green. The name is white. WASIC · ONE is green. 40 COLUMN GLASS is faint. The count, and 666 LINES FREE, are the color of a low candle. The waking lines are ash. The line about BASIC is dark red. SPEAK is white. What you type after that is ash, until a program runs.
 
-Click the glass once if the two notes stay silent. They are low, a fifth apart. The browser holds the sound until a hand arrives.
+The two notes are low, a fifth apart. Then she fades, and the words roll to the top of the glass. Click the glass once if the notes stay silent. The browser holds the sound until a hand arrives.
+
+A refusal is red, with a mark in front of the words, and two notes going down. ENOUGH is candle-colored, and those two notes are softer. A line that will not take another character only clicks.
 
 The bezel under the glass names the mood, then the lines in use.
 
 | Bezel | Mood |
 | --- | --- |
 | WAKING | Still counting |
+| READING | Fetching a program off the shelf |
 | SPEAK n/666 | Waiting for you |
 | LINE n | Running that line |
 | RUNNING | Running, between lines |
@@ -44,17 +47,17 @@ The bezel under the glass names the mood, then the lines in use.
 
 ## Typing
 
-The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, the arrows, Home, and End edit the line. Up and Down walk the last 32 lines you sent. A line holds 255 characters. Past that she rings the bell and takes no more.
+The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, the arrows, Home, and End edit the line. Up and Down walk the last 32 lines you sent. A line holds 255 characters, and one emoji is one. Past that she clicks once and takes no more.
 
 Enter stores a numbered line, or runs a bare one. A stored line does not print SPEAK. The caret just waits for the next one. An empty Enter at SPEAK prints SPEAK. again.
 
 Escape at SPEAK clears the line you have not sent. Escape while she runs, or while she waits for an answer, stops her. Ctrl-C does that too. She says:
 
 ```
-ENOUGH.
+✋ ENOUGH.
 ```
 
-From inside a program the line number comes along: `ENOUGH. IN 40`
+From inside a program the line number comes along: `✋ ENOUGH. IN 40`
 
 Paste a block and she takes it one line at a time. Paste into a DEMAND and she takes the first line.
 
@@ -71,20 +74,20 @@ A line number is an integer from 0 to 63999. The number, then the words. She sto
 A number with nothing after it deletes that line. Above 63999:
 
 ```
-NO. LINES STOP AT 63999.
+🔢 NO. LINES STOP AT 63999.
 ```
 
 666 stored lines is the wall.
 
 ```
-FULL. 666 LINES. STOP.
+🛑 FULL. 666 LINES. STOP.
 ```
 
 She will store a line she cannot parse. PRINT can sit in the program. POKE can sit in the program. `10 MARCO` can sit in the program. It fails when she reaches it. She likes to wait.
 
 ## At SPEAK
 
-These words work from the prompt. Inside a program they are `NO. NOT FROM IN HERE.`
+These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM IN HERE.`
 
 | Words | What she does |
 | --- | --- |
@@ -118,33 +121,33 @@ These words work from the prompt. Inside a program they are `NO. NOT FROM IN HER
 | CLS | She says SCRUB. NOT CLS. Then the glass is clean |
 | HOME | She says SCRUB. NOT HOME. Then the glass is clean |
 
-An empty REVEAL prints nothing. OBLITERATE with no range is `NO. SAY IT AGAIN.`
+An empty REVEAL prints nothing. OBLITERATE with no range is `❓ NO. SAY IT AGAIN.`
 
 RENUMBER rewrites line numbers in FLYTO, SUMMON, REWIND, a THEN that is only a number, and WHEN. Labels stay labels. A number that points at no line stays as written. She says RENUMBERED.
 
 VANISH says GONE. The variables go with the program.
 
-AUTO prints the next number and waits. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line she refuses to store keeps the same number. From SPEAK, AUTO OFF stops it too. RENUMBER that would push a line past 255 characters says TOO LONG. and leaves the numbers alone.
+AUTO prints the next number and waits. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line she refuses to store keeps the same number. From SPEAK, AUTO OFF stops it too. RENUMBER that would push a line past 255 characters says 📏 TOO LONG. and leaves the numbers alone.
 
 A file name is a letter, then up to 15 letters, digits, or hyphens. She folds the case. No name:
 
 ```
-NAME IT.
+🔖 NAME IT.
 ```
 
 Nothing there:
 
 ```
-NO. IT IS NOT THERE.
+🌑 NO. IT IS NOT THERE.
 ```
 
 The shelf is only for reading. A browser that will not open its box:
 
 ```
-THE BOX IS SHUT.
+📦 THE BOX IS SHUT.
 ```
 
-DOWNLOAD of an empty program says NOTHING TO RUN. SEAL of an empty program seals an empty program. That is your business.
+DOWNLOAD of an empty program says 📭 NOTHING TO RUN. SEAL of an empty program seals an empty program. That is your business.
 
 ## Running
 
@@ -157,16 +160,16 @@ DISPEL ends a run and says nothing. An error returns to SPEAK. The variables sur
 No lines:
 
 ```
-NOTHING TO RUN.
+📭 NOTHING TO RUN.
 ```
 
 No such line:
 
 ```
-NO LINE.
+🚫 NO LINE.
 ```
 
-She runs in short slices, so Escape still lands and the minions still move. A complaint from inside a program gains the line: `NO LINE. IN 40`
+She runs in short slices, so Escape still lands and the minions still move. A complaint from inside a program gains the line: `🚫 NO LINE. IN 40`
 
 ## The words
 
@@ -175,13 +178,13 @@ Case does not matter. A colon puts another statement on the line. A name is a le
 A name that is already a word of hers is refused:
 
 ```
-NO. THAT WORD IS TAKEN.
+🔒 NO. THAT WORD IS TAKEN.
 ```
 
 A line she cannot parse:
 
 ```
-NO. SAY IT AGAIN.
+❓ NO. SAY IT AGAIN.
 ```
 
 ### WHISPER
@@ -203,13 +206,13 @@ DEMAND N$ waits for a line. DEMAND "NAME"; N$ writes `NAME? ` and waits. A comma
 One variable keeps the whole answer, commas included. Several variables split on commas. The wrong count:
 
 ```
-AGAIN.
+🔁 AGAIN.
 ```
 
 A number variable that did not get a number:
 
 ```
-AGAIN. A NUMBER.
+🔢 AGAIN. A NUMBER.
 ```
 
 She asks again until the answer fits, or until Escape.
@@ -219,7 +222,7 @@ She asks again until the answer fits, or until Escape.
 CONJURE A = 1 stores a number. A = 1 stores the same number. Strings and numbers do not change clothes.
 
 ```
-NO. WRONG KIND OF THING.
+🎭 NO. WRONG KIND OF THING.
 ```
 
 A new number name starts at 0. A new string name starts empty.
@@ -231,19 +234,19 @@ FLYTO 100 jumps to that line. FLYTO start jumps to MARK start. The spot has to e
 SUMMON start calls it. BANISH returns. BANISH with nobody waiting:
 
 ```
-BANISH, AND NOBODY CALLED.
+📭 BANISH, AND NOBODY CALLED.
 ```
 
 Two MARKs with one name:
 
 ```
-NO. THAT NAME IS TAKEN.
+🔖 NO. THAT NAME IS TAKEN.
 ```
 
 Calls and loops each stop at 32 deep.
 
 ```
-TOO DEEP.
+📚 TOO DEEP.
 ```
 
 ### IF
@@ -259,13 +262,13 @@ CURSE I = 1 TO 13 counts. BREAK ends the lap. The body runs once even when the s
 STEP may be negative. STEP 0:
 
 ```
-STEP OF NOTHING. NO.
+🚫 STEP OF NOTHING. NO.
 ```
 
 BREAK I closes the loop named I, and any loop inside it. A new CURSE of the same name throws out the old one. BREAK with no CURSE:
 
 ```
-BREAK, AND NOTHING TO BREAK.
+➰ BREAK, AND NOTHING TO BREAK.
 ```
 
 A string cannot count.
@@ -288,7 +291,7 @@ OFFERING stores items for TAKE. An item is a number, a quoted string, or one bar
 The kind has to match the variable. REWIND starts the pointer over. REWIND 100, or REWIND of a label, starts at the first item on or after that line. When the offering is spent:
 
 ```
-THE OFFERING IS GONE.
+📜 THE OFFERING IS GONE.
 ```
 
 ### WHEN
@@ -302,13 +305,13 @@ DIM A(10) makes slots 0 through 10. DIM B$(3, 4) makes two axes. One or two axes
 Ask for the same array twice, or ask for one that was never made:
 
 ```
-NO. IT HAS NO ROOM.
+📦 NO. IT HAS NO ROOM.
 ```
 
 An index outside the array:
 
 ```
-NO. OUTSIDE THE ROOM.
+📐 NO. OUTSIDE THE ROOM.
 ```
 
 ## The sums
@@ -317,16 +320,22 @@ The marks are `+ - * / ^`. Power binds tighter than the rest, and it binds to th
 
 Comparisons are `= <> < > <= >=`. `><` means `<>`. AND is tighter than OR. NOT flips the truth. A comparison, AND, OR, and NOT all answer 1 or 0. Any number but 0 counts as true. AND and OR leave the unused side alone.
 
-A string plus a string joins them. A string mixed with a number is the wrong kind of thing. Dividing by zero, or MOD by zero:
+A string plus a string joins them. A string holds 255 characters, counted the same way as a line, and one emoji is one. Past that:
 
 ```
-CUTE. DIVIDE BY NOTHING.
+🧵 TOO LONG A STRING.
+```
+
+A string mixed with a number is the wrong kind of thing. Dividing by zero, or MOD by zero:
+
+```
+➗ CUTE. DIVIDE BY NOTHING.
 ```
 
 A result that will not fit:
 
 ```
-TOO BIG.
+💥 TOO BIG.
 ```
 
 Quotes wrap a string. Two quotes inside a string are one quote.
@@ -411,23 +420,23 @@ SEND id, vx, vy sets the speed in cells per second. DESTROY id removes one. DEST
 Thirty-two living minions is the house limit.
 
 ```
-NO. TOO MANY MINIONS.
+👻 NO. TOO MANY MINIONS.
 ```
 
 A number that is not alive:
 
 ```
-NO. THAT MINION IS GONE.
+👻 NO. THAT MINION IS GONE.
 ```
 
-They touch when the circles overlap. The radius is half the size. WATCH hit names a MARK. The moment two minions start to overlap, she sets HIT and OTHER to their numbers and SUMMONs that label. BANISH returns to the statement she interrupted. She does not call again until they separate and meet once more. The handler has to BANISH. Forget, and the calls pile up until TOO DEEP.
+They touch when the circles overlap. The radius is half the size. WATCH hit names a MARK. The moment two minions start to overlap, she sets HIT and OTHER to their numbers and SUMMONs that label. BANISH returns to the statement she interrupted. She does not call again until they separate and meet once more. The handler has to BANISH. Forget, and the calls pile up until 📚 TOO DEEP.
 
 ## What she refuses
 
 These are stored, and they fail when she reaches them.
 
 ```
-NO. SHE DOES NOT SPEAK THAT.
+🙊 NO. SHE DOES NOT SPEAK THAT.
 ```
 
 PRINT GOTO GOSUB RETURN FOR NEXT LET INPUT REM DATA READ RESTORE END STOP NEW LIST LOAD SAVE CLS LOCATE SOUND PLOT DRAW SLEEP GET
@@ -436,80 +445,126 @@ These are recognized. She stores them. When she reaches them she complains, beca
 
 | Word | What she says |
 | --- | --- |
-| PEEK | STOP PEEKING. |
-| POKE | DON'T POKE ME. |
-| SYS | NO SYS. I WOKE ON MY OWN. |
-| WAIT | I DO NOT WAIT ON THAT WIRE. |
-| USR | USR. I AM NOT A HOOK. |
-| CALL | DO NOT CALL ME THAT WAY. |
+| PEEK | 👀 STOP PEEKING. |
+| POKE | 👉 DON'T POKE ME. |
+| SYS | 🛑 NO SYS. I WOKE ON MY OWN. |
+| WAIT | ⏳ I DO NOT WAIT ON THAT WIRE. |
+| USR | 🪝 USR. I AM NOT A HOOK. |
+| CALL | 📞 DO NOT CALL ME THAT WAY. |
 
 `A = PEEK(1)` is a peek. `POKE 1, 2` is a poke. `SYS 64738` is a sys. Direct or stored, same speech. The leftover wire, if you find one:
 
 ```
-NO. THAT WIRE IS DEAD.
+🔌 NO. THAT WIRE IS DEAD.
 ```
 
 ## The box
 
-SHELF prints the names. UNSEAL "shelf:GUESS" loads one. Then RUN.
+The programs are files in `shelf/`. The extension is `.wasic`. `catalog.txt` is the order. SHELF prints the names. `UNSEAL "shelf:HELLO-WITCH"` loads one. Then RUN. She lowercases the name and adds the extension herself.
 
-HELLO asks a name and pretends that once was enough.
-
-```
-10 SCRUB
-20 CHANT "STATE YOUR NAME."
-30 DEMAND N$
-40 IF N$ = "" THEN CHANT "SHY. FINE. LEAVE." : DISPEL
-50 CHANT "HELLO, "; N$; "."
-60 CHANT "I WILL NOT SAY IT TWICE."
-70 DISPEL
-```
-
-GUESS wants 1 to 100 and comments on the route.
+HELLO-WITCH asks once.
 
 ```
 10 SCRUB
-20 CHANT "A NUMBER. 1 TO 100."
-30 CONJURE S = INT(RND(1) * 100) + 1
-40 CONJURE T = 0
-50 MARK AGAIN
-60 T = T + 1
-70 DEMAND "GUESS"; G
-80 IF G = S THEN FLYTO YES
-90 IF G < S THEN CHANT "HIGHER. OBVIOUSLY." : FLYTO AGAIN
-100 CHANT "LOWER. DO KEEP UP."
-110 FLYTO AGAIN
-120 MARK YES
-130 CHANT "YES."; T; " TRIES. ADORABLE."
-140 DISPEL
+20 COLOR 13, 0
+30 CHANT "☾"
+40 COLOR 15, 0
+50 CHANT "HELLO, WITCH."
+60 COLOR 10, 0
+70 CHANT "THE GLASS KNOWS YOUR NAME."
+80 COLOR 7, 0
+90 DEMAND "SPEAK IT"; N$
+100 IF N$ = "" THEN COLOR 1, 0 : CHANT "SHY. THE CIRCLE STAYS SHUT." : DISPEL
+110 COLOR 11, 0
+120 CHANT "HELLO, "; N$; "."
+130 COLOR 13, 0
+140 CHANT "ONCE. THAT IS THE WHOLE SPELL. 🧙"
+150 TONE 523, 90
+160 TONE 659, 160
+170 DISPEL
 ```
 
-DICE rolls from one to twelve bones.
+HELLO-DEMON asks, and runs warmer.
 
 ```
 10 SCRUB
-20 DEMAND "HOW MANY BONES"; N
-30 IF N < 1 OR N > 12 THEN CHANT "BETWEEN 1 AND 12." : FLYTO 20
-40 CURSE I = 1 TO N
-50 CONJURE R = INT(RND(1) * 6) + 1
-60 CHANT "BONE"; I; ":"; R
-70 BREAK
-80 CHANT "THAT IS ALL THE FATE YOU GET."
-90 DISPEL
+20 COLOR 9, 0
+30 CHANT "😈"
+40 CHANT "HELLO, DEMON."
+50 COLOR 1, 0
+60 CHANT "YOU BROUGHT THE NAME. I BROUGHT THE HEAT."
+70 COLOR 7, 0
+80 DEMAND "WHAT DO THEY CALL YOU"; N$
+90 IF N$ = "" THEN COLOR 9, 0 : CHANT "NO NAME. NO DEAL. 🔥" : DISPEL
+100 COLOR 9, 0
+110 CHANT "HELLO, "; N$; "."
+120 CHANT "TRY NOT TO SCORCH THE GLASS."
+130 TONE 98, 80
+140 TONE 73, 180
+150 COLOR 3, 0
+160 CHANT "SHE IS WATCHING."
+170 DISPEL
+```
+
+GUESS wants 1 to 100 and comments on the route. Higher is green. Lower is red.
+
+```
+10 SCRUB
+20 COLOR 11, 0
+30 CHANT "A NUMBER. 1 TO 100."
+40 COLOR 7, 0
+50 CONJURE S = INT(RND(1) * 100) + 1
+60 CONJURE T = 0
+70 MARK AGAIN
+80 T = T + 1
+90 DEMAND "GUESS"; G
+100 IF G = S THEN FLYTO YES
+110 IF G < S THEN COLOR 10, 0 : CHANT "HIGHER. OBVIOUSLY." : COLOR 7, 0 : FLYTO AGAIN
+120 COLOR 9, 0
+130 CHANT "LOWER. DO KEEP UP."
+140 COLOR 7, 0
+150 FLYTO AGAIN
+160 MARK YES
+170 COLOR 11, 0
+180 CHANT "YES."; T; " TRIES. ADORABLE."
+190 DISPEL
+```
+
+DICE rolls from one to twelve bones, and shows the face.
+
+```
+10 SCRUB
+20 COLOR 11, 0
+30 CHANT "THE BONES. 🎲"
+40 COLOR 7, 0
+50 DEMAND "HOW MANY BONES"; N
+60 IF N < 1 OR N > 12 THEN COLOR 9, 0 : CHANT "BETWEEN 1 AND 12." : COLOR 7, 0 : FLYTO 50
+70 F$ = "⚀⚁⚂⚃⚄⚅"
+80 CURSE I = 1 TO N
+90 CONJURE R = INT(RND(1) * 6) + 1
+100 COLOR 15, 0
+110 CHANT MID$(F$, R, 1); "  BONE"; I; ":"; R
+120 BREAK
+130 COLOR 3, 0
+140 CHANT "THAT IS ALL THE FATE YOU GET."
+150 DISPEL
 ```
 
 OMEN reads three lines and sends you home.
 
 ```
 10 SCRUB
-20 OFFERING "THE CUP IS EMPTY.", "SHE COUNTS THE KNIVES.", "A DOOR OPENS IN THE WALL.", "NOTHING ANSWERS. THAT IS AN ANSWER."
+20 COLOR 13, 0
 30 CHANT "THREE OMENS. DO NOT BLINK."
-40 CURSE I = 1 TO 3
-50 TAKE A$
-60 CHANT I; ". "; A$
-70 BREAK
-80 CHANT "GO HOME."
-90 DISPEL
+40 COLOR 7, 0
+50 OFFERING "THE CUP IS EMPTY.", "SHE COUNTS THE KNIVES.", "A DOOR OPENS IN THE WALL.", "NOTHING ANSWERS. THAT IS AN ANSWER."
+60 CURSE I = 1 TO 3
+70 TAKE A$
+80 CHANT I; ". "; A$
+90 BREAK
+100 COLOR 3, 0
+110 CHANT "GO HOME."
+120 DISPEL
 ```
 
 CIRCLES draws, beeps, and calls it art.
@@ -568,6 +623,8 @@ KEYS prints the key you press. Q leaves.
 90 FLYTO LOOP
 ```
 
+CAROL plays eight notes and leaves the last number on the glass. FAMILIAR puts a cat on the glass. She turns at the edges and meows when she does. Escape sends her home. Both are in `shelf/`, with the rest.
+
 ## Three that have to run
 
 A question:
@@ -603,42 +660,43 @@ The third one does not stop. Escape is the door.
 
 | When | Text |
 | --- | --- |
-| She cannot parse it | NO. SAY IT AGAIN. |
-| A BASIC word | NO. SHE DOES NOT SPEAK THAT. |
-| PEEK | STOP PEEKING. |
-| POKE | DON'T POKE ME. |
-| SYS | NO SYS. I WOKE ON MY OWN. |
-| WAIT | I DO NOT WAIT ON THAT WIRE. |
-| USR | USR. I AM NOT A HOOK. |
-| CALL | DO NOT CALL ME THAT WAY. |
-| No such line | NO LINE. |
-| Wrong kind of value | NO. WRONG KIND OF THING. |
-| Line 667 | FULL. 666 LINES. STOP. |
-| Divide by zero | CUTE. DIVIDE BY NOTHING. |
-| Dead minion | NO. THAT MINION IS GONE. |
-| Line longer than 255 | TOO LONG. |
-| BREAK with no CURSE | BREAK, AND NOTHING TO BREAK. |
-| BANISH with no SUMMON | BANISH, AND NOBODY CALLED. |
-| TAKE past the end | THE OFFERING IS GONE. |
-| Wrong number of answers | AGAIN. |
-| Answer was not a number | AGAIN. A NUMBER. |
-| The math overflowed | TOO BIG. |
-| More than 32 calls or loops | TOO DEEP. |
-| Editor words inside a program | NO. NOT FROM IN HERE. |
-| RUN with no program | NOTHING TO RUN. |
-| STEP 0 | STEP OF NOTHING. NO. |
-| DIM refused, or no such array | NO. IT HAS NO ROOM. |
-| Index outside the array | NO. OUTSIDE THE ROOM. |
-| A 33rd minion | NO. TOO MANY MINIONS. |
-| A name that is already a word | NO. THAT WORD IS TAKEN. |
-| A label used twice | NO. THAT NAME IS TAKEN. |
-| Line number past 63999 | NO. LINES STOP AT 63999. |
-| Escape or Ctrl-C | ENOUGH. |
-| SEAL with no name | NAME IT. |
+| She cannot parse it | ❓ NO. SAY IT AGAIN. |
+| A BASIC word | 🙊 NO. SHE DOES NOT SPEAK THAT. |
+| PEEK | 👀 STOP PEEKING. |
+| POKE | 👉 DON'T POKE ME. |
+| SYS | 🛑 NO SYS. I WOKE ON MY OWN. |
+| WAIT | ⏳ I DO NOT WAIT ON THAT WIRE. |
+| USR | 🪝 USR. I AM NOT A HOOK. |
+| CALL | 📞 DO NOT CALL ME THAT WAY. |
+| No such line | 🚫 NO LINE. |
+| Wrong kind of value | 🎭 NO. WRONG KIND OF THING. |
+| Line 667 | 🛑 FULL. 666 LINES. STOP. |
+| Divide by zero | ➗ CUTE. DIVIDE BY NOTHING. |
+| Dead minion | 👻 NO. THAT MINION IS GONE. |
+| Line longer than 255 | 📏 TOO LONG. |
+| String longer than 255 | 🧵 TOO LONG A STRING. |
+| BREAK with no CURSE | ➰ BREAK, AND NOTHING TO BREAK. |
+| BANISH with no SUMMON | 📭 BANISH, AND NOBODY CALLED. |
+| TAKE past the end | 📜 THE OFFERING IS GONE. |
+| Wrong number of answers | 🔁 AGAIN. |
+| Answer was not a number | 🔢 AGAIN. A NUMBER. |
+| The math overflowed | 💥 TOO BIG. |
+| More than 32 calls or loops | 📚 TOO DEEP. |
+| Editor words inside a program | 🚪 NO. NOT FROM IN HERE. |
+| RUN with no program | 📭 NOTHING TO RUN. |
+| STEP 0 | 🚫 STEP OF NOTHING. NO. |
+| DIM refused, or no such array | 📦 NO. IT HAS NO ROOM. |
+| Index outside the array | 📐 NO. OUTSIDE THE ROOM. |
+| A 33rd minion | 👻 NO. TOO MANY MINIONS. |
+| A name that is already a word | 🔒 NO. THAT WORD IS TAKEN. |
+| A label used twice | 🔖 NO. THAT NAME IS TAKEN. |
+| Line number past 63999 | 🔢 NO. LINES STOP AT 63999. |
+| Escape or Ctrl-C | ✋ ENOUGH. |
+| SEAL with no name | 🔖 NAME IT. |
 | SEAL worked | SEALED. |
 | UNSEAL worked | UNSEALED. |
-| No such program | NO. IT IS NOT THERE. |
-| The browser refused the box | THE BOX IS SHUT. |
+| No such program | 🌑 NO. IT IS NOT THERE. |
+| The browser refused the box | 📦 THE BOX IS SHUT. |
 | RENUMBER worked | RENUMBERED. |
 | VANISH | GONE. |
 | DOWNLOAD | TAKE IT. |
@@ -648,12 +706,14 @@ SPEAK.
 
 ## Limits, in one place
 
+The same numbers, and the rest of the walls, are in `SYSTEM.md` at the root of this repo. She keeps them.
+
 - 666 lines.
-- 255 characters on a typed line.
+- 255 characters on a typed line, and 255 in a string. One emoji is one.
 - Line numbers 0 through 63999.
 - Names are the whole word, up to 16 letters and digits, then `$` if it is a string.
 - File names add hyphens, and stop at 16 characters.
-- 32 loops, 32 calls, 32 living minions, 32 remembered lines, 32 keys waiting.
-- One array, at most 20000 cells, indexes 0 through 2000.
-- The shelf is read-only. SEAL and UNSEAL use this browser. UPLOAD and DOWNLOAD use the desk.
+- 32 loops, 32 calls, 32 living minions, 32 remembered lines, 32 keys waiting, 8 meetings waiting.
+- One or two axes. Each array holds at most 20000 cells. Indexes run 0 through 2000.
+- The shelf is a folder of `.wasic` files, and it is only for reading. SEAL and UNSEAL without `shelf:` use this browser. UPLOAD and DOWNLOAD use the desk.
 - Sprites are emoji. The touch radius is half the size. They share the glass with the letters, and they are drawn in front.
