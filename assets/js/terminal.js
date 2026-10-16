@@ -46,25 +46,42 @@ class Terminal {
     this.wrap.className = 'terminal-outer';
     this.wrap.tabIndex = 0;
     this.wrap.style.cssText = `
-      display: flex; flex-direction: column; width: fit-content;
-      margin: 0 auto; outline: none;
+      display: flex; flex-direction: column; align-items: center;
+      width: 100%; max-width: 100%; min-width: 0;
+      margin: 0 auto; outline: none; box-sizing: border-box;
     `;
+
+    // Stage hugs the canvas. The title bar must not widen the window,
+    // or a narrow game (Witch Hunt is 40 columns) sits on the left.
+    this.stage = document.createElement('div');
+    this.stage.className = 'terminal-stage';
+    this.stage.style.cssText = `
+      display: flex; flex-direction: column; align-items: stretch;
+      min-width: 0; max-width: 100%; margin: 0 auto; box-sizing: border-box;
+      container-type: inline-size;
+    `;
+    this.wrap.appendChild(this.stage);
 
     // ===== Header =====
     this.titleBar = document.createElement('div');
+    this.titleBar.className = 'terminal-title';
     this.titleBar.style.cssText = `
       display: flex; align-items: center; justify-content: space-between;
       background: #111; padding: 8px 12px; font-family: system-ui, sans-serif;
-      font-size: 1.75rem; font-weight: 600; color: #fff; gap: 12px;
+      font-size: clamp(1rem, 4cqw, 1.75rem); font-weight: 600; color: #fff; gap: 12px;
+      width: 100%; min-width: 0; box-sizing: border-box; overflow: hidden;
     `;
 
     this.titleText = document.createElement('span');
     this.titleText.textContent = 'Terminal';
-    this.titleText.style.flex = '0 0 auto';
+    this.titleText.style.cssText = `
+      flex: 0 1 auto; min-width: 0; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
+    `;
 
     this.headerMiddle = document.createElement('div');
     this.headerMiddle.style.cssText = `
-      flex: 1 1 auto; text-align: center; font-size: 1.1rem; font-weight: 500;
+      flex: 1 1 auto; min-width: 0; text-align: center; font-size: 1rem; font-weight: 500;
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     `;
 
@@ -72,8 +89,9 @@ class Terminal {
     this.fsBtn.innerHTML = '<b>F11</b> Fullscreen ⛶';
     this.fsBtn.style.cssText = `
       background: #111; color: #fff; border: 1px solid #39ff14; border-radius: 4px;
-      padding: 8px 18px; font-size: 1.1rem; font-family: system-ui, sans-serif;
-      font-weight: 600; cursor: pointer; flex: 0 0 auto;
+      padding: 6px 12px; font-size: clamp(0.8rem, 2.6cqw, 1.1rem); font-family: system-ui, sans-serif;
+      font-weight: 600; cursor: pointer; flex: 0 1 auto; min-width: 0;
+      white-space: nowrap;
     `;
     this.fsBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -83,7 +101,7 @@ class Terminal {
     this.titleBar.appendChild(this.titleText);
     this.titleBar.appendChild(this.headerMiddle);
     this.titleBar.appendChild(this.fsBtn);
-    this.wrap.appendChild(this.titleBar);
+    this.stage.appendChild(this.titleBar);
 
     // ===== Canvas =====
     this.canvas = document.createElement('canvas');
@@ -92,17 +110,20 @@ class Terminal {
       border: 2px solid ${this.border};
       box-shadow: 0 0 12px ${this.border}40;
       cursor: ${this.hideMouse ? 'none' : 'auto'};
-      display: block;
+      display: block; margin: 0 auto; box-sizing: content-box;
     `;
-    this.wrap.appendChild(this.canvas);
+    this.stage.appendChild(this.canvas);
 
     // ===== Footer (plain) =====
     this.footer = document.createElement('div');
+    this.footer.className = 'terminal-footer';
     this.footer.style.cssText = `
       background: #111; padding: 6px 12px; font-family: system-ui, sans-serif;
       font-size: 1rem; color: #fff; flex-shrink: 0;
+      width: 100%; min-width: 0; box-sizing: border-box;
+      overflow-wrap: anywhere;
     `;
-    this.wrap.appendChild(this.footer);
+    this.stage.appendChild(this.footer);
 
     this._onFullscreen = () => {
       if (document.fullscreenElement === this.wrap) {
@@ -111,8 +132,16 @@ class Terminal {
       } else {
         this.fsBtn.innerHTML = '<b>F11</b> Fullscreen ⛶';
       }
+      requestAnimationFrame(() => this._layout());
     };
     document.addEventListener('fullscreenchange', this._onFullscreen);
+
+    this._onResize = () => this._layout();
+    window.addEventListener('resize', this._onResize);
+    if (typeof ResizeObserver !== 'undefined') {
+      this._ro = new ResizeObserver(() => this._layout());
+      this._ro.observe(this.wrap);
+    }
 
     this.wrap.addEventListener('keydown', (e) => {
       if (e.key === 'F11') {
@@ -121,7 +150,10 @@ class Terminal {
       }
     });
 
-    setTimeout(() => this.detectTitle(), 0);
+    setTimeout(() => {
+      this.detectTitle();
+      this._layout();
+    }, 0);
 
     this.buffer = [];
     for (let y = 0; y < this.rows; y++) {
@@ -209,9 +241,63 @@ class Terminal {
     this.canvas.height = h * dpr;
     this.canvas.style.width = w + 'px';
     this.canvas.style.height = h + 'px';
+    this.stage.style.width = (w + 4) + 'px';
     this.ctx.scale(dpr, dpr);
     this.ctx.font = `${this.fontSize} ${this.font}`;
     this.ctx.textBaseline = 'top';
+    this._layout();
+  }
+
+  /**
+   * Keep the chrome the same width as the cell grid, centered.
+   * Shrink only when the parent (or the fullscreen viewport) is smaller
+   * than that grid, so the whole window stays on screen.
+   * @private
+   */
+  _layout() {
+    if (this._laying || !this.stage || !this.canvas || !this.wrap.isConnected) return;
+    this._laying = true;
+    try {
+    this._layoutNow();
+    } finally {
+      this._laying = false;
+    }
+  }
+
+  /** @private */
+  _layoutNow() {
+    const logicalW = this.cols * this.charW;
+    const logicalH = this.rows * this.charH;
+    const border = 4;
+    const full = document.fullscreenElement === this.wrap;
+    const cs = getComputedStyle(this.wrap);
+    const padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+    const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
+    const availW = this.wrap.clientWidth - padX;
+    const availH = full ? this.wrap.clientHeight - padY : Infinity;
+    if (availW < 8) return;
+
+    let scale = 1;
+    if (logicalW + border > availW) scale = availW / (logicalW + border);
+
+    const apply = (s) => {
+      let cw = Math.max(1, Math.floor(logicalW * s));
+      let ch = Math.max(1, Math.floor(logicalH * s));
+      if (cw + border > availW) cw = Math.max(1, Math.floor(availW) - border);
+      this.canvas.style.width = cw + 'px';
+      this.canvas.style.height = ch + 'px';
+      this.stage.style.width = (cw + border) + 'px';
+    };
+
+    apply(scale);
+    if (full && availH < Infinity) {
+      for (let i = 0; i < 4; i++) {
+        const total = this.stage.offsetHeight;
+        if (total <= availH || total < 1) break;
+        scale *= (availH - 1) / total;
+        apply(scale);
+      }
+    }
   }
 
   get(x, y) {
@@ -392,6 +478,8 @@ class Terminal {
     clearInterval(this._blink);
     document.removeEventListener('keydown', this._onDocKeyDown, true);
     document.removeEventListener('fullscreenchange', this._onFullscreen);
+    window.removeEventListener('resize', this._onResize);
+    if (this._ro) this._ro.disconnect();
     this.wrap.remove();
   }
 

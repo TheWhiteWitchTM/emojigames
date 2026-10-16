@@ -31,21 +31,56 @@ useEffect(() => {
   let currentStyle = null;
   let currentTag = null;
 
+  function hashValue() {
+    return decodeURIComponent((location.hash || '').replace(/^#/, '')).trim().toLowerCase();
+  }
+
+  function writeHash(value) {
+    const next = value ? '#' + encodeURIComponent(value) : location.pathname + location.search;
+    const now = location.pathname + location.search + location.hash;
+    const target = value ? location.pathname + location.search + next : next;
+    if (now !== target) history.replaceState(null, '', target);
+  }
+
+  function applyHash() {
+    const raw = hashValue();
+    currentStyle = null;
+    currentTag = null;
+    if (raw && raw !== 'all') {
+      const style = styles.find(s => s.toLowerCase() === raw);
+      const tag = allTags.find(t => t.toLowerCase() === raw);
+      if (style) currentStyle = style;
+      else if (tag) currentTag = tag;
+    }
+    styleTabs.querySelectorAll('.tab').forEach((btn, i) => {
+      const on = i === 0 ? !currentStyle : styles[i - 1] === currentStyle;
+      btn.classList.toggle('active', on);
+    });
+    const toggle = tagDrop.querySelector('.dropdown-toggle');
+    if (toggle) toggle.textContent = currentTag || 'All tags';
+  }
+
   // Search
   const search = input('Search games…', 'store-search', e => {
     query = e.target.value.toLowerCase();
     render();
   });
 
-  // Style tabs
+  // Style tabs. The hash keeps the choice: #terminal, #action, or empty for all.
   const styleTabs = tabs(['All', ...styles], 'store-tabs', i => {
     currentStyle = i === 0 ? null : styles[i - 1];
+    currentTag = null;
+    writeHash(currentStyle || '');
+    applyHash();
     render();
   });
 
   // Tag dropdown
   const tagDrop = dropdown('All tags', ['All', ...allTags], 'store-tags', val => {
     currentTag = val === 'All' ? null : val;
+    currentStyle = null;
+    writeHash(currentTag || '');
+    applyHash();
     render();
   });
 
@@ -88,13 +123,33 @@ useEffect(() => {
     });
   }
 
+  applyHash();
   render();
+  window.addEventListener('hashchange', () => {
+    applyHash();
+    render();
+  });
 });
 </script>
 
 <style>
-.store-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.5rem; align-items: center; }
-.store-search { flex: 1; min-width: 180px; }
+.page-frame:has(#storefront),
+.page-frame:has(#storefront) .content-area {
+  max-width: 1040px;
+}
+.store-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0 auto 1.5rem; align-items: center; justify-content: center; }
+.store-search { flex: 1; min-width: 180px; max-width: 420px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: center; }
+.tab {
+  background: transparent;
+  color: #e8e8e8;
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  font: inherit;
+  cursor: pointer;
+}
+.tab.active { border-color: #c9a6ff; color: #c9a6ff; }
 .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
 .game-card { display: block; text-decoration: none; color: inherit; }
 .game-thumb { width: 100%; height: auto; border-radius: 8px; background: #111; }
