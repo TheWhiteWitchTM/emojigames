@@ -100,7 +100,7 @@
   ["WHISPER", "CHANT", "DEMAND", "CONJURE", "FLYTO", "SUMMON", "BANISH", "IF", "CURSE",
     "BREAK", "MARK", "DISPEL", "FREEZE", "OFFERING", "TAKE", "REWIND", "WHEN", "MINION",
     "SEND", "WATCH", "DESTROY", "COLOR", "TONE", "CIRCLE", "LINE", "FILL", "AT", "SCRUB",
-    "DIM", "THEN", "TO", "STEP", "AND", "OR", "NOT", "TAB", "SPC"].forEach(function (w) {
+    "VEIL", "DIM", "THEN", "TO", "STEP", "AND", "OR", "NOT", "TAB", "SPC"].forEach(function (w) {
     RESERVED[w] = 1;
   });
 
@@ -323,6 +323,11 @@
       return { op: "whisper" };
     }
     if (word === "CHANT") { this.pop(); return this.parseChant(); }
+    if (word === "VEIL") {
+      this.pop();
+      var ink = this.endStmt() ? null : this.parseExpr();
+      return { op: "veil", expr: ink };
+    }
     if (word === "DEMAND") {
       this.pop();
       var prompt = null;
@@ -1384,6 +1389,17 @@
       case "chant":
         this.execChant(stmt);
         return false;
+      case "veil": {
+        var ink = "";
+        if (stmt.expr) {
+          var painted = this.eval(stmt.expr);
+          if (painted.t !== "s") throw new WasicFail("type");
+          ink = painted.v;
+        }
+        if (!this.host.veil) throw new WasicFail("syntax");
+        this.host.veil(ink);
+        return false;
+      }
       case "demand":
         return this.execDemand(stmt).then(function () { return false; });
       case "assign":

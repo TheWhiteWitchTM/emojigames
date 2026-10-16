@@ -78,6 +78,9 @@
   var catalog = [];
   var catalogPromise = null;
   var shelfCache = {};
+  var shelf = null;
+  var holdKeys = false;
+  var pen = { fg: 7, bg: 0 };
   var spark = null;
   var auto = { on: false, num: 10, step: 10 };
   var entry = "";
@@ -107,11 +110,56 @@
     var state = "SPEAK";
     if (mode === "boot") state = "WAKING";
     else if (shelfState) state = shelfState;
+    else if (mode === "shelf") state = "PICKING";
     else if (mode === "run") state = wasic && wasic.currentLine != null ? "LINE " + wasic.currentLine : "RUNNING";
     else if (mode === "demand") state = "WAITING";
     else if (mode === "freeze") state = "FROZEN";
     else if (mode === "auto") state = "AUTO " + auto.num;
     statusEl.textContent = state + " " + used + "/666";
+  }
+
+  function setPen(fg, bg) {
+    pen.fg = fg;
+    if (bg != null) pen.bg = bg;
+    term.color(pen.fg, pen.bg);
+  }
+
+  function restorePen() {
+    term.write("\x1b[0m");
+    term.color(pen.fg, pen.bg);
+  }
+
+  function writeAnsi(text) {
+    term.write(text);
+    restorePen();
+  }
+
+  function expandVeil(text) {
+    var out = "";
+    var i = 0;
+    while (i < text.length) {
+      if (text.charAt(i) === "{" && text.charAt(i + 1) === "{") {
+        out += "{";
+        i += 2;
+        continue;
+      }
+      if (text.charAt(i) === "{") {
+        var end = text.indexOf("}", i + 1);
+        if (end > i + 1 && /^[0-9][0-9;]*$/.test(text.slice(i + 1, end))) {
+          out += "\x1b[" + text.slice(i + 1, end) + "m";
+          i = end + 1;
+          continue;
+        }
+      }
+      out += text.charAt(i);
+      i += 1;
+    }
+    return out;
+  }
+
+  function veilWrite(text) {
+    term.write(expandVeil(text) + "\n");
+    restorePen();
   }
 
   function writeRaw(text) {
@@ -184,9 +232,9 @@
 
   function fault(msg, kind) {
     var stop = kind === "stop";
-    term.color(stop ? 11 : 9, 0);
+    setPen(stop ? 11 : 9, 0);
     writeRaw(msg + "\n");
-    term.color(7, 0);
+    setPen(7, 0);
     flashLed(stop);
     if (stop) stopSound();
     else errorSound();
@@ -273,7 +321,7 @@
     mode = "ready";
     if (term.cursor.col !== 0) writeRaw("\n");
     term.write("\x1b[0m\x1b[97mSPEAK.\x1b[0m\n");
-    term.color(7, 0);
+    setPen(7, 0);
     beginEntry("");
     updateFooter();
   }
@@ -281,7 +329,7 @@
   function waitSpeak() {
     auto.on = false;
     mode = "ready";
-    term.color(7, 0);
+    setPen(7, 0);
     beginEntry("");
     updateFooter();
   }
@@ -346,9 +394,10 @@
       return 0;
     },
     color: function (fg, bg) {
-      if (bg == null) term.color(fg);
-      else term.color(fg, bg);
+      if (bg == null) setPen(fg);
+      else setPen(fg, bg);
     },
+    veil: function (text) { veilWrite(text); },
     scrub: function () { term.clear(); },
     at: function (col, row) {
       term.cursor.col = col;
@@ -410,12 +459,12 @@
     tick: function () { return Math.floor(performance.now()); },
     starting: function () {
       clearMinions();
-      term.color(10, 0);
+      setPen(10, 0);
       touching.clear();
     },
     stopping: function () {
       term.write("\x1b[0m");
-      term.color(7, 0);
+      setPen(7, 0);
     },
     waitKey: function () {
       mode = "freeze";
@@ -552,9 +601,9 @@
       "SUMMON BANISH IF CURSE BREAK",
       "MARK DISPEL FREEZE WHISPER",
       "OFFERING TAKE REWIND WHEN DIM",
-      "AT SCRUB COLOR TONE MINION",
-      "SEND WATCH DESTROY CIRCLE",
-      "LINE FILL",
+      "AT SCRUB COLOR TONE VEIL",
+      "MINION SEND WATCH DESTROY",
+      "CIRCLE LINE FILL",
       "",
       "FROM OUT HERE:",
       "RUN REVEAL OBLITERATE",
@@ -563,6 +612,8 @@
       "DOWNLOAD SHELF GRIMOIRE",
       "",
       "UNSEAL \"shelf:HELLO-WITCH\"",
+      "OR SHELF, AND POINT.",
+      "LIST SHOWS THE LINES.",
       "THEN RUN. HELLO-DEMON TOO.",
       "ESCAPE LEAVES A CIRCLE THAT WILL NOT.",
       "A NUMBER STORES THE LINE. RUN LATER.",
@@ -571,6 +622,28 @@
       "PEEK POKE SYS. SHE COMPLAINS."
     ];
     for (var i = 0; i < lines.length; i += 1) writeRaw(lines[i] + "\n");
+  }
+
+  function printList(range) {
+    var text = wasic.listing(range.from, range.to);
+    writeAnsi("\x1b[1;95mLIST. THEY WERE NOT HIDING.\n");
+    writeAnsi("\x1b[2;31mRETYPE THE NUMBER. THAT IS THE EDIT.\n");
+    if (!text) {
+      writeAnsi("\x1b[31mA LIST OF AIR. STORE A LINE.\n");
+      setPen(7, 0);
+      return;
+    }
+    var lines = text.split("\n");
+    for (var i = 0; i < lines.length; i += 1) {
+      var sp = lines[i].indexOf(" ");
+      var num = sp < 0 ? lines[i] : lines[i].slice(0, sp);
+      var src = sp < 0 ? "" : lines[i].slice(sp + 1);
+      writeAnsi("\x1b[93m" + num + " ");
+      setPen(7, 0);
+      writeRaw(src + "\n");
+    }
+    writeAnsi("\x1b[2;33mTHERE. RUIN ONE, OR RUN THE LOT.\n");
+    setPen(7, 0);
   }
 
   function editorCommand(trimmed) {
@@ -591,8 +664,10 @@
       return true;
     }
     if (word === "LIST") {
-      writeRaw("REVEAL. NOT LIST.\n");
-      word = "REVEAL";
+      var listed = rest ? parseRange(rest) : { from: 0, to: MAX_LINE };
+      if (!listed) { fault(say("syntax")); return true; }
+      printList(listed);
+      return true;
     }
     if (word === "NEW") {
       writeRaw("VANISH. NOT NEW.\n");
@@ -611,7 +686,7 @@
     }
     if (word === "CLS" || word === "HOME") {
       writeRaw(word === "HOME" ? "SCRUB. NOT HOME.\n" : "SCRUB. NOT CLS.\n");
-      term.color(7, 0);
+      setPen(7, 0);
       term.clear();
       return true;
     }
@@ -639,7 +714,7 @@
     if (word === "VANISH") {
       wasic.clearProgram();
       clearMinions();
-      term.color(7, 0);
+      setPen(7, 0);
       term.clear();
       writeRaw("GONE.\n");
       return true;
@@ -733,40 +808,40 @@
 
   function doUnseal(rest) {
     var parsed = parseName(rest, true);
-    if (parsed.error === "name") { fault(say("nameit")); return true; }
-    if (parsed.error) { fault(say("syntax")); return true; }
+    if (parsed.error === "name") { fault(say("nameit")); return false; }
+    if (parsed.error) { fault(say("syntax")); return false; }
     if (!parsed.shelf) {
       var kept = null;
       try { kept = localStorage.getItem(sealKey(parsed.name)); }
-      catch (err) { fault(say("shut")); return true; }
-      if (kept == null) { fault(say("missing")); return true; }
+      catch (err) { fault(say("shut")); return false; }
+      if (kept == null) { fault(say("missing")); return false; }
       try {
         wasic.load(kept);
         clearMinions();
         writeRaw("UNSEALED.\n");
-      } catch (err) { fault(err.message || say("syntax")); }
+      } catch (err) { fault(err.message || say("syntax")); return false; }
       return true;
     }
     shelfState = "READING";
     updateFooter();
-    term.color(10, 0);
+    setPen(10, 0);
     writeRaw("☾ THE SHELF CREAKS.\n");
     writeRaw(parsed.name + ".WASIC\n");
-    term.color(7, 0);
+    setPen(7, 0);
     tone(392, 45, 0.03);
     return fetchShelf(parsed.name).then(function (text) {
       shelfState = "";
-      if (text == null) { fault(say("missing")); return true; }
+      if (text == null) { fault(say("missing")); return false; }
       try {
         wasic.load(text);
         clearMinions();
         writeRaw("UNSEALED.\n");
-      } catch (err) { fault(err.message || say("syntax")); }
+      } catch (err) { fault(err.message || say("syntax")); return false; }
       return true;
     }).catch(function () {
       shelfState = "";
       fault(say("shut"));
-      return true;
+      return false;
     });
   }
 
@@ -828,17 +903,209 @@
     return true;
   }
 
+  function fitCells(text, width) {
+    var chars = Array.from(text);
+    if (chars.length > width) return chars.slice(0, width).join("");
+    while (chars.length < width) chars.push(" ");
+    return chars.join("");
+  }
+
+  function paintAnsiRow(row, sgr, text) {
+    var chars = Array.from(text);
+    var last = null;
+    if (chars.length >= COLS) {
+      chars = chars.slice(0, COLS);
+      last = chars.pop();
+    }
+    writeAnsi("\x1b[" + (row + 1) + ";1H\x1b[" + sgr + "m" + chars.join("") + "\x1b[K");
+    if (last != null) {
+      term.write("\x1b[" + sgr + "m");
+      term.set(COLS - 1, row, last);
+      restorePen();
+    }
+  }
+
+  function paintShelfChrome() {
+    paintAnsiRow(0, "1;95;40", "☾  THE SHELF");
+    paintAnsiRow(1, shelf.shut ? "31;40" : "2;31;40", shelf.shut ? "THE BOX IS SHUT. THESE ARE YOURS." : "POINT AT ONE. I HAVE OTHER WORK.");
+    paintAnsiRow(2, "40", "");
+    paintAnsiRow(19, "40", "");
+    paintAnsiRow(21, "40", "");
+    paintAnsiRow(22, "2;33;40", "ARROWS. ENTER TAKES IT. ESCAPE FLEES.");
+    paintAnsiRow(23, "40", "");
+  }
+
+  function paintShelfList() {
+    for (var slot = 0; slot < shelf.view; slot += 1) {
+      var at = shelf.window + slot;
+      var item = shelf.items[at];
+      var row = 3 + slot;
+      if (!item) {
+        paintAnsiRow(row, "40", "");
+        continue;
+      }
+      if (item.gap) {
+        paintAnsiRow(row, "2;35;40", "  " + item.name);
+        continue;
+      }
+      var on = at === shelf.index;
+      var mark = (on ? "▶ " : "  ") + item.name;
+      paintAnsiRow(row, on ? "1;97;45" : "37;40", on ? fitCells(mark, COLS) : mark);
+    }
+  }
+
+  function paintShelfStatus() {
+    var item = shelf.items[shelf.index];
+    paintAnsiRow(20, "93;40", item ? item.name + ". TAKE IT OR DON'T." : "");
+  }
+
+  function revealPick() {
+    if (shelf.index < shelf.window) shelf.window = shelf.index;
+    if (shelf.index >= shelf.window + shelf.view) shelf.window = shelf.index - shelf.view + 1;
+  }
+
+  function repaintPick() {
+    revealPick();
+    paintShelfList();
+    paintShelfStatus();
+  }
+
+  function movePick(dir) {
+    if (!shelf || shelf.busy) return;
+    var i = shelf.index;
+    var guard = 0;
+    while (guard < shelf.items.length) {
+      guard += 1;
+      i += dir;
+      if (i < 0 || i >= shelf.items.length) return;
+      if (!shelf.items[i].gap) {
+        shelf.index = i;
+        repaintPick();
+        return;
+      }
+    }
+  }
+
+  function jumpPick(toEnd) {
+    if (!shelf || shelf.busy) return;
+    var i = toEnd ? shelf.items.length - 1 : 0;
+    var step = toEnd ? -1 : 1;
+    while (i >= 0 && i < shelf.items.length && shelf.items[i].gap) i += step;
+    if (i < 0 || i >= shelf.items.length) return;
+    shelf.index = i;
+    repaintPick();
+  }
+
+  function pagePick(dir) {
+    if (!shelf || shelf.busy) return;
+    var hops = shelf.view;
+    var i = shelf.index;
+    var moved = 0;
+    while (moved < hops) {
+      var n = i + dir;
+      while (n >= 0 && n < shelf.items.length && shelf.items[n].gap) n += dir;
+      if (n < 0 || n >= shelf.items.length) break;
+      i = n;
+      moved += 1;
+    }
+    shelf.index = i;
+    repaintPick();
+  }
+
+  function closeShelf() {
+    shelf = null;
+    mode = "run";
+    term.cursorLit = true;
+    updateFooter();
+  }
+
+  function beginShelf(items, shut) {
+    var index = 0;
+    while (index < items.length && items[index].gap) index += 1;
+    if (index >= items.length) return false;
+    shelf = { items: items, index: index, window: 0, view: 16, busy: false, shut: !!shut };
+    mode = "shelf";
+    term.cursorLit = false;
+    term.write("\x1b[2J\x1b[H");
+    restorePen();
+    paintShelfChrome();
+    repaintPick();
+    updateFooter();
+    tone(392, 45, 0.03);
+    return true;
+  }
+
+  function cancelPick() {
+    if (!shelf || shelf.busy) return;
+    shelf.busy = true;
+    closeShelf();
+    term.clear();
+    setPen(1, 0);
+    writeRaw("FINE. THE SHELF CAN WAIT.\n");
+    setPen(7, 0);
+    tone(196, 70, 0.03);
+    promptReady();
+  }
+
+  function choosePick() {
+    if (!shelf || shelf.busy) return;
+    var item = shelf.items[shelf.index];
+    if (!item || item.gap) return;
+    shelf.busy = true;
+    var quoted = "\"" + (item.shelf ? "shelf:" : "") + item.name + "\"";
+    closeShelf();
+    term.clear();
+    setPen(7, 0);
+    holdKeys = true;
+    Promise.resolve(doUnseal(quoted)).then(function (ok) {
+      if (ok) {
+        setPen(3, 0);
+        writeRaw("LIST. A NUMBER CHANGES A LINE.\n");
+        setPen(7, 0);
+      }
+    }).catch(function () {
+      fault(say("syntax"));
+    }).then(function () {
+      holdKeys = false;
+      if (mode !== "shelf") promptReady();
+    });
+  }
+
+  function onShelfKey(event) {
+    if (event.metaKey || event.altKey) return;
+    if (event.ctrlKey && !isBreak(event)) return;
+    var key = event.key;
+    if (isBreak(event) || key === "Escape") { event.preventDefault(); cancelPick(); return; }
+    if (key === "ArrowUp") { event.preventDefault(); movePick(-1); return; }
+    if (key === "ArrowDown") { event.preventDefault(); movePick(1); return; }
+    if (key === "ArrowLeft" || key === "ArrowRight") { event.preventDefault(); return; }
+    if (key === "Home") { event.preventDefault(); jumpPick(false); return; }
+    if (key === "End") { event.preventDefault(); jumpPick(true); return; }
+    if (key === "PageUp") { event.preventDefault(); pagePick(-1); return; }
+    if (key === "PageDown") { event.preventDefault(); pagePick(1); return; }
+    if (key === "Enter") { event.preventDefault(); choosePick(); return; }
+  }
+
   function doShelf() {
-    writeRaw("SHELF:\n");
+    shelfState = "READING";
+    holdKeys = true;
+    updateFooter();
     return loadCatalog().then(function (ok) {
-      if (!ok || !catalog.length) { fault(say("shut")); return true; }
-      writeWords(catalog);
+      holdKeys = false;
+      shelfState = "";
       var sealed = [];
       try { sealed = readIndex(); } catch (err) { sealed = []; }
-      if (sealed.length) {
-        writeRaw("SEALED:\n");
-        writeWords(sealed);
+      sealed = sealed.filter(function (name) { return /^[A-Z][A-Z0-9-]{0,15}$/.test(String(name).toUpperCase()) && String(name).toUpperCase() === name; });
+      if ((!ok || !catalog.length) && !sealed.length) { fault(say("shut")); return true; }
+      var items = [];
+      if (ok) {
+        for (var i = 0; i < catalog.length; i += 1) items.push({ name: catalog[i], shelf: true });
       }
+      if (sealed.length) {
+        items.push({ gap: true, name: "SEALED, IF YOU INSIST" });
+        for (var s = 0; s < sealed.length; s += 1) items.push({ name: sealed[s], shelf: false });
+      }
+      if (!beginShelf(items, !ok)) fault(say("shut"));
       return true;
     });
   }
@@ -876,7 +1143,7 @@
       fault(err && err.message ? err.message : "NO.");
     } finally {
       wasic.breakRequested = false;
-      if (holdPrompt) return;
+      if (holdPrompt || mode === "shelf") return;
       if (stayAuto) {
         mode = "auto";
         beginEntry(String(auto.num) + " ");
@@ -915,9 +1182,9 @@
         entry = "";
         caret = 0;
         painted = 0;
-        term.color(15, 0);
+        setPen(15, 0);
         writeRaw("SPEAK.\n");
-        term.color(7, 0);
+        setPen(7, 0);
         beginEntry("");
         updateFooter();
         return;
@@ -1061,10 +1328,12 @@
     if (typingTarget(event)) return;
     if (event.target && event.target.closest && event.target.closest("button") && !ui.wrap.contains(event.target)) return;
     unlock();
+    if (holdKeys) { event.preventDefault(); return; }
     if (mode === "boot") {
       if (event.key === " " || event.key.indexOf("Arrow") === 0) event.preventDefault();
       return;
     }
+    if (mode === "shelf") { onShelfKey(event); return; }
     if (mode === "run" || mode === "freeze") onRunKey(event);
     else if (mode === "ready" || mode === "auto" || mode === "demand") onEditKey(event);
   });

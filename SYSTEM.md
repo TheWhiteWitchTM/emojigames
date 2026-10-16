@@ -76,7 +76,7 @@ collections/_games/witch-1/shelf/<name>.wasic
 collections/_games/witch-1/shelf/catalog.txt
 ```
 
-`catalog.txt` is the order SHELF prints. A `#` line is a note. A name is a letter, then up to 15 letters, digits, or hyphens.
+`SHELF` opens that list on the glass. Up and down move. Enter unseals the name under the mark and does not run it. Escape leaves. `catalog.txt` is the order. A `#` line is a note. A name is a letter, then up to 15 letters, digits, or hyphens.
 
 `UNSEAL "shelf:HELLO-WITCH"` reads `hello-witch.wasic`. She lowercases the name and adds `.wasic`. She does not run it. The shelf is only for reading.
 

@@ -38,6 +38,7 @@ The bezel under the glass names the mood, then the lines in use.
 | --- | --- |
 | WAKING | Still counting |
 | READING | Fetching a program off the shelf |
+| PICKING | The shelf is open. The arrows are hers |
 | SPEAK n/666 | Waiting for you |
 | LINE n | Running that line |
 | RUNNING | Running, between lines |
@@ -48,6 +49,8 @@ The bezel under the glass names the mood, then the lines in use.
 ## Typing
 
 The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, the arrows, Home, and End edit the line. Up and Down walk the last 32 lines you sent. A line holds 255 characters, and one emoji is one. Past that she clicks once and takes no more.
+
+While the shelf is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter unseals the name under the mark. Escape leaves, and she says `FINE. THE SHELF CAN WAIT.` The caret stays dark until the shelf closes.
 
 Enter stores a numbered line, or runs a bare one. A stored line does not print SPEAK. The caret just waits for the next one. An empty Enter at SPEAK prints SPEAK. again.
 
@@ -106,7 +109,7 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | AUTO OFF | Stop numbering |
 | RUN | Start at the first line |
 | RUN n | Start at the first line numbered n or higher |
-| SHELF | List the box, then anything sealed in this browser |
+| SHELF | Open the box. Arrows move. Enter unseals. Escape leaves |
 | SEAL "NAME" | Keep the program here. She says SEALED. |
 | UNSEAL "NAME" | Load it. She says UNSEALED. She does not run it |
 | UNSEAL "shelf:NAME" | Load a program from the box |
@@ -114,7 +117,7 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | DOWNLOAD "NAME" | Save NAME.wasic. She says TAKE IT. |
 | GRIMOIRE | The short list of words |
 | HELP | She says GRIMOIRE. NOT HELP. Then the list. She says it again at the end, because the glass scrolls |
-| LIST | She says REVEAL. NOT LIST. Then REVEAL |
+| LIST | Print the program. The line numbers are yellow. Same ranges as REVEAL |
 | NEW | She says VANISH. NOT NEW. Then the program is gone. The glass stays |
 | LOAD "NAME" | She says UNSEAL. NOT LOAD. Then UNSEAL |
 | SAVE "NAME" | She says SEAL. NOT SAVE. Then SEAL |
@@ -122,6 +125,8 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | HOME | She says SCRUB. NOT HOME. Then the glass is clean |
 
 An empty REVEAL prints nothing. OBLITERATE with no range is `❓ NO. SAY IT AGAIN.`
+
+LIST prints the same lines, and she talks while she does it. `LIST. THEY WERE NOT HIDING.` Then `RETYPE THE NUMBER. THAT IS THE EDIT.` The number is yellow. The words of the line stay ash. An empty program is `A LIST OF AIR. STORE A LINE.` When there are lines, she ends with `THERE. RUIN ONE, OR RUN THE LOT.` LIST 10, LIST 10-40, LIST 10-, and LIST -40 are the same ranges as REVEAL.
 
 RENUMBER rewrites line numbers in FLYTO, SUMMON, REWIND, a THEN that is only a number, and WHEN. Labels stay labels. A number that points at no line stays as written. She says RENUMBERED.
 
@@ -194,6 +199,12 @@ The rest of that line is a comment. She eats it, colons included.
 ### CHANT
 
 CHANT writes. A comma jumps to the next column that is a multiple of 10. A semicolon stays. A trailing comma or semicolon holds the line open. CHANT alone writes a blank line.
+
+### VEIL
+
+VEIL writes one line through the glass's own color codes. A `{31}` in the string is ink. `31` is dark red. `1;97` is bold white. `38;5;141` is one of the 256. `38;2;232;206;168` is a color mixed on the spot. `2` is faint. A background is `45`, purple. `{{` is one brace. VEIL with nothing after it writes a blank line. A number where a string belongs is the wrong kind of thing.
+
+ANSI-WITCH is that picture. The lines live in `shelf/ansi-witch.wasic`. A line number changes one.
 
 A positive number grows a leading space. A whole number under a billion prints as a whole number. Anything else prints to eight digits, and the very large and the very small go scientific.
 
@@ -460,7 +471,7 @@ These are recognized. She stores them. When she reaches them she complains, beca
 
 ## The box
 
-The programs are files in `shelf/`. The extension is `.wasic`. `catalog.txt` is the order. SHELF prints the names. `UNSEAL "shelf:HELLO-WITCH"` loads one. Then RUN. She lowercases the name and adds the extension herself.
+The programs are files in `shelf/`. The extension is `.wasic`. `catalog.txt` is the order. SHELF opens the box on the glass. The mark starts on the first name. Up and down move it. Enter unseals that name and does not run it. She says `LIST. A NUMBER CHANGES A LINE.` Escape says `FINE. THE SHELF CAN WAIT.` Anything sealed in this browser sits under `SEALED, IF YOU INSIST`. `UNSEAL "shelf:HELLO-WITCH"` still loads one if you would rather type. Then RUN. She lowercases the name and adds the extension herself.
 
 HELLO-WITCH asks once.
 
@@ -624,6 +635,8 @@ KEYS prints the key you press. Q leaves.
 ```
 
 CAROL plays eight notes and leaves the last number on the glass. FAMILIAR puts a cat on the glass. She turns at the edges and meows when she does. Escape sends her home. Both are in `shelf/`, with the rest.
+
+ANSI-WITCH paints a witch. The hat is white. The face is mixed. The dress is purple. A star over her uses one of the 256. She says the hat is the point, names VEIL, and tells you to LIST if you mean to meddle. Two low notes, and she stops.
 
 ## Three that have to run
 
