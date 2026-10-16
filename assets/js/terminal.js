@@ -17,6 +17,13 @@ class Terminal {
    * @param {boolean} [options.autoRender=true]
    * @param {boolean} [options.focusHint=true]
    * @param {boolean} [options.showCursor=true]
+   * @param {number} [options.scale=1]
+   * Cell size multiplier. 1 keeps the 10×18 pixel cell and `fontSize`.
+   * 2 draws every cell twice as wide and twice as tall (the area of four
+   * cells at scale 1) and doubles a pixel font so the glyph stays sharp.
+   * @param {boolean} [options.fitWidth=false]
+   * Grow or shrink the whole window so it matches the container width.
+   * The column and row counts stay the same.
    */
   constructor(options = {}) {
     this.cols = options.cols || 80;
@@ -30,9 +37,15 @@ class Terminal {
     this.autoRender = options.autoRender !== undefined ? options.autoRender : true;
     this.focusHint = options.focusHint !== undefined ? options.focusHint : true;
     this.cursorEnabled = options.showCursor !== false;
-
-    this.charW = 10;
-    this.charH = 18;
+    this.scale = this._scaleOf(options.scale);
+    this.fitWidth = options.fitWidth === true;
+    // Scale 1 must keep the font string it was given. A larger scale turns
+    // a pixel size into pixels times scale, and the cell grows with it.
+    this.drawFontSize = this.scale === 1
+      ? this.fontSize
+      : ((parseFloat(this.fontSize) || 15) * this.scale) + 'px';
+    this.charW = 10 * this.scale;
+    this.charH = 18 * this.scale;
 
     this.colors = [
       '#000000','#aa0000','#00aa00','#aa5500',
@@ -213,6 +226,13 @@ class Terminal {
   get footerEl() { return this.footer; }
 
   /** @private */
+  _scaleOf(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n) || n <= 0) return 1;
+    return n;
+  }
+
+  /** @private */
   _buildXterm256() {
     const c = new Array(256);
     const classic = [
@@ -243,15 +263,14 @@ class Terminal {
     this.canvas.style.height = h + 'px';
     this.stage.style.width = (w + 4) + 'px';
     this.ctx.scale(dpr, dpr);
-    this.ctx.font = `${this.fontSize} ${this.font}`;
+    this.ctx.font = `${this.drawFontSize} ${this.font}`;
     this.ctx.textBaseline = 'top';
     this._layout();
   }
 
   /**
-   * Keep the chrome the same width as the cell grid, centered.
-   * Shrink only when the parent (or the fullscreen viewport) is smaller
-   * than that grid, so the whole window stays on screen.
+   * Match the window to the cell grid. fitWidth grows it to the container.
+   * A narrower parent, or fullscreen, shrinks it so the window stays on screen.
    * @private
    */
   _layout() {
@@ -278,7 +297,8 @@ class Terminal {
     if (availW < 8) return;
 
     let scale = 1;
-    if (logicalW + border > availW) scale = availW / (logicalW + border);
+    const widthScale = availW / (logicalW + border);
+    if (this.fitWidth || widthScale < 1) scale = widthScale;
 
     const apply = (s) => {
       let cw = Math.max(1, Math.floor(logicalW * s));
@@ -290,7 +310,7 @@ class Terminal {
     };
 
     apply(scale);
-    if (full && availH < Infinity) {
+    if (availH < Infinity) {
       for (let i = 0; i < 4; i++) {
         const total = this.stage.offsetHeight;
         if (total <= availH || total < 1) break;
@@ -679,7 +699,7 @@ class Terminal {
         if (cell.ch && cell.ch !== ' ') {
           let fgIdx = cell.fg;
           if (cell.bright && fgIdx != null && fgIdx < 8) fgIdx += 8;
-          ctx.font = `${cell.bright ? 'bold ' : ''}${this.fontSize} ${this.font}`;
+          ctx.font = `${cell.bright ? 'bold ' : ''}${this.drawFontSize} ${this.font}`;
           ctx.fillStyle = this._resolveColor(fgIdx, cell.fgRgb) || this.fg;
           ctx.fillText(cell.ch, px, py);
         }

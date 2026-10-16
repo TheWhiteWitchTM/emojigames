@@ -1,0 +1,43 @@
+Witch Hunt starts slower, speeds up a little on each level, and the board fills the width of the page. The witch, the hunters, and every maze cell are drawn at four times the old area so they are easier to see.
+
+Speed
+The witch used to step every 100 ms on every level. She now steps every 220 ms on level 1, then 12 ms quicker on each later level:
+
+  Level 1   220 ms
+  Level 2   208 ms
+  Level 3   196 ms
+  Level 4   184 ms
+  Level 5   172 ms
+  Level 6   160 ms
+  Level 7   148 ms
+  Level 8   136 ms
+  Level 9   124 ms
+  Level 10  112 ms
+
+The first keypress still moves her immediately. After that she waits out the full step, so level 1 gives you time to turn.
+
+Hunters stay slower than the witch in a straight hall. The lead starts wide and shrinks by 10 ms each level.
+
+  Level 1   340 ms
+  Level 10  142 ms
+
+While her shield is up they are slower still, so she can catch them. Leaving the pen matches her walking speed. Running home after a catch stays quick (80 ms).
+
+Size
+Terminal has two new options. Other games leave both off, so their windows stay the same size.
+
+scale
+  1 keeps the old 10×18 pixel cell and the font size you pass in.
+  2 draws every cell twice as wide and twice as tall. That is the area of four cells at scale 1, and the font doubles with it (15 px becomes 30 px) so the glyph stays sharp. Columns and rows do not change. A game still writes one character per cell.
+
+fitWidth
+  The window grows or shrinks to the width of its column. A narrow window still shrinks so it stays on screen. Fullscreen still fits the screen.
+
+Witch Hunt uses scale 2 and fitWidth. The maze is still 40 by 22 cells, so movement and collision are unchanged. On a wide page the window is about 923 px across, which fills the game column. The grid is about 914 px tall, so a short browser window scrolls. F11 fits the whole window on the screen. On a phone the board fills the screen width, which is as large as that screen can show.
+
+Files
+  assets/js/terminal.js
+  collections/_games/witch-hunt/witch-hunt.js
+
+Checked
+A scripted run checked the ten-level speed curve, that level 1 waits a full 220 ms step, that level 10 steps at 112 ms, that a hunter on level 1 waits 340 ms, and that scale 1 does not change cell size or stretch other terminals. Firefox screenshots showed the menu and the maze filling a desktop column, and the maze filling a phone width.

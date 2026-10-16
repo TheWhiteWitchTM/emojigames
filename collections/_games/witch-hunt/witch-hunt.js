@@ -1,5 +1,14 @@
 // Witch Hunt — ten maze levels. Hunters wait in the pen, then chase like ghosts.
-const term = new Terminal({ cols: 40, rows: 22, showCursor: false, hideMouse: true });
+// scale 2 draws each cell at four times the area (2×2). fitWidth then
+// stretches that window to the page column, so the maze fills the width.
+const term = new Terminal({
+  cols: 40,
+  rows: 22,
+  showCursor: false,
+  hideMouse: true,
+  scale: 2,
+  fitWidth: true
+});
 document.getElementById('game').appendChild(term.wrap);
 term.focus();
 term.titleText.textContent = '🧙‍♀️ Witch Hunt';
@@ -28,9 +37,9 @@ function beep(freq, dur, type, vol) {
 const COLS = 40;
 const ROWS = 22;
 const TUNNEL_Y = 13;
-// Milliseconds per cell. The witch stays quicker than a hunter in a straight
-// hall. Hunters also sit in the pen, then scatter, before they come for her.
-const PLAYER_MS = 100;
+// Milliseconds per cell. Level 1 is slow enough to steer. Each later level
+// trims a little. The witch stays quicker than a hunter in a straight hall,
+// and that lead shrinks as the levels rise.
 const INTRO_MS = 1100;
 const DYING_MS = 900;
 const CLEAR_MS = 800;
@@ -145,11 +154,16 @@ function scatterMs(lv) {
   return Math.max(2200, 5600 - (lv - 1) * 300);
 }
 
+function playerMs() {
+  return Math.max(112, 220 - (level - 1) * 12);
+}
+
 function enemyMs(c) {
-  if (c.mode === 'eyes') return 75;
-  if (c.mode === 'exit') return 150;
-  if (c.mode === 'roam' && witch.immunity > 0) return 250;
-  return Math.max(PLAYER_MS + 30, 190 - (level - 1) * 6);
+  if (c.mode === 'eyes') return 80;
+  if (c.mode === 'exit') return playerMs();
+  const gap = Math.max(28, 120 - (level - 1) * 10);
+  if (c.mode === 'roam' && witch && witch.immunity > 0) return playerMs() + gap + 70;
+  return playerMs() + gap;
 }
 
 function normalize(x, y) {
@@ -302,7 +316,7 @@ function queueDir(d) {
   if (state !== 'play' && state !== 'intro') return;
   if (!dir.x && !dir.y) {
     dir = d;
-    witchAcc = Math.max(witchAcc, PLAYER_MS);
+    witchAcc = Math.max(witchAcc, playerMs());
   } else if (d.x === -dir.x && d.y === -dir.y) {
     dir = d;
   }
@@ -491,8 +505,8 @@ function moveWitch(dt) {
   pollHeld();
   witchAcc += dt;
   let guard = 0;
-  while (witchAcc >= PLAYER_MS && guard < 2 && (state === 'play' || state === 'intro')) {
-    witchAcc -= PLAYER_MS;
+  while (witchAcc >= playerMs() && guard < 2 && (state === 'play' || state === 'intro')) {
+    witchAcc -= playerMs();
     stepWitch();
     guard++;
   }
@@ -930,5 +944,7 @@ globalThis.WITCH = {
   get pellets() { return pellets; },
   get powerUps() { return powerUps; },
   get map() { return MAP; },
-  get dir() { return dir; }
+  get dir() { return dir; },
+  playerMs,
+  enemyMs
 };
