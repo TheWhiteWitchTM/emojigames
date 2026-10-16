@@ -35,7 +35,7 @@ Trump Super Intelligence is a conversation. Type a line and press Enter. The fac
 
 The Oregon Trail asks for a number, then RETURN. On the road, RETURN stops the wagon so you can look around. Hunt and the Columbia raft use the arrows.
 
-Witch ][ is a computer. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF lists the programs in the box. Escape stops one that will not stop.
+Witch I is a computer. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF lists the programs in the box. PEEK and POKE make her complain. Escape stops one that will not stop.
 
 ## What shipped
 
@@ -47,7 +47,7 @@ Witch ][ is a computer. The prompt is SPEAK. A line number stores a line. RUN st
 
 **15 October.** Quiet.
 
-**16 October.** [Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}). Not a port. You type, it answers, the picture of the face swaps. [Notes]({{ '/releases/2026-10-16-trump-super-intelligence/' | relative_url }}). [The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}). A wagon, five names, and the road to the Willamette. [Notes]({{ '/releases/2026-10-16-oregon-trail/' | relative_url }}). [Witch \][]({{ '/games/witch-1/' | relative_url }}). A 40-column machine that speaks WASIC. [Notes]({{ '/releases/2026-10-16-witch-1/' | relative_url }}).
+**16 October.** [Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}). Not a port. You type, it answers, the picture of the face swaps. [Notes]({{ '/releases/2026-10-16-trump-super-intelligence/' | relative_url }}). [The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}). A wagon, five names, and the road to the Willamette. [Notes]({{ '/releases/2026-10-16-oregon-trail/' | relative_url }}). [Witch I]({{ '/games/witch-1/' | relative_url }}). A 40-column machine that speaks WASIC. [Notes]({{ '/releases/2026-10-16-witch-1/' | relative_url }}).
 
 The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release notes]({{ '/releases/' | relative_url }}) are the log.
 

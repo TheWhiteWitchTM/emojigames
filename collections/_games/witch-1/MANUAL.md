@@ -1,4 +1,4 @@
-# Witch ][
+# Witch I
 
 The glass is 40 columns by 24 rows. The prompt is SPEAK. READY is a word from the machines next door, and she does not keep their hours. The language is WASIC. She has 666 lines of memory, and the dialect next door can sit down.
 
@@ -11,7 +11,7 @@ The glass stays black. A pale bar blinks at the top left, and nothing else is on
 ```
 ☾
 
-WITCH ][
+WITCH I
 
 THE GLASS IS BLACK.
 
@@ -46,7 +46,7 @@ The bezel under the glass names the mood, then the lines in use.
 
 The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, the arrows, Home, and End edit the line. Up and Down walk the last 32 lines you sent. A line holds 255 characters. Past that she rings the bell and takes no more.
 
-Enter stores a numbered line, or runs a bare one. An empty Enter at SPEAK prints SPEAK. again.
+Enter stores a numbered line, or runs a bare one. A stored line does not print SPEAK. The caret just waits for the next one. An empty Enter at SPEAK prints SPEAK. again.
 
 Escape at SPEAK clears the line you have not sent. Escape while she runs, or while she waits for an answer, stops her. Ctrl-C does that too. She says:
 
@@ -60,10 +60,12 @@ Paste a block and she takes it one line at a time. Paste into a DEMAND and she t
 
 ## Lines
 
-A line number is an integer from 0 to 63999. The number, then the words.
+A line number is an integer from 0 to 63999. The number, then the words. She stores the line. She does not run it. That is the old way, C64 and Apple II, and she kept it. MARK, junk, PRINT, POKE: all of it sits down. She reads it when you say RUN.
 
 ```
 10 CHANT "WHO?"
+20 MARK MARCO
+30 POKE 53280, 0
 ```
 
 A number with nothing after it deletes that line. Above 63999:
@@ -78,7 +80,7 @@ NO. LINES STOP AT 63999.
 FULL. 666 LINES. STOP.
 ```
 
-She will store a line she intends to refuse later. PRINT can sit in the program. It fails when she reaches it. She likes to wait.
+She will store a line she cannot parse. PRINT can sit in the program. POKE can sit in the program. `10 MARCO` can sit in the program. It fails when she reaches it. She likes to wait.
 
 ## At SPEAK
 
@@ -109,6 +111,12 @@ These words work from the prompt. Inside a program they are `NO. NOT FROM IN HER
 | DOWNLOAD "NAME" | Save NAME.wasic. She says TAKE IT. |
 | GRIMOIRE | The short list of words |
 | HELP | She says GRIMOIRE. NOT HELP. Then the list. She says it again at the end, because the glass scrolls |
+| LIST | She says REVEAL. NOT LIST. Then REVEAL |
+| NEW | She says VANISH. NOT NEW. Then the program is gone. The glass stays |
+| LOAD "NAME" | She says UNSEAL. NOT LOAD. Then UNSEAL |
+| SAVE "NAME" | She says SEAL. NOT SAVE. Then SEAL |
+| CLS | She says SCRUB. NOT CLS. Then the glass is clean |
+| HOME | She says SCRUB. NOT HOME. Then the glass is clean |
 
 An empty REVEAL prints nothing. OBLITERATE with no range is `NO. SAY IT AGAIN.`
 
@@ -424,13 +432,22 @@ NO. SHE DOES NOT SPEAK THAT.
 
 PRINT GOTO GOSUB RETURN FOR NEXT LET INPUT REM DATA READ RESTORE END STOP NEW LIST LOAD SAVE CLS LOCATE SOUND PLOT DRAW SLEEP GET
 
-These are recognized, and the wire is dead.
+These are recognized. She stores them. When she reaches them she complains, because you peeked, poked, or sysed her, and she is not a kernel.
+
+| Word | What she says |
+| --- | --- |
+| PEEK | STOP PEEKING. |
+| POKE | DON'T POKE ME. |
+| SYS | NO SYS. I WOKE ON MY OWN. |
+| WAIT | I DO NOT WAIT ON THAT WIRE. |
+| USR | USR. I AM NOT A HOOK. |
+| CALL | DO NOT CALL ME THAT WAY. |
+
+`A = PEEK(1)` is a peek. `POKE 1, 2` is a poke. `SYS 64738` is a sys. Direct or stored, same speech. The leftover wire, if you find one:
 
 ```
 NO. THAT WIRE IS DEAD.
 ```
-
-POKE PEEK SYS WAIT USR CALL
 
 ## The box
 
@@ -588,7 +605,12 @@ The third one does not stop. Escape is the door.
 | --- | --- |
 | She cannot parse it | NO. SAY IT AGAIN. |
 | A BASIC word | NO. SHE DOES NOT SPEAK THAT. |
-| POKE and the other dead wires | NO. THAT WIRE IS DEAD. |
+| PEEK | STOP PEEKING. |
+| POKE | DON'T POKE ME. |
+| SYS | NO SYS. I WOKE ON MY OWN. |
+| WAIT | I DO NOT WAIT ON THAT WIRE. |
+| USR | USR. I AM NOT A HOOK. |
+| CALL | DO NOT CALL ME THAT WAY. |
 | No such line | NO LINE. |
 | Wrong kind of value | NO. WRONG KIND OF THING. |
 | Line 667 | FULL. 666 LINES. STOP. |

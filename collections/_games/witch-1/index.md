@@ -1,6 +1,6 @@
 ---
 layout: game
-title: "🖥️ Witch ]["
+title: "🖥️ Witch I"
 description: A 40-column machine. It speaks WASIC.
 image: /games/witch-1/banner.jpg
 permalink: /games/witch-1/
@@ -72,7 +72,7 @@ tags: [terminal, computer]
 
 Forty columns, twenty-four rows. The glass is black. She speaks WASIC.
 
-A line with a number is stored. A line without one runs now. `RUN` starts at the top. `SHELF` lists what shipped in the box. `UNSEAL "shelf:GUESS"` takes one down and leaves it sitting there, which is as much initiative as she offers. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. She does not answer to READY. When the glass says SPEAK, the turn is yours.
+A line with a number is stored. A line without one runs now. That is the C64 way, and she kept it. `RUN` starts at the top. `SHELF` lists what shipped in the box. `UNSEAL "shelf:GUESS"` takes one down and leaves it sitting there, which is as much initiative as she offers. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. `LIST` is REVEAL, and she will say so. PEEK, POKE, and SYS sit in a line if you type them. When she reaches them she complains. She does not answer to READY. When the glass says SPEAK, the turn is yours.
 
 Escape ends a working that will not end. Ctrl-C does too, if you were raised on the other machines. The pale bar blinks from the moment the glass is dark, before she bothers to introduce herself.
 

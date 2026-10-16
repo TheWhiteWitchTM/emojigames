@@ -1,4 +1,4 @@
-// Witch ][. A 40-column machine. The language is WASIC. The glass is emoji-engine-2d.
+// Witch I. A 40-column machine. The language is WASIC. The glass is emoji-engine-2d.
 "use strict";
 (function () {
   var COLS = 40;
@@ -27,7 +27,7 @@
   term.cursorLit = true;
   var engine = new E.Engine({ canvas: canvas });
 
-  var ui = E.Utilities.wrap(term, { title: "WITCH ][", footer: true });
+  var ui = E.Utilities.wrap(term, { title: "WITCH I", footer: true });
   var crt = document.createElement("div");
   crt.className = "crt";
   var canvasEl = term.canvas.element;
@@ -193,8 +193,15 @@
     auto.on = false;
     mode = "ready";
     if (term.cursor.col !== 0) writeRaw("\n");
-    term.color(15, 0);
-    writeRaw("SPEAK.\n");
+    term.write("\x1b[0m\x1b[97mSPEAK.\x1b[0m\n");
+    term.color(7, 0);
+    beginEntry("");
+    updateFooter();
+  }
+
+  function waitSpeak() {
+    auto.on = false;
+    mode = "ready";
     term.color(7, 0);
     beginEntry("");
     updateFooter();
@@ -326,6 +333,10 @@
       clearMinions();
       term.color(10, 0);
       touching.clear();
+    },
+    stopping: function () {
+      term.write("\x1b[0m");
+      term.color(7, 0);
     },
     waitKey: function () {
       mode = "freeze";
@@ -463,8 +474,10 @@
       "",
       "UNSEAL \"shelf:GUESS\" THEN RUN.",
       "ESCAPE LEAVES A CIRCLE THAT WILL NOT.",
+      "A NUMBER STORES THE LINE. RUN LATER.",
       "BASIC MAY SIT IN A LINE.",
-      "IT FALLS OVER WHEN SHE REACHES IT."
+      "IT FALLS OVER WHEN SHE REACHES IT.",
+      "PEEK POKE SYS. SHE COMPLAINS."
     ];
     for (var i = 0; i < lines.length; i += 1) writeRaw(lines[i] + "\n");
   }
@@ -475,7 +488,8 @@
     var word = m[1].toUpperCase();
     var known = {
       REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, SEAL: 1, UNSEAL: 1,
-      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1
+      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1,
+      LIST: 1, NEW: 1, LOAD: 1, SAVE: 1, CLS: 1, HOME: 1
     };
     if (!known[word]) return false;
     var rest = (m[2] || "").trim();
@@ -483,6 +497,31 @@
       writeRaw("GRIMOIRE. NOT HELP.\n");
       printGrimoire();
       writeRaw("GRIMOIRE. NOT HELP.\n");
+      return true;
+    }
+    if (word === "LIST") {
+      writeRaw("REVEAL. NOT LIST.\n");
+      word = "REVEAL";
+    }
+    if (word === "NEW") {
+      writeRaw("VANISH. NOT NEW.\n");
+      wasic.clearProgram();
+      clearMinions();
+      writeRaw("GONE.\n");
+      return true;
+    }
+    if (word === "LOAD") {
+      writeRaw("UNSEAL. NOT LOAD.\n");
+      return doUnseal(rest);
+    }
+    if (word === "SAVE") {
+      writeRaw("SEAL. NOT SAVE.\n");
+      return doSeal(rest);
+    }
+    if (word === "CLS" || word === "HOME") {
+      writeRaw(word === "HOME" ? "SCRUB. NOT HOME.\n" : "SCRUB. NOT CLS.\n");
+      term.color(7, 0);
+      term.clear();
       return true;
     }
     if (word === "GRIMOIRE") { printGrimoire(); return true; }
@@ -660,6 +699,7 @@
     mode = "run";
     updateFooter();
     var stayAuto = false;
+    var quiet = false;
     try {
       if (flags && flags.emptyAuto) {
         auto.on = false;
@@ -676,7 +716,7 @@
             if (auto.num > MAX_LINE) auto.on = false;
             else stayAuto = true;
           } else stayAuto = true;
-        }
+        } else if (ok) quiet = true;
         return;
       }
       auto.on = false;
@@ -692,7 +732,8 @@
         mode = "auto";
         beginEntry(String(auto.num) + " ");
         updateFooter();
-      } else promptReady();
+      } else if (quiet) waitSpeak();
+      else promptReady();
     }
   }
 
@@ -927,7 +968,7 @@
     updateFooter();
     await sleep(1200);
     term.write("\x1b[2;35m☾\x1b[0m\n\n");
-    term.write("\x1b[97mWITCH ][\x1b[0m\n\n");
+    term.write("\x1b[97mWITCH I\x1b[0m\n\n");
     term.write("\x1b[2;37mTHE GLASS IS BLACK.\x1b[0m\n\n");
     term.write("\x1b[33m");
     var marks = [111, 222, 333, 444, 555, 666];

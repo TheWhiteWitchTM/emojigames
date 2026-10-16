@@ -1,4 +1,4 @@
-// Programs that ship in the Witch ][ box. UNSEAL "shelf:NAME" loads one.
+// Programs that ship in the Witch I box. UNSEAL "shelf:NAME" loads one.
 "use strict";
 (function (root) {
   root.WITCH_SHELF = {

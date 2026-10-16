@@ -4,6 +4,12 @@
   var MESSAGES = {
     syntax: "NO. SAY IT AGAIN.",
     basic: "NO. SHE DOES NOT SPEAK THAT.",
+    peek: "STOP PEEKING.",
+    poke: "DON'T POKE ME.",
+    sys: "NO SYS. I WOKE ON MY OWN.",
+    wait: "I DO NOT WAIT ON THAT WIRE.",
+    usr: "USR. I AM NOT A HOOK.",
+    call: "DO NOT CALL ME THAT WAY.",
     wire: "NO. THAT WIRE IS DEAD.",
     noline: "NO LINE.",
     type: "NO. WRONG KIND OF THING.",
@@ -60,7 +66,7 @@
     INT: 1, ABS: 1, SQR: 1, SIN: 1, COS: 1, TAN: 1, ATN: 1, LOG: 1, EXP: 1, SGN: 1, RND: 1,
     LEN: 1, VAL: 1, ASC: 1, "STR$": 1, "CHR$": 1, "LEFT$": 1, "RIGHT$": 1, "MID$": 1,
     MOD: 1, COL: 1, ROW: 1, VX: 1, VY: 1, HELD: 1, "LISTEN$": 1, TICK: 1, FRE: 1,
-    MINION: 1, COLS: 1, ROWS: 1
+    MINION: 1, COLS: 1, ROWS: 1, PEEK: 1, USR: 1
   };
   var ZERO_ARG = { "LISTEN$": 1, TICK: 1, COLS: 1, ROWS: 1 };
   var BASIC_WORDS = {
@@ -297,7 +303,7 @@
     if (!pk || pk.t !== "id") throw new WasicFail("syntax");
     var word = pk.v;
     if (BASIC_WORDS[word]) { this.pop(); this.skipRest(); return { op: "basic" }; }
-    if (WIRE_WORDS[word]) { this.pop(); this.skipRest(); return { op: "wire" }; }
+    if (WIRE_WORDS[word]) { this.pop(); this.skipRest(); return { op: "wire", word: word }; }
     if (DIRECT_WORDS[word]) { this.pop(); this.skipRest(); return { op: "direct" }; }
     if (word === "WHISPER") {
       this.pop();
@@ -714,7 +720,6 @@
       return;
     }
     var clean = String(source).trim();
-    this.compile(clean);
     if (!this.lines.has(lineNo) && this.lines.size >= MAX_LINES) throw new WasicFail("full");
     this.lines.set(lineNo, clean);
     this.dirty = true;
@@ -764,8 +769,6 @@
       if (lineNo > MAX_LINE) throw new WasicFail("high");
       var source = m[2].trim();
       if (!source) continue;
-      this.currentLine = lineNo;
-      this.compile(source);
       if (lines.size >= MAX_LINES && !lines.has(lineNo)) throw new WasicFail("full");
       lines.set(lineNo, source);
     }
@@ -790,7 +793,9 @@
     var next = new Map();
     for (var n = 0; n < nums.length; n += 1) {
       var source = this.lines.get(nums[n]);
-      var stmts = this.compile(source);
+      var stmts;
+      try { stmts = this.compile(source); }
+      catch (err) { stmts = []; }
       var spans = [];
       for (var s = 0; s < stmts.length; s += 1) this.collectSpans(stmts[s], spans);
       spans.sort(function (a, b) { return b.from - a.from; });
@@ -816,7 +821,12 @@
     for (i = 0; i < nums.length; i += 1) {
       var source = this.lines.get(nums[i]);
       this.currentLine = nums[i];
-      var stmts = this.compile(source);
+      var stmts;
+      try { stmts = this.compile(source); }
+      catch (err) {
+        var code = isFail(err) && err.code ? err.code : "syntax";
+        stmts = [{ op: "fail", code: code }];
+      }
       this.prog.push({ num: nums[i], source: source, stmts: stmts });
     }
     for (i = 0; i < this.prog.length; i += 1) {
@@ -1046,6 +1056,8 @@
     if (name === "COLS") { this.arity(args, 0); return num(this.cols); }
     if (name === "ROWS") { this.arity(args, 0); return num(this.rows); }
     if (name === "MINION") return num(this.spawn(args));
+    if (name === "PEEK") throw new WasicFail("peek");
+    if (name === "USR") throw new WasicFail("usr");
     throw new WasicFail("syntax");
   };
   Wasic.prototype.arity = function (args, n) {
@@ -1522,7 +1534,11 @@
         }
         return false;
       case "basic": throw new WasicFail("basic");
-      case "wire": throw new WasicFail("wire");
+      case "wire": {
+        var wireWord = String(stmt.word || "").toLowerCase();
+        throw new WasicFail(MESSAGES[wireWord] ? wireWord : "wire");
+      }
+      case "fail": throw new WasicFail(stmt.code || "syntax");
       case "direct": throw new WasicFail("direct");
       default: throw new WasicFail("syntax");
     }
@@ -1571,6 +1587,7 @@
       self.stack = [];
       self.inWatch = false;
       self.halt = false;
+      if (self.host.stopping) self.host.stopping();
     });
   };
 

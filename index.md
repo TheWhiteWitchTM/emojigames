@@ -40,7 +40,7 @@ Click one and play it in the browser. The [catalog]({{ '/games/' | relative_url 
 - [🗡️ Hack]({{ '/games/hack/' | relative_url }}) — rooms, corridors, and things that walk toward you.
 - [🤖 Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}) — a chatbot with a face and a lot of opinions.
 - [🐂 The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}) — five names, a wagon, and the road to the Willamette.
-- [🖥️ Witch \][]({{ '/games/witch-1/' | relative_url }}) — a 40-column machine. It speaks WASIC.
+- [🖥️ Witch I]({{ '/games/witch-1/' | relative_url }}) — a 40-column machine. It speaks WASIC.
 
 ## Elsewhere
 
