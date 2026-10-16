@@ -16,7 +16,8 @@
         { "title": "🗡️ Hack", "url": "/games/hack/" },
         { "title": "🤖 Trump Super Intelligence", "url": "/games/trump-si/" },
         { "title": "🐂 The Oregon Trail", "url": "/games/oregon-trail/" },
-        { "title": "🧙‍♀️ Witch Hunt", "url": "/games/witch-hunt/" }
+        { "title": "🧙‍♀️ Witch Hunt", "url": "/games/witch-hunt/" },
+        { "title": "🧙 A Witch's Tale", "url": "/games/witch-tales/" }
       ]
     },
     { "title": "🔮 About", "url": "/about/" }
