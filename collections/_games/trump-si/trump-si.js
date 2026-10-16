@@ -95,7 +95,17 @@ class TrumpSI {
       this.term.wrap.appendChild(img);
     }
     const file = this.faceMap[mood] || this.faceMap.neutral;
-    img.src = "/emojigames/games/trump-si/" + file + "?t=" + Date.now();
+    img.src = file;
+  }
+
+  // First row of dialogue, under the face rather than over it.
+  textTop() {
+    const img = document.getElementById("trump-face");
+    const canvas = this.term.canvas;
+    if (!img || !canvas) return 14;
+    const covered = (img.offsetTop + img.offsetHeight) - canvas.offsetTop;
+    const row = Math.ceil(covered / this.term.charH) + 1;
+    return Math.max(0, Math.min(row, this.term.rows - 8));
   }
 
   reply(input) {
@@ -139,7 +149,7 @@ class TrumpSI {
   redraw(latest) {
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 14);
+    this.term.moveTo(0, this.textTop());
     this.term.setFg(15);
     this.term.write("YOU: ");
     this.term.resetAttr();
@@ -163,7 +173,7 @@ class TrumpSI {
     this.mood = "happy";
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, 14);
+    this.term.moveTo(0, this.textTop());
     this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
@@ -185,19 +195,9 @@ useEffect(() => {
 
   const term = new Terminal({ border: '#ff8c00', fg: '#ffffff' });
   container.appendChild(term.wrap);
-  term.wrap.focus();
-
-  const origRender = term.render.bind(term);
-  term.render = function() {
-    origRender();
-    if (this.cursorOn && this._focused) {
-      const el = this.cellEls[this.cy]?.[this.cx];
-      if (el) el.style.color = '#ffffff';
-    }
-  };
+  term.focus();
 
   const bot = new TrumpSI(term);
-  bot.start();
 
   function onKey(e) {
     if (e.key === "Enter") {
@@ -221,4 +221,5 @@ useEffect(() => {
   }
 
   term.wrap.addEventListener("keydown", onKey);
+  bot.start();
 });

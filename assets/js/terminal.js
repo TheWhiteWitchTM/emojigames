@@ -29,7 +29,8 @@ class Terminal {
     this.hideMouse = options.hideMouse !== undefined ? options.hideMouse : true;
     this.autoRender = options.autoRender !== undefined ? options.autoRender : true;
     this.focusHint = options.focusHint !== undefined ? options.focusHint : true;
-    this.showCursor = options.showCursor !== undefined ? options.showCursor : true;
+    // Data flag. A method is also named showCursor, so this cannot use that name.
+    this.cursorEnabled = options.showCursor !== false;
 
     this.charW = 10;
     this.charH = 18;
@@ -84,14 +85,15 @@ class Terminal {
     `;
     this.wrap.appendChild(this.canvas);
 
-    document.addEventListener('fullscreenchange', () => {
+    this._onFullscreen = () => {
       if (document.fullscreenElement === this.wrap) {
         this.fsBtn.innerHTML = '<b>Esc</b> Shrink ⤡';
-        setTimeout(() => this.wrap.focus(), 50);
+        setTimeout(() => this.focus(), 50);
       } else {
         this.fsBtn.innerHTML = '<b>F11</b> Fullscreen ⛶';
       }
-    });
+    };
+    document.addEventListener('fullscreenchange', this._onFullscreen);
 
     this.wrap.addEventListener('keydown', (e) => {
       if (e.key === 'F11') {
@@ -141,6 +143,12 @@ class Terminal {
 
     this.wrap.addEventListener('keydown', (e) => this._keysDown.add(e.key));
     this.wrap.addEventListener('keyup', (e) => this._keysDown.delete(e.key));
+
+    // Games listen on the terminal element. A page load often cannot keep
+    // that element focused, so keys typed at the page never arrived.
+    // Forward those keys here unless the user is in another control.
+    this._onDocKeyDown = (e) => this._forwardKey(e);
+    document.addEventListener('keydown', this._onDocKeyDown, true);
 
     this._setupCanvas();
 
@@ -324,8 +332,49 @@ class Terminal {
     this.buffer.push(newRow);
   }
 
-  hideCursor() { this.showCursor = false; this.render(); }
-  showCursor() { this.showCursor = true; this.render(); }
+  hideCursor() { this.cursorEnabled = false; this.render(); }
+  showCursor() { this.cursorEnabled = true; this.render(); }
+
+  /** @private */
+  _isForeignTyping(el) {
+    if (!el || el === document.body || el === document.documentElement) return false;
+    if (this.wrap.contains(el)) return false;
+    const tag = el.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'A' || tag === 'BUTTON') return true;
+    return !!el.isContentEditable;
+  }
+
+  /** @private Deliver a page-level key to listeners on the terminal. */
+  _forwardKey(e) {
+    if (this._destroyed || e.__fromTerminal) return;
+    if (e.target && this.wrap.contains(e.target)) return;
+    if (this._isForeignTyping(e.target)) return;
+    const fwd = new KeyboardEvent('keydown', {
+      key: e.key,
+      code: e.code,
+      ctrlKey: e.ctrlKey,
+      metaKey: e.metaKey,
+      altKey: e.altKey,
+      shiftKey: e.shiftKey,
+      repeat: e.repeat,
+      bubbles: true,
+      cancelable: true
+    });
+    fwd.__fromTerminal = true;
+    this.wrap.dispatchEvent(fwd);
+    if (fwd.defaultPrevented) e.preventDefault();
+    // Focus after this event so the browser does not also deliver it natively.
+    if (document.activeElement !== this.wrap) setTimeout(() => this.focus(), 0);
+  }
+
+  destroy() {
+    if (this._destroyed) return;
+    this._destroyed = true;
+    clearInterval(this._blink);
+    document.removeEventListener('keydown', this._onDocKeyDown, true);
+    document.removeEventListener('fullscreenchange', this._onFullscreen);
+    this.wrap.remove();
+  }
 
   setHideMouse(hide) {
     this.hideMouse = !!hide;
@@ -521,14 +570,17 @@ class Terminal {
         }
 
         if (cell.ch && cell.ch !== ' ') {
-          ctx.fillStyle = this._resolveColor(cell.fg, cell.fgRgb) || this.fg;
+          let fgIdx = cell.fg;
+          if (cell.bright && fgIdx != null && fgIdx < 8) fgIdx += 8;
+          ctx.font = `${cell.bright ? 'bold ' : ''}${this.fontSize} ${this.font}`;
+          ctx.fillStyle = this._resolveColor(fgIdx, cell.fgRgb) || this.fg;
           ctx.fillText(cell.ch, px, py);
         }
       }
     }
 
     // Cursor
-    if (this.showCursor && this.cursorOn && this._focused && this.cx >= 0 && this.cy >= 0 && this.cx < this.cols && this.cy < this.rows) {
+    if (this.cursorEnabled && this.cursorOn && this._focused && this.cx >= 0 && this.cy >= 0 && this.cx < this.cols && this.cy < this.rows) {
       ctx.fillStyle = '#ffff00';
       ctx.fillRect(this.cx * this.charW, this.cy * this.charH, this.charW, this.charH);
     }

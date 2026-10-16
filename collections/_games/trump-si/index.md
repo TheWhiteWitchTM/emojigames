@@ -12,5 +12,4 @@ tags: [terminal, joke]
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
 <script src="{{ '/games/trump-si/responses.js' | relative_url }}"></script>
-<script src="{{ '/games/trump-si/trump-faces.js' | relative_url }}"></script>
 <script src="{{ '/games/trump-si/trump-si.js' | relative_url }}"></script>

@@ -12,7 +12,8 @@ useEffect(() => {
     border: '#39ff14',
     cols: 60,
     rows: 20,
-    autoRender: false
+    autoRender: false,
+    showCursor: false
   });
   gameEl.appendChild(term.wrap);
   term.wrap.tabIndex = 0;
@@ -56,7 +57,7 @@ useEffect(() => {
     term.setFg(11);
     term.writeAt(14, 12, 'Press ENTER to begin');
     term.setFg(8);
-    term.writeAt(16, 16, 'WASD / hjkl to move');
+    term.writeAt(12, 16, 'Arrows, WASD, or hjkl');
     term.render();
     beep(440, 0.15);
   }
@@ -141,7 +142,7 @@ useEffect(() => {
     term.write(`Dlvl:${depth}  HP:${player.hp}/${player.maxHp}  Gold:${player.gold}`);
     term.moveTo(0, level.height + 1);
     term.setFg(7);
-    term.write((messages.join(' | ') || '').slice(0, 70));
+    term.write((messages.join(' | ') || '').slice(0, term.cols));
     term.render();
   }
 
@@ -210,43 +211,45 @@ useEffect(() => {
   }
 
   function showHelp() {
-    messages = [
-      'WASD to move (QEZC diagonals) or hjkl',
-      'i = inventory   ? = help   r = restart'
-    ];
+    messages = ['Move: arrows/WASD/hjkl.  i inventory.  ? help.  r restart'];
     draw();
   }
 
-  function handleKey(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (state === 'intro') {
-      if (e.key === 'Enter') newGame();
-      return;
-    }
-    if (state === 'dead' || state === 'win') {
-      if (e.key === 'r' || e.key === 'R') {
-        newGame();
-      }
-      return;
-    }
-
-    const key = e.key.toLowerCase();
+  function moveFor(key) {
+    const k = key.length === 1 ? key.toLowerCase() : key;
     const map = {
       a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1],
       q: [-1, -1], e: [1, -1], z: [-1, 1], c: [1, 1],
       h: [-1, 0], l: [1, 0], k: [0, -1], j: [0, 1],
-      y: [-1, -1], u: [1, -1], b: [-1, 1], n: [1, 1]
+      y: [-1, -1], u: [1, -1], b: [-1, 1], n: [1, 1],
+      ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]
     };
+    return map[k] || null;
+  }
 
-    if (map[key]) {
-      playerMove(...map[key]);
-    } else if (key === 'i') {
+  function handleKey(e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+
+    const move = moveFor(e.key);
+    if (state === 'intro') {
+      newGame();
+      if (move) playerMove(...move);
+      return;
+    }
+    if (state === 'dead' || state === 'win') {
+      if (e.key === 'r' || e.key === 'R' || e.key === 'Enter') newGame();
+      return;
+    }
+    if (move) {
+      playerMove(...move);
+    } else if (e.key === 'i' || e.key === 'I') {
       msg('Inventory: ' + (player.inventory.map(i => i.name).join(', ') || 'empty'));
       draw();
-    } else if (key === '?') {
+    } else if (e.key === '?') {
       showHelp();
+    } else if (e.key === 'r' || e.key === 'R') {
+      newGame();
     }
   }
 
