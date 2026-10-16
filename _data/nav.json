@@ -14,7 +14,8 @@
         { "title": "🗡️ Rogue", "url": "/games/rogue/" },
         { "title": "🐍 Snake", "url": "/games/snake/" },
         { "title": "🗡️ Hack", "url": "/games/hack/" },
-        { "title": "🤖 Trump Super Intelligence", "url": "/games/trump-si/" }
+        { "title": "🤖 Trump Super Intelligence", "url": "/games/trump-si/" },
+        { "title": "🐂 The Oregon Trail", "url": "/games/oregon-trail/" }
       ]
     },
     { "title": "🔮 About", "url": "/about/" }

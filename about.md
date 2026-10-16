@@ -2,7 +2,7 @@
 layout: default
 title: About
 permalink: /about/
-description: Why Emoji Games exists, and what shipped in the first four days.
+description: Why Emoji Games exists, and what has shipped.
 ---
 
 # 🔮 About
@@ -33,7 +33,9 @@ Rogue and Hack are dungeons. You move a step at a time. Step on a thing to pick 
 
 Trump Super Intelligence is a conversation. Type a line and press Enter. The face changes with the mood.
 
-## The first four days
+The Oregon Trail asks for a number, then RETURN. On the road, RETURN stops the wagon so you can look around. Hunt and the Columbia raft use the arrows.
+
+## What shipped
 
 **12 October 2026.** [Pong]({{ '/games/pong/' | relative_url }}) and [Snake]({{ '/games/snake/' | relative_url }}). Two games you can explain in a sentence, which made them the right place to start. [Notes]({{ '/releases/2026-10-12-pong-and-snake/' | relative_url }}).
 
@@ -43,7 +45,7 @@ Trump Super Intelligence is a conversation. Type a line and press Enter. The fac
 
 **15 October.** Quiet.
 
-**16 October.** [Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}). Not a port. You type, it answers, the picture of the face swaps. [Notes]({{ '/releases/2026-10-16-trump-super-intelligence/' | relative_url }}).
+**16 October.** [Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}). Not a port. You type, it answers, the picture of the face swaps. [Notes]({{ '/releases/2026-10-16-trump-super-intelligence/' | relative_url }}). [The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}). A wagon, five names, and the road to the Willamette. [Notes]({{ '/releases/2026-10-16-oregon-trail/' | relative_url }}).
 
 The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release notes]({{ '/releases/' | relative_url }}) are the log.
 
