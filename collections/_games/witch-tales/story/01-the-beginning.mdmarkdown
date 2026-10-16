@@ -1,0 +1,27 @@
+# Chapter 01 — The Beginning
+
+**Status:** Released  
+**Folder:** `01-the-beginning/`
+
+## Summary
+
+You wake up with a problem and very little else.  
+The first chapter introduces the basic systems: moving through a small area, talking to a few people, fighting something that should not be there, and learning how the save works.
+
+## What this chapter adds
+
+- Basic movement and tile map
+- Simple combat
+- A short dialogue
+- Local save of position, health, and a couple of flags
+
+## Ending
+
+The chapter ends when you leave the starting area with a specific item or piece of information.  
+The game then looks for Chapter 02. If it is not present, it tells you the next part has not been written yet.
+
+## Continuity
+
+- Flag `met_the_crow` may be set.
+- Flag `has_the_key` may be set.
+- Later chapters can check these.
