@@ -3,9 +3,14 @@
     <span class="release-emoji">▼</span>
     <span class="title-text">{{ include.post.title }}</span>
   </h2>
+  <time class="release-date" datetime="{{ include.post.date | date: '%Y-%m-%d' }}">{{ include.post.date | date: "%-d %B %Y" }}</time>
 
   <div class="release-excerpt">
-    {{ include.post.content | strip_html | truncate: 200 }}
+    {% if include.post.description %}
+      {{ include.post.description }}
+    {% else %}
+      {{ include.post.content | strip_html | truncate: 200 }}
+    {% endif %}
   </div>
 
   <div class="release-full" hidden></div>

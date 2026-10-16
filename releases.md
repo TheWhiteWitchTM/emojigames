@@ -1,10 +1,12 @@
 ---
 title: 📢 Releases
-description: New game announcements and updates.
+permalink: /releases/
+description: What shipped, and on which day. Newest first.
 ---
 
 # 📢 Releases
 
-New games, updates, and notes.
+What shipped, and on which day. Newest first.
 
 {% include release-list.html %}
+{% include release-scripts.html %}

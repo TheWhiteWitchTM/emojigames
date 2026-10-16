@@ -12,7 +12,9 @@
         { "title": "🚀 Galaxy Hunt", "url": "/games/galaxy-hunt/" },
         { "title": "🏓 Pong", "url": "/games/pong/" },
         { "title": "🗡️ Rogue", "url": "/games/rogue/" },
-        { "title": "🐍 Snake", "url": "/games/snake/" }
+        { "title": "🐍 Snake", "url": "/games/snake/" },
+        { "title": "🗡️ Hack", "url": "/games/hack/" },
+        { "title": "🤖 Trump Super Intelligence", "url": "/games/trump-si/" }
       ]
     },
     { "title": "🔮 About", "url": "/about/" }
