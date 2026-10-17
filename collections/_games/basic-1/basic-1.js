@@ -97,13 +97,14 @@
     term.write("512 LINES FREE");
 
     term.cursor.row = 10;
-    term.cursor.col = 2;
+    term.cursor.col = 0;
     term.write("READY.");
 
     term.dirty = true;
     term.flush();
+
     term.cursor.row = 11;
-    term.cursor.col = 2;
+    term.cursor.col = 0;
     setStatus();
   }
 
