@@ -4,6 +4,10 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-17
 
+### Basic I
+
+The machine next to Witch I. Same glass, forty by twenty-four, same walls, and the prompt is READY. PRINT, GOTO, FOR, and NEXT run. The witch's names run too. SHELF, LIST, and a number still work the way they do on her desk.
+
 ### The glass, and three on the marquee
 
 The playable games sit on the emoji engine now. A title card waits for Return. When the game is over, win or death, R starts it again and skips the title. Trump Super Intelligence is still a conversation: no title, no ending. Witch I was not part of this pass.

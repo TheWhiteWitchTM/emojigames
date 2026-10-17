@@ -1,4 +1,4 @@
-// BASIC I. A 40-column machine. Language-neutral host. Loads interpreter.js
+// Basic I. A 40-column machine. The language is BASIC. The glass is emoji-engine-2d.
 "use strict";
 (function () {
   var COLS = 40;
@@ -8,11 +8,11 @@
   var MAX_LINE = 63999;
   var LINE_CHARS = 255;
   var HIST_MAX = 32;
-  var BACK_MAX = 512;
+  var BACK_MAX = 666;
   var KEY_MAX = 32;
   var MINIONS = 32;
   var HITS = 8;
-  var INDEX_KEY = "emojigames-witch1-seals";
+  var INDEX_KEY = "emojigames-basic1-seals";
   // The white witch in assets/images/site.jpg (1168×784). Hat through the wand, not the title.
   var WITCH_CROP = { x: 58, y: 236, w: 204, h: 268 };
 
@@ -76,11 +76,11 @@
   var toolHints = [];
   var TOOLS = [
     { act: "list", key: "F1", emoji: "📜", label: "LIST" },
-    { act: "run", key: "F2", emoji: "🕯️", label: "RUN" },
+    { act: "run", key: "F2", emoji: "▶", label: "RUN" },
     { act: "shelf", key: "F3", emoji: "📚", label: "SHELF" },
-    { act: "scrub", key: "F4", emoji: "🧹", label: "SCRUB" },
-    { act: "magic", key: "F5", emoji: "✨", label: "MAGIC" },
-    { act: "exorcise", key: "F6", emoji: "🌑", label: "EXORCISE" },
+    { act: "cls", key: "F4", emoji: "🧹", label: "CLS" },
+    { act: "auto", key: "F5", emoji: "✨", label: "AUTO" },
+    { act: "renum", key: "F6", emoji: "🔢", label: "RENUM" },
     { act: "latch", key: "F7", emoji: "🔒", label: "LATCH" }
   ];
   var bar = document.createElement("div");
@@ -168,15 +168,15 @@
   var interpreter;
 
   function cp(s) { return Array.from(s); }
-  function sealKey(name) { return "emojigames-witch1-seal:" + name; }
+  function sealKey(name) { return "emojigames-basic1-seal:" + name; }
 
   function updateFooter() {
-    var used = wasic ? interpreter.lines.size : 0;
+    var used = interpreter ? interpreter.lines.size : 0;
     var state = "READY";
     if (mode === "boot") state = "WAKING";
     else if (shelfState) state = shelfState;
     else if (mode === "shelf") state = "PICKING";
-    else if (mode === "run") state = wasic && interpreter.currentLine != null ? "LINE " + interpreter.currentLine : "RUNNING";
+    else if (mode === "run") state = interpreter && interpreter.currentLine != null ? "LINE " + interpreter.currentLine : "RUNNING";
     else if (mode === "demand") state = "WAITING";
     else if (mode === "freeze") state = "FROZEN";
     else if (mode === "auto") state = "AUTO " + auto.num;
@@ -190,7 +190,7 @@
       var usable = act === "latch" ? editing : speaking;
       var on = false;
       if (act === "latch") on = editing && latch;
-      if (act === "magic") on = !!auto.on && speaking;
+      if (act === "auto") on = !!auto.on && speaking;
       hint.classList.toggle("quiet", !usable);
       hint.classList.toggle("lit", on);
     }
@@ -266,7 +266,7 @@
   }
 
   function say(code) {
-    var book = globalThis.WASIC_MESSAGES;
+    var book = globalThis.BASIC_MESSAGES;
     return (book && book[code]) || "❓ NO.";
   }
 
@@ -563,7 +563,7 @@
     minions.forEach(killSprite);
     minions.clear();
     touching.clear();
-    if (wasic) interpreter.pendingHits.length = 0;
+    if (interpreter) interpreter.pendingHits.length = 0;
   }
 
   function living() {
@@ -812,50 +812,44 @@
 
   function printGrimoire() {
     var lines = [
-      "THE SHORT LIST. SHE IS NOT YOUR TUTOR.",
+      "THE SHORT LIST.",
       "",
-      "CHANT DEMAND CONJURE FLYTO",
-      "SUMMON BANISH IF CURSE BREAK",
-      "MARK DISPEL FREEZE WHISPER",
-      "OFFERING TAKE REWIND WHEN DIM",
-      "AT SCRUB COLOR TONE VEIL",
-      "MINION SEND WATCH DESTROY",
+      "PRINT INPUT LET GOTO",
+      "GOSUB RETURN IF FOR NEXT",
+      "LABEL END SLEEP REM",
+      "DATA READ RESTORE ON DIM",
+      "LOCATE CLS COLOR SOUND INK",
+      "SPRITE SEND WATCH DESTROY",
       "CIRCLE LINE FILL",
       "",
       "FROM OUT HERE:",
-      "RUN REVEAL OBLITERATE",
-      "RENUMBER VANISH AUTO MAGIC",
-      "SEAL UNSEAL UPLOAD",
-      "DOWNLOAD SHELF GRIMOIRE",
-      "EXORCISE LATCH",
+      "RUN LIST NEW AUTO",
+      "RENUM LOAD SAVE",
+      "UPLOAD DOWNLOAD SHELF",
+      "HELP LATCH",
       "",
       "LATCH HOLDS THE GLASS.",
       "UP WALKS WHAT ROLLED OFF.",
       "LATCH OFF, AND UP RECALLS.",
       "",
-      "UNSEAL \"shelf:HELLO-WITCH\"",
+      "LOAD \"shelf:HELLO\"",
       "OR SHELF, AND POINT.",
       "LIST SHOWS THE LINES.",
-      "THEN RUN. HELLO-DEMON TOO.",
-      "ESCAPE LEAVES A CIRCLE THAT WILL NOT.",
+      "THEN RUN.",
+      "ESCAPE LEAVES A PROGRAM THAT WILL NOT.",
       "A NUMBER STORES THE LINE. RUN LATER.",
-      "MAGIC NUMBERS. AUTO DOES TOO.",
-      "BASIC MAY SIT IN A LINE.",
-      "IT FALLS OVER WHEN SHE REACHES IT.",
-      "EXORCISE DRIVES IT OUT.",
-      "EMPTY, SHE TAKES A FILE.",
-      "THE SUMS STAY.",
-      "PEEK POKE SYS. SHE COMPLAINS."
+      "AUTO NUMBERS THE NEXT LINES.",
+      "PEEK POKE SYS. IT COMPLAINS."
     ];
     for (var i = 0; i < lines.length; i += 1) writeRaw(lines[i] + "\n");
   }
 
   function printList(range) {
     var text = interpreter.listing(range.from, range.to);
-    writeAnsi("\x1b[1;95mLIST. THEY WERE NOT HIDING.\n");
+    writeAnsi("\x1b[1;37mLIST.\n");
     writeAnsi("\x1b[2;31mRETYPE THE NUMBER. THAT IS THE EDIT.\n");
     if (!text) {
-      writeAnsi("\x1b[31mA LIST OF AIR. STORE A LINE.\n");
+      writeAnsi("\x1b[31mNO LINES.\n");
       setPen(7, 0);
       return;
     }
@@ -868,7 +862,7 @@
       setPen(7, 0);
       writeRaw(src + "\n");
     }
-    writeAnsi("\x1b[2;33mTHERE. RUIN ONE, OR RUN THE LOT.\n");
+    writeAnsi("\x1b[2;33mRUN, OR RETYPE A NUMBER.\n");
     setPen(7, 0);
   }
 
@@ -877,16 +871,14 @@
     if (!m) return false;
     var word = m[1].toUpperCase();
     var known = {
-      REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
-      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, EXORCISE: 1, LATCH: 1,
+      REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, RENUM: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
+      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, LATCH: 1,
       LIST: 1, NEW: 1, LOAD: 1, SAVE: 1, CLS: 1, HOME: 1
     };
     if (!known[word]) return false;
     var rest = (m[2] || "").trim();
-    if (word === "HELP") {
-      writeRaw("GRIMOIRE. NOT HELP.\n");
+    if (word === "HELP" || word === "GRIMOIRE") {
       printGrimoire();
-      writeRaw("GRIMOIRE. NOT HELP.\n");
       return true;
     }
     if (word === "LIST") {
@@ -895,28 +887,23 @@
       printList(listed);
       return true;
     }
-    if (word === "NEW") {
-      writeRaw("VANISH. NOT NEW.\n");
+    if (word === "NEW" || word === "VANISH") {
       interpreter.clearProgram();
       clearMinions();
+      if (word === "VANISH") {
+        setPen(7, 0);
+        term.clear();
+      }
       writeRaw("GONE.\n");
       return true;
     }
-    if (word === "LOAD") {
-      writeRaw("UNSEAL. NOT LOAD.\n");
-      return doUnseal(rest);
-    }
-    if (word === "SAVE") {
-      writeRaw("SEAL. NOT SAVE.\n");
-      return doSeal(rest);
-    }
+    if (word === "LOAD" || word === "UNSEAL") { return doUnseal(rest); }
+    if (word === "SAVE" || word === "SEAL") { return doSeal(rest); }
     if (word === "CLS" || word === "HOME") {
-      writeRaw(word === "HOME" ? "SCRUB. NOT HOME.\n" : "SCRUB. NOT CLS.\n");
       setPen(7, 0);
       term.clear();
       return true;
     }
-    if (word === "GRIMOIRE") { printGrimoire(); return true; }
     if (word === "RUN") { return doRun(rest); }
     if (word === "REVEAL") {
       var range = rest ? parseRange(rest) : { from: 0, to: MAX_LINE };
@@ -931,27 +918,13 @@
       interpreter.deleteRange(gone.from, gone.to);
       return true;
     }
-    if (word === "RENUMBER") {
+    if (word === "RENUMBER" || word === "RENUM") {
       if (rest) { fault(say("syntax")); return true; }
       try { interpreter.renumber(); writeRaw("RENUMBERED.\n"); }
       catch (err) { fault(err.message || "NO."); }
       return true;
     }
-    if (word === "VANISH") {
-      interpreter.clearProgram();
-      clearMinions();
-      setPen(7, 0);
-      term.clear();
-      writeRaw("GONE.\n");
-      return true;
-    }
     if (word === "AUTO" || word === "MAGIC") { return doAuto(rest); }
-    if (word === "EXORCISE") {
-      if (rest) { fault(say("syntax")); return true; }
-      return doExorcise();
-    }
-    if (word === "SEAL") { return doSeal(rest); }
-    if (word === "UNSEAL") { return doUnseal(rest); }
     if (word === "DOWNLOAD") { return doDownload(rest); }
     if (word === "UPLOAD") { return doUpload(); }
     if (word === "SHELF") { return doShelf(); }
@@ -1005,7 +978,7 @@
       localStorage.setItem(sealKey(parsed.name), interpreter.listing());
       if (index.indexOf(parsed.name) < 0) index.push(parsed.name);
       localStorage.setItem(INDEX_KEY, JSON.stringify(index));
-      writeRaw("SEALED.\n");
+      writeRaw("SAVED.\n");
     } catch (err) { fault(say("shut")); }
     return true;
   }
@@ -1037,7 +1010,7 @@
     if (Object.prototype.hasOwnProperty.call(shelfCache, name)) {
       return Promise.resolve(shelfCache[name]);
     }
-    return fetch(shelfBase + name.toLowerCase() + ".wasic").then(function (res) {
+    return fetch(shelfBase + name.toLowerCase() + ".bas").then(function (res) {
       if (res.status === 404) return null;
       if (!res.ok) throw new Error("shut");
       return res.text();
@@ -1060,15 +1033,15 @@
       try {
         interpreter.load(kept);
         clearMinions();
-        writeRaw("UNSEALED.\n");
+        writeRaw("LOADED.\n");
       } catch (err) { fault(err.message || say("syntax")); return false; }
       return true;
     }
     shelfState = "READING";
     updateFooter();
     setPen(10, 0);
-    writeRaw("☾ THE SHELF CREAKS.\n");
-    writeRaw(parsed.name + ".WASIC\n");
+    writeRaw("READING.\n");
+    writeRaw(parsed.name + ".BAS\n");
     setPen(7, 0);
     tone(392, 45, 0.03);
     return fetchShelf(parsed.name).then(function (text) {
@@ -1077,7 +1050,7 @@
       try {
         interpreter.load(text);
         clearMinions();
-        writeRaw("UNSEALED.\n");
+        writeRaw("LOADED.\n");
       } catch (err) { fault(err.message || say("syntax")); return false; }
       return true;
     }).catch(function () {
@@ -1097,7 +1070,7 @@
     var url = URL.createObjectURL(blob);
     var a = document.createElement("a");
     a.href = url;
-    a.download = parsed.name.toLowerCase() + ".wasic";
+    a.download = parsed.name.toLowerCase() + ".bas";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -1110,7 +1083,7 @@
     holdPrompt = true;
     var input = document.createElement("input");
     input.type = "file";
-    input.accept = ".wasic,.txt,text/plain";
+    input.accept = ".bas,.basic,.txt,text/plain";
     var settled = false;
     function settle(text) {
       if (settled) return;
@@ -1120,7 +1093,7 @@
         try {
           interpreter.load(text);
           clearMinions();
-          writeRaw("UNSEALED.\n");
+          writeRaw("LOADED.\n");
         } catch (err) { fault(err.message || "NO."); }
       }
       promptReady();
@@ -1172,7 +1145,7 @@
     catch (err) { fault(err.message || say("syntax")); return; }
     if (!spell || !String(spell.text || "").trim()) { fault(say("empty")); return; }
     if (!spell.changed) {
-      if (!fromFile) { writeRaw("NOTHING HERE READYS BASIC.\n"); return; }
+      if (!fromFile) { writeRaw("NOTHING HERE SPEAKS BASIC.\n"); return; }
       try {
         interpreter.load(spell.text);
         clearMinions();
@@ -1277,11 +1250,11 @@
         auto.on = false;
         keep = false;
         await doShelf();
-      } else if (act === "scrub") {
+      } else if (act === "cls") {
         term.write("\x1b[0m");
         setPen(7, 0);
         term.clear();
-      } else if (act === "magic") {
+      } else if (act === "auto") {
         if (auto.on) {
           auto.on = false;
           keep = false;
@@ -1290,7 +1263,10 @@
           doAuto("");
           keep = true;
         }
-      } else if (act === "exorcise") doExorcise();
+      } else if (act === "renum") {
+        try { interpreter.renumber(); writeRaw("RENUMBERED.\n"); }
+        catch (err) { fault(err.message || "NO."); }
+      }
     } catch (err) {
       fault(err && err.message ? err.message : "NO.");
     } finally {
@@ -1328,7 +1304,7 @@
   }
 
   function paintShelfChrome() {
-    paintAnsiRow(0, "1;95;40", "☾  THE SHELF");
+    paintAnsiRow(0, "1;37;40", "THE SHELF");
     paintAnsiRow(1, shelf.shut ? "31;40" : "2;31;40", shelf.shut ? "THE BOX IS SHUT. THESE ARE YOURS." : "POINT AT ONE. I HAVE OTHER WORK.");
     paintAnsiRow(2, "40", "");
     paintAnsiRow(19, "40", "");
@@ -1504,7 +1480,7 @@
         for (var i = 0; i < catalog.length; i += 1) items.push({ name: catalog[i], shelf: true });
       }
       if (sealed.length) {
-        items.push({ gap: true, name: "SEALED, IF YOU INSIST" });
+        items.push({ gap: true, name: "SAVED IN THIS BROWSER" });
         for (var s = 0; s < sealed.length; s += 1) items.push({ name: sealed[s], shelf: false });
       }
       if (!beginShelf(items, !ok)) fault(say("shut"));
@@ -1924,18 +1900,7 @@
 
   var waking = true;
   var inkHold = true;
-  var witchSrc = mount.getAttribute("data-witch");
-  if (witchSrc) {
-    var witchImg = new Image();
-    witchImg.onload = function () {
-      portrait.image = witchImg;
-      if (waking && !inkHold) {
-        portrait.target = 1;
-        lightSpark();
-      }
-    };
-    witchImg.src = witchSrc;
-  }
+  portrait.target = 0;
 
   // The same picture as shelf/ansi-witch.wasic, drawn on the glass before the sign-on.
   var INK_WITCH = [
@@ -1991,8 +1956,6 @@
     updateFooter();
     loadCatalog();
     await sleep(220);
-    await paintInkWitch();
-    await sleep(380);
     tone(196, 90, 0.04);
     await sleep(110);
     tone(247, 150, 0.035);
@@ -2001,16 +1964,13 @@
     term.clear();
     setPen(7, 0);
     inkHold = false;
-    if (portrait.image) {
-      portrait.target = 1;
-      lightSpark();
-    }
-    await sleep(240);
+    portrait.target = 0;
+    await sleep(80);
     var boxCol = centerOf("┌────────────────────┐");
     var box = [
       ["┌────────────────────┐", "92"],
-      ["│ **** WITCH I ****  │", "1;97"],
-      ["│    WASIC · ONE     │", "92"],
+      ["│ **** BASIC I ****  │", "1;97"],
+      ["│    BASIC · ONE     │", "92"],
       ["└────────────────────┘", "92"]
     ];
     for (var b = 0; b < box.length; b += 1) cup(SIGN + b, boxCol, box[b][0], box[b][1]);
@@ -2024,10 +1984,10 @@
       await sleep(50);
     }
     var spoken = [
-      [8, "SHE WOKE UP.", "37"],
-      [9, "THE CIRCLE HOLDS.", "37"],
-      [10, "WASIC READYS.", "37"],
-      [11, "BASIC CAN SIT IN THE DARK.", "31"]
+      [8, "IT WOKE UP.", "37"],
+      [9, "THE GLASS HOLDS.", "37"],
+      [10, "BASIC SPEAKS.", "37"],
+      [11, "A NUMBER STORES A LINE.", "37"]
     ];
     for (var n = 0; n < spoken.length; n += 1) {
       await sleep(65);
@@ -2057,10 +2017,10 @@
     }
   }
 
-  globalThis.WITCH = {
+  globalThis.BASIC = {
     term: term,
     engine: engine,
-    wasic: wasic,
+    interpreter: interpreter,
     get mode() { return mode; },
     get gaze() { return gaze; },
     get latch() { return latch; },

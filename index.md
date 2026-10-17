@@ -53,6 +53,7 @@ Rooms, corridors, and things that walk toward you. Weapons get wielded when they
 - [🧙‍♀️ Witch Hunt]({{ '/games/witch-hunt/' | relative_url }}) — ten levels. Symbols chase the witch.
 - [🧙 A Witch's Tale]({{ '/games/witch-tales/' | relative_url }}) — a chaptered tile tale. You are a witch.
 - [🖥️ Witch I]({{ '/games/witch-1/' | relative_url }}) — a 40-column machine. It speaks WASIC.
+- [🖥️ Basic I]({{ '/games/basic-1/' | relative_url }}) — the same glass. It speaks BASIC.
 
 ## Elsewhere
 

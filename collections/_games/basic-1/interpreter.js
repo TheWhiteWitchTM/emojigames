@@ -1,9 +1,9 @@
-// Interpreter. BASIC dialect. Loaded by the language-neutral host as interpreter.js
+// BASIC. A line-numbered interpreter. The witch's names are the same words.
 "use strict";
 (function (root) {
   var MESSAGES = {
     syntax: "❓ NO. SAY IT AGAIN.",
-    basic: "🙊 NO. SHE DOES NOT SPEAK THAT.",
+    basic: "🙊 NO. NOT ON THIS MACHINE.",
     peek: "👀 STOP PEEKING.",
     poke: "👉 DON'T POKE ME.",
     sys: "🛑 NO SYS. I WOKE ON MY OWN.",
@@ -13,14 +13,14 @@
     wire: "🔌 NO. THAT WIRE IS DEAD.",
     noline: "🚫 NO LINE.",
     type: "🎭 NO. WRONG KIND OF THING.",
-    full: "🛑 FULL. 512 LINES. STOP.",
+    full: "🛑 FULL. 666 LINES. STOP.",
     div0: "➗ CUTE. DIVIDE BY NOTHING.",
-    sprite: "👻 NO. THAT MINION IS GONE.",
+    sprite: "👻 NO. THAT SPRITE IS GONE.",
     long: "📏 TOO LONG.",
     string: "🧵 TOO LONG A STRING.",
-    nofor: "➰ BREAK, AND NOTHING TO BREAK.",
+    nofor: "➰ NEXT, AND NOTHING TO NEXT.",
     noreturn: "📭 RETURN, AND NOBODY CALLED.",
-    nodata: "📜 THE DATA IS GONE.",
+    nodata: "📜 OUT OF DATA.",
     redo: "🔁 AGAIN.",
     redonum: "🔢 AGAIN. A NUMBER.",
     big: "💥 TOO BIG.",
@@ -30,9 +30,9 @@
     step: "🚫 STEP OF NOTHING. NO.",
     dim: "📦 NO. IT HAS NO ROOM.",
     index: "📐 NO. OUTSIDE THE ROOM.",
-    many: "👻 NO. TOO MANY MINIONS.",
-    taken: "🔒 NO. THAT WORD IS READN.",
-    label: "🔖 NO. THAT NAME IS READN.",
+    many: "👻 NO. TOO MANY SPRITES.",
+    taken: "🔒 NO. THAT WORD IS TAKEN.",
+    label: "🔖 NO. THAT NAME IS TAKEN.",
     high: "🔢 NO. LINES STOP AT 63999.",
     break: "✋ ENOUGH.",
     nameit: "🔖 NAME IT.",
@@ -41,7 +41,7 @@
   };
 
   var MAX_LINE = 63999;
-  var MAX_LINES = 512;
+  var MAX_LINES = 666;
   var MAX_STACK = 32;
   var MAX_CELLS = 20000;
   var MAX_CHARS = 255;
@@ -77,29 +77,30 @@
   var FUNCTIONS = {
     INT: 1, ABS: 1, SQR: 1, SIN: 1, COS: 1, TAN: 1, ATN: 1, LOG: 1, EXP: 1, SGN: 1, RND: 1,
     LEN: 1, VAL: 1, ASC: 1, "STR$": 1, "CHR$": 1, "LEFT$": 1, "RIGHT$": 1, "MID$": 1,
-    MOD: 1, COL: 1, ROW: 1, VX: 1, VY: 1, HELD: 1, "LISTEN$": 1, TICK: 1, FRE: 1,
-    MINION: 1, COLS: 1, ROWS: 1, PEEK: 1, USR: 1
+    MOD: 1, COL: 1, ROW: 1, VX: 1, VY: 1, HELD: 1, "LISTEN$": 1, "INKEY$": 1, TICK: 1, FRE: 1,
+    MINION: 1, SPRITE: 1, COLS: 1, ROWS: 1, PEEK: 1, USR: 1
   };
-  var ZERO_ARG = { "LISTEN$": 1, TICK: 1, COLS: 1, ROWS: 1 };
-  var BASIC_WORDS = {
-    PRINT: 1, GOTO: 1, GOSUB: 1, RETURN: 1, FOR: 1, NEXT: 1, LET: 1, INPUT: 1, REM: 1,
-    DATA: 1, READ: 1, RESTORE: 1, END: 1, STOP: 1, NEW: 1, LIST: 1, LOAD: 1, SAVE: 1,
-    CLS: 1, LOCATE: 1, SOUND: 1, PLOT: 1, DRAW: 1, SLEEP: 1, GET: 1
-  };
+  var ZERO_ARG = { "LISTEN$": 1, "INKEY$": 1, TICK: 1, COLS: 1, ROWS: 1 };
+  var BASIC_WORDS = { PLOT: 1, DRAW: 1, PSET: 1, PRESET: 1 };
   var WIRE_WORDS = { POKE: 1, PEEK: 1, SYS: 1, WAIT: 1, USR: 1, CALL: 1 };
   var DIRECT_WORDS = {
-    REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
-    UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, EXORCISE: 1, LATCH: 1
+    REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, RENUM: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
+    UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, LATCH: 1,
+    LIST: 1, NEW: 1, LOAD: 1, SAVE: 1
   };
   var RESERVED = {};
   var wordBag;
   for (wordBag in FUNCTIONS) RESERVED[wordBag] = 1;
+  for (wordBag in BASIC_WORDS) RESERVED[wordBag] = 1;
   for (wordBag in WIRE_WORDS) RESERVED[wordBag] = 1;
   for (wordBag in DIRECT_WORDS) RESERVED[wordBag] = 1;
-  ["REM", "PRINT", "INPUT", "LET", "GOTO", "GOSUB", "RETURN", "IF", "FOR",
-    "BREAK", "MARK", "END", "SLEEP", "DATA", "READ", "RESTORE", "WHEN", "MINION",
-    "SEND", "WATCH", "DESTROY", "COLOR", "TONE", "CIRCLE", "LINE", "FILL", "AT", "CLS",
-    "VEIL", "DIM", "THEN", "TO", "STEP", "AND", "OR", "NOT", "TAB", "SPC"].forEach(function (w) {
+  ["WHISPER", "CHANT", "DEMAND", "CONJURE", "FLYTO", "SUMMON", "BANISH", "IF", "CURSE",
+    "BREAK", "MARK", "DISPEL", "FREEZE", "OFFERING", "TAKE", "REWIND", "WHEN", "MINION",
+    "SEND", "WATCH", "DESTROY", "COLOR", "TONE", "CIRCLE", "LINE", "FILL", "AT", "SCRUB",
+    "VEIL", "DIM", "THEN", "TO", "STEP", "AND", "OR", "NOT", "TAB", "SPC",
+    "PRINT", "GOTO", "GOSUB", "RETURN", "FOR", "NEXT", "LET", "INPUT", "REM",
+    "DATA", "READ", "RESTORE", "END", "STOP", "CLS", "LOCATE", "SOUND", "SLEEP",
+    "GET", "SPRITE", "ON", "LABEL", "INK", "GO"].forEach(function (w) {
     RESERVED[w] = 1;
   });
 
@@ -177,6 +178,12 @@
       }
       if ("+-*/^=<>".indexOf(ch) >= 0) {
         tokens.push({ t: "op", v: ch, from: i, to: i + 1 });
+        i += 1;
+        continue;
+      }
+      if (ch === "'") break;
+      if (ch === "?") {
+        tokens.push({ t: "p", v: "?", from: i, to: i + 1 });
         i += 1;
         continue;
       }
@@ -311,23 +318,39 @@
   };
   Parser.prototype.parseStatement = function () {
     var pk = this.peek();
+    if (pk && pk.t === "p" && pk.v === "?") {
+      this.pop();
+      return this.parseChant();
+    }
     if (!pk || pk.t !== "id") throw new InterpreterFail("syntax");
     var word = pk.v;
-    if (BASIC_WORDS[word]) { this.pop(); this.skipRest(); return { op: "basic" }; }
     if (WIRE_WORDS[word]) { this.pop(); this.skipRest(); return { op: "wire", word: word }; }
     if (DIRECT_WORDS[word]) { this.pop(); this.skipRest(); return { op: "direct" }; }
-    if (word === "REM") {
+    if (BASIC_WORDS[word]) { this.pop(); this.skipRest(); return { op: "basic" }; }
+    if (word === "GO") {
+      this.pop();
+      var go = this.expect("id");
+      if (go.v === "TO") return { op: "flyto", target: this.parseTarget() };
+      if (go.v === "SUB") return { op: "summon", target: this.parseTarget() };
+      throw new InterpreterFail("syntax");
+    }
+    if (word === "GET") {
+      this.pop();
+      var got = this.parseLvalue();
+      return { op: "assign", name: got.name, dims: got.dims, expr: { op: "call", name: "LISTEN$", args: [] } };
+    }
+    if (word === "WHISPER" || word === "REM") {
       this.pop();
       this.i = this.tokens.length;
       return { op: "whisper" };
     }
-    if (word === "PRINT") { this.pop(); return this.parseChant(); }
-    if (word === "VEIL") {
+    if (word === "CHANT" || word === "PRINT") { this.pop(); return this.parseChant(); }
+    if (word === "VEIL" || word === "INK") {
       this.pop();
       var ink = this.endStmt() ? null : this.parseExpr();
       return { op: "veil", expr: ink };
     }
-    if (word === "INPUT") {
+    if (word === "DEMAND" || word === "INPUT") {
       this.pop();
       var prompt = null;
       var bang = true;
@@ -341,10 +364,10 @@
       do { vars.push(this.parseLvalue()); } while (this.eat("p", ","));
       return { op: "demand", prompt: prompt, bang: bang, vars: vars };
     }
-    if (word === "LET") { this.pop(); return this.parseAssign(); }
-    if (word === "GOTO") { this.pop(); return { op: "flyto", target: this.parseTarget() }; }
-    if (word === "GOSUB") { this.pop(); return { op: "summon", target: this.parseTarget() }; }
-    if (word === "RETURN") { this.pop(); return { op: "banish" }; }
+    if (word === "CONJURE" || word === "LET") { this.pop(); return this.parseAssign(); }
+    if (word === "FLYTO" || word === "GOTO") { this.pop(); return { op: "flyto", target: this.parseTarget() }; }
+    if (word === "SUMMON" || word === "GOSUB") { this.pop(); return { op: "summon", target: this.parseTarget() }; }
+    if (word === "BANISH" || word === "RETURN") { this.pop(); return { op: "banish" }; }
     if (word === "IF") {
       this.pop();
       var test = this.parseExpr();
@@ -357,7 +380,7 @@
       }
       return { op: "if", test: test, goto: null, skip: 0 };
     }
-    if (word === "FOR") {
+    if (word === "CURSE" || word === "FOR") {
       this.pop();
       var cname = this.expect("id");
       this.checkAssign(cname.v);
@@ -373,7 +396,7 @@
       }
       return { op: "curse", name: cname.v, start: start, end: end, step: step };
     }
-    if (word === "BREAK") {
+    if (word === "BREAK" || word === "NEXT") {
       this.pop();
       var bname = null;
       if (!this.endStmt()) {
@@ -384,17 +407,17 @@
       }
       return { op: "break", name: bname };
     }
-    if (word === "MARK") {
+    if (word === "MARK" || word === "LABEL") {
       this.pop();
       return { op: "mark", name: this.nameTarget(this.expect("id")).value };
     }
-    if (word === "END") { this.pop(); return { op: "dispel" }; }
-    if (word === "SLEEP") {
+    if (word === "DISPEL" || word === "END" || word === "STOP") { this.pop(); return { op: "dispel" }; }
+    if (word === "FREEZE" || word === "SLEEP") {
       this.pop();
       var ms = this.endStmt() ? null : this.parseExpr();
       return { op: "freeze", ms: ms };
     }
-    if (word === "DATA") {
+    if (word === "OFFERING" || word === "DATA") {
       this.pop();
       if (this.endStmt()) throw new InterpreterFail("syntax");
       var items = [];
@@ -419,27 +442,29 @@
       }
       return { op: "data", items: items };
     }
-    if (word === "READ") {
+    if (word === "TAKE" || word === "READ") {
       this.pop();
       var takes = [];
       do { takes.push(this.parseLvalue()); } while (this.eat("p", ","));
       return { op: "take", vars: takes };
     }
-    if (word === "RESTORE") {
+    if (word === "REWIND" || word === "RESTORE") {
       this.pop();
       var rtarget = this.endStmt() ? null : this.parseTarget();
       return { op: "rewind", target: rtarget };
     }
-    if (word === "WHEN") {
+    if (word === "WHEN" || word === "ON") {
       this.pop();
       var index = this.parseExpr();
       var mode = this.expect("id");
-      if (mode.v !== "GOTO" && mode.v !== "GOSUB") throw new InterpreterFail("syntax");
+      var jump = mode.v === "SUMMON" || mode.v === "GOSUB";
+      var hop = mode.v === "FLYTO" || mode.v === "GOTO";
+      if (!jump && !hop) throw new InterpreterFail("syntax");
       var targets = [];
       do { targets.push(this.parseTarget()); } while (this.eat("p", ","));
-      return { op: "when", index: index, mode: mode.v, targets: targets };
+      return { op: "when", index: index, mode: jump ? "SUMMON" : "FLYTO", targets: targets };
     }
-    if (word === "MINION") { this.pop(); return { op: "minion", args: this.parseArgs(true) }; }
+    if (word === "MINION" || word === "SPRITE") { this.pop(); return { op: "minion", args: this.parseArgs(true) }; }
     if (word === "SEND") {
       this.pop();
       var sid = this.parseExpr();
@@ -465,7 +490,7 @@
       if (this.eat("p", ",")) bg = this.parseExpr();
       return { op: "color", fg: fg, bg: bg };
     }
-    if (word === "TONE") {
+    if (word === "TONE" || word === "SOUND") {
       this.pop();
       var freq = this.parseExpr();
       this.expect("p", ",");
@@ -499,6 +524,13 @@
       var fy = this.parseExpr();
       return { op: "fill", x: fx, y: fy };
     }
+    if (word === "LOCATE") {
+      this.pop();
+      var lrow = this.parseExpr();
+      this.expect("p", ",");
+      var lcol = this.parseExpr();
+      return { op: "at", x: lcol, y: lrow };
+    }
     if (word === "AT") {
       this.pop();
       var ax = this.parseExpr();
@@ -506,7 +538,7 @@
       var ay = this.parseExpr();
       return { op: "at", x: ax, y: ay };
     }
-    if (word === "CLS") { this.pop(); return { op: "scrub" }; }
+    if (word === "SCRUB" || word === "CLS") { this.pop(); return { op: "scrub" }; }
     if (word === "DIM") {
       this.pop();
       var dims = [];
@@ -1069,12 +1101,12 @@
       return num(got);
     }
     if (name === "HELD") { this.arity(args, 1); return num(this.host.held(asStr(args[0])) ? 1 : 0); }
-    if (name === "LISTEN$") { this.arity(args, 0); return str(String(this.host.inkey() || "")); }
+    if (name === "LISTEN$" || name === "INKEY$") { this.arity(args, 0); return str(String(this.host.inkey() || "")); }
     if (name === "TICK") { this.arity(args, 0); return num(Math.floor(Number(this.host.tick()) || 0)); }
     if (name === "FRE") { this.arity(args, 1); asNum(args[0]); return num(MAX_LINES - this.lines.size); }
     if (name === "COLS") { this.arity(args, 0); return num(this.cols); }
     if (name === "ROWS") { this.arity(args, 0); return num(this.rows); }
-    if (name === "MINION") return num(this.spawn(args));
+    if (name === "MINION" || name === "SPRITE") return num(this.spawn(args));
     if (name === "PEEK") throw new InterpreterFail("peek");
     if (name === "USR") throw new InterpreterFail("usr");
     throw new InterpreterFail("syntax");
@@ -1501,7 +1533,7 @@
         var pick = Math.floor(asNum(this.eval(stmt.index)));
         if (pick < 1 || pick > stmt.targets.length) return false;
         var target = stmt.targets[pick - 1];
-        return stmt.mode === "GOSUB" ? this.gosub(target) : this.jumpTo(target);
+        return stmt.mode === "SUMMON" ? this.gosub(target) : this.jumpTo(target);
       }
       case "minion": {
         var id = this.spawn(stmt.args.map(function (a) { return self.eval(a); }));
@@ -1677,9 +1709,9 @@
 
   // EXORCISE. Statement names move. INT, SIN, RND, and the rest of the sums stay.
   var RENAME = {
-    PRINT: "PRINT", GOTO: "GOTO", GOSUB: "GOSUB", RETURN: "RETURN", FOR: "FOR",
-    LET: "LET", INPUT: "INPUT", DATA: "DATA", READ: "READ", RESTORE: "RESTORE",
-    END: "END", STOP: "END", CLS: "CLS"
+    PRINT: "CHANT", GOTO: "FLYTO", GOSUB: "SUMMON", RETURN: "BANISH", FOR: "CURSE",
+    LET: "CONJURE", INPUT: "DEMAND", DATA: "OFFERING", READ: "TAKE", RESTORE: "REWIND",
+    END: "DISPEL", STOP: "DISPEL", CLS: "SCRUB"
   };
   var BURY = {
     POKE: 1, SYS: 1, WAIT: 1, CALL: 1, SOUND: 1, PLOT: 1, DRAW: 1, PSET: 1, PRESET: 1,
@@ -1818,7 +1850,7 @@
     if (!mark) return false;
     if (mark[1] === "'") return true;
     var word = readWordAt(rest, 0).word;
-    return word === "IF" || word === "REM" || word === "REM";
+    return word === "IF" || word === "REM" || word === "WHISPER";
   }
 
   function splitConsuming(src) {
@@ -1870,7 +1902,7 @@
       if (comment) notes.push(comment);
       var text = live;
       if (notes.length) {
-        var whisper = "REM " + notes.join(" : ");
+        var whisper = "WHISPER " + notes.join(" : ");
         text = live ? live + " : " + whisper : whisper;
       }
       return { src: text.trim(), wires: wires, buriedAll: !live && drops.length > 0 };
@@ -1910,7 +1942,7 @@
             at = true;
             continue;
           }
-          out += "PRINT";
+          out += "CHANT";
           i += 1;
           at = false;
           continue;
@@ -1918,7 +1950,7 @@
       }
       if (isLetterCh(ch)) {
         var id = readWordAt(src, i);
-        if (at && id.word === "REM") {
+        if (at && id.word === "WHISPER") {
           return { src: src.trim(), wires: wires, buriedAll: false };
         }
         if (at && id.word === "REM") {
@@ -1928,7 +1960,7 @@
         if (at && id.word === "GO") {
           var step = readWordAt(src, id.to);
           if (step.word === "TO" || step.word === "SUB") {
-            out += step.word === "TO" ? "GOTO" : "GOSUB";
+            out += step.word === "TO" ? "FLYTO" : "SUMMON";
             i = step.to;
             at = false;
             continue;
@@ -1956,7 +1988,7 @@
             continue;
           }
           if (id.word === "LINE") { /* unreachable */ }
-          out += id.word === "INPUT" ? "INPUT" : "PRINT";
+          out += id.word === "INPUT" ? "DEMAND" : "CHANT";
           i = id.to;
           at = false;
           continue;
@@ -1964,7 +1996,7 @@
         if (at && id.word === "LINE") {
           var lineNext = readWordAt(src, id.to);
           if (lineNext.word === "INPUT") {
-            out += "INPUT";
+            out += "DEMAND";
             i = lineNext.to;
             at = false;
             continue;
@@ -2033,9 +2065,9 @@
         if (at && id.word === "SLEEP") {
           var sEnd = statementEnd(src, id.to);
           var sArg = src.slice(id.to, sEnd).trim();
-          if (!sArg) out += "SLEEP";
-          else if (/^\d+(\.\d+)?$/.test(sArg)) out += "SLEEP " + String(Math.min(60000, Math.round(Number(sArg) * 1000)));
-          else out += "SLEEP (" + sArg + ") * 1000";
+          if (!sArg) out += "FREEZE";
+          else if (/^\d+(\.\d+)?$/.test(sArg)) out += "FREEZE " + String(Math.min(60000, Math.round(Number(sArg) * 1000)));
+          else out += "FREEZE (" + sArg + ") * 1000";
           i = sEnd;
           at = false;
           continue;
@@ -2054,14 +2086,14 @@
           var mode = "";
           var use = -1;
           var width = 0;
-          if (gsub >= 0 && (gto < 0 || gsub < gto)) { use = gsub; width = 5; mode = "GOSUB"; }
-          else if (gto >= 0) { use = gto; width = 4; mode = "GOTO"; }
+          if (gsub >= 0 && (gto < 0 || gsub < gto)) { use = gsub; width = 5; mode = "SUMMON"; }
+          else if (gto >= 0) { use = gto; width = 4; mode = "FLYTO"; }
           if (use < 0) {
             var goAt = findKeyword(oBody, "GO", 0);
             if (goAt >= 0) {
               var second = readWordAt(oBody, goAt + 2);
-              if (second.word === "TO") { use = goAt; width = second.to - goAt; mode = "GOTO"; }
-              else if (second.word === "SUB") { use = goAt; width = second.to - goAt; mode = "GOSUB"; }
+              if (second.word === "TO") { use = goAt; width = second.to - goAt; mode = "FLYTO"; }
+              else if (second.word === "SUB") { use = goAt; width = second.to - goAt; mode = "SUMMON"; }
             }
           }
           if (use < 0 || !mode) dropRange(i, oEnd);
@@ -2131,7 +2163,7 @@
 
   function pureJump(src) {
     var s = String(src || "").trim();
-    return /^\d+$/.test(s) || /^GOTO\s+\S+$/.test(s);
+    return /^\d+$/.test(s) || /^FLYTO\s+\S+$/.test(s);
   }
 
   function elseSplit(src) {
@@ -2168,16 +2200,16 @@
     var elseW = walkBasic(parts.elsePart || "");
     var wires = cond.wires + thenW.wires + elseW.wires;
     var elseSrc = elseW.src.trim();
-    if (/^\d+$/.test(elseSrc)) elseSrc = "GOTO " + elseSrc;
+    if (/^\d+$/.test(elseSrc)) elseSrc = "FLYTO " + elseSrc;
     var thenSrc = thenW.src.trim();
     var thenLine;
     var needs = false;
     if (!thenSrc) {
-      thenLine = "IF " + cond.src + " THEN GOTO {{SKIP}}";
+      thenLine = "IF " + cond.src + " THEN FLYTO {{SKIP}}";
       needs = true;
     } else if (pureJump(thenSrc)) thenLine = "IF " + cond.src + " THEN " + thenSrc;
     else {
-      thenLine = "IF " + cond.src + " THEN " + thenSrc + " : GOTO {{SKIP}}";
+      thenLine = "IF " + cond.src + " THEN " + thenSrc + " : FLYTO {{SKIP}}";
       needs = true;
     }
     return { thenLine: thenLine, elseSrc: elseSrc, needs: needs, wires: wires };
@@ -2195,10 +2227,10 @@
   function asWhisper(num, original) {
     var body = String(original || "").trim();
     var chars = Array.from(body);
-    var src = "REM " + chars.join("");
+    var src = "WHISPER " + chars.join("");
     while (chars.length && !lineFits(num, src)) {
       chars.pop();
-      src = "REM " + chars.join("");
+      src = "WHISPER " + chars.join("");
     }
     return src;
   }
@@ -2268,7 +2300,7 @@
     function take(walked) {
       if (!walked || !walked.src) return;
       wires += walked.wires;
-      if (walked.buriedAll || /^\s*REM\b/i.test(walked.src)) notes.push(walked.src.replace(/^\s*REM\s*/i, ""));
+      if (walked.buriedAll || /^\s*WHISPER\b/i.test(walked.src)) notes.push(walked.src.replace(/^\s*WHISPER\s*/i, ""));
       else live.push(walked.src);
     }
     for (var p = 0; p < pieces.length; p += 1) {
@@ -2285,7 +2317,7 @@
     }
     var text = live.join(" : ");
     if (notes.length) {
-      var whisper = "REM " + notes.join(" : ");
+      var whisper = "WHISPER " + notes.join(" : ");
       text = text ? text + " : " + whisper : whisper;
     }
     return { src: text.trim(), wires: wires, elseBuild: elseBuild };
@@ -2339,7 +2371,7 @@
       if (built.elseBuild && slots) {
         main = main.split("{{SKIP}}").join(String(slots.landing));
         extras.push({ n: slots.slot, src: slots.elseSrc });
-        if (slots.pad != null) extras.push({ n: slots.pad, src: "REM" });
+        if (slots.pad != null) extras.push({ n: slots.pad, src: "WHISPER" });
       } else if (built.elseBuild) main = asWhisper(row.n, original);
       var kind = "same";
       if (main !== original || extras.length) {
@@ -2369,8 +2401,8 @@
             kind = "buried";
           }
         } else {
-          var wasComment = /^\s*(REM\b|REM\b|')/i.test(original);
-          var onlyWhisper = /^\s*REM\b/i.test(main);
+          var wasComment = /^\s*(REM\b|WHISPER\b|')/i.test(original);
+          var onlyWhisper = /^\s*WHISPER\b/i.test(main);
           kind = onlyWhisper && !wasComment ? "buried" : "renamed";
           if (main === original && !extras.length) kind = "same";
           else if (main === original && extras.length) kind = "renamed";
@@ -2404,12 +2436,12 @@
     };
   }
 
-  Wasic.exorcise = exorciseListing;
+  Interpreter.exorcise = exorciseListing;
 
-  root.Wasic = Wasic;
+  root.Interpreter = Interpreter;
   root.InterpreterFail = InterpreterFail;
-  root.WASIC_MESSAGES = MESSAGES;
-  root.WASIC_LIMITS = {
+  root.BASIC_MESSAGES = MESSAGES;
+  root.BASIC_LIMITS = {
     cols: 40,
     rows: 24,
     maxLine: MAX_LINE,

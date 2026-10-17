@@ -1,6 +1,6 @@
 ---
 layout: game
-title: "🖥️ BASIC I"
+title: "🖥️ Basic I"
 description: A 40-column machine. It speaks BASIC.
 image: /games/basic-1/banner.jpg
 permalink: /games/basic-1/
@@ -166,7 +166,7 @@ tags: [terminal, computer]
 </style>
 
 <div class="witch-front markdown-body">
-  <h1>🖥️ BASIC I</h1>
+  <h1>🖥️ Basic I</h1>
   <p class="witch-lead">Forty columns, twenty-four rows. It speaks BASIC.</p>
 
   <div class="witch-actions">
@@ -181,24 +181,24 @@ tags: [terminal, computer]
     <p>The prompt is <strong>READY</strong>. A line with a number is stored. A line without one runs now.</p>
     <ul>
       <li>📚 <code>SHELF</code> opens the box. The arrows move. Enter takes a program down and does not run it.</li>
-      <li>🕯️ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
-      <li>🧹 <code>SCRUB</code> clears the glass. ✨ <code>MAGIC</code> numbers the next lines.</li>
+      <li>▶ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
+      <li>🧹 <code>CLS</code> clears the glass. ✨ <code>AUTO</code> numbers the next lines.</li>
       <li>✋ Ctrl-C stops a program that will not stop.</li>
     </ul>
-    <p>Try <code>SHELF</code>, point at <code>HELLO-WITCH</code>, press Enter, then <code>RUN</code>. <code>HELLO-DEMON</code> is the other hello. <code>ANSI-WITCH</code> paints her.</p>
+    <p>Try <code>SHELF</code>, point at <code>HELLO</code>, press Enter, then <code>RUN</code>. <code>GUESS</code> wants a number. <code>CIRCLES</code> draws.</p>
     <p>Under the glass, the keys are an emoji, a word, and a function key. Nothing there is a button.</p>
     <ul>
       <li>📜 LIST F1</li>
-      <li>🕯️ RUN F2</li>
+      <li>▶ RUN F2</li>
       <li>📚 SHELF F3</li>
-      <li>🧹 SCRUB F4</li>
-      <li>✨ MAGIC F5</li>
-      <li>🌑 EXORCISE F6</li>
+      <li>🧹 CLS F4</li>
+      <li>✨ AUTO F5</li>
+      <li>🔢 RENUM F6</li>
       <li>🔒 LATCH F7</li>
       <li>⛶ FULL F11</li>
       <li>⎋ BACK ESC</li>
     </ul>
-    <p>She wakes latched. Up walks the lines that rolled off the glass. The walls are in <a href="{{ '/SYSTEM.md' | relative_url }}">SYSTEM.md</a>.</p>
+    <p>It wakes latched. Up walks the lines that rolled off the glass. The walls are the same ones Witch I keeps, in <a href="{{ '/SYSTEM.md' | relative_url }}">SYSTEM.md</a>.</p>
   </div>
 
   <div id="witch-manual" class="witch-panel manual markdown-body" hidden>
@@ -245,7 +245,7 @@ tags: [terminal, computer]
     if (document.fullscreenElement) {
       Promise.resolve(document.exitFullscreen()).catch(function () {});
     }
-    if (window.WITCH && WITCH.leave) WITCH.leave();
+    if (window.BASIC && BASIC.leave) BASIC.leave();
     boot.focus();
   }
 
@@ -257,7 +257,7 @@ tags: [terminal, computer]
     var root = stage;
     var pending = root.requestFullscreen ? root.requestFullscreen() : Promise.reject();
     Promise.resolve(pending).catch(function () {});
-    if (window.WITCH && WITCH.power) WITCH.power();
+    if (window.BASIC && BASIC.power) BASIC.power();
   }
 
   boot.addEventListener("click", openStage);
