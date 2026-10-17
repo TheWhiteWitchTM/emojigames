@@ -40,26 +40,35 @@
     term.clear();
     term.color(15, 0);
 
-    // Banner at the top
+    // Title
     term.cursor.row = 2;
     term.cursor.col = 8;
     term.write("**** BASIC I ****");
 
-    // Free lines directly under it
+    // Small friendly character
     term.cursor.row = 4;
+    term.cursor.col = 16;
+    term.write("  ^_^  ");
+    term.cursor.row = 5;
+    term.cursor.col = 16;
+    term.write(" (o o) ");
+    term.cursor.row = 6;
+    term.cursor.col = 16;
+    term.write("  > <  ");
+
+    // Free lines
+    term.cursor.row = 8;
     term.cursor.col = 10;
     term.write("512 LINES FREE");
 
-    // READY right under the banner, classic style
-    term.cursor.row = 6;
+    // READY right under the banner
+    term.cursor.row = 10;
     term.cursor.col = 2;
     term.write("READY.");
 
     term.dirty = true;
     term.flush();
-
-    // Cursor on the next line so typing starts under READY
-    term.cursor.row = 7;
+    term.cursor.row = 11;
     term.cursor.col = 2;
   }
 
