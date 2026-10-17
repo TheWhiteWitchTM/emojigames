@@ -1,4 +1,4 @@
-// BASIC I. Black background, white text, forced blue border.
+// BASIC I. Black background, white text, blue border via CSS.
 "use strict";
 (function () {
   var COLS = 40;
@@ -86,24 +86,16 @@
     term.clear();
     term.color(15, 0);
 
-    // Force blue border, one line at a time
-    writeAt(4, 2, 12, "┌────────────────────────────────────┐");
-    writeAt(5, 2, 12, "│                                    │");
-    writeAt(6, 2, 12, "│          **** BASIC I ****         │");
-    writeAt(7, 2, 12, "│                                    │");
-    writeAt(8, 2, 12, "│          512 LINES FREE            │");
-    writeAt(9, 2, 12, "│                                    │");
-    writeAt(10, 2, 12, "└────────────────────────────────────┘");
-
-    writeAt(13, 2, 15, "READY.");
-    writeAt(15, 2, 11, "Type a command or a numbered line.");
+    writeAt(5, 4, 12, "**** BASIC I ****");
+    writeAt(7, 4, 15, "512 LINES FREE");
+    writeAt(10, 4, 15, "READY.");
 
     term.color(7, 0);
     term.dirty = true;
     term.flush();
     setStatus();
-    term.cursor.row = 16;
-    term.cursor.col = 2;
+    term.cursor.row = 12;
+    term.cursor.col = 4;
   }
 
   function writeReady() {
