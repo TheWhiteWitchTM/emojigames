@@ -117,4 +117,54 @@ tags: [terminal, computer]
 
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
 <script src="{{ '/games/basic-1/basic.js' | relative_url }}"></script>
-<script src="{{ '/games/basic-1/
+<script src="{{ '/games/basic-1/basic-1.js' | relative_url }}"></script>
+<script>
+(function () {
+  var stage = document.getElementById("basic-stage");
+  var boot = document.getElementById("basic-boot");
+  var startedBtn = document.getElementById("basic-started-btn");
+  var manualBtn = document.getElementById("basic-manual-btn");
+  var started = document.getElementById("basic-started");
+  var manual = document.getElementById("basic-manual");
+  var open = false;
+
+  function openStage() {
+    open = true;
+    stage.hidden = false;
+    stage.classList.add("basic-open");
+    document.body.classList.add("basic-glass-on");
+    if (stage.requestFullscreen) {
+      stage.requestFullscreen().catch(function () {});
+    }
+    if (window.BASIC && BASIC.power) BASIC.power();
+  }
+  function closeStage() {
+    if (!open) return;
+    open = false;
+    stage.classList.remove("basic-open");
+    stage.hidden = true;
+    document.body.classList.remove("basic-glass-on");
+    if (document.fullscreenElement === stage) {
+      document.exitFullscreen().catch(function () {});
+    }
+    if (window.BASIC && BASIC.leave) BASIC.leave();
+  }
+
+  boot.addEventListener("click", openStage);
+  startedBtn.addEventListener("click", function () { started.hidden = !started.hidden; });
+  manualBtn.addEventListener("click", function () { manual.hidden = !manual.hidden; });
+
+  document.addEventListener("fullscreenchange", function () {
+    if (!document.fullscreenElement && open) {
+      closeStage();
+    }
+  });
+
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && open) {
+      e.preventDefault();
+      closeStage();
+    }
+  }, true);
+})();
+</script>
