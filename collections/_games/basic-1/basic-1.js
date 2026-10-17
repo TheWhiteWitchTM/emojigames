@@ -79,7 +79,6 @@
     term.clear();
     term.color(15, 0);
 
-    // Blue border
     term.color(12, 0);
     term.cursor.row = 5;
     term.cursor.col = 3;
