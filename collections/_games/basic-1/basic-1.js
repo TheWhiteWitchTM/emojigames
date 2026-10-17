@@ -1,4 +1,4 @@
-// BASIC I. Simple reliable boot: black bg, white text, blue border.
+// BASIC I. Black background, white text, blue border box.
 "use strict";
 (function () {
   var COLS = 40;
@@ -36,8 +36,6 @@
   scan.className = "scan";
   crt.appendChild(scan);
   mount.appendChild(ui.wrap);
-  ui.wrap.setAttribute("role", "application");
-  ui.wrap.setAttribute("aria-label", "BASIC I");
 
   var statusEl = document.createElement("span");
   statusEl.className = "status";
@@ -65,14 +63,6 @@
     span.appendChild(kbd);
     bar.appendChild(span);
   });
-  var esc = document.createElement("span");
-  esc.className = "basic-key";
-  esc.appendChild(document.createTextNode("⎋ BACK "));
-  var escK = document.createElement("kbd");
-  escK.textContent = "ESC";
-  esc.appendChild(escK);
-  bar.appendChild(esc);
-
   ui.footer.textContent = "";
   ui.footer.appendChild(mood);
   ui.footer.appendChild(bar);
@@ -87,34 +77,34 @@
 
   function paintWelcome() {
     term.clear();
-    term.color(15, 0); // white on black
+    term.color(15, 0);
 
-    // Blue border box
-    term.color(12, 0); // blue
-    term.cursor.row = 4;
-    term.cursor.col = 2;
-    term.write("┌────────────────────────────────────┐");
+    // Blue border
+    term.color(12, 0);
     term.cursor.row = 5;
-    term.cursor.col = 2;
-    term.write("│                                    │");
+    term.cursor.col = 3;
+    term.write("┌──────────────────────────────────┐");
     term.cursor.row = 6;
-    term.cursor.col = 2;
-    term.write("│          **** BASIC I ****         │");
+    term.cursor.col = 3;
+    term.write("│                                  │");
     term.cursor.row = 7;
-    term.cursor.col = 2;
-    term.write("│                                    │");
+    term.cursor.col = 3;
+    term.write("│         **** BASIC I ****        │");
     term.cursor.row = 8;
-    term.cursor.col = 2;
-    term.write("│          512 LINES FREE            │");
+    term.cursor.col = 3;
+    term.write("│                                  │");
     term.cursor.row = 9;
-    term.cursor.col = 2;
-    term.write("│                                    │");
+    term.cursor.col = 3;
+    term.write("│         512 LINES FREE           │");
     term.cursor.row = 10;
-    term.cursor.col = 2;
-    term.write("└────────────────────────────────────┘");
+    term.cursor.col = 3;
+    term.write("│                                  │");
+    term.cursor.row = 11;
+    term.cursor.col = 3;
+    term.write("└──────────────────────────────────┘");
 
-    term.cursor.row = 13;
-    term.cursor.col = 2;
+    term.cursor.row = 14;
+    term.cursor.col = 3;
     term.color(15, 0);
     term.write("READY.");
 
@@ -122,7 +112,6 @@
     term.dirty = true;
     term.flush();
     setStatus();
-    term.cursorLit = true;
   }
 
   function writeReady() {
@@ -236,8 +225,5 @@
     document.removeEventListener("keydown", onKey, true);
   }
 
-  window.BASIC = {
-    power: power,
-    leave: leave
-  };
+  window.BASIC = { power: power, leave: leave };
 })();
