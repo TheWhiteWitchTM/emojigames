@@ -1,4 +1,4 @@
-// BASIC I. Blue C64-style boot, no green, full fill.
+// BASIC I. Simple reliable boot: black bg, white text, blue border.
 "use strict";
 (function () {
   var COLS = 40;
@@ -21,7 +21,7 @@
     cellHeight: CH,
     canvas: canvas
   });
-  term.cursorColor = "#7cf0ff";
+  term.cursorColor = "#ffffff";
   term.cursorLit = true;
 
   var engine = new E.Engine({ canvas: canvas });
@@ -85,45 +85,40 @@
     statusEl.textContent = "READY " + lines.size + "/512";
   }
 
-  function fillScreen() {
-    // Solid blue background (color 12)
-    term.color(15, 12);
-    for (var r = 0; r < ROWS; r++) {
-      term.cursor.row = r;
-      term.cursor.col = 0;
-      term.write("                                        "); // exactly 40 spaces
-    }
-    term.cursor.row = 0;
-    term.cursor.col = 0;
-  }
-
   function paintWelcome() {
     term.clear();
-    fillScreen();
+    term.color(15, 0); // white on black
 
-    // Friendly simple box, white on blue
-    term.color(15, 12);
-    var linesArt = [
-      "┌────────────────────────────────────┐",
-      "│                                    │",
-      "│          **** BASIC I ****         │",
-      "│                                    │",
-      "│          512 LINES FREE            │",
-      "│                                    │",
-      "└────────────────────────────────────┘"
-    ];
-    for (var i = 0; i < linesArt.length; i++) {
-      term.cursor.row = 5 + i;
-      term.cursor.col = 2;
-      term.write(linesArt[i]);
-    }
-
-    term.cursor.row = 14;
+    // Blue border box
+    term.color(12, 0); // blue
+    term.cursor.row = 4;
     term.cursor.col = 2;
-    term.color(14, 12); // cyan on blue
+    term.write("┌────────────────────────────────────┐");
+    term.cursor.row = 5;
+    term.cursor.col = 2;
+    term.write("│                                    │");
+    term.cursor.row = 6;
+    term.cursor.col = 2;
+    term.write("│          **** BASIC I ****         │");
+    term.cursor.row = 7;
+    term.cursor.col = 2;
+    term.write("│                                    │");
+    term.cursor.row = 8;
+    term.cursor.col = 2;
+    term.write("│          512 LINES FREE            │");
+    term.cursor.row = 9;
+    term.cursor.col = 2;
+    term.write("│                                    │");
+    term.cursor.row = 10;
+    term.cursor.col = 2;
+    term.write("└────────────────────────────────────┘");
+
+    term.cursor.row = 13;
+    term.cursor.col = 2;
+    term.color(15, 0);
     term.write("READY.");
 
-    term.color(7, 12);
+    term.color(7, 0);
     term.dirty = true;
     term.flush();
     setStatus();
@@ -131,26 +126,26 @@
   }
 
   function writeReady() {
-    term.color(14, 12);
+    term.color(15, 0);
     term.write("READY.\n");
-    term.color(7, 12);
+    term.color(7, 0);
     term.flush();
   }
 
   function doPrint(arg) {
     var text = arg.replace(/^["']|["']$/g, "");
-    term.color(15, 12);
+    term.color(15, 0);
     term.write(text + "\n");
-    term.color(7, 12);
+    term.color(7, 0);
   }
 
   function doList() {
     var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
-    term.color(11, 12);
+    term.color(11, 0);
     keys.forEach(function (n) {
       term.write(n + " " + lines.get(n) + "\n");
     });
-    term.color(7, 12);
+    term.color(7, 0);
   }
 
   function doReset() {
@@ -161,14 +156,14 @@
 
   function doRun() {
     var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
-    term.color(10, 12);
+    term.color(10, 0);
     keys.forEach(function (n) {
       var src = lines.get(n);
       if (/^PRINT\s+/i.test(src)) {
         doPrint(src.replace(/^PRINT\s+/i, ""));
       }
     });
-    term.color(7, 12);
+    term.color(7, 0);
     writeReady();
   }
 
@@ -181,9 +176,9 @@
       var num = parseInt(numMatch[1], 10);
       var rest = numMatch[2];
       if (lines.size >= maxLines && !lines.has(num)) {
-        term.color(9, 12);
+        term.color(9, 0);
         term.write("OUT OF MEMORY\n");
-        term.color(7, 12);
+        term.color(7, 0);
         writeReady();
         return;
       }
@@ -200,9 +195,9 @@
     if (upper === "CLS") { paintWelcome(); return; }
     if (/^PRINT\s+/i.test(line)) { doPrint(line.replace(/^PRINT\s+/i, "")); writeReady(); return; }
 
-    term.color(9, 12);
+    term.color(9, 0);
     term.write("SYNTAX ERROR\n");
-    term.color(7, 12);
+    term.color(7, 0);
     writeReady();
   }
 
