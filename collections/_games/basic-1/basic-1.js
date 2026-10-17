@@ -1,26 +1,44 @@
 "use strict";
 (function () {
   var mount = document.getElementById("game");
-  if (!mount || !window.EmojiEngine) {
-    if (mount) mount.textContent = "NO ENGINE";
+  if (!mount) return;
+
+  if (!window.EmojiEngine) {
+    mount.textContent = "EMOJI ENGINE MISSING";
     return;
   }
+
   var E = window.EmojiEngine;
   var canvas = new E.Canvas({ width: 720, height: 576 });
-  var term = new E.Terminal({ cols: 40, rows: 24, cellWidth: 18, cellHeight: 24, canvas: canvas });
-  term.cursorColor = "#fff";
+  var term = new E.Terminal({
+    cols: 40,
+    rows: 24,
+    cellWidth: 18,
+    cellHeight: 24,
+    canvas: canvas
+  });
+  term.cursorColor = "#ffffff";
   term.cursorLit = true;
+
   var ui = E.Utilities.wrap(term, { title: "BASIC I", footer: true });
+  // Force the wrapped terminal into the mount point
+  mount.innerHTML = "";
   mount.appendChild(ui.wrap);
 
   var basic = null;
   var entry = "";
 
   function paint() {
-    term.clear();
-    term.color(15, 0);
-    term.write("**** BASIC I ****\n512 LINES FREE\n\nREADY.\n");
-    term.flush();
+    try {
+      term.clear();
+      term.color(15, 0);
+      term.write("**** BASIC I ****\n");
+      term.write("512 LINES FREE\n\n");
+      term.write("READY.\n");
+      term.flush();
+    } catch (err) {
+      mount.textContent = "DRAW ERROR: " + err.message;
+    }
   }
 
   function ready() {
@@ -30,7 +48,11 @@
   }
 
   function handle(line) {
-    if (!basic) return;
+    if (!basic) {
+      term.write("(no interpreter)\n");
+      ready();
+      return;
+    }
     var r = basic.execLine(line);
     if (r.type === "reset" || r.type === "cls") { paint(); return; }
     if (r.type === "print") {
@@ -58,7 +80,11 @@
     }
     if (e.key === "Backspace") {
       e.preventDefault();
-      if (entry) { entry = entry.slice(0, -1); term.write("\b \b"); term.flush(); }
+      if (entry) {
+        entry = entry.slice(0, -1);
+        term.write("\b \b");
+        term.flush();
+      }
       return;
     }
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
@@ -71,7 +97,9 @@
 
   window.BASIC = {
     power: function () {
-      if (!basic && window.BASIC) basic = new window.BASIC();
+      if (!basic && window.BASIC) {
+        try { basic = new window.BASIC(); } catch (e) {}
+      }
       paint();
       document.addEventListener("keydown", onKey, true);
     },
