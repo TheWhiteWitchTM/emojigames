@@ -1,214 +1,122 @@
-// BASIC I. Self-contained working glass. No wasic dependency.
+// BASIC interpreter. PRINT, GOTO, LIST, RUN, NEW.
 "use strict";
-(function () {
-  var COLS = 40;
-  var ROWS = 24;
-  var CW = 18;
-  var CH = 24;
+(function (root) {
+  var MAX_LINES = 512;
+  var MAX_LINE = 63999;
 
-  var mount = document.getElementById("game");
-  if (!mount || !globalThis.EmojiEngine) {
-    if (mount) mount.textContent = "GLASS MISSING";
-    return;
+  function Basic() {
+    this.lines = new Map();
+    this.currentLine = null;
+    this.running = false;
+    this.breakRequested = false;
   }
 
-  var E = globalThis.EmojiEngine;
-  var canvas = new E.Canvas({ width: COLS * CW, height: ROWS * CH });
-  var term = new E.Terminal({
-    cols: COLS,
-    rows: ROWS,
-    cellWidth: CW,
-    cellHeight: CH,
-    canvas: canvas
-  });
-  term.cursorColor = "#e6d3b0";
-  term.cursorLit = true;
+  Basic.prototype.clearAll = function () {
+    this.lines.clear();
+    this.currentLine = null;
+    this.running = false;
+    this.breakRequested = false;
+  };
 
-  var engine = new E.Engine({ canvas: canvas });
-  var ui = E.Utilities.wrap(term, { title: "BASIC I", footer: true });
+  Basic.prototype.addLine = function (num, source) {
+    if (num < 0 || num > MAX_LINE) return { type: "error", msg: "LINE NUMBER TOO HIGH" };
+    if (this.lines.size >= MAX_LINES && !this.lines.has(num)) {
+      return { type: "error", msg: "OUT OF MEMORY" };
+    }
+    if (!source || !source.trim()) {
+      this.lines.delete(num);
+    } else {
+      this.lines.set(num, source.trim());
+    }
+    return { type: "ok" };
+  };
 
-  var crt = document.createElement("div");
-  crt.className = "crt";
-  var canvasEl = term.canvas.element;
-  ui.wrap.insertBefore(crt, canvasEl);
-  crt.appendChild(canvasEl);
-  var scan = document.createElement("div");
-  scan.className = "scan";
-  crt.appendChild(scan);
-  mount.appendChild(ui.wrap);
-  ui.wrap.setAttribute("role", "application");
-  ui.wrap.setAttribute("aria-label", "BASIC I");
+  Basic.prototype.list = function () {
+    var keys = Array.from(this.lines.keys()).sort(function (a, b) { return a - b; });
+    var text = keys.map(function (n) { return n + " " + this.lines.get(n); }, this).join("\n");
+    return { type: "print", text: text };
+  };
 
-  var statusEl = document.createElement("span");
-  statusEl.className = "status";
-  statusEl.textContent = "READY 0/512";
-  var mood = document.createElement("span");
-  mood.className = "basic-mood";
-  mood.appendChild(statusEl);
+  Basic.prototype.run = function () {
+    this.running = true;
+    this.breakRequested = false;
+    var keys = Array.from(this.lines.keys()).sort(function (a, b) { return a - b; });
+    if (!keys.length) {
+      this.running = false;
+      return { type: "ok" };
+    }
 
-  var TOOLS = [
-    { key: "F1", emoji: "📜", label: "LIST" },
-    { key: "F2", emoji: "🕯️", label: "RUN" },
-    { key: "F3", emoji: "📚", label: "SHELF" },
-    { key: "F4", emoji: "🧹", label: "CLS" },
-    { key: "F5", emoji: "✨", label: "AUTO" },
-    { key: "F7", emoji: "🔒", label: "LATCH" }
-  ];
-  var bar = document.createElement("div");
-  bar.className = "basic-bar";
-  TOOLS.forEach(function (t) {
-    var span = document.createElement("span");
-    span.className = "basic-key";
-    span.appendChild(document.createTextNode(t.emoji + " " + t.label + " "));
-    var kbd = document.createElement("kbd");
-    kbd.textContent = t.key;
-    span.appendChild(kbd);
-    bar.appendChild(span);
-  });
-  ui.footer.textContent = "";
-  ui.footer.appendChild(mood);
-  ui.footer.appendChild(bar);
+    var output = [];
+    var pc = 0;
+    var guard = 0;
+    var maxSteps = 10000;
 
-  var lines = new Map();
-  var entry = "";
-  var maxLines = 512;
+    while (pc < keys.length && guard < maxSteps && !this.breakRequested) {
+      guard++;
+      var num = keys[pc];
+      var src = this.lines.get(num);
+      this.currentLine = num;
 
-  function setStatus() {
-    statusEl.textContent = "READY " + lines.size + "/512";
-  }
+      var printMatch = src.match(/^PRINT\s+(.*)$/i);
+      if (printMatch) {
+        var text = printMatch[1].replace(/^["']|["']$/g, "");
+        output.push(text);
+        pc++;
+        continue;
+      }
 
-  function paintWelcome() {
-    term.clear();
-    term.color(15, 0);
-    term.cursor.row = 2;
-    term.cursor.col = 8;
-    term.write("**** BASIC I ****");
-    term.cursor.row = 4;
-    term.cursor.col = 16;
-    term.write("  ^_^  ");
-    term.cursor.row = 5;
-    term.cursor.col = 16;
-    term.write(" (o o) ");
-    term.cursor.row = 6;
-    term.cursor.col = 16;
-    term.write("  > <  ");
-    term.cursor.row = 8;
-    term.cursor.col = 10;
-    term.write("512 LINES FREE");
-    term.cursor.row = 10;
-    term.cursor.col = 0;
-    term.write("READY.\n");
-    term.dirty = true;
-    term.flush();
-    setStatus();
-  }
+      var gotoMatch = src.match(/^GOTO\s+(\d+)$/i);
+      if (gotoMatch) {
+        var target = parseInt(gotoMatch[1], 10);
+        var idx = keys.indexOf(target);
+        if (idx === -1) {
+          this.running = false;
+          return { type: "error", msg: "UNDEF'D STATEMENT " + target };
+        }
+        pc = idx;
+        continue;
+      }
 
-  function writeReady() {
-    term.color(15, 0);
-    term.write("READY.\n");
-    term.color(7, 0);
-    term.flush();
-    setStatus();
-  }
+      this.running = false;
+      return { type: "error", msg: "SYNTAX ERROR IN " + num };
+    }
 
-  function doPrint(arg) {
-    var text = arg.replace(/^["']|["']$/g, "");
-    term.color(15, 0);
-    term.write(text + "\n");
-    term.color(7, 0);
-  }
+    this.running = false;
+    if (this.breakRequested) {
+      return { type: "print", text: output.join("\n") + (output.length ? "\n" : "") + "BREAK" };
+    }
+    if (guard >= maxSteps) {
+      return { type: "print", text: output.join("\n") + (output.length ? "\n" : "") + "TOO MANY STEPS" };
+    }
+    return { type: "print", text: output.join("\n") };
+  };
 
-  function doList() {
-    var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
-    term.color(11, 0);
-    keys.forEach(function (n) {
-      term.write(n + " " + lines.get(n) + "\n");
-    });
-    term.color(7, 0);
-  }
+  Basic.prototype.execLine = function (source) {
+    var line = (source || "").trim();
+    if (!line) return { type: "ok" };
 
-  function doReset() {
-    lines.clear();
-    entry = "";
-    paintWelcome();
-  }
-
-  function doRun() {
-    var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
-    term.color(10, 0);
-    keys.forEach(function (n) {
-      var src = lines.get(n);
-      if (/^PRINT\s+/i.test(src)) doPrint(src.replace(/^PRINT\s+/i, ""));
-    });
-    term.color(7, 0);
-    writeReady();
-  }
-
-  function handleLine(raw) {
-    var line = (raw || "").trim();
-    if (!line) { writeReady(); return; }
     var numMatch = line.match(/^(\d+)\s*(.*)$/);
     if (numMatch) {
-      var num = parseInt(numMatch[1], 10);
-      var rest = numMatch[2];
-      if (lines.size >= maxLines && !lines.has(num)) {
-        term.color(9, 0);
-        term.write("OUT OF MEMORY\n");
-        term.color(7, 0);
-        writeReady();
-        return;
-      }
-      if (!rest) lines.delete(num);
-      else lines.set(num, rest);
-      writeReady();
-      return;
+      return this.addLine(parseInt(numMatch[1], 10), numMatch[2]);
     }
+
     var upper = line.toUpperCase();
-    if (upper === "LIST") { doList(); writeReady(); return; }
-    if (upper === "NEW" || upper === "RESET") { doReset(); return; }
-    if (upper === "RUN") { doRun(); return; }
-    if (upper === "CLS") { paintWelcome(); return; }
-    if (/^PRINT\s+/i.test(line)) { doPrint(line.replace(/^PRINT\s+/i, "")); writeReady(); return; }
-    term.color(9, 0);
-    term.write("SYNTAX ERROR\n");
-    term.color(7, 0);
-    writeReady();
-  }
-
-  function onKey(e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      var line = entry;
-      entry = "";
-      term.write("\n");
-      handleLine(line);
-      return;
+    if (upper === "NEW" || upper === "RESET") {
+      this.clearAll();
+      return { type: "reset" };
     }
-    if (e.key === "Backspace") {
-      e.preventDefault();
-      if (entry.length) {
-        entry = entry.slice(0, -1);
-        term.write("\b \b");
-        term.flush();
-      }
-      return;
+    if (upper === "LIST") return this.list();
+    if (upper === "RUN") return this.run();
+    if (upper === "CLS") return { type: "cls" };
+
+    var printMatch = line.match(/^PRINT\s+(.*)$/i);
+    if (printMatch) {
+      var text = printMatch[1].replace(/^["']|["']$/g, "");
+      return { type: "print", text: text };
     }
-    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      e.preventDefault();
-      entry += e.key;
-      term.write(e.key);
-      term.flush();
-    }
-  }
 
-  function power() {
-    paintWelcome();
-    document.addEventListener("keydown", onKey, true);
-  }
+    return { type: "error", msg: "SYNTAX ERROR" };
+  };
 
-  function leave() {
-    document.removeEventListener("keydown", onKey, true);
-  }
-
-  window.BASIC = { power: power, leave: leave };
-})();
+  root.BASIC = Basic;
+})(typeof globalThis !== "undefined" ? globalThis : this);
