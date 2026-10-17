@@ -1,4 +1,4 @@
-// BASIC. A line-numbered interpreter. The witch's names are the same words.
+// BASIC. A line-numbered interpreter. Older Witch I names still parse.
 "use strict";
 (function (root) {
   var MESSAGES = {
@@ -13,7 +13,7 @@
     wire: "🔌 NO. THAT WIRE IS DEAD.",
     noline: "🚫 NO LINE.",
     type: "🎭 NO. WRONG KIND OF THING.",
-    full: "🛑 FULL. 666 LINES. STOP.",
+    full: "🛑 FULL. 512 LINES. STOP.",
     div0: "➗ CUTE. DIVIDE BY NOTHING.",
     sprite: "👻 NO. THAT SPRITE IS GONE.",
     long: "📏 TOO LONG.",
@@ -37,11 +37,11 @@
     break: "✋ ENOUGH.",
     nameit: "🔖 NAME IT.",
     missing: "🌑 NO. IT IS NOT THERE.",
-    shut: "📦 THE BOX IS SHUT."
+    shut: "📦 IT WOULD NOT OPEN."
   };
 
   var MAX_LINE = 63999;
-  var MAX_LINES = 666;
+  var MAX_LINES = 512;
   var MAX_STACK = 32;
   var MAX_CELLS = 20000;
   var MAX_CHARS = 255;
@@ -85,7 +85,7 @@
   var WIRE_WORDS = { POKE: 1, PEEK: 1, SYS: 1, WAIT: 1, USR: 1, CALL: 1 };
   var DIRECT_WORDS = {
     REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, RENUM: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
-    UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, LATCH: 1,
+    UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, MODULES: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, LATCH: 1,
     LIST: 1, NEW: 1, LOAD: 1, SAVE: 1
   };
   var RESERVED = {};
@@ -168,6 +168,8 @@
         if (source[i] === "$") i += 1;
         var raw = source.slice(idFrom, i).toUpperCase();
         tokens.push({ t: "id", v: raw, from: idFrom, to: i });
+        // A remark eats the rest of the line, periods included.
+        if (raw === "REM" || raw === "WHISPER") break;
         continue;
       }
       var two = source.slice(i, i + 2);

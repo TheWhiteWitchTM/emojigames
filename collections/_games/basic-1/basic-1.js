@@ -8,13 +8,11 @@
   var MAX_LINE = 63999;
   var LINE_CHARS = 255;
   var HIST_MAX = 32;
-  var BACK_MAX = 666;
+  var BACK_MAX = 512;
   var KEY_MAX = 32;
   var MINIONS = 32;
   var HITS = 8;
   var INDEX_KEY = "emojigames-basic1-seals";
-  // The white witch in assets/images/site.jpg (1168×784). Hat through the wand, not the title.
-  var WITCH_CROP = { x: 58, y: 236, w: 204, h: 268 };
 
   var mount = document.getElementById("game");
   if (!mount || !globalThis.EmojiEngine) {
@@ -24,22 +22,6 @@
 
   var E = globalThis.EmojiEngine;
   var canvas = new E.Canvas({ width: COLS * CW, height: ROWS * CH });
-  var portrait = {
-    image: null,
-    alpha: 0,
-    target: 0,
-    draw: function (ctx) {
-      var image = this.image;
-      if (!image || !image.complete || !image.naturalWidth || this.alpha < 0.012) return;
-      var box = witchBox();
-      ctx.save();
-      ctx.imageSmoothingEnabled = false;
-      ctx.globalAlpha = this.alpha;
-      ctx.drawImage(image, WITCH_CROP.x, WITCH_CROP.y, WITCH_CROP.w, WITCH_CROP.h, box.dx, box.dy, box.dw, box.dh);
-      ctx.restore();
-    }
-  };
-  canvas.add(portrait, "witch");
   var term = new E.Terminal({
     cols: COLS,
     rows: ROWS,
@@ -77,7 +59,7 @@
   var TOOLS = [
     { act: "list", key: "F1", emoji: "📜", label: "LIST" },
     { act: "run", key: "F2", emoji: "▶", label: "RUN" },
-    { act: "shelf", key: "F3", emoji: "📚", label: "SHELF" },
+    { act: "shelf", key: "F3", emoji: "📘", label: "MODULES" },
     { act: "cls", key: "F4", emoji: "🧹", label: "CLS" },
     { act: "auto", key: "F5", emoji: "✨", label: "AUTO" },
     { act: "renum", key: "F6", emoji: "🔢", label: "RENUM" },
@@ -135,7 +117,7 @@
   var awake = false;
   var booting = false;
   var shelfState = "";
-  var shelfBase = mount.getAttribute("data-shelf") || "shelf/";
+  var shelfBase = mount.getAttribute("data-modules") || mount.getAttribute("data-shelf") || "modules/";
   if (shelfBase.slice(-1) !== "/") shelfBase += "/";
   var catalog = [];
   var catalogPromise = null;
@@ -143,7 +125,6 @@
   var shelf = null;
   var holdKeys = false;
   var pen = { fg: 7, bg: 0 };
-  var spark = null;
   var auto = { on: false, num: 10, step: 10 };
   var entry = "";
   var caret = 0;
@@ -181,7 +162,7 @@
     else if (mode === "freeze") state = "FROZEN";
     else if (mode === "auto") state = "AUTO " + auto.num;
     if (gaze > 0 && (mode === "ready" || mode === "auto" || mode === "demand")) state = "GAZE " + gaze;
-    statusEl.textContent = state + " " + used + "/666";
+    statusEl.textContent = state + " " + used + "/512";
     var speaking = mode === "ready" || mode === "auto";
     var editing = speaking || mode === "demand";
     for (var b = 0; b < toolHints.length; b += 1) {
@@ -722,17 +703,7 @@
       s.vx = (s.data.cvx || 0) * CW * dt;
       s.vy = (s.data.cvy || 0) * CH * dt;
     });
-    if (spark && spark.alive) {
-      spark.vx = 0;
-      spark.vy = 0;
-    }
     try { engine.update(); } catch (err) {}
-    if (spark && spark.alive) {
-      spark.x = spark.data.hx + Math.sin(t / 160) * 2.5;
-      spark.y = spark.data.hy + Math.sin(t / 210) * 3.5;
-    }
-    portrait.alpha += (portrait.target - portrait.alpha) * Math.min(1, dt * 8);
-    if (Math.abs(portrait.target - portrait.alpha) < 0.01) portrait.alpha = portrait.target;
     touching.forEach(function (key) { if (!framePairs.has(key)) touching.delete(key); });
     try { canvas.draw(); } catch (err) {}
     requestAnimationFrame(frame);
@@ -775,9 +746,9 @@
       body = body.slice(1, -1).trim();
     }
     var shelf = false;
-    if (allowShelf && /^shelf:/i.test(body)) {
+    if (allowShelf && /^(?:module|shelf):/i.test(body)) {
       shelf = true;
-      body = body.slice(6);
+      body = body.replace(/^(?:module|shelf):/i, "");
     }
     var name = body.toUpperCase();
     if (!/^[A-Z][A-Z0-9-]{0,15}$/.test(name)) return { error: "syntax" };
@@ -822,24 +793,25 @@
       "SPRITE SEND WATCH DESTROY",
       "CIRCLE LINE FILL",
       "",
-      "FROM OUT HERE:",
+      "FROM THE PROMPT:",
       "RUN LIST NEW AUTO",
       "RENUM LOAD SAVE",
-      "UPLOAD DOWNLOAD SHELF",
+      "UPLOAD DOWNLOAD MODULES",
       "HELP LATCH",
       "",
       "LATCH HOLDS THE GLASS.",
       "UP WALKS WHAT ROLLED OFF.",
       "LATCH OFF, AND UP RECALLS.",
       "",
-      "LOAD \"shelf:HELLO\"",
-      "OR SHELF, AND POINT.",
+      "MODULES OPENS THE LESSONS.",
+      "ARROWS PICK. ENTER LOADS.",
+      "LOAD \"module:HELLO\"",
       "LIST SHOWS THE LINES.",
       "THEN RUN.",
-      "ESCAPE LEAVES A PROGRAM THAT WILL NOT.",
-      "A NUMBER STORES THE LINE. RUN LATER.",
+      "A NUMBER STORES THE LINE.",
       "AUTO NUMBERS THE NEXT LINES.",
-      "PEEK POKE SYS. IT COMPLAINS."
+      "ESCAPE LEAVES A PROGRAM.",
+      "CTRL-C STOPS ONE TOO."
     ];
     for (var i = 0; i < lines.length; i += 1) writeRaw(lines[i] + "\n");
   }
@@ -872,7 +844,7 @@
     var word = m[1].toUpperCase();
     var known = {
       REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, RENUM: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
-      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, LATCH: 1,
+      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, MODULES: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, LATCH: 1,
       LIST: 1, NEW: 1, LOAD: 1, SAVE: 1, CLS: 1, HOME: 1
     };
     if (!known[word]) return false;
@@ -927,7 +899,7 @@
     if (word === "AUTO" || word === "MAGIC") { return doAuto(rest); }
     if (word === "DOWNLOAD") { return doDownload(rest); }
     if (word === "UPLOAD") { return doUpload(); }
-    if (word === "SHELF") { return doShelf(); }
+    if (word === "SHELF" || word === "MODULES") { return doShelf(); }
     if (word === "LATCH") { return doLatch(rest); }
     return false;
   }
@@ -1304,12 +1276,12 @@
   }
 
   function paintShelfChrome() {
-    paintAnsiRow(0, "1;37;40", "THE SHELF");
-    paintAnsiRow(1, shelf.shut ? "31;40" : "2;31;40", shelf.shut ? "THE BOX IS SHUT. THESE ARE YOURS." : "POINT AT ONE. I HAVE OTHER WORK.");
+    paintAnsiRow(0, "1;37;40", "BUILT-IN MODULES");
+    paintAnsiRow(1, shelf.shut ? "31;40" : "2;36;40", shelf.shut ? "THE LIST DID NOT OPEN. THESE ARE YOURS." : "PICK A LESSON. ENTER LOADS IT.");
     paintAnsiRow(2, "40", "");
     paintAnsiRow(19, "40", "");
     paintAnsiRow(21, "40", "");
-    paintAnsiRow(22, "2;33;40", "ARROWS. ENTER TAKES IT. ESC GOES BACK.");
+    paintAnsiRow(22, "2;33;40", "ARROWS MOVE. ENTER LOADS. ESC BACK.");
     paintAnsiRow(23, "40", "");
   }
 
@@ -1323,18 +1295,18 @@
         continue;
       }
       if (item.gap) {
-        paintAnsiRow(row, "2;35;40", "  " + item.name);
+        paintAnsiRow(row, "2;36;40", "  " + item.name);
         continue;
       }
       var on = at === shelf.index;
       var mark = (on ? "▶ " : "  ") + item.name;
-      paintAnsiRow(row, on ? "1;97;45" : "37;40", on ? fitCells(mark, COLS) : mark);
+      paintAnsiRow(row, on ? "1;97;44" : "37;40", on ? fitCells(mark, COLS) : mark);
     }
   }
 
   function paintShelfStatus() {
     var item = shelf.items[shelf.index];
-    paintAnsiRow(20, "93;40", item ? item.name + ". TAKE IT OR DON'T." : "");
+    paintAnsiRow(20, "93;40", item ? item.name + ". PRESS ENTER TO LOAD." : "");
   }
 
   function revealPick() {
@@ -1419,7 +1391,7 @@
     closeShelf();
     term.clear();
     setPen(1, 0);
-    writeRaw("FINE. THE SHELF CAN WAIT.\n");
+    writeRaw("OK. THE MODULES CAN WAIT.\n");
     setPen(7, 0);
     tone(196, 70, 0.03);
     promptReady();
@@ -1430,7 +1402,7 @@
     var item = shelf.items[shelf.index];
     if (!item || item.gap) return;
     shelf.busy = true;
-    var quoted = "\"" + (item.shelf ? "shelf:" : "") + item.name + "\"";
+    var quoted = "\"" + (item.shelf ? "module:" : "") + item.name + "\"";
     closeShelf();
     term.clear();
     setPen(7, 0);
@@ -1438,7 +1410,7 @@
     Promise.resolve(doUnseal(quoted)).then(function (ok) {
       if (ok) {
         setPen(3, 0);
-        writeRaw("LIST. A NUMBER CHANGES A LINE.\n");
+        writeRaw("LIST IT. A NUMBER CHANGES A LINE.\n");
         setPen(7, 0);
       }
     }).catch(function () {
@@ -1480,7 +1452,7 @@
         for (var i = 0; i < catalog.length; i += 1) items.push({ name: catalog[i], shelf: true });
       }
       if (sealed.length) {
-        items.push({ gap: true, name: "SAVED IN THIS BROWSER" });
+        items.push({ gap: true, name: "YOUR SAVED PROGRAMS" });
         for (var s = 0; s < sealed.length; s += 1) items.push({ name: sealed[s], shelf: false });
       }
       if (!beginShelf(items, !ok)) fault(say("shut"));
@@ -1854,12 +1826,6 @@
     hush();
   }
 
-  function witchBox() {
-    var dh = 210;
-    var dw = Math.round(dh * WITCH_CROP.w / WITCH_CROP.h);
-    return { dx: Math.round((COLS * CW - dw) / 2), dy: 4, dw: dw, dh: dh };
-  }
-
   function centerOf(text) {
     return Math.max(0, Math.floor((COLS - Array.from(text).length) / 2));
   }
@@ -1868,26 +1834,8 @@
     term.write("\x1b[" + (row + 1) + ";" + (col + 1) + "H\x1b[" + sgr + "m" + text + "\x1b[0m");
   }
 
-  function lightSpark() {
-    if (spark || !portrait.image) return;
-    var box = witchBox();
-    var x = box.dx + box.dw * 0.78;
-    var y = box.dy + box.dh * 0.44;
-    spark = engine.sprite("✨", x, y, 26, "spark");
-    spark.data.cvx = 0;
-    spark.data.cvy = 0;
-    spark.data.hx = x;
-    spark.data.hy = y;
-  }
-
-  function dropSpark() {
-    if (!spark) return;
-    killSprite(spark);
-    spark = null;
-  }
-
   function rollUp(rows) {
-    // Blank rows leaving as she wakes. Not a listing, so they are not kept.
+    // Blank rows leaving as it wakes. Not a listing, so they are not kept.
     var i = 0;
     function step() {
       if (i >= rows) return Promise.resolve();
@@ -1898,113 +1846,62 @@
     return step();
   }
 
-  var waking = true;
-  var inkHold = true;
-  portrait.target = 0;
-
-  // The same picture as shelf/ansi-witch.wasic, drawn on the glass before the sign-on.
-  var INK_WITCH = [
-    [1, ["1;95", "               ANSI WITCH"]],
-    [2, ["2;31", "        THE INK IS HERS. SIT DOWN."]],
-    [4, ["2;37", "             ·    ", "38;5;226", "*", "2;37", "    ·"]],
-    [5, ["1;97", "                 .-^-. "]],
-    [6, ["97", "              .-'     '-."]],
-    [7, ["38;5;54", "            .'    ", "38;5;141", "☾", "38;5;54", "    '."]],
-    [8, ["38;2;232;206;168", "           :   ", "1;91", "•", "38;2;232;206;168", "     ", "1;91", "•", "38;2;232;206;168", "   :"]],
-    [9, ["38;2;232;206;168", "            '.   ", "1;31", "—", "38;2;232;206;168", "   .'"]],
-    [10, ["97", "              '-._____.-'"]],
-    [11, ["35", "                 | |"]],
-    [12, ["45;97", "            .-'|     |'-."]],
-    [13, ["45;97", "          .'   |     |   '."]],
-    [14, ["45;97", "         :     |  ", "38;5;226", "*", "45;97", "  |     :"]],
-    [15, ["45;97", "          '.   |     |   .'"]],
-    [16, ["35", "            '-.|_____|.-'"]],
-    [17, ["93", "                \\   /"]],
-    [18, ["38;5;226", "               *     *"]],
-    [20, ["2;31", "            SHE WOKE IN INK."]]
-  ];
-
-  function paintInkRow(row, parts) {
-    var seq = "\x1b[" + (row + 1) + ";1H";
-    for (var i = 0; i < parts.length; i += 2) seq += "\x1b[" + parts[i] + "m" + parts[i + 1];
-    seq += "\x1b[0m";
-    term.write(seq);
-    term.cursor.row = 23;
-    term.cursor.col = 0;
-    term.dirty = true;
-  }
-
-  async function paintInkWitch() {
-    for (var i = 0; i < INK_WITCH.length; i += 1) {
-      paintInkRow(INK_WITCH[i][0], INK_WITCH[i][1]);
-      await sleep(40);
-    }
-  }
-
   async function boot() {
-    var SIGN = 10;
+    var SIGN = 8;
     mode = "boot";
-    waking = true;
     try {
     term.clear();
     term.cursor.col = 0;
     term.cursor.row = 0;
     term.cursorLit = true;
     term.flush();
-    inkHold = true;
-    portrait.target = 0;
     updateFooter();
     loadCatalog();
     await sleep(220);
-    tone(196, 90, 0.04);
+    tone(392, 90, 0.04);
     await sleep(110);
-    tone(247, 150, 0.035);
+    tone(523, 150, 0.035);
     await sleep(260);
     term.write("\x1b[0m");
     term.clear();
     setPen(7, 0);
-    inkHold = false;
-    portrait.target = 0;
     await sleep(80);
     var boxCol = centerOf("┌────────────────────┐");
     var box = [
-      ["┌────────────────────┐", "92"],
+      ["┌────────────────────┐", "96"],
       ["│ **** BASIC I ****  │", "1;97"],
-      ["│    BASIC · ONE     │", "92"],
-      ["└────────────────────┘", "92"]
+      ["│  LEARN BY TYPING   │", "96"],
+      ["└────────────────────┘", "96"]
     ];
     for (var b = 0; b < box.length; b += 1) cup(SIGN + b, boxCol, box[b][0], box[b][1]);
     await sleep(90);
     var glass = "40 COLUMN GLASS";
     cup(SIGN + 5, centerOf(glass), glass, "2;37");
-    var marks = [111, 222, 333, 444, 555, 666];
+    var marks = [64, 128, 256, 384, 448, 512];
     for (var i = 0; i < marks.length; i += 1) {
       var mem = "MEMORY " + String(marks[i]).padStart(3, "0");
       cup(SIGN + 6, centerOf(mem), mem, "93");
       await sleep(50);
     }
     var spoken = [
-      [8, "IT WOKE UP.", "37"],
-      [9, "THE GLASS HOLDS.", "37"],
-      [10, "BASIC SPEAKS.", "37"],
-      [11, "A NUMBER STORES A LINE.", "37"]
+      [8, "HI. LET US LEARN.", "37"],
+      [9, "A NUMBER STORES A LINE.", "37"],
+      [10, "A BARE LINE RUNS NOW.", "37"],
+      [11, "THE LESSONS ARE IN MODULES.", "37"]
     ];
     for (var n = 0; n < spoken.length; n += 1) {
       await sleep(65);
       cup(SIGN + spoken[n][0], centerOf(spoken[n][1]), spoken[n][1], spoken[n][2]);
     }
     await sleep(65);
-    var free = "666 LINES FREE.";
+    var free = "512 LINES FREE.";
     var last = SIGN + 13;
     cup(last, centerOf(free), free, "93");
     unlock();
-    if (glassLive) { try { engine.beep(98, 160); } catch (err) {} }
+    if (glassLive) { try { engine.beep(392, 140); } catch (err) {} }
     await sleep(190);
-    if (glassLive) { try { engine.beep(146, 260); } catch (err) {} }
+    if (glassLive) { try { engine.beep(523, 220); } catch (err) {} }
     await sleep(240);
-    waking = false;
-    portrait.target = 0;
-    dropSpark();
     await rollUp(SIGN);
     term.cursor.row = last - SIGN + 1;
     term.cursor.col = 0;

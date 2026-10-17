@@ -1,7 +1,7 @@
 ---
 layout: game
 title: "🖥️ Basic I"
-description: A 40-column machine. It speaks BASIC.
+description: A small computer for learning BASIC. Forty columns, 512 lines, lessons built in.
 image: /games/basic-1/banner.jpg
 permalink: /games/basic-1/
 tags: [terminal, computer]
@@ -30,7 +30,7 @@ tags: [terminal, computer]
     font-size: 1.05rem;
     color: #e8e8e8;
     background: transparent;
-    border: 1px solid #3a2a4a;
+    border: 1px solid #24564c;
     border-radius: 8px;
     padding: 0.55rem 0.95rem;
     cursor: pointer;
@@ -38,13 +38,13 @@ tags: [terminal, computer]
   .witch-actions button:hover,
   .witch-actions button:focus-visible,
   .witch-actions button[aria-expanded="true"] {
-    border-color: #c9a6ff;
-    color: #e8d5ff;
+    border-color: #7ec8b8;
+    color: #e7fff6;
     outline: none;
   }
   .witch-actions button.boot {
-    border-color: #c9a6ff;
-    color: #e8d5ff;
+    border-color: #7ec8b8;
+    color: #e7fff6;
   }
   .witch-hint {
     margin: 0.2rem 0 0.8rem;
@@ -111,7 +111,7 @@ tags: [terminal, computer]
     overflow: hidden;
     box-shadow:
       inset 0 0 0 1px #1a1012,
-      inset 0 0 80px rgba(36, 0, 12, .55);
+      inset 0 0 80px rgba(0, 40, 28, .45);
   }
   .crt canvas {
     display: block;
@@ -167,48 +167,34 @@ tags: [terminal, computer]
 
 <div class="witch-front markdown-body">
   <h1>🖥️ Basic I</h1>
-  <p class="witch-lead">Forty columns, twenty-four rows. It speaks BASIC.</p>
+  <p class="witch-lead">A small computer for kids, retro fans, and anyone learning BASIC. Forty columns. 512 lines. The lessons are built in.</p>
 
   <div class="witch-actions">
     <button type="button" class="boot" id="witch-boot">🖥️ Boot</button>
     <button type="button" id="witch-started-btn" aria-expanded="false" aria-controls="witch-started">📖 Getting Started</button>
-    <button type="button" id="witch-manual-btn" aria-expanded="false" aria-controls="witch-manual">📜 Manual</button>
+    <button type="button" id="witch-tutorial-btn" aria-expanded="false" aria-controls="witch-tutorial">✏️ Tutorial</button>
+    <button type="button" id="witch-manual-btn" aria-expanded="false" aria-controls="witch-manual">📘 Manual</button>
   </div>
-  <p class="witch-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
+  <p class="witch-hint">Boot fills the screen. Escape brings you back here. Your lines stay. Start with Getting Started, then the tutorial.</p>
 
-  <div id="witch-started" class="witch-panel" hidden>
-    <h2>📖 Getting Started</h2>
-    <p>The prompt is <strong>READY</strong>. A line with a number is stored. A line without one runs now.</p>
-    <ul>
-      <li>📚 <code>SHELF</code> opens the box. The arrows move. Enter takes a program down and does not run it.</li>
-      <li>▶ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
-      <li>🧹 <code>CLS</code> clears the glass. ✨ <code>AUTO</code> numbers the next lines.</li>
-      <li>✋ Ctrl-C stops a program that will not stop.</li>
-    </ul>
-    <p>Try <code>SHELF</code>, point at <code>HELLO</code>, press Enter, then <code>RUN</code>. <code>GUESS</code> wants a number. <code>CIRCLES</code> draws.</p>
-    <p>Under the glass, the keys are an emoji, a word, and a function key. Nothing there is a button.</p>
-    <ul>
-      <li>📜 LIST F1</li>
-      <li>▶ RUN F2</li>
-      <li>📚 SHELF F3</li>
-      <li>🧹 CLS F4</li>
-      <li>✨ AUTO F5</li>
-      <li>🔢 RENUM F6</li>
-      <li>🔒 LATCH F7</li>
-      <li>⛶ FULL F11</li>
-      <li>⎋ BACK ESC</li>
-    </ul>
-    <p>It wakes latched. Up walks the lines that rolled off the glass. The walls are the same ones Witch I keeps, in <a href="{{ '/SYSTEM.md' | relative_url }}">SYSTEM.md</a>.</p>
+  <div id="witch-started" class="witch-panel manual markdown-body" hidden>
+    {% capture started_doc %}{% include_relative GETTING-STARTED.md %}{% endcapture %}
+    {{ started_doc | markdownify }}
+  </div>
+
+  <div id="witch-tutorial" class="witch-panel manual markdown-body" hidden>
+    {% capture tutorial_doc %}{% include_relative TUTORIAL.md %}{% endcapture %}
+    {{ tutorial_doc | markdownify }}
   </div>
 
   <div id="witch-manual" class="witch-panel manual markdown-body" hidden>
-    {% capture witch_manual %}{% include_relative MANUAL.md %}{% endcapture %}
-    {{ witch_manual | markdownify }}
+    {% capture manual_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+    {{ manual_doc | markdownify }}
   </div>
 </div>
 
 <div id="witch-stage" class="witch-stage" hidden>
-  <div id="game" data-shelf="{{ '/games/basic-1/shelf/' | relative_url }}" data-witch="{{ '/assets/images/site.jpg' | relative_url }}"></div>
+  <div id="game" data-modules="{{ '/games/basic-1/modules/' | relative_url }}"></div>
 </div>
 
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
@@ -219,21 +205,26 @@ tags: [terminal, computer]
   var stage = document.getElementById("witch-stage");
   var boot = document.getElementById("witch-boot");
   var startedBtn = document.getElementById("witch-started-btn");
+  var tutorialBtn = document.getElementById("witch-tutorial-btn");
   var manualBtn = document.getElementById("witch-manual-btn");
   var started = document.getElementById("witch-started");
+  var tutorial = document.getElementById("witch-tutorial");
   var manual = document.getElementById("witch-manual");
   var open = false;
   var inFull = false;
+  var docs = [
+    { btn: startedBtn, panel: started },
+    { btn: tutorialBtn, panel: tutorial },
+    { btn: manualBtn, panel: manual }
+  ];
 
-  function togglePanel(btn, panel, otherBtn, other) {
-    var show = btn.getAttribute("aria-expanded") !== "true";
-    btn.setAttribute("aria-expanded", show ? "true" : "false");
-    panel.hidden = !show;
-    if (show) {
-      otherBtn.setAttribute("aria-expanded", "false");
-      other.hidden = true;
-      panel.scrollIntoView({ block: "nearest" });
-    }
+  function togglePanel(which) {
+    docs.forEach(function (item) {
+      var show = item === which && item.btn.getAttribute("aria-expanded") !== "true";
+      item.btn.setAttribute("aria-expanded", show ? "true" : "false");
+      item.panel.hidden = !show;
+      if (show) item.panel.scrollIntoView({ block: "nearest" });
+    });
   }
 
   function closeStage() {
@@ -261,12 +252,9 @@ tags: [terminal, computer]
   }
 
   boot.addEventListener("click", openStage);
-  startedBtn.addEventListener("click", function () {
-    togglePanel(startedBtn, started, manualBtn, manual);
-  });
-  manualBtn.addEventListener("click", function () {
-    togglePanel(manualBtn, manual, startedBtn, started);
-  });
+  startedBtn.addEventListener("click", function () { togglePanel(docs[0]); });
+  tutorialBtn.addEventListener("click", function () { togglePanel(docs[1]); });
+  manualBtn.addEventListener("click", function () { togglePanel(docs[2]); });
 
   document.addEventListener("fullscreenchange", function () {
     if (document.fullscreenElement) {

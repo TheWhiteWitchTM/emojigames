@@ -1,32 +1,32 @@
 # Basic I
 
-The glass is 40 columns by 24 rows. The prompt is READY. The language is BASIC. It has 666 lines of memory. It is the machine next to Witch I, and it keeps her walls. Her names still run. The names on this page are the ones it answers to first.
+The glass is 40 columns by 24 rows. The prompt is READY. The language is BASIC. A program can hold 512 lines. This is a learning machine: the same shape as the old 40-column computers, with lessons built in.
 
-A line with a number is stored. A line without one runs now. The words are the same either way.
+A line with a number is stored. A line without one runs now. The words are the same either way. The lessons, the first hour, and every key are in Getting Started and the Tutorial, on the same page.
 
 ## When it wakes
 
-The glass stays black. A pale bar blinks at the top left. Two low notes, a fifth apart. Then the sign:
+The glass stays black. A pale bar blinks at the top left. Two notes, a fourth apart. Then the sign:
 
 ```
          ┌────────────────────┐
          │ **** BASIC I ****  │
-         │    BASIC · ONE     │
+         │  LEARN BY TYPING   │
          └────────────────────┘
 
             40 COLUMN GLASS
-               MEMORY 666
+               MEMORY 512
 
-              IT WOKE UP.
-           THE GLASS HOLDS.
-             BASIC SPEAKS.
-       A NUMBER STORES A LINE.
+           HI. LET US LEARN.
+        A NUMBER STORES A LINE.
+         A BARE LINE RUNS NOW.
+      THE LESSONS ARE IN MODULES.
 
-            666 LINES FREE.
+            512 LINES FREE.
 READY.
 ```
 
-The frame is green. The name is white. BASIC · ONE is green. 40 COLUMN GLASS is faint. The count, and 666 LINES FREE, are the color of a low candle. The waking lines are ash. READY is white. What you type after that is ash, until a program runs.
+The frame is cyan. The name is white. LEARN BY TYPING is cyan. 40 COLUMN GLASS is faint. The count, and 512 LINES FREE, are the color of a low candle. The waking lines are ash. READY is white. What you type after that is ash, until a program runs.
 
 The page is a desk. 🖥️ Boot fills the screen with the glass. Escape returns to the page. Boot opens the glass again. A program that was running has stopped. The lines you stored are still there.
 
@@ -39,9 +39,9 @@ The bezel under the glass names the mood, then the lines in use.
 | Bezel | Mood |
 | --- | --- |
 | WAKING | Still counting |
-| READING | Fetching a program off the shelf |
-| PICKING | The shelf is open. The arrows are its |
-| READY n/666 | Waiting for you |
+| READING | Opening a built-in module |
+| PICKING | The module list is open. The arrows are its |
+| READY n/512 | Waiting for you |
 | LINE n | Running that line |
 | RUNNING | Running, between lines |
 | WAITING | INPUT wants an answer |
@@ -55,7 +55,7 @@ Under that, the keys. Each one is an emoji, a word, and a function key. They are
 | --- | --- |
 | 📜 LIST F1 | LIST |
 | ▶ RUN F2 | RUN |
-| 📚 SHELF F3 | SHELF |
+| 📘 MODULES F3 | MODULES |
 | 🧹 CLS F4 | CLS. The letters go, and so do the lines that had rolled off. The sprites stay |
 | ✨ AUTO F5 | AUTO. Again, and the numbering stops |
 | 🔢 RENUM F6 | RENUM |
@@ -63,17 +63,17 @@ Under that, the keys. Each one is an emoji, a word, and a function key. They are
 | ⛶ FULL F11 | The glass fills the screen. F11 again returns to the page |
 | ⎋ BACK ESC | Returns to the page. A program that was running stops |
 
-The bar is quiet while it runs, and while the shelf is open. LATCH stays lit while it is latched at READY, at AUTO, and while INPUT waits. While AUTO is numbering, the bar still lists, clears, renumbers, and latches. Typing those words on the numbered line stores them, the way RUN would. The function key does the thing.
+The bar is quiet while it runs, and while the module list is open. LATCH stays lit while it is latched at READY, at AUTO, and while INPUT waits. While AUTO is numbering, the bar still lists, clears, renumbers, and latches. Typing those words on the numbered line stores them, the way RUN would. The function key does the thing.
 
 ## Typing
 
 The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, Left, and Right edit the line. A line holds 255 characters, and one emoji is one. Past that it clicks once and takes no more.
 
-It wakes latched. That is the scroll lock, and the word is LATCH. Lines that roll off the top are kept, 666 of them. Up and Down walk those lines. Page Up and Page Down move a glassful, leaving one row so you can see where you were. Home is the oldest line still kept. End sits on the pen. A key that writes also sits on the pen, so the line you were typing is still there. The bezel says GAZE and how far above the pen you are. Ctrl-Up and Ctrl-Down still recall the last 32 lines you sent.
+It wakes latched. That is the scroll lock, and the word is LATCH. Lines that roll off the top are kept, 512 of them. Up and Down walk those lines. Page Up and Page Down move a glassful, leaving one row so you can see where you were. Home is the oldest line still kept. End sits on the pen. A key that writes also sits on the pen, so the line you were typing is still there. The bezel says GAZE and how far above the pen you are. Ctrl-Up and Ctrl-Down still recall the last 32 lines you sent.
 
 `LATCH` turns the hold on. `LATCH ON` does that too. `LATCH OFF`, or `LATCH` again, opens the glass. Then Up and Down recall, the way a shell does, and Page Up only clicks. Home and End edit the line. F7 and the Scroll Lock key do what the bare word does, without printing a line. The same hold is on while INPUT waits, so you can walk up and read the question. AUTO keeps it. A program does not. While it runs, the arrows belong to the program, and the glass is text.
 
-While the shelf is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter loads the name under the mark. Escape returns to the page. If the shelf was open it closes, and it says `FINE. THE SHELF CAN WAIT.` The caret stays dark until the shelf closes.
+While the module list is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter loads the name under the mark. Escape returns to the page. If the list was open it closes, and it says `OK. THE MODULES CAN WAIT.` The caret stays dark until the list closes.
 
 Enter stores a numbered line, or runs a bare one. A stored line does not print READY. The caret just waits for the next one. An empty Enter at READY prints READY. again.
 
@@ -103,10 +103,10 @@ A number with nothing after it deletes that line. Above 63999:
 🔢 NO. LINES STOP AT 63999.
 ```
 
-666 stored lines is the wall.
+512 stored lines is the wall.
 
 ```
-🛑 FULL. 666 LINES. STOP.
+🛑 FULL. 512 LINES. STOP.
 ```
 
 It will store a line it cannot parse. POKE can sit in the program. `10 MARCO` can sit in the program. It fails when the run reaches it.
@@ -132,8 +132,8 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | RENUM | Renumber from 10, step 10. RENUMBER is the same word |
 | LOAD "NAME" | Load a program kept in this browser. It says LOADED. It does not run it |
 | SAVE "NAME" | Keep the program here. It says SAVED. |
-| LOAD "shelf:NAME" | Load a program from the box |
-| SHELF | Open the box. Arrows move. Enter loads. Escape returns to the page |
+| LOAD "module:NAME" | Load a built-in lesson. It does not run it |
+| MODULES | Open the lessons. Arrows move. Enter loads. Escape returns to the page |
 | UPLOAD | Read a text file. Cancel returns to READY with no speech |
 | DOWNLOAD "NAME" | Save NAME.bas. It says TAKE IT. |
 | CLS | Clear the glass. The sprites stay |
@@ -160,17 +160,17 @@ Nothing there:
 🌑 NO. IT IS NOT THERE.
 ```
 
-The shelf is only for reading. A browser that will not open its box:
+The lessons are only for reading. A browser that will not open them:
 
 ```
-📦 THE BOX IS SHUT.
+📦 IT WOULD NOT OPEN.
 ```
 
 DOWNLOAD of an empty program says 📭 NOTHING TO RUN. SAVE of an empty program saves an empty program.
 
 ## Running
 
-RUN clears the variables, the loops, the calls, the data pointer, the watch, and the sprites. The pen turns green on black for the working. The letters already on the glass stay until CLS, or until they scroll off. What scrolls off is kept until the 666 are full, or until the glass is cleared. While it runs, that memory is not a window. The glass is text, and the arrows belong to the program. When it stops, the pen returns to ash, and the latch is how you walk back up.
+RUN clears the variables, the loops, the calls, the data pointer, the watch, and the sprites. The pen turns green on black for the working. The letters already on the glass stay until CLS, or until they scroll off. What scrolls off is kept until the 512 are full, or until the glass is cleared. While it runs, that memory is not a window. The glass is text, and the arrows belong to the program. When it stops, the pen returns to ash, and the latch is how you walk back up.
 
 A bare GOTO or GOSUB at READY walks into the program and leaves the variables where they sit.
 
@@ -208,7 +208,7 @@ A line it cannot parse:
 
 ### REM
 
-The rest of that line is a comment. `'` does the same. It eats the rest, colons included.
+The rest of that line is a comment. `'` does the same. It eats the rest, periods and colons included. A note is for the person reading LIST. RUN skips it.
 
 ### PRINT
 
@@ -222,7 +222,7 @@ TAB(n) and SPC(n) belong only inside PRINT. Column 0 is the left edge. TAB past 
 
 INK writes one line through the glass's own color codes. A `{31}` in the string is ink. `31` is dark red. `1;97` is bold white. `38;5;141` is one of the 256. `38;2;232;206;168` is a color mixed on the spot. `2` is faint. A background is `45`, purple. A doubled `{` is one brace. INK with nothing after it writes a blank line. A number where a string belongs is the wrong kind of thing.
 
-`INK` on the shelf is that sample. A line number changes one.
+`COLORS` in the modules is that sample. A line number changes one.
 
 ### INPUT
 
@@ -339,9 +339,11 @@ An index outside the array:
 📐 NO. OUTSIDE THE ROOM.
 ```
 
-## The other names
+## Older names
 
-Witch I speaks WASIC. This machine speaks BASIC, and it still knows her words. A line written either way runs.
+You do not need this table to learn. The lessons use the BASIC names.
+
+Witch I speaks WASIC. A listing from that machine still runs here. The words on the right are the old ones.
 
 | BASIC | The other name |
 | --- | --- |
@@ -408,7 +410,7 @@ Parentheses, then the arguments. INKEY$, LISTEN$, TICK, COLS, and ROWS may skip 
 
 | Function | Answer |
 | --- | --- |
-| INT(n) | Toward the pit. INT(-1.2) is -2 |
+| INT(n) | Toward the more negative side. INT(-1.2) is -2 |
 | ABS(n) | Distance from zero |
 | SQR(n) | Square root. A negative is the wrong kind of thing |
 | SIN COS TAN ATN | Radians |
@@ -431,7 +433,7 @@ Parentheses, then the arguments. INKEY$, LISTEN$, TICK, COLS, and ROWS may skip 
 | HELD(s$) | 1 while that key is down. "ArrowLeft", "a", "A" |
 | INKEY$, LISTEN$ | The next key seen while running, or "" |
 | TICK | Milliseconds since it woke |
-| FRE(n) | 666 minus the lines stored. n is required, numeric, and ignored |
+| FRE(n) | 512 minus the lines stored. n is required, numeric, and ignored |
 | COLS ROWS | 40 and 24 |
 | SPRITE(picture$, x, y) | Make one. Size defaults to 28. The number comes back, and IT is set |
 | SPRITE(picture$, x, y, size) | Same, with a size |
@@ -520,11 +522,11 @@ These are recognized. It stores them. When it reaches them it complains, because
 🔌 NO. THAT WIRE IS DEAD.
 ```
 
-## The box
+## The modules
 
-The programs are files in `shelf/`. The extension is `.bas`. `catalog.txt` is the order. SHELF opens the box on the glass. The mark starts on the first name. Up and down move it. Enter loads that name and does not run it. It says `LIST. A NUMBER CHANGES A LINE.` Escape says `FINE. THE SHELF CAN WAIT.` Anything saved in this browser sits under `SAVED IN THIS BROWSER`. `LOAD "shelf:HELLO"` still loads one if you would rather type. Then RUN. It lowercases the name and adds `.bas` itself.
+The lessons are files in `modules/`. The extension is `.bas`. `catalog.txt` is the order. A `#` line in that file is a note. MODULES opens the list on the glass. The mark starts on the first name. Up and down move it. Enter loads that name and does not run it. It says `LIST IT. A NUMBER CHANGES A LINE.` Escape says `OK. THE MODULES CAN WAIT.` Anything saved in this browser sits under `YOUR SAVED PROGRAMS`. `LOAD "module:HELLO"` still loads one if you would rather type. Then RUN. It lowercases the name and adds `.bas` itself.
 
-HELLO asks once. GUESS wants 1 to 100. DICE rolls from one to twelve. OMEN reads three lines. CIRCLES draws. SPRITES puts a ghost and a bat on the glass. KEYS prints the key you press. CAROL plays eight notes. CAT walks the glass and turns at the edges. INK paints with the glass's own colors.
+HELLO asks your name. COUNT counts to 10. GUESS wants 1 to 100. DICE rolls from one to twelve. QUIZ reads three questions. CIRCLES draws. BOUNCE puts a star and a ball on the glass. KEYS prints the key you press. SCALE plays eight notes. CAT walks the glass and turns at the edges. COLORS paints with the sixteen pens, and with ink mixed on the spot.
 
 ## Three that have to run
 
@@ -571,7 +573,7 @@ The third one does not stop. Ctrl-C is the door. Escape returns to the page.
 | CALL | 📞 DO NOT CALL ME THAT WAY. |
 | No such line | 🚫 NO LINE. |
 | Wrong kind of value | 🎭 NO. WRONG KIND OF THING. |
-| Line 667 | 🛑 FULL. 666 LINES. STOP. |
+| Line 513 | 🛑 FULL. 512 LINES. STOP. |
 | Divide by zero | ➗ CUTE. DIVIDE BY NOTHING. |
 | Dead sprite | 👻 NO. THAT SPRITE IS GONE. |
 | Line longer than 255 | 📏 TOO LONG. |
@@ -597,7 +599,7 @@ The third one does not stop. Ctrl-C is the door. Escape returns to the page.
 | SAVE worked | SAVED. |
 | LOAD worked | LOADED. |
 | No such program | 🌑 NO. IT IS NOT THERE. |
-| The browser refused the box | 📦 THE BOX IS SHUT. |
+| The browser would not open | 📦 IT WOULD NOT OPEN. |
 | RENUM worked | RENUMBERED. |
 | NEW | GONE. |
 | DOWNLOAD | TAKE IT. |
@@ -607,14 +609,15 @@ READY.
 
 ## Limits, in one place
 
-The same numbers are the walls Witch I keeps. They are written in `SYSTEM.md` at the root of this repo.
+Witch I is a different machine. Its walls are in `SYSTEM.md`. These are the walls on this one.
 
-- 666 lines.
+- 512 lines in a program. FRE(0) is how many are left.
+- 512 lines kept after they roll off the top. CLS forgets them.
 - 255 characters on a typed line, and 255 in a string. One emoji is one.
 - Line numbers 0 through 63999.
 - Names are the whole word, up to 16 letters and digits, then `$` if it is a string.
 - File names add hyphens, and stop at 16 characters.
 - 32 loops, 32 calls, 32 living sprites, 32 remembered lines, 32 keys waiting, 8 meetings waiting.
 - One or two axes. Each array holds at most 20000 cells. Indexes run 0 through 2000.
-- The shelf is a folder of `.bas` files, and it is only for reading. SAVE and LOAD without `shelf:` use this browser. UPLOAD and DOWNLOAD use the desk.
+- The lessons are a folder of `.bas` files, and that folder is only for reading. MODULES opens them. SAVE and LOAD without `module:` use this browser. UPLOAD and DOWNLOAD use the computer you are sitting at.
 - Sprites are emoji. The touch radius is half the size. They share the glass with the letters, and they are drawn in front.

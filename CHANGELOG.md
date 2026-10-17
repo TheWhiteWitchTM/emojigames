@@ -6,7 +6,7 @@ The glass keeps this record. Newest first.
 
 ### Basic I
 
-The machine next to Witch I. Same glass, forty by twenty-four, same walls, and the prompt is READY. PRINT, GOTO, FOR, and NEXT run. The witch's names run too. SHELF, LIST, and a number still work the way they do on her desk.
+A 40-column computer for learning BASIC. The prompt is READY. A program holds 512 lines. MODULES opens the built-in lessons. Getting Started and a tutorial sit on the page.
 
 ### The glass, and three on the marquee
 

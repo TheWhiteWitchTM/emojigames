@@ -1,0 +1,12 @@
+# Built-in lessons. One name a line. The file is the name, lower case, plus .bas.
+HELLO
+COUNT
+GUESS
+DICE
+QUIZ
+CIRCLES
+BOUNCE
+KEYS
+SCALE
+CAT
+COLORS
