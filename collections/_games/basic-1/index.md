@@ -177,25 +177,8 @@ tags: [terminal, computer]
   <p class="basic-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
 
   <div id="basic-started" class="basic-panel" hidden>
-    <h2>📖 Getting Started</h2>
-    <p>The prompt is <strong>READY</strong>. A line that starts with a number is stored. A line without a number runs right away.</p>
-    <p><strong>Immediate mode</strong> (runs now):</p>
-    <pre><code>PRINT "HELLO"</code></pre>
-    <p>Press Enter. It prints and returns to READY.</p>
-    <p><strong>Stored program</strong>:</p>
-    <pre><code>10 PRINT "HELLO"
-20 PRINT "WORLD"
-30 END
-RUN</code></pre>
-    <p><code>RUN</code> starts at the lowest line. <code>LIST</code> shows the lines. <code>NEW</code> or <code>RESET</code> clears the program. The machine holds <strong>512 lines</strong>.</p>
-    <ul>
-      <li><code>SHELF</code> opens the box of example programs. Arrows move. Enter loads one (it does not run).</li>
-      <li><code>RUN</code> starts the program. <code>LIST</code> shows the lines.</li>
-      <li><code>CLS</code> clears the glass. <code>AUTO</code> numbers the next lines for you.</li>
-      <li>Ctrl-C or Escape stops a running program.</li>
-    </ul>
-    <p>Try <code>SHELF</code>, move to an example, press Enter, then <code>RUN</code>.</p>
-    <p>Under the glass the keys are labeled. Nothing there is a mouse button.</p>
+    {% capture basic_started %}{% include_relative GETTING-STARTED.md %}{% endcapture %}
+    {{ basic_started | markdownify }}
   </div>
 
   <div id="basic-manual" class="basic-panel manual markdown-body" hidden>
