@@ -36,16 +36,45 @@
   crt.appendChild(scan);
   mount.appendChild(ui.wrap);
 
+  // Footer: status + quick keys
+  var statusEl = document.createElement("span");
+  statusEl.className = "status";
+  statusEl.textContent = "READY 0/512";
+  var mood = document.createElement("span");
+  mood.className = "basic-mood";
+  mood.appendChild(statusEl);
+
+  var TOOLS = [
+    { key: "F1", emoji: "📜", label: "LIST" },
+    { key: "F2", emoji: "🕯️", label: "RUN" },
+    { key: "F3", emoji: "📚", label: "SHELF" },
+    { key: "F4", emoji: "🧹", label: "CLS" },
+    { key: "F5", emoji: "✨", label: "AUTO" },
+    { key: "F7", emoji: "🔒", label: "LATCH" }
+  ];
+  var bar = document.createElement("div");
+  bar.className = "basic-bar";
+  TOOLS.forEach(function (t) {
+    var span = document.createElement("span");
+    span.className = "basic-key";
+    span.appendChild(document.createTextNode(t.emoji + " " + t.label + " "));
+    var kbd = document.createElement("kbd");
+    kbd.textContent = t.key;
+    span.appendChild(kbd);
+    bar.appendChild(span);
+  });
+  ui.footer.textContent = "";
+  ui.footer.appendChild(mood);
+  ui.footer.appendChild(bar);
+
   function paintWelcome() {
     term.clear();
     term.color(15, 0);
 
-    // Title
     term.cursor.row = 2;
     term.cursor.col = 8;
     term.write("**** BASIC I ****");
 
-    // Small friendly character
     term.cursor.row = 4;
     term.cursor.col = 16;
     term.write("  ^_^  ");
@@ -56,12 +85,10 @@
     term.cursor.col = 16;
     term.write("  > <  ");
 
-    // Free lines
     term.cursor.row = 8;
     term.cursor.col = 10;
     term.write("512 LINES FREE");
 
-    // READY right under the banner
     term.cursor.row = 10;
     term.cursor.col = 2;
     term.write("READY.");
