@@ -48,12 +48,11 @@ tags: [terminal, computer]
   .ee-wrap {
     width: 100% !important;
     max-width: none;
+    max-height: 100%;
     background: #0b090a !important;
     color: #cbbfa6 !important;
     border-radius: 12px;
-    box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
     font-family: ui-monospace, "Courier New", monospace !important;
-    max-height: 100%;
   }
   .crt {
     position: relative;
@@ -74,10 +73,6 @@ tags: [terminal, computer]
     position: absolute;
     inset: 0;
     background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.18) 1px, transparent 2px, transparent 3px);
-  }
-  .ee-footer {
-    color: #8d7b68;
-    letter-spacing: .08em;
   }
 </style>
 
@@ -124,12 +119,19 @@ tags: [terminal, computer]
     open = true;
     stage.hidden = false;
     stage.classList.add("basic-open");
+    document.body.classList.add("basic-glass-on");
+    var pending = stage.requestFullscreen ? stage.requestFullscreen() : Promise.reject();
+    Promise.resolve(pending).catch(function () {});
     if (window.BASIC && BASIC.power) BASIC.power();
   }
   function closeStage() {
     open = false;
     stage.classList.remove("basic-open");
     stage.hidden = true;
+    document.body.classList.remove("basic-glass-on");
+    if (document.fullscreenElement) {
+      Promise.resolve(document.exitFullscreen()).catch(function () {});
+    }
     if (window.BASIC && BASIC.leave) BASIC.leave();
   }
 
