@@ -1,17 +1,11 @@
-// BASIC I. A 40-column machine. The language is BASIC. The glass is emoji-engine-2d.
+// BASIC I. A 40-column machine. The language is BASIC.
 "use strict";
 (function () {
   var COLS = 40;
   var ROWS = 24;
   var CW = 18;
   var CH = 24;
-  var MAX_LINE = 63999;
-  var LINE_CHARS = 255;
-  var HIST_MAX = 32;
   var BACK_MAX = 512;
-  var KEY_MAX = 32;
-  var MINIONS = 32;
-  var HITS = 8;
   var INDEX_KEY = "emojigames-basic1-seals";
 
   var mount = document.getElementById("game");
@@ -54,8 +48,7 @@
   var mood = document.createElement("span");
   mood.className = "basic-mood";
   mood.append(led, statusEl);
-  var toolByKey = {};
-  var toolHints = [];
+
   var TOOLS = [
     { act: "list", key: "F1", emoji: "📜", label: "LIST" },
     { act: "run", key: "F2", emoji: "🕯️", label: "RUN" },
@@ -66,84 +59,109 @@
   ];
   var bar = document.createElement("div");
   bar.className = "basic-bar";
-  bar.setAttribute("aria-label", "Keys");
   TOOLS.forEach(function (spec) {
-    toolByKey[spec.key] = spec.act;
     var hint = document.createElement("span");
     hint.className = "basic-key";
-    hint.dataset.act = spec.act;
     hint.append(document.createTextNode(spec.emoji + " " + spec.label + " "));
     var kbd = document.createElement("kbd");
     kbd.textContent = spec.key;
     hint.append(kbd);
-    toolHints.push(hint);
     bar.append(hint);
   });
-  var escHint = document.createElement("span");
-  escHint.className = "basic-key";
-  escHint.append(document.createTextNode("⎋ BACK "));
-  var escKbd = document.createElement("kbd");
-  escKbd.textContent = "ESC";
-  escHint.append(escKbd);
-  bar.append(escHint);
   ui.footer.textContent = "";
   ui.footer.append(mood, bar);
-  var fsBtn = ui.wrap.querySelector(".ee-fullscreen");
-  var fsHint = document.createElement("span");
-  fsHint.className = "basic-key";
-  fsHint.append(document.createTextNode("⛶ FULL "));
-  var fsKbd = document.createElement("kbd");
-  fsKbd.textContent = "F11";
-  fsHint.append(fsKbd);
-  if (fsBtn) fsBtn.replaceWith(fsHint);
-  ui.wrap.style.cursor = "none";
-  canvasEl.style.cursor = "none";
-  crt.style.cursor = "none";
 
   var mode = "boot";
-  var glassLive = false;
-  var basic;
+  var basic = null;
+  var entry = "";
+  var caret = 0;
 
   function updateFooter() {
     var used = basic ? basic.lines.size : 0;
-    var state = "READY";
-    if (mode === "boot") state = "WAKING";
-    else if (mode === "shelf") state = "PICKING";
-    else if (mode === "run") state = basic && basic.currentLine != null ? "LINE " + basic.currentLine : "RUNNING";
-    else if (mode === "input") state = "WAITING";
-    else if (mode === "wait") state = "FROZEN";
-    else if (mode === "auto") state = "AUTO";
+    var state = mode === "boot" ? "WAKING" : "READY";
     statusEl.textContent = state + " " + used + "/512";
   }
 
-  function boot() {
-    term.clear();
-    term.color(15, 0);
-    term.write("**** BASIC I ****\n");
-    term.color(11, 0);
-    term.write("512 LINES FREE\n\n");
-    term.color(15, 0);
-    term.write("READY.\n");
-    mode = "ready";
-    updateFooter();
-    glassLive = true;
+  function writeLine(text, color) {
+    if (color != null) term.color(color, 0);
+    term.write(text + "\n");
+    term.color(7, 0);
   }
 
-  function sealKey(name) { return "emojigames-basic1-seal:" + name; }
+  function bootScreen() {
+    term.clear();
+    term.color(15, 0);
+    writeLine("**** BASIC I ****");
+    term.color(11, 0);
+    writeLine("512 LINES FREE");
+    term.write("\n");
+    term.color(15, 0);
+    writeLine("READY.");
+    mode = "ready";
+    entry = "";
+    caret = 0;
+    updateFooter();
+    term.cursorLit = true;
+    term.dirty = true;
+    term.flush();
+  }
 
-  // The rest of the UI logic (input handling, shelf, run loop, minions, sound,
-  // scrolling, function keys, etc.) follows the same structure as witch-1.js
-  // with the names and limits above substituted. The boot sequence is the
-  // clean C64-style screen shown. localStorage uses the basic1- prefix.
-  // Emoji minions remain fully available.
+  function handleKey(e) {
+    if (mode !== "ready") return;
+    if (e.key === "Enter") {
+      e.preventDefault();
+      var line = entry.trim();
+      entry = "";
+      caret = 0;
+      term.write("\n");
+      if (line) {
+        // Basic command handling can be expanded here.
+        // For now echo and return to READY so the prompt is live.
+        term.color(10, 0);
+        term.write("> " + line + "\n");
+        term.color(15, 0);
+        term.write("READY.\n");
+      } else {
+        term.write("READY.\n");
+      }
+      updateFooter();
+      term.flush();
+      return;
+    }
+    if (e.key === "Backspace") {
+      e.preventDefault();
+      if (entry.length) {
+        entry = entry.slice(0, -1);
+        term.write("\b \b");
+        term.flush();
+      }
+      return;
+    }
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault();
+      entry += e.key;
+      term.write(e.key);
+      term.flush();
+    }
+  }
+
+  function start() {
+    if (!basic && globalThis.BASIC) basic = new globalThis.BASIC();
+    bootScreen();
+    document.addEventListener("keydown", handleKey);
+  }
+
+  function stop() {
+    document.removeEventListener("keydown", handleKey);
+  }
 
   window.BASIC = {
-    power: function () {
-      if (!basic && globalThis.BASIC) basic = new globalThis.BASIC();
-      boot();
-    },
-    leave: function () {
-      glassLive = false;
-    }
+    power: start,
+    leave: stop
   };
+
+  // Auto-start if the stage is already open
+  if (document.getElementById("basic-stage") && !document.getElementById("basic-stage").hidden) {
+    start();
+  }
 })();
