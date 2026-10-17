@@ -20,10 +20,8 @@ tags: [terminal, computer]
   }
   .ee-header { border-bottom: 1px solid #2a211c; }
   .ee-title { letter-spacing: .22em; color: #d7c7a2; font-weight: 500; }
-  .ee-fullscreen {
-    color: #cbbfa6 !important;
-    border-color: #4a3b32 !important;
-  }
+  .ee-wrap, .ee-wrap * { cursor: none !important; }
+  .ee-wrap { user-select: none; }
   .crt {
     position: relative;
     margin: 10px;
@@ -69,40 +67,20 @@ tags: [terminal, computer]
     gap: 4px;
     margin-left: auto;
   }
-  .witch-mod {
-    color: #8d7b68;
-    font-size: 11px;
-    letter-spacing: 0;
-    margin-right: 2px;
-  }
   .witch-key {
     font: inherit;
-    letter-spacing: .06em;
+    letter-spacing: .04em;
     font-size: 11px;
     color: #cbbfa6;
-    background: transparent;
-    border: 1px solid #4a3b32;
-    border-radius: 4px;
-    padding: 2px 6px;
-    cursor: pointer;
+    white-space: nowrap;
   }
   .witch-key kbd {
     color: #8d7b68;
     font: inherit;
     letter-spacing: 0;
   }
-  .witch-key:hover:not(:disabled) {
-    color: #e6d3b0;
-    border-color: #7a2e24;
-  }
-  .witch-key.lit {
-    color: #e2b657;
-    border-color: #7a5a28;
-  }
-  .witch-key:disabled {
-    opacity: .38;
-    cursor: default;
-  }
+  .witch-key.lit, .witch-key.lit kbd { color: #e2b657; }
+  .witch-key.quiet { opacity: .38; }
   .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
   .ee-wrap:fullscreen {
     width: 100% !important;
@@ -125,11 +103,17 @@ When she wakes, she draws herself in the glass's own colors, hat first. The same
 
 A line with a number is stored. A line without one runs now. That is the C64 way, and she kept it. `RUN` starts at the top. The programs live in `shelf/`, and the names end in `.wasic`. `SHELF` opens the box. The arrows move. Enter takes one down and leaves it sitting there, so a line number can change it. `UNSEAL "shelf:HELLO-WITCH"` still types the long way. `HELLO-DEMON` is the other hello. `ANSI-WITCH` paints her in the glass's own colors. `LIST` shows the lines, numbers in yellow. `REVEAL` is the quiet copy. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. PEEK, POKE, and SYS sit in a line if you type them. When she reaches them she complains, in red, with a mark, and the glass rings. She does not answer to READY. When the glass says SPEAK, the turn is yours.
 
-Under the glass, the bezel names the mood and the lines. Beside that, six keys: LIST, RUN, SHELF, SCRUB, MAGIC, EXORCISE. They are Alt+Shift and a letter, the chords a browser leaves alone. MAGIC numbers the next lines. AUTO is the same word. EXORCISE drives BASIC out of a listing and leaves the sums where they are. An empty circle opens the desk for a file. UPLOAD still reads a file as it stands.
+Under the glass, the bezel names the mood and the lines. Beside that, the keys. An emoji, a word, then the function key. Nothing there is a button. The mouse is not plugged in.
+
+📜 LIST F1. 🕯️ RUN F2. 📚 SHELF F3. 🧹 SCRUB F4. ✨ MAGIC F5. 🌑 EXORCISE F6. 🔒 LATCH F7. ⛶ FULL F11.
+
+MAGIC numbers the next lines. AUTO is the same word. EXORCISE drives BASIC out of a listing and leaves the sums where they are. An empty circle opens the desk for a file. UPLOAD still reads a file as it stands.
+
+LATCH is the scroll lock. She wakes latched. Up walks the lines that rolled off the glass, six hundred and sixty-six of them. Down walks back to the pen. Page Up and Page Down move a glassful. While a program runs, the glass is text again, and the arrows belong to the program. LATCH OFF, and Up recalls what you typed.
 
 Escape ends a working that will not end. Ctrl-C does too, if you were raised on the other machines. The pale bar blinks from the moment the glass is dark, before she bothers to introduce herself.
 
-Click the glass once if the two notes stay buried. They are low, a fifth apart. The browser holds sound until a hand arrives. A refusal is two notes going down.
+Press a key if the two notes stay buried. They are low, a fifth apart. The browser holds sound until a key arrives. A refusal is two notes going down.
 
 The walls are written in [SYSTEM.md]({{ '/SYSTEM.md' | relative_url }}). She keeps them.
 

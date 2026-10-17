@@ -18,6 +18,8 @@ She is kin to the 40-column machines: a line with a number is stored, a line wit
 
 A mark that falls off the glass is ignored. AT clamps onto the glass. The caret is a pale bar and it blinks, including while the glass is still black.
 
+Lines that roll off the top are kept. The wall is 666. Older than that, they are gone. Clearing the glass forgets them. Ctrl-Up and Ctrl-Down recall the last 32 lines even while the glass is latched. At SPEAK, at AUTO, and while DEMAND waits, the glass starts latched: Up and Down walk those lines, Page Up and Page Down move a glassful, Home is the oldest line still kept, and End sits on the pen. `LATCH` turns the hold on. `LATCH OFF` opens it, and then Up and Down recall the last 32 lines sent. F7 and Scroll Lock do what `LATCH` does. While a program runs, the glass is text. The arrows go to the program. The mouse is not a device on this machine.
+
 The pen has sixteen colors, 0 through 15.
 
 | n | Color | n | Color |

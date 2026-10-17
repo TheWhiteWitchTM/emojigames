@@ -30,7 +30,7 @@ SPEAK.
 
 The frame is green. The name is white. WASIC · ONE is green. 40 COLUMN GLASS is faint. The count, and 666 LINES FREE, are the color of a low candle. The waking lines are ash. The line about BASIC is dark red. SPEAK is white. What you type after that is ash, until a program runs.
 
-The two notes are low, a fifth apart. Then she fades, and the words roll to the top of the glass. Click the glass once if the notes stay silent. The browser holds the sound until a hand arrives.
+The two notes are low, a fifth apart. Then she fades, and the words roll to the top of the glass. Press a key if the notes stay silent. The browser holds the sound until a key arrives. The mouse is not a device here. The pointer is hidden over the glass, and a click does nothing.
 
 A refusal is red, with a mark in front of the words, and two notes going down. ENOUGH is candle-colored, and those two notes are softer. A line that will not take another character only clicks.
 
@@ -47,23 +47,30 @@ The bezel under the glass names the mood, then the lines in use.
 | WAITING | DEMAND wants an answer |
 | AUTO n | Numbering for you |
 | FROZEN | FREEZE is holding still |
+| GAZE n | The glass is latched, n lines above the pen |
 
-Under that, six keys. The bar says Alt+Shift once, and each key carries its letter. A browser does not take those chords for tabs, reload, find, or the address line. Ctrl stays with the browser, and with Ctrl-C, which still stops a working. Alt alone is back, forward, and the menu. She does not use those.
+Under that, the keys. Each one is an emoji, a word, and a function key. They are not buttons. F5 is hers, not the browser's reload. F11 fills the screen with the glass.
 
-| Chord | What it does |
+| Key | What it does |
 | --- | --- |
-| Alt+Shift+L | LIST |
-| Alt+Shift+R | RUN |
-| Alt+Shift+S | SHELF |
-| Alt+Shift+C | SCRUB. The letters go. The minions stay |
-| Alt+Shift+M | MAGIC. The same as AUTO. Again, and the numbering stops |
-| Alt+Shift+X | EXORCISE |
+| 📜 LIST F1 | LIST |
+| 🕯️ RUN F2 | RUN |
+| 📚 SHELF F3 | SHELF |
+| 🧹 SCRUB F4 | SCRUB. The letters go, and so do the lines that had rolled off. The minions stay |
+| ✨ MAGIC F5 | MAGIC. The same as AUTO. Again, and the numbering stops |
+| 🌑 EXORCISE F6 | EXORCISE |
+| 🔒 LATCH F7 | Scroll lock. Scroll Lock does this too |
+| ⛶ FULL F11 | The glass fills the screen. F11 again sits it back on the page. Escape leaves a full screen too, because the browser keeps that key |
 
-The bar is quiet while she runs, while she waits, and while the shelf is open. A click does what the chord does. While MAGIC is numbering, the bar still lists, clears, and exorcises. Typing those words on the numbered line stores them, the way RUN would. The bar does the thing.
+The bar is quiet while she runs, and while the shelf is open. LATCH stays lit while she is latched at SPEAK, at AUTO, and while DEMAND waits. While MAGIC is numbering, the bar still lists, clears, exorcises, and latches. Typing those words on the numbered line stores them, the way RUN would. The function key does the thing.
 
 ## Typing
 
-The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, the arrows, Home, and End edit the line. Up and Down walk the last 32 lines you sent. A line holds 255 characters, and one emoji is one. Past that she clicks once and takes no more.
+The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, Left, and Right edit the line. A line holds 255 characters, and one emoji is one. Past that she clicks once and takes no more.
+
+She wakes latched. That is the scroll lock, and the word is LATCH. Lines that roll off the top are kept, 666 of them. Up and Down walk those lines. Page Up and Page Down move a glassful, leaving one row so you can see where you were. Home is the oldest line still kept. End sits on the pen. A key that writes also sits on the pen, so the line you were typing is still there. The bezel says GAZE and how far above the pen you are. Ctrl-Up and Ctrl-Down still recall the last 32 lines you sent.
+
+`LATCH` turns the hold on. `LATCH ON` does that too. `LATCH OFF`, or `LATCH` again, opens the glass. Then Up and Down recall, the way a shell does, and Page Up only clicks. Home and End edit the line. F7 and the Scroll Lock key do what the bare word does, without printing a line. The same hold is on while DEMAND waits, so you can walk up and read the question. AUTO keeps it. A program does not. While she runs, the arrows are hers, and the glass is text.
 
 While the shelf is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter unseals the name under the mark. Escape leaves, and she says `FINE. THE SHELF CAN WAIT.` The caret stays dark until the shelf closes.
 
@@ -141,6 +148,9 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | HOME | She says SCRUB. NOT HOME. Then the glass is clean |
 | EXORCISE | Drive BASIC out of the lines in the circle. The sums stay |
 | EXORCISE, and the circle is empty | Open the desk for a listing. Cancel returns to SPEAK with no further speech |
+| LATCH | Toggle the scroll lock |
+| LATCH ON | Up walks the lines that rolled off |
+| LATCH OFF | Up and Down recall the last 32 lines you sent |
 
 An empty REVEAL prints nothing. OBLITERATE with no range is `❓ NO. SAY IT AGAIN.`
 
@@ -174,7 +184,7 @@ DOWNLOAD of an empty program says 📭 NOTHING TO RUN. SEAL of an empty program 
 
 ## Running
 
-RUN clears the variables, the loops, the calls, the offering pointer, the watch, and the minions. The pen turns green on black for the working. The letters already on the glass stay until SCRUB, or until they scroll off. When she stops, the pen returns to ash.
+RUN clears the variables, the loops, the calls, the offering pointer, the watch, and the minions. The pen turns green on black for the working. The letters already on the glass stay until SCRUB, or until they scroll off. What scrolls off is kept until the 666 are full, or until the glass is scrubbed. While she runs, that memory is not a window. The glass is text, and the arrows belong to the program. When she stops, the pen returns to ash, and the latch is how you walk back up.
 
 A bare FLYTO or SUMMON at SPEAK walks into the program and leaves the variables where they sit.
 
@@ -524,7 +534,7 @@ A file with no line numbers is numbered from 10, step 10. A bare line among numb
 
 An empty circle opens the desk. `.BAS`, `.BASIC`, `.TXT`, or `.WASIC`. She drives the BASIC out and leaves the lines sitting there. She does not run them. Cancel says nothing more. UPLOAD still reads a file as it stands. A listing that is already WASIC comes in as itself, and she says ALREADY WASIC.
 
-The bar's EXORCISE does this. Alt+Shift+X does this. So does the word.
+The bar's EXORCISE does this. F6 does this. So does the word.
 
 ## The box
 

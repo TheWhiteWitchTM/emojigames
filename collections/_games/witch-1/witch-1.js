@@ -8,6 +8,7 @@
   var MAX_LINE = 63999;
   var LINE_CHARS = 255;
   var HIST_MAX = 32;
+  var BACK_MAX = 666;
   var KEY_MAX = 32;
   var MINIONS = 32;
   var HITS = 8;
@@ -72,42 +73,52 @@
   mood.className = "witch-mood";
   mood.append(led, statusEl);
   var toolByKey = {};
-  var toolButtons = [];
+  var toolHints = [];
   var TOOLS = [
-    { act: "list", key: "L", label: "LIST", hint: "List the lines" },
-    { act: "run", key: "R", label: "RUN", hint: "Run the program" },
-    { act: "shelf", key: "S", label: "SHELF", hint: "Open the shelf" },
-    { act: "scrub", key: "C", label: "SCRUB", hint: "Clear the glass" },
-    { act: "magic", key: "M", label: "MAGIC", hint: "Number the next lines. AUTO does this too" },
-    { act: "exorcise", key: "X", label: "EXORCISE", hint: "Turn BASIC into WASIC. An empty circle takes a file" }
+    { act: "list", key: "F1", emoji: "📜", label: "LIST" },
+    { act: "run", key: "F2", emoji: "🕯️", label: "RUN" },
+    { act: "shelf", key: "F3", emoji: "📚", label: "SHELF" },
+    { act: "scrub", key: "F4", emoji: "🧹", label: "SCRUB" },
+    { act: "magic", key: "F5", emoji: "✨", label: "MAGIC" },
+    { act: "exorcise", key: "F6", emoji: "🌑", label: "EXORCISE" },
+    { act: "latch", key: "F7", emoji: "🔒", label: "LATCH" }
   ];
   var bar = document.createElement("div");
   bar.className = "witch-bar";
-  bar.setAttribute("role", "toolbar");
-  bar.setAttribute("aria-label", "Spells");
-  var legend = document.createElement("span");
-  legend.className = "witch-mod";
-  legend.textContent = "Alt+Shift";
-  bar.append(legend);
+  bar.setAttribute("aria-label", "Keys");
   TOOLS.forEach(function (spec) {
     toolByKey[spec.key] = spec.act;
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "witch-key";
-    btn.dataset.act = spec.act;
-    btn.title = spec.hint + ". Alt+Shift+" + spec.key;
-    btn.setAttribute("aria-keyshortcuts", "Alt+Shift+" + spec.key);
-    btn.append(document.createTextNode(spec.label + " "));
+    var hint = document.createElement("span");
+    hint.className = "witch-key";
+    hint.dataset.act = spec.act;
+    hint.append(document.createTextNode(spec.emoji + " " + spec.label + " "));
     var kbd = document.createElement("kbd");
     kbd.textContent = spec.key;
-    btn.append(kbd);
-    btn.addEventListener("mousedown", function (event) { event.preventDefault(); });
-    btn.addEventListener("click", function () { invokeTool(spec.act); });
-    toolButtons.push(btn);
-    bar.append(btn);
+    hint.append(kbd);
+    toolHints.push(hint);
+    bar.append(hint);
   });
   ui.footer.textContent = "";
   ui.footer.append(mood, bar);
+  var fsBtn = ui.wrap.querySelector(".ee-fullscreen");
+  var fsHint = document.createElement("span");
+  fsHint.className = "witch-key";
+  fsHint.append(document.createTextNode("⛶ FULL "));
+  var fsKbd = document.createElement("kbd");
+  fsKbd.textContent = "F11";
+  fsHint.append(fsKbd);
+  if (fsBtn) fsBtn.replaceWith(fsHint);
+  ui.wrap.style.cursor = "none";
+  canvasEl.style.cursor = "none";
+  crt.style.cursor = "none";
+  function eatMouse(event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  ["mousedown", "mouseup", "click", "dblclick", "auxclick", "contextmenu", "dragstart"].forEach(function (name) {
+    ui.wrap.addEventListener(name, eatMouse, true);
+  });
+  ui.wrap.addEventListener("wheel", eatMouse, { capture: true, passive: false });
 
   var mode = "boot";
   var shelfState = "";
@@ -129,6 +140,9 @@
   var hist = [];
   var histAt = -1;
   var stash = "";
+  var back = [];
+  var gaze = 0;
+  var latch = true;
   var busy = false;
   var holdPrompt = false;
   var demandResolve = null;
@@ -153,15 +167,19 @@
     else if (mode === "demand") state = "WAITING";
     else if (mode === "freeze") state = "FROZEN";
     else if (mode === "auto") state = "AUTO " + auto.num;
+    if (gaze > 0 && (mode === "ready" || mode === "auto" || mode === "demand")) state = "GAZE " + gaze;
     statusEl.textContent = state + " " + used + "/666";
-    var live = mode === "ready" || mode === "auto";
-    for (var b = 0; b < toolButtons.length; b += 1) {
-      var btn = toolButtons[b];
-      btn.disabled = !live;
-      if (btn.dataset.act === "magic") {
-        btn.classList.toggle("lit", !!auto.on);
-        btn.setAttribute("aria-pressed", auto.on ? "true" : "false");
-      }
+    var speaking = mode === "ready" || mode === "auto";
+    var editing = speaking || mode === "demand";
+    for (var b = 0; b < toolHints.length; b += 1) {
+      var hint = toolHints[b];
+      var act = hint.dataset.act;
+      var usable = act === "latch" ? editing : speaking;
+      var on = false;
+      if (act === "latch") on = editing && latch;
+      if (act === "magic") on = !!auto.on && speaking;
+      hint.classList.toggle("quiet", !usable);
+      hint.classList.toggle("lit", on);
     }
   }
 
@@ -287,16 +305,151 @@
     else errorSound();
   }
 
-  function scrollOne() {
-    term.cells.shift();
+  function cloneCell(cell) {
+    var copy = {};
+    for (var k in cell) {
+      if (!Object.prototype.hasOwnProperty.call(cell, k)) continue;
+      var v = cell[k];
+      copy[k] = v && typeof v === "object" ? { r: v.r, g: v.g, b: v.b } : v;
+    }
+    return copy;
+  }
+
+  function blankGlassRow() {
     var row = [];
     for (var c = 0; c < COLS; c += 1) row.push({ ch: " " });
-    term.cells.push(row);
+    return row;
+  }
+
+  function rememberTop() {
+    if (!term.cells.length) return;
+    var row = term.cells[0];
+    var copy = new Array(row.length);
+    for (var i = 0; i < row.length; i += 1) copy[i] = cloneCell(row[i]);
+    back.push(copy);
+    if (back.length > BACK_MAX) {
+      back.shift();
+      if (gaze > 0) gaze -= 1;
+    }
+    if (gaze > back.length) gaze = back.length;
+    if (gaze < 0) gaze = 0;
+  }
+
+  function shiftGlass() {
+    term.cells.shift();
+    term.cells.push(blankGlassRow());
     term.cursor.row = Math.max(0, term.cursor.row - 1);
     if (origin) origin.row = Math.max(0, origin.row - 1);
     term.dirty = true;
     term.flush();
   }
+
+  function scrollOne() {
+    rememberTop();
+    shiftGlass();
+  }
+
+  function reading() {
+    return gaze > 0 && (mode === "ready" || mode === "auto" || mode === "demand");
+  }
+
+  function composedRows() {
+    var live = term.cells;
+    var total = back.length + live.length;
+    var start = total - ROWS - gaze;
+    if (start < 0) start = 0;
+    var out = [];
+    for (var i = 0; i < ROWS; i += 1) {
+      var idx = start + i;
+      if (idx < back.length) out.push(back[idx]);
+      else {
+        var liveAt = idx - back.length;
+        out.push(liveAt >= 0 && liveAt < live.length ? live[liveAt] : blankGlassRow());
+      }
+    }
+    return out;
+  }
+
+  function showGaze() {
+    term.dirty = true;
+    term.flush();
+    updateFooter();
+  }
+
+  function gazeBy(delta) {
+    var max = back.length;
+    if (max < 1) { term.bell(); return; }
+    var next = gaze + delta;
+    if (next < 0) next = 0;
+    if (next > max) next = max;
+    if (next === gaze) { term.bell(); return; }
+    gaze = next;
+    showGaze();
+  }
+
+  function gazeTop() {
+    if (!back.length || gaze === back.length) { term.bell(); return; }
+    gaze = back.length;
+    showGaze();
+  }
+
+  function gazeLive() {
+    if (gaze === 0) { term.bell(); return; }
+    gaze = 0;
+    showGaze();
+  }
+
+  function sit() {
+    if (gaze === 0) return;
+    gaze = 0;
+    showGaze();
+  }
+
+  var paintLive = term.draw.bind(term);
+  term.draw = function (ctx, camera) {
+    if (!reading()) {
+      paintLive(ctx, camera);
+      return;
+    }
+    var savedCells = this.cells;
+    var savedLit = this.cursorLit;
+    this.cells = composedRows();
+    this.cursorLit = false;
+    try { paintLive(ctx, camera); }
+    finally {
+      this.cells = savedCells;
+      this.cursorLit = savedLit;
+    }
+  };
+
+  term.scrollIntoView = function () {
+    while (this.cursor.row >= this.rows) {
+      rememberTop();
+      shiftGlass();
+    }
+    if (this.cursor.row < 0) this.cursor.row = 0;
+    if (this.cursor.col < 0) this.cursor.col = 0;
+    if (this.cursor.col > this.cols) this.cursor.col = this.cols;
+    this.dirty = true;
+  };
+
+  term.scrollUp = function (count) {
+    var lines = Math.min(Math.max(0, count | 0), this.rows);
+    for (var i = 0; i < lines; i += 1) {
+      rememberTop();
+      this.cells.shift();
+      this.cells.push(blankGlassRow());
+      if (origin) origin.row = Math.max(0, origin.row - 1);
+    }
+    this.dirty = true;
+  };
+
+  var wipeGlass = term.clear.bind(term);
+  term.clear = function () {
+    back.length = 0;
+    gaze = 0;
+    wipeGlass();
+  };
 
   function paintEntry() {
     var text = cp(promptText + entry);
@@ -364,6 +517,7 @@
   }
 
   function promptReady() {
+    sit();
     auto.on = false;
     mode = "ready";
     if (term.cursor.col !== 0) writeRaw("\n");
@@ -374,6 +528,7 @@
   }
 
   function waitSpeak() {
+    sit();
     auto.on = false;
     mode = "ready";
     setPen(7, 0);
@@ -657,7 +812,11 @@
       "RENUMBER VANISH AUTO MAGIC",
       "SEAL UNSEAL UPLOAD",
       "DOWNLOAD SHELF GRIMOIRE",
-      "EXORCISE",
+      "EXORCISE LATCH",
+      "",
+      "LATCH HOLDS THE GLASS.",
+      "UP WALKS WHAT ROLLED OFF.",
+      "LATCH OFF, AND UP RECALLS.",
       "",
       "UNSEAL \"shelf:HELLO-WITCH\"",
       "OR SHELF, AND POINT.",
@@ -704,7 +863,7 @@
     var word = m[1].toUpperCase();
     var known = {
       REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
-      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, EXORCISE: 1,
+      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, EXORCISE: 1, LATCH: 1,
       LIST: 1, NEW: 1, LOAD: 1, SAVE: 1, CLS: 1, HOME: 1
     };
     if (!known[word]) return false;
@@ -781,7 +940,19 @@
     if (word === "DOWNLOAD") { return doDownload(rest); }
     if (word === "UPLOAD") { return doUpload(); }
     if (word === "SHELF") { return doShelf(); }
+    if (word === "LATCH") { return doLatch(rest); }
     return false;
+  }
+
+  function doLatch(rest) {
+    if (!rest) latch = !latch;
+    else if (/^ON$/i.test(rest)) latch = true;
+    else if (/^OFF$/i.test(rest)) latch = false;
+    else { fault(say("syntax")); return true; }
+    if (!latch) sit();
+    writeRaw(latch ? "LATCHED. THE GLASS HOLDS.\n" : "OPEN. THE ARROWS RECALL.\n");
+    updateFooter();
+    return true;
   }
 
   function doRun(rest) {
@@ -1045,9 +1216,26 @@
     return pickBasic();
   }
 
+  function toggleLatch() {
+    if (mode !== "ready" && mode !== "auto" && mode !== "demand") {
+      term.bell();
+      return;
+    }
+    latch = !latch;
+    if (!latch) sit();
+    tone(latch ? 494 : 262, 50, 0.03);
+    updateFooter();
+  }
+
+  function toggleFull() {
+    var request = document.fullscreenElement ? document.exitFullscreen() : ui.wrap.requestFullscreen();
+    Promise.resolve(request).catch(function () {});
+  }
+
   async function invokeTool(act) {
     if (busy || holdKeys || holdPrompt) return;
     if (mode !== "ready" && mode !== "auto") return;
+    sit();
     if (entry) {
       entry = "";
       caret = 0;
@@ -1095,13 +1283,6 @@
         updateFooter();
       } else promptReady();
     }
-  }
-
-  function chordLetter(event) {
-    if (!event.altKey || !event.shiftKey || event.ctrlKey || event.metaKey || event.repeat) return "";
-    var code = event.code || "";
-    if (code.length === 4 && code.slice(0, 3) === "Key") return code.charAt(3);
-    return "";
   }
 
   function fitCells(text, width) {
@@ -1312,6 +1493,7 @@
   }
 
   async function handleLine(line, flags) {
+    sit();
     mode = "run";
     updateFooter();
     var stayAuto = false;
@@ -1472,10 +1654,31 @@
         entry = "";
         caret = 0;
         submitEntry();
+        return;
+      }
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+        sit();
+        recall(event.key === "ArrowUp" ? -1 : 1);
       }
       return;
     }
     var key = event.key;
+    if (latch && (key === "ArrowUp" || key === "ArrowDown" || key === "PageUp" || key === "PageDown" || key === "Home" || key === "End")) {
+      event.preventDefault();
+      if (key === "ArrowUp") gazeBy(1);
+      else if (key === "ArrowDown") gazeBy(-1);
+      else if (key === "PageUp") gazeBy(ROWS - 1);
+      else if (key === "PageDown") gazeBy(1 - ROWS);
+      else if (key === "Home") {
+        if (back.length) gazeTop();
+        else { caret = 0; paintEntry(); }
+      } else if (gaze > 0) gazeLive();
+      else { caret = cp(entry).length; paintEntry(); }
+      return;
+    }
+    if (gaze) sit();
+    if (key === "PageUp" || key === "PageDown") { event.preventDefault(); term.bell(); return; }
     if (key === "Enter") { event.preventDefault(); submitEntry(); return; }
     if (key === "Backspace") {
       event.preventDefault();
@@ -1527,14 +1730,24 @@
 
   window.addEventListener("keydown", function (event) {
     if (typingTarget(event)) return;
-    var chord = chordLetter(event);
-    if (chord && toolByKey[chord]) {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.key === "F11") {
       event.preventDefault();
       event.stopPropagation();
-      unlock();
-      invokeTool(toolByKey[chord]);
+      if (!event.repeat) toggleFull();
       return;
     }
+    var act = toolByKey[event.key];
+    var scrollKey = event.key === "ScrollLock";
+    if (!act && !scrollKey) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.repeat) return;
+    unlock();
+    if (holdKeys || mode === "boot") return;
+    if (scrollKey || act === "latch") { toggleLatch(); return; }
+    if (mode !== "ready" && mode !== "auto") { term.bell(); return; }
+    invokeTool(act);
   }, true);
 
   window.addEventListener("keydown", function (event) {
@@ -1583,8 +1796,6 @@
     }
   }
 
-  crt.addEventListener("pointerdown", unlock);
-
   function sleep(ms) {
     return new Promise(function (r) { setTimeout(r, ms); });
   }
@@ -1622,10 +1833,11 @@
   }
 
   function rollUp(rows) {
+    // Blank rows leaving as she wakes. Not a listing, so they are not kept.
     var i = 0;
     function step() {
       if (i >= rows) return Promise.resolve();
-      scrollOne();
+      shiftGlass();
       i += 1;
       return sleep(20).then(step);
     }
@@ -1764,7 +1976,21 @@
     term: term,
     engine: engine,
     wasic: wasic,
-    get mode() { return mode; }
+    get mode() { return mode; },
+    get gaze() { return gaze; },
+    get latch() { return latch; },
+    get kept() { return back.length; },
+    glass: function () {
+      var rows = reading() ? composedRows() : term.cells;
+      var out = [];
+      for (var r = 0; r < rows.length; r += 1) {
+        var line = "";
+        var cells = rows[r];
+        for (var c = 0; c < cells.length; c += 1) line += cells[c].ch || " ";
+        out.push(line.replace(/\s+$/, ""));
+      }
+      return out;
+    }
   };
 
   boot();
