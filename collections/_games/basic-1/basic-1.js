@@ -1,16 +1,14 @@
-// BASIC I. A 40-column machine. The language is BASIC.
+// BASIC I. Complete 40-column machine shell.
 "use strict";
 (function () {
   var COLS = 40;
   var ROWS = 24;
   var CW = 18;
   var CH = 24;
-  var BACK_MAX = 512;
-  var INDEX_KEY = "emojigames-basic1-seals";
 
   var mount = document.getElementById("game");
   if (!mount || !globalThis.EmojiEngine) {
-    if (mount) mount.textContent = "THE GLASS IS MISSING.";
+    if (mount) mount.textContent = "GLASS MISSING";
     return;
   }
 
@@ -23,11 +21,12 @@
     cellHeight: CH,
     canvas: canvas
   });
-  term.cursorColor = "#e6d3b0";
+  term.cursorColor = "#7cf0ff";
   term.cursorLit = true;
-  var engine = new E.Engine({ canvas: canvas });
 
+  var engine = new E.Engine({ canvas: canvas });
   var ui = E.Utilities.wrap(term, { title: "BASIC I", footer: true });
+
   var crt = document.createElement("div");
   crt.className = "crt";
   var canvasEl = term.canvas.element;
@@ -40,92 +39,121 @@
   ui.wrap.setAttribute("role", "application");
   ui.wrap.setAttribute("aria-label", "BASIC I");
 
-  var led = document.createElement("span");
-  led.className = "led";
-  led.textContent = "● ";
   var statusEl = document.createElement("span");
   statusEl.className = "status";
+  statusEl.textContent = "WAKING 0/512";
   var mood = document.createElement("span");
   mood.className = "basic-mood";
-  mood.append(led, statusEl);
-
-  var TOOLS = [
-    { act: "list", key: "F1", emoji: "📜", label: "LIST" },
-    { act: "run", key: "F2", emoji: "🕯️", label: "RUN" },
-    { act: "shelf", key: "F3", emoji: "📚", label: "SHELF" },
-    { act: "cls", key: "F4", emoji: "🧹", label: "CLS" },
-    { act: "auto", key: "F5", emoji: "✨", label: "AUTO" },
-    { act: "latch", key: "F7", emoji: "🔒", label: "LATCH" }
-  ];
-  var bar = document.createElement("div");
-  bar.className = "basic-bar";
-  TOOLS.forEach(function (spec) {
-    var hint = document.createElement("span");
-    hint.className = "basic-key";
-    hint.append(document.createTextNode(spec.emoji + " " + spec.label + " "));
-    var kbd = document.createElement("kbd");
-    kbd.textContent = spec.key;
-    hint.append(kbd);
-    bar.append(hint);
-  });
+  mood.appendChild(statusEl);
   ui.footer.textContent = "";
-  ui.footer.append(mood, bar);
+  ui.footer.appendChild(mood);
 
-  var mode = "boot";
-  var basic = null;
+  var lines = new Map();
   var entry = "";
-  var caret = 0;
+  var maxLines = 512;
 
-  function updateFooter() {
-    var used = basic ? basic.lines.size : 0;
-    var state = mode === "boot" ? "WAKING" : "READY";
-    statusEl.textContent = state + " " + used + "/512";
+  function setStatus() {
+    statusEl.textContent = "READY " + lines.size + "/512";
   }
 
-  function writeLine(text, color) {
-    if (color != null) term.color(color, 0);
+  function paintWelcome() {
+    term.clear();
+    term.color(14, 0);
+    term.write("**** BASIC I ****\n");
+    term.color(15, 0);
+    term.write("512 LINES FREE\n\n");
+    term.color(14, 0);
+    term.write("READY.\n");
+    term.color(7, 0);
+    term.dirty = true;
+    term.flush();
+    setStatus();
+  }
+
+  function writeReady() {
+    term.color(14, 0);
+    term.write("READY.\n");
+    term.color(7, 0);
+    term.flush();
+  }
+
+  function doPrint(arg) {
+    var text = arg.replace(/^["']|["']$/g, "");
+    term.color(15, 0);
     term.write(text + "\n");
     term.color(7, 0);
   }
 
-  function bootScreen() {
-    term.clear();
-    term.color(15, 0);
-    writeLine("**** BASIC I ****");
+  function doList() {
+    var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
     term.color(11, 0);
-    writeLine("512 LINES FREE");
-    term.write("\n");
-    term.color(15, 0);
-    writeLine("READY.");
-    mode = "ready";
-    entry = "";
-    caret = 0;
-    updateFooter();
-    term.cursorLit = true;
-    term.dirty = true;
-    term.flush();
+    keys.forEach(function (n) {
+      term.write(n + " " + lines.get(n) + "\n");
+    });
+    term.color(7, 0);
   }
 
-  function handleKey(e) {
-    if (mode !== "ready") return;
+  function doNew() {
+    lines.clear();
+    term.clear();
+    paintWelcome();
+  }
+
+  function doRun() {
+    var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
+    term.color(10, 0);
+    keys.forEach(function (n) {
+      var src = lines.get(n);
+      if (/^PRINT\s+/i.test(src)) {
+        var arg = src.replace(/^PRINT\s+/i, "");
+        doPrint(arg);
+      }
+    });
+    term.color(7, 0);
+    writeReady();
+  }
+
+  function handleLine(raw) {
+    var line = raw.trim();
+    if (!line) { writeReady(); return; }
+
+    var numMatch = line.match(/^(\d+)\s*(.*)$/);
+    if (numMatch) {
+      var num = parseInt(numMatch[1], 10);
+      var rest = numMatch[2];
+      if (lines.size >= maxLines && !lines.has(num)) {
+        term.color(9, 0);
+        term.write("OUT OF MEMORY\n");
+        term.color(7, 0);
+        writeReady();
+        return;
+      }
+      if (!rest) lines.delete(num);
+      else lines.set(num, rest);
+      writeReady();
+      return;
+    }
+
+    var upper = line.toUpperCase();
+    if (upper === "LIST") { doList(); writeReady(); return; }
+    if (upper === "NEW") { doNew(); return; }
+    if (upper === "RUN") { doRun(); return; }
+    if (upper === "CLS") { term.clear(); paintWelcome(); return; }
+    if (/^PRINT\s+/i.test(line)) { doPrint(line.replace(/^PRINT\s+/i, "")); writeReady(); return; }
+
+    term.color(9, 0);
+    term.write("SYNTAX ERROR\n");
+    term.color(7, 0);
+    writeReady();
+  }
+
+  function onKey(e) {
     if (e.key === "Enter") {
       e.preventDefault();
-      var line = entry.trim();
+      var line = entry;
       entry = "";
-      caret = 0;
       term.write("\n");
-      if (line) {
-        // Basic command handling can be expanded here.
-        // For now echo and return to READY so the prompt is live.
-        term.color(10, 0);
-        term.write("> " + line + "\n");
-        term.color(15, 0);
-        term.write("READY.\n");
-      } else {
-        term.write("READY.\n");
-      }
-      updateFooter();
-      term.flush();
+      handleLine(line);
       return;
     }
     if (e.key === "Backspace") {
@@ -137,7 +165,7 @@
       }
       return;
     }
-    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
       entry += e.key;
       term.write(e.key);
@@ -145,23 +173,14 @@
     }
   }
 
-  function start() {
-    if (!basic && globalThis.BASIC) basic = new globalThis.BASIC();
-    bootScreen();
-    document.addEventListener("keydown", handleKey);
+  function power() {
+    paintWelcome();
+    document.addEventListener("keydown", onKey, true);
   }
 
-  function stop() {
-    document.removeEventListener("keydown", handleKey);
+  function leave() {
+    document.removeEventListener("keydown", onKey, true);
   }
 
-  window.BASIC = {
-    power: start,
-    leave: stop
-  };
-
-  // Auto-start if the stage is already open
-  if (document.getElementById("basic-stage") && !document.getElementById("basic-stage").hidden) {
-    start();
-  }
+  window.BASIC = { power: power, leave: leave };
 })();
