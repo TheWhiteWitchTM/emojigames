@@ -34,8 +34,10 @@ class Monster {
     const nx = this.x + dx;
     const ny = this.y + dy;
     if (nx === player.x && ny === player.y) {
-      const hit = 1 + Math.floor(Math.random() * this.dmg);
+      const soak = player.armor ? player.armor.bonus : 0;
+      const hit = Math.max(0, 1 + Math.floor(Math.random() * this.dmg) - soak);
       player.hp -= hit;
+      if (!hit) return `Your armor turns the ${this.name}'s blow.`;
       return `${this.emoji} ${this.name} hits you for ${hit}.`;
     } else if (level.isWalkable(nx, ny) && !level.getMonsterAt(nx, ny)) {
       this.x = nx;

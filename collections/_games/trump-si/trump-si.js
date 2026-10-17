@@ -77,35 +77,11 @@ class TrumpSI {
     if (!img) {
       img = document.createElement("img");
       img.id = "trump-face";
-      img.style.cssText = `
-        position: absolute;
-        top: 116px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 130px;
-        height: 130px;
-        object-fit: cover;
-        border-radius: 14px;
-        border: 3px solid #ff8c00;
-        box-shadow: 0 0 12px #ff8c00;
-        z-index: 10;
-        pointer-events: none;
-      `;
-      this.term.wrap.style.position = "relative";
-      this.term.wrap.appendChild(img);
+      img.alt = "";
+      img.style.cssText = "height:64px;width:64px;object-fit:cover;border-radius:10px;border:2px solid #ff8c00;box-shadow:0 0 10px #ff8c00;";
+      if (this.term.headerMiddle) this.term.headerMiddle.appendChild(img);
     }
-    const file = this.faceMap[mood] || this.faceMap.neutral;
-    img.src = file;
-  }
-
-  // First row of dialogue, under the face rather than over it.
-  textTop() {
-    const img = document.getElementById("trump-face");
-    const canvas = this.term.canvas;
-    if (!img || !canvas) return 14;
-    const covered = (img.offsetTop + img.offsetHeight) - canvas.offsetTop;
-    const row = Math.ceil(covered / this.term.charH) + 1;
-    return Math.max(0, Math.min(row, this.term.rows - 8));
+    img.src = this.faceMap[mood] || this.faceMap.neutral;
   }
 
   reply(input) {
@@ -149,7 +125,7 @@ class TrumpSI {
   redraw(latest) {
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, this.textTop());
+    this.term.moveTo(0, 1);
     this.term.setFg(15);
     this.term.write("YOU: ");
     this.term.resetAttr();
@@ -173,7 +149,7 @@ class TrumpSI {
     this.mood = "happy";
     this.showFace(this.mood);
     this.term.clear();
-    this.term.moveTo(0, this.textTop());
+    this.term.moveTo(0, 1);
     this.term.setFg(3);
     this.term.setBright(true);
     this.term.write("TRUMP SI: ");
@@ -193,18 +169,22 @@ useEffect(() => {
   const container = document.getElementById('game');
   if (!container) return;
 
-  const term = new Terminal({ border: '#ff8c00', fg: '#ffffff' });
+  const term = new Glass({
+    cols: 72,
+    rows: 22,
+    title: '🤖 Trump Super Intelligence',
+    border: '#ff8c00',
+    footer: 'Type a line. Return sends it.'
+  });
   container.appendChild(term.wrap);
   term.focus();
 
   const bot = new TrumpSI(term);
 
   function onKey(e) {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" || e.key === "NumpadEnter") {
       e.preventDefault();
-      if (bot.inputBuffer.trim()) {
-        bot.reply(bot.inputBuffer.trim());
-      }
+      if (bot.inputBuffer.trim()) bot.reply(bot.inputBuffer.trim());
     } else if (e.key === "Backspace") {
       e.preventDefault();
       if (bot.inputBuffer.length) {
@@ -220,6 +200,8 @@ useEffect(() => {
     }
   }
 
-  term.wrap.addEventListener("keydown", onKey);
+  term.onKey(onKey);
   bot.start();
+
+  return () => term.destroy();
 });

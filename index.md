@@ -26,19 +26,32 @@ Argue with the code, not the caption.
 
 ---
 
-## On the shelf
+## Featured
 
-Click one and play it in the browser. The [catalog]({{ '/games/' | relative_url }}) can be searched and filtered. The [release notes]({{ '/releases/' | relative_url }}) are the log of what showed up on which day.
+The menu carries these three. The [catalog]({{ '/games/' | relative_url }}) still has the whole shelf, and the [release notes]({{ '/releases/' | relative_url }}) are the log.
 
-- [🏓 Pong]({{ '/games/pong/' | relative_url }}) — first to 5, you against the machine.
-- [🐍 Snake]({{ '/games/snake/' | relative_url }}) — eat, grow, and don’t hit the furniture.
-- [🚀 Galaxy Hunt]({{ '/games/galaxy-hunt/' | relative_url }}) — clear an 8×8 galaxy before the stardate runs out.
+### [🚀 Galaxy Hunt]({{ '/games/galaxy-hunt/' | relative_url }})
+
+Super Star Trek, drawn with emoji. The galaxy is eight by eight. You are the Alliance hunter. Raiders sit in the quadrants, stars block a shot, and an outpost will repair you if you dock on its sector. Energy, missiles, shields, and a stardate. `HELP` prints the rose and the commands. Clear the fleet before the date runs out.
+
+### [🐂 The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }})
+
+A wagon, five names, and the road from Independence to the Willamette. Banker, carpenter, or farmer. Matt sells the oxen. The rivers want a choice, the hunt wants the arrows, and the Columbia wants a raft that can find the channel. A score is written only if someone arrives. Return leaves the title. The trail after that is the one you already know: a number, then Return.
+
+### [🗡️ Hack]({{ '/games/hack/' | relative_url }})
+
+Rooms, corridors, and things that walk toward you. Weapons get wielded when they are better than the one in your hand. Armor takes the edge off a hit. `P` drinks a potion. The Amulet of Yendor is on the sixth floor. Pick it up and the delve is over.
+
+## Also on the shelf
+
+- [🏓 Pong]({{ '/games/pong/' | relative_url }}) — first to 5. You are the left paddle.
+- [🐍 Snake]({{ '/games/snake/' | relative_url }}) — eat, grow, and don’t hit the furniture. One hundred points clears the board.
 - [🌲 Adventureland]({{ '/games/adventureland/' | relative_url }}) — thirteen treasures, one hollow stump.
-- [🏴‍☠️ Pirate Adventure]({{ '/games/pirate/' | relative_url }}) — leave the flat, find the island, keep the gold.
+- [🏴‍☠️ Pirate Adventure]({{ '/games/pirate/' | relative_url }}) — leave the flat, find the island, bring the gold home.
 - [🗡️ Rogue]({{ '/games/rogue/' | relative_url }}) — six floors, then the amulet.
-- [🗡️ Hack]({{ '/games/hack/' | relative_url }}) — rooms, corridors, and things that walk toward you.
-- [🤖 Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}) — a chatbot with a face and a lot of opinions.
-- [🐂 The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}) — five names, a wagon, and the road to the Willamette.
+- [🤖 Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}) — a conversation with a face. Not a match.
+- [🧙‍♀️ Witch Hunt]({{ '/games/witch-hunt/' | relative_url }}) — ten levels. Symbols chase the witch.
+- [🧙 A Witch's Tale]({{ '/games/witch-tales/' | relative_url }}) — a chaptered tile tale. You are a witch.
 - [🖥️ Witch I]({{ '/games/witch-1/' | relative_url }}) — a 40-column machine. It speaks WASIC.
 
 ## Elsewhere

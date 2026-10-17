@@ -263,7 +263,22 @@ class OregonGame {
     this.timer = null;
     this.unsub = term.onKey(event => this.onKey(event));
     this.initState();
-    this.showTitle();
+    this.showSplash();
+  }
+
+  showSplash() {
+    this.clearTimer();
+    this.cls();
+    this.term.fill(0, 0, 80, 24, ' ', OT.bcyan, OT.blue);
+    this.center(7, 'THE OREGON TRAIL', OT.byellow, OT.blue);
+    this.center(9, 'Independence, Missouri, to the Willamette Valley', OT.bwhite, OT.blue);
+    this.center(11, '1848', OT.bcyan, OT.blue);
+    this.center(16, 'Press Return', OT.byellow, OT.blue);
+    this.center(18, 'R starts the trail', OT.white, OT.blue);
+    this.phase = 'splash';
+    this.done();
+    this.beep(392, 0.08);
+    setTimeout(() => this.beep(523, 0.12), 150);
   }
 
   destroy() {
@@ -333,24 +348,8 @@ class OregonGame {
   }
 
   beep(freq, duration, type) {
-    if (!this.sound) return;
-    try {
-      const Ctx = typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext);
-      if (!Ctx) return;
-      if (!this.audio) this.audio = new Ctx();
-      if (this.audio.state === 'suspended') this.audio.resume();
-      const osc = this.audio.createOscillator();
-      const gain = this.audio.createGain();
-      osc.type = type || 'square';
-      osc.frequency.value = freq;
-      const now = this.audio.currentTime;
-      gain.gain.setValueAtTime(0.045, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-      osc.connect(gain);
-      gain.connect(this.audio.destination);
-      osc.start(now);
-      osc.stop(now + duration);
-    } catch (err) {}
+    if (!this.sound || !this.term || typeof this.term.tone !== 'function') return;
+    this.term.tone(freq, duration, type);
   }
 
   toggleSound() {
@@ -369,6 +368,11 @@ class OregonGame {
       return;
     }
     if (key === 'Enter' || key === ' ') event.preventDefault();
+    if (this.phase === 'splash') {
+      if (key === 'Enter' || key === 'NumpadEnter') this.showTitle();
+      else if (key === 'r' || key === 'R') this.showProfession(true);
+      return;
+    }
     if (this.phase === 'hunt') return this.huntKey(event);
     if (this.phase === 'raft') return this.raftKey(event);
     if (this.phase === 'travel') {
@@ -2578,6 +2582,7 @@ class OregonGame {
     this.center(9, this.totalMiles + ' miles from Independence', OT.gray);
     this.center(12, 'There is no score.', OT.white);
     this.center(16, 'Press RETURN to try again', OT.byellow);
+    this.center(17, 'R starts again', OT.gray);
     this.footer('Ctrl-S toggles sound');
     this.phase = 'over';
     this.done();
@@ -2647,14 +2652,15 @@ OregonGame.prototype.onKey = function (event) {
 if (typeof useEffect === 'function') {
   useEffect(() => {
     const container = document.getElementById('game');
-    if (!container || typeof Terminal === 'undefined') return undefined;
-    const term = new Terminal({
+    if (!container || typeof Glass === 'undefined') return undefined;
+    const term = new Glass({
       cols: 80,
       rows: 24,
+      title: '🐂 The Oregon Trail',
       fg: '#39ff14',
       bg: '#000000',
       border: '#39ff14',
-      fontSize: '15px'
+      footer: false
     });
     container.appendChild(term.wrap);
     term.focus();

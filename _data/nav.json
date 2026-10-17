@@ -7,18 +7,9 @@
       "dropdown": [
         { "title": "📂 All Games", "url": "/games/" },
         { "separator": true },
-        { "title": "🌲 Adventureland", "url": "/games/adventureland/" },
-        { "title": "🏴‍☠️ Pirate Adventure", "url": "/games/pirate/" },
         { "title": "🚀 Galaxy Hunt", "url": "/games/galaxy-hunt/" },
-        { "title": "🏓 Pong", "url": "/games/pong/" },
-        { "title": "🗡️ Rogue", "url": "/games/rogue/" },
-        { "title": "🐍 Snake", "url": "/games/snake/" },
-        { "title": "🗡️ Hack", "url": "/games/hack/" },
-        { "title": "🤖 Trump Super Intelligence", "url": "/games/trump-si/" },
         { "title": "🐂 The Oregon Trail", "url": "/games/oregon-trail/" },
-        { "title": "🧙‍♀️ Witch Hunt", "url": "/games/witch-hunt/" },
-        { "title": "🧙 A Witch's Tale", "url": "/games/witch-tales/" },
-        { "title": "🖥️ Witch I", "url": "/games/witch-1/" }
+        { "title": "🗡️ Hack", "url": "/games/hack/" }
       ]
     },
     { "title": "🔮 About", "url": "/about/" }

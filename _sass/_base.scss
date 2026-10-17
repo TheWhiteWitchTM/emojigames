@@ -104,3 +104,71 @@ body {
 .game-frame h3 {
   margin: 1.5rem 0 0.5rem;
 }
+
+.ee-game {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+}
+
+.ee-game .ee-header,
+.ee-game .ee-footer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ee-game:fullscreen {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  background: #0a0a0a;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0.75rem;
+}
+
+.ee-game:fullscreen canvas {
+  width: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 5.5rem);
+  margin: 0 auto;
+}
+
+.play-card {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  width: min(28rem, 92%);
+  text-align: center;
+  color: #d8ffd8;
+  background: rgba(4, 12, 4, 0.94);
+  border: 1px solid #39ff14;
+  border-radius: 10px;
+  padding: 1.25rem 1rem 1.1rem;
+  font-family: "Courier New", Courier, monospace;
+  box-shadow: 0 0 24px rgba(57, 255, 20, 0.25);
+  z-index: 3;
+}
+
+.play-card h2 {
+  margin: 0 0 0.45rem;
+  font-size: 1.55rem;
+  color: #b8ff55;
+}
+
+.play-card p {
+  margin: 0.35rem 0;
+  color: #d5ecd5;
+}
+
+.play-card .play-foot {
+  margin-top: 0.85rem;
+  color: #39ff14;
+}
+
+.play-card[hidden] {
+  display: none;
+}

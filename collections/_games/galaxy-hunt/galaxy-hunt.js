@@ -5,16 +5,18 @@ useEffect(() => {
   const gameEl = document.getElementById('game');
   if (!gameEl) return;
 
-  const term = new Terminal({
-    fontSize: '14px',
-    fg: '#39ff14',
-    bg: '#0a140a',
-    border: '#39ff14'
+  const term = new Glass({
+    cols: 72,
+    rows: 24,
+    title: '🚀 Galaxy Hunt',
+    border: '#39ff14',
+    footer: 'NAV  SRS  LRS  BEA  MIS  SHE  DAM  COM  STA  HELP  RESTART'
   });
   gameEl.appendChild(term.wrap);
-  term.wrap.focus();
+  term.focus();
 
   let inputBuffer = '';
+  let screen = 'intro';
 
   function print(text = '') {
     term.writeln(text);
@@ -31,19 +33,60 @@ useEffect(() => {
     term.write('> ');
   }
   function beep(freq = 440, duration = 0.08) {
-    try {
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.value = freq;
-      gain.gain.setValueAtTime(0.05, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + duration);
-    } catch (e) {}
+    term.tone(freq, duration);
+  }
+
+  function showIntro() {
+    screen = 'intro';
+    term.paintCard({
+      kicker: 'Alliance Hunter',
+      title: 'GALAXY HUNT',
+      lines: [
+        'Eight by eight. A stardate that does not wait.',
+        'Destroy the raider fleet before time runs out.',
+        'Dock at an outpost to repair and resupply.',
+        'HELP lists the commands. RESTART begins again.'
+      ],
+      foot: 'Press Return'
+    });
+    term.tone(392, 0.08);
+    setTimeout(() => term.tone(523, 0.1), 140);
+  }
+
+  function finish(reason) {
+    if (screen === 'end') return;
+    gameOver = true;
+    screen = 'end';
+    const won = reason === 'won';
+    const titles = {
+      won: 'THE GALAXY IS CLEAR',
+      destroyed: 'HUNTER DESTROYED',
+      time: 'STARDATE EXPIRED',
+      quit: 'MISSION ABANDONED'
+    };
+    const lines = {
+      won: 'Every raider is scrap.',
+      destroyed: 'The hull gives out. The fleet is still out there.',
+      time: 'The stardate runs out with raiders on the map.',
+      quit: 'You turn the hunter for home.'
+    };
+    term.paintCard({
+      title: titles[reason] || 'MISSION OVER',
+      fg: won ? 10 : 9,
+      lines: [
+        lines[reason] || '',
+        'Raiders left ' + totalRaidersLeft() + '    Energy ' + Math.floor(energy),
+        'Stardate ' + date.toFixed(1)
+      ],
+      foot: 'Press R'
+    });
+    if (won) {
+      term.tone(523, 0.1);
+      setTimeout(() => term.tone(659, 0.12), 140);
+      setTimeout(() => term.tone(784, 0.18), 280);
+    } else {
+      term.tone(70, 0.45);
+    }
   }
 
   // ---- Game state ----
@@ -121,7 +164,6 @@ useEffect(() => {
     print('');
     status();
     shortScan(true);
-    prompt();
   }
 
   function enterQuadrant() {
@@ -204,7 +246,8 @@ useEffect(() => {
     if (course < 1 || course > 9) { print('Course 1–9.'); return; }
     if (warp < 0.1 || warp > 8) { print('Warp factor 0.1–8.'); return; }
     const cost = Math.floor(warp * 8 + rand(5));
-    if (energy < cost) { print('Insufficient energy.'); return; }
+    if (energy < cost) { print('Insufficient energy.'); beep(90, 0.08); return; }
+    beep(196, 0.05);
 
     energy -= cost;
     date += warp * 0.1;
@@ -228,10 +271,12 @@ useEffect(() => {
         print('Collision with star! Movement stopped.');
         energy -= 50 + rand(50);
         hitSomething = true;
+        beep(90, 0.18);
       } else if (current.raiders.some(r => r.x === secX && r.y === secY)) {
         print('Collision with raider! Both damaged.');
         energy -= 100;
         hitSomething = true;
+        beep(110, 0.16);
       } else if (current.outpost && current.outpost.x === secX && current.outpost.y === secY) {
         docked = true;
         print('Docked at outpost. Resupplying...');
@@ -240,6 +285,7 @@ useEffect(() => {
         shields = 0;
         damage.fill(0);
         hitSomething = true;
+        beep(660, 0.12);
       }
     }
 
@@ -257,10 +303,12 @@ useEffect(() => {
     const idx = rand(8);
     damage[idx] += 1 + rand(3);
     print(`Damage to ${SYSTEMS[idx]}!`);
+    beep(140, 0.1);
   }
 
   function raiderTurn() {
     if (!current.raiders.length || docked) return;
+    beep(150, 0.05);
     current.raiders.forEach(r => {
       if (r.energy <= 0) return;
       const dist = Math.hypot(r.x - secX, r.y - secY) || 1;
@@ -284,13 +332,16 @@ useEffect(() => {
     if (amount <= 0 || amount > energy) { print('Invalid energy.'); return; }
     energy -= amount;
     print(`Firing beams with ${amount} energy...`);
+    beep(880, 0.07);
     current.raiders.forEach(r => {
       const dist = Math.hypot(r.x - secX, r.y - secY) || 1;
       const dmg = Math.floor(amount * (randf() * 0.3 + 0.7) / (dist * current.raiders.length));
       r.energy -= dmg;
       print(`Raider at ${r.x},${r.y} takes ${dmg} damage (energy left: ${Math.max(0, r.energy)})`);
     });
+    const before = current.raiders.length;
     current.raiders = current.raiders.filter(r => r.energy > 0);
+    if (current.raiders.length < before) beep(520, 0.08);
     galaxy[quadY-1][quadX-1].raiders = current.raiders.length;
     if (!current.raiders.length) print('All raiders in quadrant destroyed!');
     raiderTurn();
@@ -306,6 +357,7 @@ useEffect(() => {
     const dir = COURSE[course];
     let x = secX, y = secY;
     print(`Missile launched on course ${course}...`);
+    beep(300, 0.06);
     for (let i = 0; i < 10; i++) {
       x += dir.dx;
       y += dir.dy;
@@ -314,6 +366,7 @@ useEffect(() => {
       const hit = current.raiders.findIndex(r => r.x === x && r.y === y);
       if (hit >= 0) {
         print(`Missile hits raider at ${x},${y}! Destroyed.`);
+        beep(640, 0.1);
         current.raiders.splice(hit, 1);
         galaxy[quadY-1][quadX-1].raiders = current.raiders.length;
         break;
@@ -361,46 +414,29 @@ useEffect(() => {
 
   function help() {
     clearScreen();
-    printAnsi('\x1b[1;33m=== GALAXY HUNT COMMANDS ===\x1b[0m');
-    print('NAV <course 1-9> <warp 0.1-8>   Navigate');
-    print('SRS                             Short-range scan (map)');
-    print('LRS                             Long-range scan');
-    print('BEA <energy>                    Fire beams');
-    print('MIS <course 1-9>                Fire missile');
-    print('SHE <energy>                    Set shields');
-    print('DAM                             Damage report');
-    print('COM                             Library computer');
-    print('STA                             Status');
-    print('HELP                            This screen');
-    print('QUIT                            End game');
+    printAnsi('\x1b[1;33mGALAXY HUNT\x1b[0m');
+    print('NAV <1-9> <warp>  move            SRS  short-range scan');
+    print('LRS               long-range scan BEA <energy>  beams');
+    print('MIS <1-9>         missile         SHE <energy>  shields');
+    print('DAM  damage   COM  computer   STA  status');
+    print('HELP  this screen    RESTART  again, past the title    QUIT');
     print('');
-    printAnsi('\x1b[1;36m=== MAP EMOJIS ===\x1b[0m');
-    print('🚀  Your Hunter');
-    print('👾  Raider warship');
-    print('⭐  Star (blocks movement/missiles)');
-    print('🏢  Alliance Outpost (dock here to resupply & repair)');
-    print('·   Empty sector');
+    printAnsi('\x1b[1;36mMAP\x1b[0m');
+    print('🚀 hunter   👾 raider   ⭐ star, it blocks   🏢 outpost   · empty');
     print('');
-    print('Course rose:  3');
-    print('            4   2');
-    print('          5   *   1');
-    print('            6   8');
-    print('              7');
+    print('Course rose:    3');
+    print('              4   2');
+    print('            5   *   1');
+    print('              6   8');
+    print('                7');
     print('');
-    print('Dock by moving onto the outpost sector. Destroy all raiders before time expires.');
+    print('Dock on the outpost sector. Destroy every raider before the stardate.');
   }
 
   function checkEnd() {
-    if (energy <= 0) {
-      printAnsi('\x1b[1;31mHUNTER DESTROYED — Mission failed.\x1b[0m');
-      gameOver = true;
-    } else if (timeLeft <= 0) {
-      printAnsi('\x1b[1;31mTime expired — Mission failed.\x1b[0m');
-      gameOver = true;
-    } else if (totalRaidersLeft() <= 0) {
-      printAnsi('\x1b[1;32mAll raiders destroyed! Mission successful!\x1b[0m');
-      gameOver = true;
-    }
+    if (energy <= 0) finish('destroyed');
+    else if (timeLeft <= 0) finish('time');
+    else if (totalRaidersLeft() <= 0) finish('won');
   }
 
   function handle(raw) {
@@ -427,8 +463,11 @@ useEffect(() => {
       case 'STA': status(); break;
       case 'HELP': help(); break;
       case 'QUIT':
-        print('Abandoning mission.');
-        gameOver = true;
+        finish('quit');
+        break;
+      case 'RESTART':
+        screen = 'play';
+        resetGame();
         break;
       default:
         print('Unknown command. Type HELP.');
@@ -436,13 +475,30 @@ useEffect(() => {
   }
 
   function onKey(e) {
-    if (gameOver) return;
+    if (screen === 'intro') {
+      if (isReturn(e.key) || isRestart(e.key)) {
+        e.preventDefault();
+        screen = 'play';
+        resetGame();
+        prompt();
+      }
+      return;
+    }
+    if (screen === 'end') {
+      if (isRestart(e.key)) {
+        e.preventDefault();
+        screen = 'play';
+        resetGame();
+        prompt();
+      }
+      return;
+    }
     if (e.key === 'Enter') {
       e.preventDefault();
       term.writeln('');
       handle(inputBuffer);
       inputBuffer = '';
-      if (!gameOver) prompt();
+      if (screen === 'play') prompt();
     } else if (e.key === 'Backspace') {
       e.preventDefault();
       if (inputBuffer.length) {
@@ -457,12 +513,11 @@ useEffect(() => {
     }
   }
 
-  term.wrap.addEventListener('keydown', onKey);
+  term.onKey(onKey);
 
-  resetGame();
+  showIntro();
 
   return () => {
-    term.wrap.removeEventListener('keydown', onKey);
     term.destroy();
   };
 });

@@ -1,7 +1,7 @@
 ---
 layout: game
 title: 🏴‍☠️ Pirate Adventure
-description: Sail the seas, find treasure.
+description: Leave the flat, find the island, and bring three treasures home.
 image: /games/pirate/banner.jpg
 permalink: /games/pirate/
 tags: [terminal, adventure]
@@ -9,8 +9,9 @@ tags: [terminal, adventure]
 
 <div id="game"></div>
 
-A classic pirate adventure. Explore the island, find the treasure, stay alive.
+Leave the London flat. The parrot knows the words, and the gold belongs back home. Return leaves the title. R, when it is over, starts again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>
-<script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/glass.js' | relative_url }}"></script>
 <script src="{{ '/games/pirate/pirate.js' | relative_url }}"></script>

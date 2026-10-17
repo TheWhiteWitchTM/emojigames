@@ -78,7 +78,9 @@ class Level {
   }
 
   placeMonsters() {
-    const types = ['a','b','c','d','e','f','g','h','i','j','k','l'];
+    const shallow = ['a','b','c','f','h','j','k','l'];
+    const deep = ['d','e','g','i'];
+    const types = this.depth < 3 ? shallow : shallow.concat(deep);
     for (let i = 0; i < 2 + this.depth; i++) {
       const pos = this.randomFloor();
       if (pos) this.monsters.push(new Monster(types[Math.floor(Math.random()*types.length)], pos.x, pos.y, this.depth));
@@ -89,6 +91,10 @@ class Level {
     for (let i = 0; i < 1 + Math.floor(this.depth / 2); i++) {
       const pos = this.randomFloor();
       if (pos) this.items.push(new Item(pos.x, pos.y, this.depth));
+    }
+    if (this.depth >= 6) {
+      const pos = this.randomFloor();
+      if (pos) this.items.push({ x: pos.x, y: pos.y, ch: '💎', name: 'Amulet of Yendor', type: 'amulet' });
     }
   }
 

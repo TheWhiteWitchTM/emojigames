@@ -2,9 +2,15 @@ useEffect(() => {
   const container = document.getElementById('game');
   if (!container) return;
 
-  const term = new Terminal({ border: '#39ff14' });
+  const term = new Glass({
+    cols: 80,
+    rows: 24,
+    title: '🌲 Adventureland',
+    border: '#39ff14',
+    footer: 'LOOK  INVENTORY  GO  GET  DROP  HELP  RESTART'
+  });
   container.appendChild(term.wrap);
-  term.wrap.focus();
+  term.focus();
 
   const rooms = {
     forest: {
@@ -192,6 +198,73 @@ useEffect(() => {
   let lampOn = false;
   let windowBlown = false;
   let lavaDammed = false;
+  let mode = "intro";
+  const roomSeed = JSON.parse(JSON.stringify(rooms));
+
+  function stored() {
+    return rooms.stump.objects.filter(id => objects[id] && objects[id].treasure).length;
+  }
+
+  function showIntro() {
+    mode = "intro";
+    inputBuffer = "";
+    term.paintCard({
+      kicker: "thirteen treasures",
+      title: "ADVENTURELAND",
+      lines: [
+        "The woods, the stump, and a dragon that hates mud.",
+        "Carry every starred treasure into the hollow stump.",
+        "HELP lists the words. RESTART begins again."
+      ],
+      foot: "Press Return"
+    });
+    term.tone(392, 0.08);
+  }
+
+  function showEnd(kind, line, detail) {
+    mode = "end";
+    inputBuffer = "";
+    const title = kind === "win" ? "THE STUMP IS FULL" : kind === "dead" ? "YOU DIED" : "YOU TURN BACK";
+    term.paintCard({
+      title: title,
+      fg: kind === "win" ? 11 : kind === "dead" ? 9 : 7,
+      lines: [line, detail, "Score " + score + "    Stump " + stored() + "/13"],
+      foot: "Press R"
+    });
+    if (kind === "win") {
+      term.tone(523, 0.1);
+      setTimeout(() => term.tone(659, 0.12), 140);
+      setTimeout(() => term.tone(784, 0.16), 280);
+    } else if (kind === "dead") term.tone(80, 0.4);
+    else term.tone(220, 0.1);
+  }
+
+  function begin() {
+    mode = "play";
+    Object.keys(rooms).forEach(key => {
+      rooms[key].objects = roomSeed[key].objects.slice();
+      rooms[key].exits = Object.assign({}, roomSeed[key].exits);
+      if (Object.prototype.hasOwnProperty.call(roomSeed[key], "locked")) rooms[key].locked = roomSeed[key].locked;
+      else delete rooms[key].locked;
+    });
+    current = "forest";
+    inventory = [];
+    score = 0;
+    treasures = 0;
+    inputBuffer = "";
+    lampOn = false;
+    windowBlown = false;
+    lavaDammed = false;
+    look();
+    term.write("> ");
+    term.tone(330, 0.05);
+  }
+
+  function checkWin() {
+    if (mode === "play" && stored() >= 13) {
+      showEnd("win", "All thirteen treasures sit in the hollow stump.", "The woods will keep the story.");
+    }
+  }
 
   function print(text, color = 2) {
     term.setFg(color);
@@ -225,9 +298,8 @@ useEffect(() => {
 
     const exits = Object.keys(room.exits).map(d => d.toUpperCase()).join(", ");
     print(`Exits: ${exits}`, 6);
-    print(`Score: ${score}/100   Treasures: ${treasures}/13`, 3);
+    print(`Score: ${score}    Stump: ${stored()}/13`, 3);
     term.writeln("");
-    term.write("> ");
     inputBuffer = "";
   }
 
@@ -240,6 +312,7 @@ useEffect(() => {
     inventory.push(id);
     if (objects[id].treasure) { score += 7; treasures++; }
     print(`You take the ${objects[id].name}.`);
+    term.tone(540, 0.06);
   }
 
   function drop(id) {
@@ -249,6 +322,8 @@ useEffect(() => {
     rooms[current].objects.push(id);
     if (objects[id].treasure && current === "stump") score += 3;
     print(`You drop the ${objects[id].name}.`);
+    term.tone(300, 0.05);
+    checkWin();
   }
 
   function showHelp() {
@@ -256,7 +331,7 @@ useEffect(() => {
     print("  LOOK/L  INVENTORY/I  GO <dir>  GET/TAKE  DROP", 2);
     print("  SAY BUNYON  SAY AWAY  RUB LAMP  LIGHT LAMP", 2);
     print("  UNLOCK DOOR  YELL  JUMP  FILL  CATCH  DAM  POUR", 2);
-    print("  SCORE  HELP  QUIT", 2);
+    print("  SCORE  HELP  RESTART  QUIT", 2);
   }
 
   function handle(input) {
@@ -273,8 +348,12 @@ useEffect(() => {
       inventory.forEach(id => print(`  ${objects[id].desc}`));
       return;
     }
-    if (verb === "score") return print(`Score: ${score}/100  Treasures: ${treasures}/13`);
-    if (verb === "quit" || verb === "exit") { print("Thanks for playing!"); return; }
+    if (verb === "score") return print(`Score: ${score}    Stump: ${stored()}/13`);
+    if (verb === "restart") return begin();
+    if (verb === "quit" || verb === "exit") {
+      showEnd("leave", "You leave the forest unfinished.", "The stump is still short a few stars.");
+      return;
+    }
 
     if (verb === "go" || ["n","s","e","w","u","d"].includes(verb)) {
       const dir = verb === "go" ? noun : verb;
@@ -282,8 +361,29 @@ useEffect(() => {
       if (!room.exits[dir]) return print("You can't go that way.");
       if (room.locked && dir === "d") return print("The door is locked.");
       if (current === "chamber" && dir === "e" && !windowBlown) return print("The window is bricked up.");
+      if (current === "ledge2" && dir === "e" && rooms.ledge2.objects.includes("bear")) {
+        showEnd("dead", "The bear mauls you before you can pass.", "A yell might have startled it.");
+        return;
+      }
       current = room.exits[dir];
+      term.tone(220, 0.03);
       return look();
+    }
+
+    if ((verb === "get" || verb === "take" || verb === "attack") && noun === "dragon") {
+      if (current === "meadow" && rooms.meadow.objects.includes("dragon")) {
+        showEnd("dead", "The dragon wakes up hungry.", "It does not like being handled.");
+        return;
+      }
+      if (verb === "attack") return print("Nothing here wants a fight.");
+    }
+
+    if ((verb === "get" || verb === "take") && noun === "bees" && current === "bees") {
+      if (inventory.includes("bottle") && inventory.includes("mud")) {
+        print("Protected by the mud, you catch the bees in the bottle.");
+        get("bees");
+      } else showEnd("dead", "The bees sting you to death.", "Mud on your skin, and a bottle in your hand.");
+      return;
     }
 
     if (verb === "get" || verb === "take") {
@@ -352,6 +452,10 @@ useEffect(() => {
     }
 
     if (verb === "jump") {
+      if (current === "hole") {
+        showEnd("dead", "You jump into the bottomless hole.", "There is no bottom.");
+        return;
+      }
       if (current === "ledge1") { current = "ledge2"; look(); }
       else if (current === "ledge2") { current = "ledge1"; look(); }
       else print("You can't jump here.");
@@ -400,14 +504,6 @@ useEffect(() => {
       return;
     }
 
-    if (verb === "get" && noun === "bees") {
-      if (current === "bees" && inventory.includes("bottle") && inventory.includes("mud")) {
-        print("Protected by the mud, you catch the bees in the bottle.");
-        get("bees");
-      } else print("The bees sting you! You need mud and a bottle.");
-      return;
-    }
-
     if (verb === "drop" && noun === "bees") {
       if (current === "meadow" && inventory.includes("bees")) {
         print("You release the bees! They attack the dragon, which flies away. Dragon eggs are left behind.");
@@ -422,12 +518,20 @@ useEffect(() => {
   }
 
   function onKey(e) {
+    if (mode === "intro") {
+      if (isReturn(e.key) || isRestart(e.key)) begin();
+      return;
+    }
+    if (mode === "end") {
+      if (isRestart(e.key)) begin();
+      return;
+    }
     if (e.key === "Enter") {
       e.preventDefault();
       term.writeln("");
       handle(inputBuffer);
       inputBuffer = "";
-      term.write("> ");
+      if (mode === "play") term.write("> ");
     } else if (e.key === "Backspace") {
       e.preventDefault();
       if (inputBuffer.length) {
@@ -441,17 +545,9 @@ useEffect(() => {
     }
   }
 
-  term.wrap.addEventListener("keydown", onKey);
+  term.onKey(onKey);
 
-  term.clear();
-  print("ADVENTURELAND", 10);
-  print("Complete classic chain — White Witch Edition", 2);
-  print("Collect all 13 *treasures* in the stump. Type HELP.", 7);
-  print("");
-  look();
+  showIntro();
 
-  return () => {
-    term.wrap.removeEventListener("keydown", onKey);
-    term.destroy();
-  };
+  return () => term.destroy();
 });

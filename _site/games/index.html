@@ -1,3 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13S6Z9KCX9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13S6Z9KCX9');
+</script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧙‍♀️</text></svg>">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Games</title>
+<meta name="description" content="Browse the shelf. Featured games sit first.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://localhost:4019/emojigames/games/">
+<meta property="og:title" content="Games">
+<meta property="og:description" content="Browse the shelf. Featured games sit first.">
+<meta property="og:site_name" content="Emoji Games">
+<meta property="og:image" content="http://localhost:4019/emojigames/assets/images/preview.jpg">
+<meta property="og:image:alt" content="Games">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@TheWhiteWitchTM">
+<meta name="twitter:title" content="Games">
+<meta name="twitter:description" content="Browse the shelf. Featured games sit first.">
+<meta name="twitter:image" content="http://localhost:4019/emojigames/assets/images/preview.jpg">
+<meta name="twitter:image:alt" content="Games">
+
+  <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+</head>
+<body>
+  <header class="site-header">
+  <nav class="site-nav">
+    <ul>
+      
+        
+          <li>
+            
+              <a href="/emojigames/">🏠 Home</a>
+            
+          </li>
+        
+      
+        
+          <li>
+            
+              <a href="/emojigames/releases/">📢 Releases</a>
+            
+          </li>
+        
+      
+        
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">🕹️ Games</a>
+            <ul class="dropdown-menu">
+              
+                
+                  <li><a href="/emojigames/games/">📂 All Games</a></li>
+                
+              
+                
+                  <li class="dropdown-separator"></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/galaxy-hunt/">🚀 Galaxy Hunt</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/oregon-trail/">🐂 The Oregon Trail</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/hack/">🗡️ Hack</a></li>
+                
+              
+            </ul>
+          </li>
+        
+      
+        
+          <li>
+            
+              <a href="/emojigames/about/">🔮 About</a>
+            
+          </li>
+        
+      
+    </ul>
+  </nav>
+</header>
+
+
+  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
+
+  <main class="page-frame">
+    <div class="content-area markdown-body">
+      <h1 id="games">Games</h1>
+
+<p>Three are on the marquee. The rest of the shelf is still in the room.</p>
+
 <div id="storefront"></div>
 
 <script src="/emojigames/assets/js/components.js"></script>
@@ -12,8 +121,10 @@ useEffect(() => {
       url: "/emojigames/games/adventureland/",
       image: "/emojigames/games/adventureland/banner.jpg",
       tags: ["terminal","adventure"],
-      description: "Classic text adventure.",
-      style: "terminal"
+      description: "Thirteen treasures, and one hollow stump to keep them in.",
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
@@ -21,17 +132,21 @@ useEffect(() => {
       url: "/emojigames/games/galaxy-hunt/",
       image: "/emojigames/games/galaxy-hunt/banner.jpg",
       tags: ["terminal","action"],
-      description: "Classic space shooter. Clear the waves.",
-      style: "terminal"
+      description: "Super Star Trek. Clear an eight-by-eight galaxy before the stardate runs out.",
+      style: "terminal",
+      featured: true,
+      rank: 1
     },
     
     {
-      title: "Hack",
+      title: "🗡️ Hack",
       url: "/emojigames/games/hack/",
       image: "/emojigames/games/hack/banner.jpg",
       tags: ["terminal","roguelike"],
-      description: "A close terminal homage to the original Hack roguelike.",
-      style: "terminal"
+      description: "Rooms, corridors, and an amulet on the sixth floor.",
+      style: "terminal",
+      featured: true,
+      rank: 3
     },
     
     {
@@ -39,8 +154,10 @@ useEffect(() => {
       url: "/emojigames/games/oregon-trail/",
       image: "/emojigames/games/oregon-trail/banner.jpg",
       tags: ["terminal","strategy"],
-      description: "A terminal homage to the 1985 Apple II Oregon Trail.",
-      style: "terminal"
+      description: "A wagon, five names, and the road from Independence to the Willamette.",
+      style: "terminal",
+      featured: true,
+      rank: 2
     },
     
     {
@@ -48,35 +165,43 @@ useEffect(() => {
       url: "/emojigames/games/pirate/",
       image: "/emojigames/games/pirate/banner.jpg",
       tags: ["terminal","adventure"],
-      description: "Sail the seas, find treasure.",
-      style: "terminal"
+      description: "Leave the flat, find the island, and bring three treasures home.",
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
-      title: "🏓Pong",
+      title: "🏓 Pong",
       url: "/emojigames/games/pong/",
       image: "/emojigames/games/pong/banner.jpg",
       tags: ["terminal","action"],
-      description: "Classic terminal Pong. First to 5 wins.",
-      style: "terminal"
+      description: "First to 5. You on the left, the machine on the right.",
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
-      title: "Rogue",
+      title: "🗡️ Rogue",
       url: "/emojigames/games/rogue/",
       image: "/emojigames/games/rogue/banner.jpg",
       tags: ["terminal","roguelike"],
-      description: "A close terminal homage to the 1980 classic. Descend, fight, and find the Amulet.",
-      style: "terminal"
+      description: "Six floors, a handful of rooms, and the amulet at the bottom.",
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
-      title: "Snake",
+      title: "🐍 Snake",
       url: "/emojigames/games/snake/",
       image: "/emojigames/games/snake/banner.jpg",
       tags: ["terminal","action"],
-      description: "Classic terminal Snake. Eat, grow, don’t crash.",
-      style: "terminal"
+      description: "Eat, grow, and don’t hit the furniture. One hundred points clears the board.",
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
@@ -85,7 +210,9 @@ useEffect(() => {
       image: "/emojigames/games/trump-si/banner.jpg",
       tags: ["terminal","joke"],
       description: "The most tremendous chatbot. Many people are saying it.",
-      style: "terminal"
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
@@ -94,7 +221,9 @@ useEffect(() => {
       image: "/emojigames/games/witch-1/banner.jpg",
       tags: ["terminal","computer"],
       description: "A 40-column machine. It speaks WASIC.",
-      style: "terminal"
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
@@ -103,7 +232,9 @@ useEffect(() => {
       image: "/emojigames/games/witch-hunt/banner.jpg",
       tags: ["terminal","action","arcade"],
       description: "Survive 10 levels. Religious symbols chase the White Witch. Cast spells, grab power-ups, clear the pellets. Alpha.",
-      style: "terminal"
+      style: "terminal",
+      featured: null,
+      rank: 0
     },
     
     {
@@ -112,14 +243,19 @@ useEffect(() => {
       image: "/emojigames/games/witch-tales/banner.jpg",
       tags: ["terminal","rpg","adventure"],
       description: "A chaptered tile RPG. You are a witch. The land has problems. Alpha.",
-      style: "terminal"
+      style: "terminal",
+      featured: null,
+      rank: 0
     }
     
   ];
 
-  // Collect unique styles and tags
-  const styles = [...new Set(games.map(g => g.style))].sort();
-  const allTags = [...new Set(games.flatMap(g => g.tags))].sort();
+  const featured = games.filter(g => g.featured).sort((a, b) => a.rank - b.rank);
+  const rest = games.filter(g => !g.featured);
+  const ordered = featured.concat(rest);
+
+  const styles = [...new Set(ordered.map(g => g.style))].sort();
+  const allTags = [...new Set(ordered.flatMap(g => g.tags))].sort();
 
   let query = '';
   let currentStyle = null;
@@ -154,13 +290,11 @@ useEffect(() => {
     if (toggle) toggle.textContent = currentTag || 'All tags';
   }
 
-  // Search
   const search = input('Search games…', 'store-search', e => {
     query = e.target.value.toLowerCase();
     render();
   });
 
-  // Style tabs. The hash keeps the choice: #terminal, #action, or empty for all.
   const styleTabs = tabs(['All', ...styles], 'store-tabs', i => {
     currentStyle = i === 0 ? null : styles[i - 1];
     currentTag = null;
@@ -169,7 +303,6 @@ useEffect(() => {
     render();
   });
 
-  // Tag dropdown
   const tagDrop = dropdown('All tags', ['All', ...allTags], 'store-tags', val => {
     currentTag = val === 'All' ? null : val;
     currentStyle = null;
@@ -187,34 +320,56 @@ useEffect(() => {
 
   root.append(controls, grid);
 
+  function matches(g) {
+    const matchesQuery = !query ||
+      g.title.toLowerCase().includes(query) ||
+      g.description.toLowerCase().includes(query) ||
+      g.tags.some(t => t.toLowerCase().includes(query));
+    const matchesStyle = !currentStyle || g.style === currentStyle;
+    const matchesTag = !currentTag || g.tags.includes(currentTag);
+    return matchesQuery && matchesStyle && matchesTag;
+  }
+
+  function addCard(g) {
+    const el = card(`
+      <a href="${g.url}" class="game-card${g.featured ? ' is-featured' : ''}">
+        ${g.featured ? '<div class="featured-flag">Featured</div>' : ''}
+        <img src="${g.image}" alt="" class="game-thumb" loading="lazy" width="240" height="135">
+        <div class="game-title">${g.title}</div>
+        <div class="game-desc">${g.description}</div>
+        <div class="game-tags">${g.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      </a>
+    `, 'game-card-wrap' + (g.featured ? ' is-featured' : ''));
+    grid.appendChild(el);
+  }
+
+  function label(text) {
+    const el = document.createElement('h2');
+    el.className = 'shelf-label';
+    el.textContent = text;
+    grid.appendChild(el);
+  }
+
   function render() {
     grid.innerHTML = '';
-    const filtered = games.filter(g => {
-      const matchesQuery = !query ||
-        g.title.toLowerCase().includes(query) ||
-        g.description.toLowerCase().includes(query) ||
-        g.tags.some(t => t.toLowerCase().includes(query));
-      const matchesStyle = !currentStyle || g.style === currentStyle;
-      const matchesTag = !currentTag || g.tags.includes(currentTag);
-      return matchesQuery && matchesStyle && matchesTag;
-    });
-
-    if (!filtered.length) {
+    const shownFeatured = featured.filter(matches);
+    const shownRest = rest.filter(matches);
+    if (!shownFeatured.length && !shownRest.length) {
       grid.innerHTML = '<p class="empty">No games match.</p>';
       return;
     }
-
-    filtered.forEach(g => {
-      const el = card(`
-        <a href="${g.url}" class="game-card">
-          <img src="${g.image}" alt="" class="game-thumb" loading="lazy" width="240" height="135">
-          <div class="game-title">${g.title}</div>
-          <div class="game-desc">${g.description}</div>
-          <div class="game-tags">${g.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-        </a>
-      `, 'game-card-wrap');
-      grid.appendChild(el);
-    });
+    const openShelf = !query && !currentStyle && !currentTag;
+    if (openShelf && shownFeatured.length) {
+      label('Featured');
+      shownFeatured.forEach(addCard);
+      if (shownRest.length) {
+        label('The rest of the shelf');
+        shownRest.forEach(addCard);
+      }
+      return;
+    }
+    shownFeatured.forEach(addCard);
+    shownRest.forEach(addCard);
   }
 
   applyHash();
@@ -245,7 +400,23 @@ useEffect(() => {
 }
 .tab.active { border-color: #c9a6ff; color: #c9a6ff; }
 .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.shelf-label { grid-column: 1 / -1; margin: 0.2rem 0 0; color: #c9a6ff; font-size: 1rem; }
+.game-card-wrap.is-featured .game-card {
+  display: block;
+  border: 1px solid #c9a6ff;
+  border-radius: 12px;
+  padding: 0.55rem;
+  background: #14101a;
+  box-shadow: 0 0 0 1px rgba(201, 166, 255, 0.25), 0 10px 28px rgba(0, 0, 0, 0.35);
+}
 .game-card { display: block; text-decoration: none; color: inherit; }
+.featured-flag {
+  color: #c9a6ff;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
 .game-thumb { width: 100%; height: auto; border-radius: 8px; background: #111; }
 .game-title { font-weight: 600; margin: 0.4rem 0 0.2rem; }
 .game-desc { font-size: 0.85rem; opacity: 0.8; }
@@ -254,3 +425,30 @@ useEffect(() => {
 .empty { opacity: 0.6; }
 </style>
 
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+  <div class="footer-links">
+    <a href="http://localhost:4019/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <span>•</span>
+    <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
+    <span>•</span>
+    <a href="#" title="Contribute (PayPal coming soon)">💸 Contribute</a>
+    <span>•</span>
+    <a href="https://thewhitewitchtm.github.io/whitewitch/" title="The White Witch™">🧙‍♀️ The White Witch</a>
+  </div>
+</footer>
+
+  <script>
+document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    btn.nextElementSibling.classList.toggle('open');
+  });
+});
+</script>
+
+</body>
+</html>

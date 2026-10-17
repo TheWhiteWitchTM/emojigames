@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4019/emojigames/feed/releases.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4019/emojigames/" rel="alternate" type="text/html" /><updated>2026-10-17T05:11:31+02:00</updated><id>http://localhost:4019/emojigames/feed/releases.xml</id><title type="html">Emoji Games | Releases</title><subtitle>A White Witch spinoff. Emoji games, no accounts.</subtitle><entry><title type="html">🖥️ Witch I, on the shelf</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/" rel="alternate" type="text/html" title="🖥️ Witch I, on the shelf" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-shelf</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/"><![CDATA[<h1 id="️-witch-i-on-the-shelf">🖥️ Witch I, on the shelf</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4019/emojigames/feed/releases.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4019/emojigames/" rel="alternate" type="text/html" /><updated>2026-10-17T06:00:34+02:00</updated><id>http://localhost:4019/emojigames/feed/releases.xml</id><title type="html">Emoji Games | Releases</title><subtitle>A White Witch spinoff. Emoji games, no accounts.</subtitle><entry><title type="html">🖥️ Witch I, on the shelf</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/" rel="alternate" type="text/html" title="🖥️ Witch I, on the shelf" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-shelf</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/"><![CDATA[<h1 id="️-witch-i-on-the-shelf">🖥️ Witch I, on the shelf</h1>
 
 <p>17 October 2026. The box has a door.</p>
 
@@ -26,7 +26,33 @@
 
 <p>EXORCISE rewrites a BASIC listing into WASIC. PRINT becomes CHANT, GOTO becomes FLYTO, FOR becomes CURSE, and the rest of the old names follow. INT, SIN, RND, and the other sums stay. PEEK answers 0. A line she still cannot say is buried as a whisper, and RUN steps over it. An empty circle opens the desk for a <code class="language-plaintext highlighter-rouge">.BAS</code> file. She leaves the lines sitting there. You run them.</p>
 
-<p><a href="/emojigames/games/witch-1/">Witch I</a>. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[She draws herself in ink. The bezel grows six keys. EXORCISE drives BASIC out.]]></summary></entry><entry><title type="html">🧙 A Witch’s Tale</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/" rel="alternate" type="text/html" title="🧙 A Witch’s Tale" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-tales</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/"><![CDATA[<h1 id="-a-witchs-tale">🧙 A Witch’s Tale</h1>
+<p><a href="/emojigames/games/witch-1/">Witch I</a>. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[She draws herself in ink. The bezel grows six keys. EXORCISE drives BASIC out.]]></summary></entry><entry><title type="html">🕹️ The glass</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-the-glass/" rel="alternate" type="text/html" title="🕹️ The glass" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/the-glass</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-the-glass/"><![CDATA[<h1 id="️-the-glass">🕹️ The glass</h1>
+
+<p>17 October 2026. Return to begin. R to go again.</p>
+
+<p>The playable games now draw on the emoji engine. Each one, except the conversation, opens on a title. Return leaves it. If you win, or if you die, the last screen says so, and R starts that game again without the title.</p>
+
+<p><a href="/emojigames/games/trump-si/">Trump Super Intelligence</a> is not a match. It has no title and no ending. You type, it answers, the face follows the mood.</p>
+
+<h2 id="featured">Featured</h2>
+
+<p>The Games menu carries three. The <a href="/emojigames/games/">catalog</a> still has the rest, with those three first.</p>
+
+<p><a href="/emojigames/games/galaxy-hunt/">Galaxy Hunt</a> is the starship. Eight by eight, raiders, outposts, and a stardate. Dock to repair. <code class="language-plaintext highlighter-rouge">HELP</code> is the manual.</p>
+
+<p><a href="/emojigames/games/oregon-trail/">The Oregon Trail</a> keeps the trail it already had. The new screen is only the title in front of it. Return still means Return, once you are on the road.</p>
+
+<p><a href="/emojigames/games/hack/">Hack</a> is the dungeon with rooms and a bestiary. A better weapon gets wielded. Armor soaks a hit. <code class="language-plaintext highlighter-rouge">P</code> drinks a potion. The Amulet of Yendor is on the sixth floor, and picking it up is the win.</p>
+
+<h2 id="the-others">The others</h2>
+
+<p><a href="/emojigames/games/pong/">Pong</a> and <a href="/emojigames/games/snake/">Snake</a> are no longer a text box. Paddles, a ball, a snake, apples, and the furniture. Snake clears the board at one hundred.</p>
+
+<p><a href="/emojigames/games/rogue/">Rogue</a> is the shorter delve: rooms, corridors, six floors, the amulet at the bottom. <code class="language-plaintext highlighter-rouge">Q</code> drinks.</p>
+
+<p><a href="/emojigames/games/adventureland/">Adventureland</a> wants the thirteen treasures in the stump. The bees, the dragon, the bear, and the hole will end it if you insist.</p>
+
+<p><a href="/emojigames/games/pirate/">Pirate Adventure</a> wants the three treasures back in the London flat. The skeleton does not share, unless the parrot has heard the words.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The games move onto the emoji engine. Three of them lead the shelf.]]></summary></entry><entry><title type="html">🧙 A Witch’s Tale</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/" rel="alternate" type="text/html" title="🧙 A Witch’s Tale" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-tales</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/"><![CDATA[<h1 id="-a-witchs-tale">🧙 A Witch’s Tale</h1>
 
 <p>16 October 2026. A chapter, and a save.</p>
 

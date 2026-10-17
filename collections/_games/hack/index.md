@@ -1,24 +1,21 @@
 ---
 layout: game
-title:  Hack
-description: A close terminal homage to the original Hack roguelike.
+title: 🗡️ Hack
+description: Rooms, corridors, and an amulet on the sixth floor.
 image: /games/hack/banner.jpg
 permalink: /games/hack/
 tags: [terminal, roguelike]
-
-
+featured: true
+feature_rank: 3
 ---
 
-# 🗡️ Hack
+<div id="game"></div>
 
-<div id="game">
-  <div id="loading" style="color:#39ff14; font-family:monospace; padding:1rem;">
-    Loading Hack...
-  </div>
-</div>
+Descend. Fight. The Amulet of Yendor is waiting on the sixth floor. Return begins. R starts again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>
-<script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/glass.js' | relative_url }}"></script>
 <script src="{{ '/games/hack/level.js' | relative_url }}"></script>
 <script src="{{ '/games/hack/item.js' | relative_url }}"></script>
 <script src="{{ '/games/hack/monster.js' | relative_url }}"></script>

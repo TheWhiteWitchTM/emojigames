@@ -4,6 +4,14 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-17
 
+### The glass, and three on the marquee
+
+The playable games sit on the emoji engine now. A title card waits for Return. When the game is over, win or death, R starts it again and skips the title. Trump Super Intelligence is still a conversation: no title, no ending. Witch I was not part of this pass.
+
+Galaxy Hunt, The Oregon Trail, and Hack are the featured three. They lead the catalog, they lead the home page, and they are the Games menu. The rest of the shelf stays in the catalog.
+
+Pong and Snake are sprites on that engine. Rogue has rooms. Hack can be won: the Amulet of Yendor is on the sixth floor. Adventureland and Pirate Adventure can be finished, and they can kill you if you grab the wrong thing.
+
 ### Witch I, the desk
 
 The page is a desk. 🖥️ Boot fills the screen with the glass. Escape brings the site back, and Boot opens the same glass again. 📖 Getting Started and 📜 Manual sit on the page.

@@ -2,9 +2,15 @@ useEffect(() => {
   const container = document.getElementById('game');
   if (!container) return;
 
-  const term = new Terminal({ border: '#39ff14' });
+  const term = new Glass({
+    cols: 80,
+    rows: 24,
+    title: '🏴‍☠️ Pirate Adventure',
+    border: '#39ff14',
+    footer: 'LOOK  INVENTORY  GO  GET  DROP  SAY  HELP  RESTART'
+  });
   container.appendChild(term.wrap);
-  term.wrap.focus();
+  term.focus();
 
   const rooms = {
     flat: {
@@ -103,6 +109,72 @@ useEffect(() => {
   let inputBuffer = "";
   let chestOpen = false;
   let parrotFriendly = false;
+  let mode = "intro";
+  const roomSeed = JSON.parse(JSON.stringify(rooms));
+  const HOME = ["treasure", "jewels", "coins"];
+
+  function atHome() {
+    return HOME.every(id => rooms.flat.objects.includes(id));
+  }
+
+  function showIntro() {
+    mode = "intro";
+    inputBuffer = "";
+    term.paintCard({
+      kicker: "pieces of eight",
+      title: "PIRATE ADVENTURE",
+      lines: [
+        "Leave the London flat. Find the island. Bring the gold home.",
+        "Three treasures belong back in the flat.",
+        "The parrot knows the words. HELP lists the rest."
+      ],
+      foot: "Press Return"
+    });
+    term.tone(349, 0.08);
+    setTimeout(() => term.tone(440, 0.1), 140);
+  }
+
+  function showEnd(kind, line, detail) {
+    mode = "end";
+    inputBuffer = "";
+    const title = kind === "win" ? "THE FLAT IS RICH" : kind === "dead" ? "YOU DIED" : "YOU TURN BACK";
+    term.paintCard({
+      title: title,
+      fg: kind === "win" ? 11 : kind === "dead" ? 9 : 7,
+      lines: [line, detail, "Score " + score],
+      foot: "Press R"
+    });
+    if (kind === "win") {
+      term.tone(523, 0.1);
+      setTimeout(() => term.tone(659, 0.12), 140);
+      setTimeout(() => term.tone(784, 0.16), 280);
+    } else if (kind === "dead") term.tone(80, 0.4);
+    else term.tone(220, 0.1);
+  }
+
+  function begin() {
+    mode = "play";
+    Object.keys(rooms).forEach(key => {
+      rooms[key].objects = roomSeed[key].objects.slice();
+      rooms[key].exits = Object.assign({}, roomSeed[key].exits);
+    });
+    current = "flat";
+    inventory = [];
+    score = 0;
+    treasures = 0;
+    inputBuffer = "";
+    chestOpen = false;
+    parrotFriendly = false;
+    look();
+    term.write("> ");
+    term.tone(330, 0.05);
+  }
+
+  function checkWin() {
+    if (mode === "play" && atHome()) {
+      showEnd("win", "The gold, the jewels, and the coins are home.", "London looks different with a fortune in the flat.");
+    }
+  }
 
   function print(text, color = 2) {
     term.setFg(color);
@@ -136,9 +208,8 @@ useEffect(() => {
 
     const exits = Object.keys(room.exits).map(d => d.toUpperCase()).join(", ");
     print(`Exits: ${exits}`, 6);
-    print(`Score: ${score}/100   Treasures: ${treasures}/3`, 3);
+    print(`Score: ${score}    Home: ${HOME.filter(id => rooms.flat.objects.includes(id)).length}/3`, 3);
     term.writeln("");
-    term.write("> ");
     inputBuffer = "";
   }
 
@@ -147,10 +218,15 @@ useEffect(() => {
     const idx = room.objects.indexOf(id);
     if (idx === -1) return print("You don't see that here.");
     if (objects[id]?.static) return print("You can't take that.");
+    if (current === "cave" && rooms.cave.objects.includes("skeleton") && !parrotFriendly && (id === "treasure" || id === "coins")) {
+      showEnd("dead", "The skeleton runs you through.", "The parrot knows the words.");
+      return;
+    }
     room.objects.splice(idx, 1);
     inventory.push(id);
     if (objects[id].treasure) { score += 25; treasures++; }
     print(`You take the ${objects[id].name}.`);
+    term.tone(540, 0.06);
   }
 
   function drop(id) {
@@ -159,12 +235,14 @@ useEffect(() => {
     inventory.splice(idx, 1);
     rooms[current].objects.push(id);
     print(`You drop the ${objects[id].name}.`);
+    term.tone(300, 0.05);
+    checkWin();
   }
 
   function showHelp() {
     print("Commands:", 7);
     print("  LOOK/L  INVENTORY/I  GO <dir>  GET/TAKE  DROP", 2);
-    print("  READ  OPEN  SAY  CLIMB  BOARD  FILL  SCORE  HELP  QUIT", 2);
+    print("  READ  OPEN  SAY  CLIMB  BOARD  FILL  SCORE  HELP  RESTART  QUIT", 2);
   }
 
   function handle(input) {
@@ -181,14 +259,23 @@ useEffect(() => {
       inventory.forEach(id => print(`  ${objects[id].desc}`));
       return;
     }
-    if (verb === "score") return print(`Score: ${score}/100  Treasures: ${treasures}/3`);
-    if (verb === "quit" || verb === "exit") { print("Yo ho ho and a bottle of rum!"); return; }
+    if (verb === "score") return print(`Score: ${score}    Home: ${HOME.filter(id => rooms.flat.objects.includes(id)).length}/3`);
+    if (verb === "restart") return begin();
+    if (verb === "quit" || verb === "exit") {
+      showEnd("leave", "You turn back before the gold is home.", "The flat is quiet.");
+      return;
+    }
+    if (verb === "swim") {
+      showEnd("dead", "You swim until the water wins.", "The boat was the sensible way.");
+      return;
+    }
 
     if (verb === "go" || ["n","s","e","w","u","d"].includes(verb)) {
       const dir = verb === "go" ? noun : verb;
       const room = rooms[current];
       if (!room.exits[dir]) return print("You can't go that way.");
       current = room.exits[dir];
+      term.tone(220, 0.03);
       return look();
     }
 
@@ -234,8 +321,13 @@ useEffect(() => {
         rooms.hold.objects.push("jewels");
         chestOpen = true;
       } else if (current === "cave") {
+        if (rooms.cave.objects.includes("skeleton") && !parrotFriendly) {
+          showEnd("dead", "The skeleton will not share the chest.", "Say the words the book taught you.");
+          return;
+        }
         print("The skeleton's chest is already open. Gold coins spill out.");
-        rooms.cave.objects.push("coins");
+        if (!rooms.cave.objects.includes("coins")) rooms.cave.objects.push("coins");
+        term.tone(480, 0.08);
       } else print("You can't open that.");
       return;
     }
@@ -259,12 +351,20 @@ useEffect(() => {
   }
 
   function onKey(e) {
+    if (mode === "intro") {
+      if (isReturn(e.key) || isRestart(e.key)) begin();
+      return;
+    }
+    if (mode === "end") {
+      if (isRestart(e.key)) begin();
+      return;
+    }
     if (e.key === "Enter") {
       e.preventDefault();
       term.writeln("");
       handle(inputBuffer);
       inputBuffer = "";
-      term.write("> ");
+      if (mode === "play") term.write("> ");
     } else if (e.key === "Backspace") {
       e.preventDefault();
       if (inputBuffer.length) {
@@ -278,17 +378,9 @@ useEffect(() => {
     }
   }
 
-  term.wrap.addEventListener("keydown", onKey);
+  term.onKey(onKey);
 
-  term.clear();
-  print("PIRATE ADVENTURE", 10);
-  print("Scott Adams #2 — White Witch Edition", 2);
-  print("Find the treasures. Type HELP. Pieces of eight!", 7);
-  print("");
-  look();
+  showIntro();
 
-  return () => {
-    term.wrap.removeEventListener("keydown", onKey);
-    term.destroy();
-  };
+  return () => term.destroy();
 });

@@ -9,7 +9,10 @@ tags: [terminal, joke]
 
 <div id="game"></div>
 
+A conversation, not a match. Type a line and press Return. The face follows the mood.
+
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>
-<script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/glass.js' | relative_url }}"></script>
 <script src="{{ '/games/trump-si/responses.js' | relative_url }}"></script>
 <script src="{{ '/games/trump-si/trump-si.js' | relative_url }}"></script>

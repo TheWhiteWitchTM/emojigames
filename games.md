@@ -1,8 +1,13 @@
 ---
+layout: default
 title: Games
 permalink: /games/
-description: Browse terminal games.
+description: Browse the shelf. Featured games sit first.
 ---
+
+# Games
+
+Three are on the marquee. The rest of the shelf is still in the room.
 
 <div id="storefront"></div>
 
@@ -18,14 +23,19 @@ useEffect(() => {
       image: {{ game.image | default: "" | relative_url | jsonify }},
       tags: {% if game.tags %}{{ game.tags | jsonify }}{% else %}[]{% endif %},
       description: {{ game.description | default: "" | jsonify }},
-      style: {{ game.style | default: "terminal" | jsonify }}
+      style: {{ game.style | default: "terminal" | jsonify }},
+      featured: {{ game.featured | jsonify }},
+      rank: {{ game.feature_rank | default: 0 }}
     }{% unless forloop.last %},{% endunless %}
     {% endfor %}
   ];
 
-  // Collect unique styles and tags
-  const styles = [...new Set(games.map(g => g.style))].sort();
-  const allTags = [...new Set(games.flatMap(g => g.tags))].sort();
+  const featured = games.filter(g => g.featured).sort((a, b) => a.rank - b.rank);
+  const rest = games.filter(g => !g.featured);
+  const ordered = featured.concat(rest);
+
+  const styles = [...new Set(ordered.map(g => g.style))].sort();
+  const allTags = [...new Set(ordered.flatMap(g => g.tags))].sort();
 
   let query = '';
   let currentStyle = null;
@@ -60,13 +70,11 @@ useEffect(() => {
     if (toggle) toggle.textContent = currentTag || 'All tags';
   }
 
-  // Search
   const search = input('Search games…', 'store-search', e => {
     query = e.target.value.toLowerCase();
     render();
   });
 
-  // Style tabs. The hash keeps the choice: #terminal, #action, or empty for all.
   const styleTabs = tabs(['All', ...styles], 'store-tabs', i => {
     currentStyle = i === 0 ? null : styles[i - 1];
     currentTag = null;
@@ -75,7 +83,6 @@ useEffect(() => {
     render();
   });
 
-  // Tag dropdown
   const tagDrop = dropdown('All tags', ['All', ...allTags], 'store-tags', val => {
     currentTag = val === 'All' ? null : val;
     currentStyle = null;
@@ -93,34 +100,56 @@ useEffect(() => {
 
   root.append(controls, grid);
 
+  function matches(g) {
+    const matchesQuery = !query ||
+      g.title.toLowerCase().includes(query) ||
+      g.description.toLowerCase().includes(query) ||
+      g.tags.some(t => t.toLowerCase().includes(query));
+    const matchesStyle = !currentStyle || g.style === currentStyle;
+    const matchesTag = !currentTag || g.tags.includes(currentTag);
+    return matchesQuery && matchesStyle && matchesTag;
+  }
+
+  function addCard(g) {
+    const el = card(`
+      <a href="${g.url}" class="game-card${g.featured ? ' is-featured' : ''}">
+        ${g.featured ? '<div class="featured-flag">Featured</div>' : ''}
+        <img src="${g.image}" alt="" class="game-thumb" loading="lazy" width="240" height="135">
+        <div class="game-title">${g.title}</div>
+        <div class="game-desc">${g.description}</div>
+        <div class="game-tags">${g.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      </a>
+    `, 'game-card-wrap' + (g.featured ? ' is-featured' : ''));
+    grid.appendChild(el);
+  }
+
+  function label(text) {
+    const el = document.createElement('h2');
+    el.className = 'shelf-label';
+    el.textContent = text;
+    grid.appendChild(el);
+  }
+
   function render() {
     grid.innerHTML = '';
-    const filtered = games.filter(g => {
-      const matchesQuery = !query ||
-        g.title.toLowerCase().includes(query) ||
-        g.description.toLowerCase().includes(query) ||
-        g.tags.some(t => t.toLowerCase().includes(query));
-      const matchesStyle = !currentStyle || g.style === currentStyle;
-      const matchesTag = !currentTag || g.tags.includes(currentTag);
-      return matchesQuery && matchesStyle && matchesTag;
-    });
-
-    if (!filtered.length) {
+    const shownFeatured = featured.filter(matches);
+    const shownRest = rest.filter(matches);
+    if (!shownFeatured.length && !shownRest.length) {
       grid.innerHTML = '<p class="empty">No games match.</p>';
       return;
     }
-
-    filtered.forEach(g => {
-      const el = card(`
-        <a href="${g.url}" class="game-card">
-          <img src="${g.image}" alt="" class="game-thumb" loading="lazy" width="240" height="135">
-          <div class="game-title">${g.title}</div>
-          <div class="game-desc">${g.description}</div>
-          <div class="game-tags">${g.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-        </a>
-      `, 'game-card-wrap');
-      grid.appendChild(el);
-    });
+    const openShelf = !query && !currentStyle && !currentTag;
+    if (openShelf && shownFeatured.length) {
+      label('Featured');
+      shownFeatured.forEach(addCard);
+      if (shownRest.length) {
+        label('The rest of the shelf');
+        shownRest.forEach(addCard);
+      }
+      return;
+    }
+    shownFeatured.forEach(addCard);
+    shownRest.forEach(addCard);
   }
 
   applyHash();
@@ -151,7 +180,23 @@ useEffect(() => {
 }
 .tab.active { border-color: #c9a6ff; color: #c9a6ff; }
 .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.shelf-label { grid-column: 1 / -1; margin: 0.2rem 0 0; color: #c9a6ff; font-size: 1rem; }
+.game-card-wrap.is-featured .game-card {
+  display: block;
+  border: 1px solid #c9a6ff;
+  border-radius: 12px;
+  padding: 0.55rem;
+  background: #14101a;
+  box-shadow: 0 0 0 1px rgba(201, 166, 255, 0.25), 0 10px 28px rgba(0, 0, 0, 0.35);
+}
 .game-card { display: block; text-decoration: none; color: inherit; }
+.featured-flag {
+  color: #c9a6ff;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
 .game-thumb { width: 100%; height: auto; border-radius: 8px; background: #111; }
 .game-title { font-weight: 600; margin: 0.4rem 0 0.2rem; }
 .game-desc { font-size: 0.85rem; opacity: 0.8; }
