@@ -74,6 +74,18 @@ tags: [terminal, computer]
     inset: 0;
     background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.18) 1px, transparent 2px, transparent 3px);
   }
+  .ee-footer {
+    color: #8d7b68;
+    letter-spacing: .08em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+  }
+  .basic-mood { white-space: nowrap; }
+  .basic-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-left: auto; }
+  .basic-key { font: inherit; letter-spacing: .04em; font-size: 11px; color: #cbbfa6; white-space: nowrap; }
+  .basic-key kbd { color: #8d7b68; font: inherit; }
 </style>
 
 <div class="basic-front">
@@ -120,17 +132,19 @@ tags: [terminal, computer]
     stage.hidden = false;
     stage.classList.add("basic-open");
     document.body.classList.add("basic-glass-on");
-    var pending = stage.requestFullscreen ? stage.requestFullscreen() : Promise.reject();
-    Promise.resolve(pending).catch(function () {});
+    if (stage.requestFullscreen) {
+      stage.requestFullscreen().catch(function () {});
+    }
     if (window.BASIC && BASIC.power) BASIC.power();
   }
   function closeStage() {
+    if (!open) return;
     open = false;
     stage.classList.remove("basic-open");
     stage.hidden = true;
     document.body.classList.remove("basic-glass-on");
-    if (document.fullscreenElement) {
-      Promise.resolve(document.exitFullscreen()).catch(function () {});
+    if (document.fullscreenElement === stage) {
+      document.exitFullscreen().catch(function () {});
     }
     if (window.BASIC && BASIC.leave) BASIC.leave();
   }
@@ -138,8 +152,18 @@ tags: [terminal, computer]
   boot.addEventListener("click", openStage);
   startedBtn.addEventListener("click", function () { started.hidden = !started.hidden; });
   manualBtn.addEventListener("click", function () { manual.hidden = !manual.hidden; });
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && open) closeStage();
+
+  document.addEventListener("fullscreenchange", function () {
+    if (!document.fullscreenElement && open) {
+      closeStage();
+    }
   });
+
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && open) {
+      e.preventDefault();
+      closeStage();
+    }
+  }, true);
 })();
 </script>
