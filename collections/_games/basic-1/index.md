@@ -8,24 +8,24 @@ tags: [terminal, computer]
 ---
 
 <style>
-  .basic-front {
+  .witch-front {
     width: min(72ch, 100%);
     color: #e8e8e8;
   }
-  .basic-front h1 {
+  .witch-front h1 {
     margin: 0.2rem 0 0.6rem;
   }
-  .basic-lead {
+  .witch-lead {
     margin: 0.4rem 0 0;
     color: #ccc;
   }
-  .basic-actions {
+  .witch-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
     margin: 1.1rem 0 0.7rem;
   }
-  .basic-actions button {
+  .witch-actions button {
     font: inherit;
     font-size: 1.05rem;
     color: #e8e8e8;
@@ -35,37 +35,37 @@ tags: [terminal, computer]
     padding: 0.55rem 0.95rem;
     cursor: pointer;
   }
-  .basic-actions button:hover,
-  .basic-actions button:focus-visible,
-  .basic-actions button[aria-expanded="true"] {
+  .witch-actions button:hover,
+  .witch-actions button:focus-visible,
+  .witch-actions button[aria-expanded="true"] {
     border-color: #c9a6ff;
     color: #e8d5ff;
     outline: none;
   }
-  .basic-actions button.boot {
+  .witch-actions button.boot {
     border-color: #c9a6ff;
     color: #e8d5ff;
   }
-  .basic-hint {
+  .witch-hint {
     margin: 0.2rem 0 0.8rem;
     color: #9a9a9a;
   }
-  .basic-panel {
+  .witch-panel {
     border: 1px solid #2a2a2a;
     border-radius: 8px;
     background: #111;
     padding: 0.3rem 1rem 0.8rem;
     margin: 0.4rem 0 1rem;
   }
-  .basic-panel[hidden] { display: none !important; }
-  .basic-panel.manual {
+  .witch-panel[hidden] { display: none !important; }
+  .witch-panel.manual {
     max-height: min(70vh, 680px);
     overflow: auto;
   }
-  body.basic-glass-on { overflow: hidden; }
-  .basic-stage[hidden] { display: none !important; }
-  .basic-stage.basic-open,
-  .basic-stage:fullscreen {
+  body.witch-glass-on { overflow: hidden; }
+  .witch-stage[hidden] { display: none !important; }
+  .witch-stage.witch-open,
+  .witch-stage:fullscreen {
     display: flex !important;
     position: fixed;
     inset: 0;
@@ -79,8 +79,8 @@ tags: [terminal, computer]
     align-items: center;
     justify-content: center;
   }
-  .basic-stage.basic-open #game,
-  .basic-stage:fullscreen #game {
+  .witch-stage.witch-open #game,
+  .witch-stage:fullscreen #game {
     width: min(100%, calc((100vh - 128px) * 720 / 576));
     width: min(100%, calc((100dvh - 128px) * 720 / 576));
     max-width: 100%;
@@ -95,8 +95,8 @@ tags: [terminal, computer]
     box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
     font-family: ui-monospace, "Courier New", monospace !important;
   }
-  .basic-stage:fullscreen .ee-wrap,
-  .basic-stage.basic-open .ee-wrap {
+  .witch-stage:fullscreen .ee-wrap,
+  .witch-stage.witch-open .ee-wrap {
     border-radius: 12px;
   }
   .ee-header { border-bottom: 1px solid #2a211c; }
@@ -140,96 +140,88 @@ tags: [terminal, computer]
     align-items: center;
     gap: 6px 12px;
   }
-  .basic-mood { white-space: nowrap; }
-  .basic-bar {
+  .witch-mood { white-space: nowrap; }
+  .witch-bar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 4px;
     margin-left: auto;
   }
-  .basic-key {
+  .witch-key {
     font: inherit;
     letter-spacing: .04em;
     font-size: 11px;
     color: #cbbfa6;
     white-space: nowrap;
   }
-  .basic-key kbd {
+  .witch-key kbd {
     color: #8d7b68;
     font: inherit;
     letter-spacing: 0;
   }
-  .basic-key.lit, .basic-key.lit kbd { color: #e2b657; }
-  .basic-key.quiet { opacity: .38; }
+  .witch-key.lit, .witch-key.lit kbd { color: #e2b657; }
+  .witch-key.quiet { opacity: .38; }
   .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
 </style>
 
-<div class="basic-front markdown-body">
+<div class="witch-front markdown-body">
   <h1>🖥️ BASIC I</h1>
-  <p class="basic-lead">Forty columns, twenty-four rows. It speaks BASIC.</p>
+  <p class="witch-lead">Forty columns, twenty-four rows. It speaks BASIC.</p>
 
-  <div class="basic-actions">
-    <button type="button" class="boot" id="basic-boot">🖥️ Boot</button>
-    <button type="button" id="basic-started-btn" aria-expanded="false" aria-controls="basic-started">📖 Getting Started</button>
-    <button type="button" id="basic-manual-btn" aria-expanded="false" aria-controls="basic-manual">📜 Manual</button>
+  <div class="witch-actions">
+    <button type="button" class="boot" id="witch-boot">🖥️ Boot</button>
+    <button type="button" id="witch-started-btn" aria-expanded="false" aria-controls="witch-started">📖 Getting Started</button>
+    <button type="button" id="witch-manual-btn" aria-expanded="false" aria-controls="witch-manual">📜 Manual</button>
   </div>
-  <p class="basic-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
+  <p class="witch-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
 
-  <div id="basic-started" class="basic-panel" hidden>
+  <div id="witch-started" class="witch-panel" hidden>
     <h2>📖 Getting Started</h2>
-    <p>The prompt is <strong>READY</strong>. A line that starts with a number is stored. A line without a number runs right away.</p>
-    <p><strong>Immediate mode</strong> (runs now):</p>
-    <pre><code>PRINT "HELLO"</code></pre>
-    <p>Press Enter. It prints and returns to READY.</p>
-    <p><strong>Stored program</strong>:</p>
-    <pre><code>10 PRINT "HELLO"
-20 PRINT "WORLD"
-30 END
-RUN</code></pre>
-    <p><code>RUN</code> starts at the lowest line. <code>LIST</code> shows the lines. <code>NEW</code> clears the program. The machine holds <strong>512 lines</strong>. When you reach the limit it will say so.</p>
+    <p>The prompt is <strong>READY</strong>. A line with a number is stored. A line without one runs now.</p>
     <ul>
-      <li><code>SHELF</code> opens the box of example programs. Arrows move. Enter loads one (it does not run).</li>
-      <li><code>RUN</code> starts the program. <code>LIST</code> shows the lines.</li>
-      <li><code>CLS</code> clears the glass. <code>AUTO</code> numbers the next lines for you.</li>
-      <li>Ctrl-C or Escape stops a running program.</li>
+      <li>📚 <code>SHELF</code> opens the box. The arrows move. Enter takes a program down and does not run it.</li>
+      <li>🕯️ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
+      <li>🧹 <code>SCRUB</code> clears the glass. ✨ <code>MAGIC</code> numbers the next lines.</li>
+      <li>✋ Ctrl-C stops a program that will not stop.</li>
     </ul>
-    <p>Try <code>SHELF</code>, move to <code>HELLO</code>, press Enter, then <code>RUN</code>.</p>
-    <p>Under the glass the keys are labeled. Nothing there is a mouse button.</p>
+    <p>Try <code>SHELF</code>, point at <code>HELLO-WITCH</code>, press Enter, then <code>RUN</code>. <code>HELLO-DEMON</code> is the other hello. <code>ANSI-WITCH</code> paints her.</p>
+    <p>Under the glass, the keys are an emoji, a word, and a function key. Nothing there is a button.</p>
     <ul>
       <li>📜 LIST F1</li>
       <li>🕯️ RUN F2</li>
       <li>📚 SHELF F3</li>
-      <li>🧹 CLS F4</li>
-      <li>✨ AUTO F5</li>
+      <li>🧹 SCRUB F4</li>
+      <li>✨ MAGIC F5</li>
+      <li>🌑 EXORCISE F6</li>
       <li>🔒 LATCH F7</li>
       <li>⛶ FULL F11</li>
       <li>⎋ BACK ESC</li>
     </ul>
-    <p>The full list of words and the walls are in the Manual.</p>
+    <p>She wakes latched. Up walks the lines that rolled off the glass. The walls are in <a href="{{ '/SYSTEM.md' | relative_url }}">SYSTEM.md</a>.</p>
   </div>
 
-  <div id="basic-manual" class="basic-panel manual markdown-body" hidden>
-    {% capture basic_manual %}{% include_relative MANUAL.md %}{% endcapture %}
-    {{ basic_manual | markdownify }}
+  <div id="witch-manual" class="witch-panel manual markdown-body" hidden>
+    {% capture witch_manual %}{% include_relative MANUAL.md %}{% endcapture %}
+    {{ witch_manual | markdownify }}
   </div>
 </div>
 
-<div id="basic-stage" class="basic-stage" hidden>
-  <div id="game" data-shelf="{{ '/games/basic-1/shelf/' | relative_url }}"></div>
+<div id="witch-stage" class="witch-stage" hidden>
+  <div id="game" data-shelf="{{ '/games/basic-1/shelf/' | relative_url }}" data-witch="{{ '/assets/images/site.jpg' | relative_url }}"></div>
 </div>
 
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
-<script src="{{ '/games/basic-1/basic.js' | relative_url }}"></script>
+<script src="{{ '/games/basic-1/interpreter.js' | relative_url }}"></script>
 <script src="{{ '/games/basic-1/basic-1.js' | relative_url }}"></script>
 <script>
 (function () {
-  var stage = document.getElementById("basic-stage");
-  var boot = document.getElementById("basic-boot");
-  var startedBtn = document.getElementById("basic-started-btn");
-  var manualBtn = document.getElementById("basic-manual-btn");
-  var started = document.getElementById("basic-started");
-  var manual = document.getElementById("basic-manual");
+  var stage = document.getElementById("witch-stage");
+  var boot = document.getElementById("witch-boot");
+  var startedBtn = document.getElementById("witch-started-btn");
+  var manualBtn = document.getElementById("witch-manual-btn");
+  var started = document.getElementById("witch-started");
+  var manual = document.getElementById("witch-manual");
   var open = false;
   var inFull = false;
 
@@ -247,25 +239,25 @@ RUN</code></pre>
   function closeStage() {
     if (!open) return;
     open = false;
-    stage.classList.remove("basic-open");
+    stage.classList.remove("witch-open");
     stage.hidden = true;
-    document.body.classList.remove("basic-glass-on");
+    document.body.classList.remove("witch-glass-on");
     if (document.fullscreenElement) {
       Promise.resolve(document.exitFullscreen()).catch(function () {});
     }
-    if (window.BASIC && BASIC.leave) BASIC.leave();
+    if (window.WITCH && WITCH.leave) WITCH.leave();
     boot.focus();
   }
 
   function openStage() {
     open = true;
     stage.hidden = false;
-    stage.classList.add("basic-open");
-    document.body.classList.add("basic-glass-on");
+    stage.classList.add("witch-open");
+    document.body.classList.add("witch-glass-on");
     var root = stage;
     var pending = root.requestFullscreen ? root.requestFullscreen() : Promise.reject();
     Promise.resolve(pending).catch(function () {});
-    if (window.BASIC && BASIC.power) BASIC.power();
+    if (window.WITCH && WITCH.power) WITCH.power();
   }
 
   boot.addEventListener("click", openStage);
