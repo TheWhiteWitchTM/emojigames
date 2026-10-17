@@ -25,7 +25,8 @@ tags: [terminal, computer]
     gap: 0.6rem;
     margin: 1.1rem 0 0.7rem;
   }
-  .basic-actions button {
+  .basic-actions button,
+  .basic-actions a.button {
     font: inherit;
     font-size: 1.05rem;
     color: #e8e8e8;
@@ -34,10 +35,14 @@ tags: [terminal, computer]
     border-radius: 8px;
     padding: 0.55rem 0.95rem;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
   }
   .basic-actions button:hover,
   .basic-actions button:focus-visible,
-  .basic-actions button[aria-expanded="true"] {
+  .basic-actions button[aria-expanded="true"],
+  .basic-actions a.button:hover,
+  .basic-actions a.button:focus-visible {
     border-color: #c9a6ff;
     color: #e8d5ff;
     outline: none;
@@ -109,7 +114,7 @@ tags: [terminal, computer]
     background: #000;
     border-radius: 12px;
     overflow: hidden;
-    border: 3px solid #4a90e2;
+    border: 6px solid #4a90e2;
     box-shadow:
       inset 0 0 0 1px #1a1012,
       inset 0 0 40px rgba(74, 144, 226, 0.25);
@@ -161,111 +166,4 @@ tags: [terminal, computer]
     font: inherit;
     letter-spacing: 0;
   }
-  .basic-key.lit, .basic-key.lit kbd { color: #e2b657; }
-  .basic-key.quiet { opacity: .38; }
-  .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
-</style>
-
-<div class="basic-front markdown-body">
-  <h1>🖥️ BASIC I</h1>
-  <p class="basic-lead">Forty columns, twenty-four rows. It speaks BASIC.</p>
-
-  <div class="basic-actions">
-    <button type="button" class="boot" id="basic-boot">🖥️ Boot</button>
-    <button type="button" id="basic-started-btn" aria-expanded="false" aria-controls="basic-started">📖 Getting Started</button>
-    <button type="button" id="basic-manual-btn" aria-expanded="false" aria-controls="basic-manual">📜 Manual</button>
-  </div>
-  <p class="basic-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
-  <p class="basic-hint"><a href="{{ '/games/basic-1/learning/' | relative_url }}">Learning BASIC</a> — short introduction for anyone who wants to learn line-numbered BASIC.</p>
-
-  <div id="basic-started" class="basic-panel" hidden>
-    {% capture basic_started %}{% include_relative GETTING-STARTED.md %}{% endcapture %}
-    {{ basic_started | markdownify }}
-  </div>
-
-  <div id="basic-manual" class="basic-panel manual markdown-body" hidden>
-    {% capture basic_manual %}{% include_relative MANUAL.md %}{% endcapture %}
-    {{ basic_manual | markdownify }}
-  </div>
-</div>
-
-<div id="basic-stage" class="basic-stage" hidden>
-  <div id="game" data-shelf="{{ '/games/basic-1/shelf/' | relative_url }}"></div>
-</div>
-
-<script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
-<script src="{{ '/games/basic-1/basic.js' | relative_url }}"></script>
-<script src="{{ '/games/basic-1/basic-1.js' | relative_url }}"></script>
-<script>
-(function () {
-  var stage = document.getElementById("basic-stage");
-  var boot = document.getElementById("basic-boot");
-  var startedBtn = document.getElementById("basic-started-btn");
-  var manualBtn = document.getElementById("basic-manual-btn");
-  var started = document.getElementById("basic-started");
-  var manual = document.getElementById("basic-manual");
-  var open = false;
-  var inFull = false;
-
-  function togglePanel(btn, panel, otherBtn, other) {
-    var show = btn.getAttribute("aria-expanded") !== "true";
-    btn.setAttribute("aria-expanded", show ? "true" : "false");
-    panel.hidden = !show;
-    if (show) {
-      otherBtn.setAttribute("aria-expanded", "false");
-      other.hidden = true;
-      panel.scrollIntoView({ block: "nearest" });
-    }
-  }
-
-  function closeStage() {
-    if (!open) return;
-    open = false;
-    stage.classList.remove("basic-open");
-    stage.hidden = true;
-    document.body.classList.remove("basic-glass-on");
-    if (document.fullscreenElement) {
-      Promise.resolve(document.exitFullscreen()).catch(function () {});
-    }
-    if (window.BASIC && BASIC.leave) BASIC.leave();
-    boot.focus();
-  }
-
-  function openStage() {
-    open = true;
-    stage.hidden = false;
-    stage.classList.add("basic-open");
-    document.body.classList.add("basic-glass-on");
-    var root = stage;
-    var pending = root.requestFullscreen ? root.requestFullscreen() : Promise.reject();
-    Promise.resolve(pending).catch(function () {});
-    if (window.BASIC && BASIC.power) BASIC.power();
-  }
-
-  boot.addEventListener("click", openStage);
-  startedBtn.addEventListener("click", function () {
-    togglePanel(startedBtn, started, manualBtn, manual);
-  });
-  manualBtn.addEventListener("click", function () {
-    togglePanel(manualBtn, manual, startedBtn, started);
-  });
-
-  document.addEventListener("fullscreenchange", function () {
-    if (document.fullscreenElement) {
-      inFull = true;
-      return;
-    }
-    if (!inFull) return;
-    inFull = false;
-    if (!open) return;
-    closeStage();
-  });
-
-  window.addEventListener("keydown", function (event) {
-    if (event.key !== "Escape" || !open) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    closeStage();
-  }, true);
-})();
-</script>
+  .basic-key.lit, .
