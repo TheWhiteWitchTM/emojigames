@@ -1,4 +1,4 @@
-// BASIC I. Black background, white text, blue border box.
+// BASIC I. Black background, white text, forced blue border.
 "use strict";
 (function () {
   var COLS = 40;
@@ -75,42 +75,35 @@
     statusEl.textContent = "READY " + lines.size + "/512";
   }
 
+  function writeAt(row, col, color, text) {
+    term.color(color, 0);
+    term.cursor.row = row;
+    term.cursor.col = col;
+    term.write(text);
+  }
+
   function paintWelcome() {
     term.clear();
     term.color(15, 0);
 
-    term.color(12, 0);
-    term.cursor.row = 5;
-    term.cursor.col = 3;
-    term.write("┌──────────────────────────────────┐");
-    term.cursor.row = 6;
-    term.cursor.col = 3;
-    term.write("│                                  │");
-    term.cursor.row = 7;
-    term.cursor.col = 3;
-    term.write("│         **** BASIC I ****        │");
-    term.cursor.row = 8;
-    term.cursor.col = 3;
-    term.write("│                                  │");
-    term.cursor.row = 9;
-    term.cursor.col = 3;
-    term.write("│         512 LINES FREE           │");
-    term.cursor.row = 10;
-    term.cursor.col = 3;
-    term.write("│                                  │");
-    term.cursor.row = 11;
-    term.cursor.col = 3;
-    term.write("└──────────────────────────────────┘");
+    // Force blue border, one line at a time
+    writeAt(4, 2, 12, "┌────────────────────────────────────┐");
+    writeAt(5, 2, 12, "│                                    │");
+    writeAt(6, 2, 12, "│          **** BASIC I ****         │");
+    writeAt(7, 2, 12, "│                                    │");
+    writeAt(8, 2, 12, "│          512 LINES FREE            │");
+    writeAt(9, 2, 12, "│                                    │");
+    writeAt(10, 2, 12, "└────────────────────────────────────┘");
 
-    term.cursor.row = 14;
-    term.cursor.col = 3;
-    term.color(15, 0);
-    term.write("READY.");
+    writeAt(13, 2, 15, "READY.");
+    writeAt(15, 2, 11, "Type a command or a numbered line.");
 
     term.color(7, 0);
     term.dirty = true;
     term.flush();
     setStatus();
+    term.cursor.row = 16;
+    term.cursor.col = 2;
   }
 
   function writeReady() {
