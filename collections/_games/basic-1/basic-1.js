@@ -1,220 +1,83 @@
-// BASIC I. 40-column machine with C64-style boot and function keys.
+// BASIC interpreter. 512-line limit. Friendly messages.
 "use strict";
-(function () {
-  var COLS = 40;
-  var ROWS = 24;
-  var CW = 18;
-  var CH = 24;
+(function (root) {
+  var MAX_LINES = 512;
+  var MAX_LINE = 63999;
 
-  var mount = document.getElementById("game");
-  if (!mount || !globalThis.EmojiEngine) {
-    if (mount) mount.textContent = "GLASS MISSING";
-    return;
+  function Basic() {
+    this.lines = new Map();
+    this.vars = {};
+    this.currentLine = null;
   }
 
-  var E = globalThis.EmojiEngine;
-  var canvas = new E.Canvas({ width: COLS * CW, height: ROWS * CH });
-  var term = new E.Terminal({
-    cols: COLS,
-    rows: ROWS,
-    cellWidth: CW,
-    cellHeight: CH,
-    canvas: canvas
-  });
-  term.cursorColor = "#7cf0ff";
-  term.cursorLit = true;
+  Basic.prototype.clearAll = function () {
+    this.lines.clear();
+    this.vars = {};
+    this.currentLine = null;
+  };
 
-  var engine = new E.Engine({ canvas: canvas });
-  var ui = E.Utilities.wrap(term, { title: "BASIC I", footer: true });
+  Basic.prototype.reset = function () {
+    this.clearAll();
+    return { type: "reset" };
+  };
 
-  var crt = document.createElement("div");
-  crt.className = "crt";
-  var canvasEl = term.canvas.element;
-  ui.wrap.insertBefore(crt, canvasEl);
-  crt.appendChild(canvasEl);
-  var scan = document.createElement("div");
-  scan.className = "scan";
-  crt.appendChild(scan);
-  mount.appendChild(ui.wrap);
-  ui.wrap.setAttribute("role", "application");
-  ui.wrap.setAttribute("aria-label", "BASIC I");
+  Basic.prototype.addLine = function (num, source) {
+    if (num < 0 || num > MAX_LINE) return { type: "error", msg: "LINE NUMBER TOO HIGH" };
+    if (this.lines.size >= MAX_LINES && !this.lines.has(num)) {
+      return { type: "error", msg: "OUT OF MEMORY" };
+    }
+    if (!source || !source.trim()) {
+      this.lines.delete(num);
+    } else {
+      this.lines.set(num, source.trim());
+    }
+    return { type: "ok" };
+  };
 
-  // Footer + function key bar
-  var statusEl = document.createElement("span");
-  statusEl.className = "status";
-  statusEl.textContent = "WAKING 0/512";
-  var mood = document.createElement("span");
-  mood.className = "basic-mood";
-  mood.appendChild(statusEl);
+  Basic.prototype.list = function () {
+    var keys = Array.from(this.lines.keys()).sort(function (a, b) { return a - b; });
+    var text = keys.map(function (n) { return n + " " + this.lines.get(n); }, this).join("\n");
+    return { type: "print", text: text };
+  };
 
-  var TOOLS = [
-    { key: "F1", emoji: "📜", label: "LIST" },
-    { key: "F2", emoji: "🕯️", label: "RUN" },
-    { key: "F3", emoji: "📚", label: "SHELF" },
-    { key: "F4", emoji: "🧹", label: "CLS" },
-    { key: "F5", emoji: "✨", label: "AUTO" },
-    { key: "F7", emoji: "🔒", label: "LATCH" }
-  ];
-  var bar = document.createElement("div");
-  bar.className = "basic-bar";
-  TOOLS.forEach(function (t) {
-    var span = document.createElement("span");
-    span.className = "basic-key";
-    span.appendChild(document.createTextNode(t.emoji + " " + t.label + " "));
-    var kbd = document.createElement("kbd");
-    kbd.textContent = t.key;
-    span.appendChild(kbd);
-    bar.appendChild(span);
-  });
-  var esc = document.createElement("span");
-  esc.className = "basic-key";
-  esc.appendChild(document.createTextNode("⎋ BACK "));
-  var escK = document.createElement("kbd");
-  escK.textContent = "ESC";
-  esc.appendChild(escK);
-  bar.appendChild(esc);
-
-  ui.footer.textContent = "";
-  ui.footer.appendChild(mood);
-  ui.footer.appendChild(bar);
-
-  var lines = new Map();
-  var entry = "";
-  var maxLines = 512;
-
-  function setStatus() {
-    statusEl.textContent = "READY " + lines.size + "/512";
-  }
-
-  function paintWelcome() {
-    term.clear();
-    // Friendly C64-ish colors
-    term.color(14, 0); // cyan
-    term.write("┌──────────────────────────────────────┐\n");
-    term.write("│           **** BASIC I ****          │\n");
-    term.write("│                                      │\n");
-    term.color(11, 0); // yellow
-    term.write("│           512 LINES FREE             │\n");
-    term.color(14, 0);
-    term.write("│                                      │\n");
-    term.write("└──────────────────────────────────────┘\n\n");
-    term.color(15, 0); // white
-    term.write("READY.\n");
-    term.color(7, 0);
-    term.dirty = true;
-    term.flush();
-    setStatus();
-  }
-
-  function writeReady() {
-    term.color(14, 0);
-    term.write("READY.\n");
-    term.color(7, 0);
-    term.flush();
-  }
-
-  function doPrint(arg) {
-    var text = arg.replace(/^["']|["']$/g, "");
-    term.color(15, 0);
-    term.write(text + "\n");
-    term.color(7, 0);
-  }
-
-  function doList() {
-    var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
-    term.color(11, 0);
-    keys.forEach(function (n) {
-      term.write(n + " " + lines.get(n) + "\n");
-    });
-    term.color(7, 0);
-  }
-
-  function doNew() {
-    lines.clear();
-    paintWelcome();
-  }
-
-  function doRun() {
-    var keys = Array.from(lines.keys()).sort(function (a, b) { return a - b; });
-    term.color(10, 0);
-    keys.forEach(function (n) {
-      var src = lines.get(n);
-      if (/^PRINT\s+/i.test(src)) {
-        doPrint(src.replace(/^PRINT\s+/i, ""));
+  Basic.prototype.run = function () {
+    var keys = Array.from(this.lines.keys()).sort(function (a, b) { return a - b; });
+    var output = [];
+    for (var i = 0; i < keys.length; i++) {
+      var src = this.lines.get(keys[i]);
+      var m = src.match(/^PRINT\s+(.*)$/i);
+      if (m) {
+        var arg = m[1].replace(/^["']|["']$/g, "");
+        output.push(arg);
       }
-    });
-    term.color(7, 0);
-    writeReady();
-  }
+    }
+    return { type: "print", text: output.join("\n") };
+  };
 
-  function handleLine(raw) {
-    var line = raw.trim();
-    if (!line) { writeReady(); return; }
+  Basic.prototype.execLine = function (source) {
+    var line = (source || "").trim();
+    if (!line) return { type: "ok" };
 
     var numMatch = line.match(/^(\d+)\s*(.*)$/);
     if (numMatch) {
-      var num = parseInt(numMatch[1], 10);
-      var rest = numMatch[2];
-      if (lines.size >= maxLines && !lines.has(num)) {
-        term.color(9, 0);
-        term.write("OUT OF MEMORY\n");
-        term.color(7, 0);
-        writeReady();
-        return;
-      }
-      if (!rest) lines.delete(num);
-      else lines.set(num, rest);
-      writeReady();
-      return;
+      return this.addLine(parseInt(numMatch[1], 10), numMatch[2]);
     }
 
     var upper = line.toUpperCase();
-    if (upper === "LIST") { doList(); writeReady(); return; }
-    if (upper === "NEW") { doNew(); return; }
-    if (upper === "RUN") { doRun(); return; }
-    if (upper === "CLS") { term.clear(); paintWelcome(); return; }
-    if (/^PRINT\s+/i.test(line)) { doPrint(line.replace(/^PRINT\s+/i, "")); writeReady(); return; }
+    if (upper === "RESET") return this.reset();
+    if (upper === "NEW") return this.reset();
+    if (upper === "LIST") return this.list();
+    if (upper === "RUN") return this.run();
+    if (upper === "CLS") return { type: "cls" };
 
-    term.color(9, 0);
-    term.write("SYNTAX ERROR\n");
-    term.color(7, 0);
-    writeReady();
-  }
-
-  function onKey(e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      var line = entry;
-      entry = "";
-      term.write("\n");
-      handleLine(line);
-      return;
+    var printMatch = line.match(/^PRINT\s+(.*)$/i);
+    if (printMatch) {
+      var text = printMatch[1].replace(/^["']|["']$/g, "");
+      return { type: "print", text: text };
     }
-    if (e.key === "Backspace") {
-      e.preventDefault();
-      if (entry.length) {
-        entry = entry.slice(0, -1);
-        term.write("\b \b");
-        term.flush();
-      }
-      return;
-    }
-    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      e.preventDefault();
-      entry += e.key;
-      term.write(e.key);
-      term.flush();
-    }
-  }
 
-  function power() {
-    paintWelcome();
-    document.addEventListener("keydown", onKey, true);
-  }
+    return { type: "error", msg: "SYNTAX ERROR" };
+  };
 
-  function leave() {
-    document.removeEventListener("keydown", onKey, true);
-  }
-
-  window.BASIC = { power: power, leave: leave };
-})();
+  root.BASIC = Basic;
+})(typeof globalThis !== "undefined" ? globalThis : this);
