@@ -1,4 +1,4 @@
-// BASIC I. Working shell based on the Witch I terminal setup.
+// BASIC I. Friendly C64-style full-screen boot.
 "use strict";
 (function () {
   var COLS = 40;
@@ -86,21 +86,55 @@
     statusEl.textContent = "READY " + lines.size + "/512";
   }
 
+  function fillBackground() {
+    // Fill entire glass with blue background (color 6 = teal/blue family)
+    term.color(15, 6);
+    for (var r = 0; r < ROWS; r++) {
+      term.write("                                        \n"); // 40 spaces
+    }
+    term.cursor.row = 0;
+    term.cursor.col = 0;
+  }
+
   function paintWelcome() {
     term.clear();
-    // Blue background (C64 style), cyan / white text
-    term.color(14, 6); // cyan on blue
-    term.write("┌──────────────────────────────────────┐\n");
-    term.write("│                                      │\n");
-    term.write("│           **** BASIC I ****          │\n");
-    term.write("│                                      │\n");
+    fillBackground();
+
+    // Simple friendly box art, white/cyan on blue
     term.color(15, 6); // white on blue
-    term.write("│           512 LINES FREE             │\n");
-    term.color(14, 6);
-    term.write("│                                      │\n");
-    term.write("└──────────────────────────────────────┘\n\n");
-    term.color(15, 6);
-    term.write("READY.\n");
+    term.cursor.row = 4;
+    term.cursor.col = 2;
+    term.write("┌────────────────────────────────────┐");
+
+    term.cursor.row = 5;
+    term.cursor.col = 2;
+    term.write("│                                    │");
+
+    term.cursor.row = 6;
+    term.cursor.col = 2;
+    term.write("│          **** BASIC I ****         │");
+
+    term.cursor.row = 7;
+    term.cursor.col = 2;
+    term.write("│                                    │");
+
+    term.cursor.row = 8;
+    term.cursor.col = 2;
+    term.write("│          512 LINES FREE            │");
+
+    term.cursor.row = 9;
+    term.cursor.col = 2;
+    term.write("│                                    │");
+
+    term.cursor.row = 10;
+    term.cursor.col = 2;
+    term.write("└────────────────────────────────────┘");
+
+    term.cursor.row = 13;
+    term.cursor.col = 2;
+    term.color(14, 6); // cyan on blue
+    term.write("READY.");
+
     term.color(7, 6);
     term.dirty = true;
     term.flush();
@@ -109,7 +143,7 @@
   }
 
   function writeReady() {
-    term.color(15, 6);
+    term.color(14, 6);
     term.write("READY.\n");
     term.color(7, 6);
     term.flush();
@@ -175,7 +209,7 @@
     if (upper === "LIST") { doList(); writeReady(); return; }
     if (upper === "NEW" || upper === "RESET") { doReset(); return; }
     if (upper === "RUN") { doRun(); return; }
-    if (upper === "CLS") { term.clear(); paintWelcome(); return; }
+    if (upper === "CLS") { paintWelcome(); return; }
     if (/^PRINT\s+/i.test(line)) { doPrint(line.replace(/^PRINT\s+/i, "")); writeReady(); return; }
 
     term.color(9, 6);
