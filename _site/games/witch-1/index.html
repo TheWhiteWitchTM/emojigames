@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13S6Z9KCX9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13S6Z9KCX9');
+</script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧙‍♀️</text></svg>">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>🖥️ Witch I</title>
+<meta name="description" content="A 40-column machine. It speaks WASIC.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="http://localhost:4019/emojigames/games/witch-1/">
+<meta property="og:title" content="🖥️ Witch I">
+<meta property="og:description" content="A 40-column machine. It speaks WASIC.">
+<meta property="og:site_name" content="Emoji Games">
+<meta property="og:image" content="http://localhost:4019/emojigames/games/witch-1/banner.jpg">
+<meta property="og:image:alt" content="🖥️ Witch I">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@TheWhiteWitchTM">
+<meta name="twitter:title" content="🖥️ Witch I">
+<meta name="twitter:description" content="A 40-column machine. It speaks WASIC.">
+<meta name="twitter:image" content="http://localhost:4019/emojigames/games/witch-1/banner.jpg">
+<meta name="twitter:image:alt" content="🖥️ Witch I">
+
+  <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+</head>
+<body>
+  <header class="site-header">
+  <nav class="site-nav">
+    <ul>
+      
+        
+          <li>
+            
+              <a href="/emojigames/">🏠 Home</a>
+            
+          </li>
+        
+      
+        
+          <li>
+            
+              <a href="/emojigames/releases/">📢 Releases</a>
+            
+          </li>
+        
+      
+        
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">🕹️ Games</a>
+            <ul class="dropdown-menu">
+              
+                
+                  <li><a href="/emojigames/games/">📂 All Games</a></li>
+                
+              
+                
+                  <li class="dropdown-separator"></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/adventureland/">🌲 Adventureland</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/pirate/">🏴‍☠️ Pirate Adventure</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/galaxy-hunt/">🚀 Galaxy Hunt</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/pong/">🏓 Pong</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/rogue/">🗡️ Rogue</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/snake/">🐍 Snake</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/hack/">🗡️ Hack</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/trump-si/">🤖 Trump Super Intelligence</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/oregon-trail/">🐂 The Oregon Trail</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/witch-hunt/">🧙‍♀️ Witch Hunt</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/witch-tales/">🧙 A Witch's Tale</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/witch-1/">🖥️ Witch I</a></li>
+                
+              
+            </ul>
+          </li>
+        
+      
+        
+          <li>
+            
+              <a href="/emojigames/about/">🔮 About</a>
+            
+          </li>
+        
+      
+    </ul>
+  </nav>
+</header>
+
+
+  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
+
+  <main class="game-frame">
+    <style>
+  .witch-front {
+    width: min(72ch, 100%);
+    color: #e8e8e8;
+  }
+  .witch-front h1 {
+    margin: 0.2rem 0 0.6rem;
+  }
+  .witch-lead {
+    margin: 0.4rem 0 0;
+    color: #ccc;
+  }
+  .witch-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1.1rem 0 0.7rem;
+  }
+  .witch-actions button {
+    font: inherit;
+    font-size: 1.05rem;
+    color: #e8e8e8;
+    background: transparent;
+    border: 1px solid #3a2a4a;
+    border-radius: 8px;
+    padding: 0.55rem 0.95rem;
+    cursor: pointer;
+  }
+  .witch-actions button:hover,
+  .witch-actions button:focus-visible,
+  .witch-actions button[aria-expanded="true"] {
+    border-color: #c9a6ff;
+    color: #e8d5ff;
+    outline: none;
+  }
+  .witch-actions button.boot {
+    border-color: #c9a6ff;
+    color: #e8d5ff;
+  }
+  .witch-hint {
+    margin: 0.2rem 0 0.8rem;
+    color: #9a9a9a;
+  }
+  .witch-panel {
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    background: #111;
+    padding: 0.3rem 1rem 0.8rem;
+    margin: 0.4rem 0 1rem;
+  }
+  .witch-panel[hidden] { display: none !important; }
+  .witch-panel.manual {
+    max-height: min(70vh, 680px);
+    overflow: auto;
+  }
+  body.witch-glass-on { overflow: hidden; }
+  .witch-stage[hidden] { display: none !important; }
+  .witch-stage.witch-open,
+  .witch-stage:fullscreen {
+    display: flex !important;
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 12px;
+    box-sizing: border-box;
+    background: #050305;
+    align-items: center;
+    justify-content: center;
+  }
+  .witch-stage.witch-open #game,
+  .witch-stage:fullscreen #game {
+    width: min(100%, calc((100vh - 128px) * 720 / 576));
+    width: min(100%, calc((100dvh - 128px) * 720 / 576));
+    max-width: 100%;
+    margin: 0;
+  }
+  .ee-wrap {
+    width: 100% !important;
+    max-width: none;
+    background: #0b090a !important;
+    color: #cbbfa6 !important;
+    border-radius: 18px;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
+    font-family: ui-monospace, "Courier New", monospace !important;
+  }
+  .witch-stage:fullscreen .ee-wrap,
+  .witch-stage.witch-open .ee-wrap {
+    border-radius: 12px;
+  }
+  .ee-header { border-bottom: 1px solid #2a211c; }
+  .ee-title { letter-spacing: .22em; color: #d7c7a2; font-weight: 500; }
+  .ee-wrap, .ee-wrap * { cursor: none !important; }
+  .ee-wrap { user-select: none; }
+  .crt {
+    position: relative;
+    margin: 8px 10px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow:
+      inset 0 0 0 1px #1a1012,
+      inset 0 0 80px rgba(36, 0, 12, .55);
+  }
+  .crt canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #000;
+  }
+  .scan {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, .18),
+      rgba(0, 0, 0, .18) 1px,
+      transparent 2px,
+      transparent 3px
+    );
+    mix-blend-mode: multiply;
+  }
+  .ee-footer {
+    color: #8d7b68;
+    letter-spacing: .08em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+  }
+  .witch-mood { white-space: nowrap; }
+  .witch-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+  }
+  .witch-key {
+    font: inherit;
+    letter-spacing: .04em;
+    font-size: 11px;
+    color: #cbbfa6;
+    white-space: nowrap;
+  }
+  .witch-key kbd {
+    color: #8d7b68;
+    font: inherit;
+    letter-spacing: 0;
+  }
+  .witch-key.lit, .witch-key.lit kbd { color: #e2b657; }
+  .witch-key.quiet { opacity: .38; }
+  .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
+</style>
+
+<div class="witch-front markdown-body">
+  <h1>🖥️ Witch I</h1>
+  <p class="witch-lead">Forty columns, twenty-four rows. She speaks WASIC.</p>
+
+  <div class="witch-actions">
+    <button type="button" class="boot" id="witch-boot">🖥️ Boot</button>
+    <button type="button" id="witch-started-btn" aria-expanded="false" aria-controls="witch-started">📖 Getting Started</button>
+    <button type="button" id="witch-manual-btn" aria-expanded="false" aria-controls="witch-manual">📜 Manual</button>
+  </div>
+  <p class="witch-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
+
+  <div id="witch-started" class="witch-panel" hidden="">
+    <h2>📖 Getting Started</h2>
+    <p>The prompt is <strong>SPEAK</strong>. A line with a number is stored. A line without one runs now.</p>
+    <ul>
+      <li>📚 <code>SHELF</code> opens the box. The arrows move. Enter takes a program down and does not run it.</li>
+      <li>🕯️ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
+      <li>🧹 <code>SCRUB</code> clears the glass. ✨ <code>MAGIC</code> numbers the next lines.</li>
+      <li>✋ Ctrl-C stops a program that will not stop.</li>
+    </ul>
+    <p>Try <code>SHELF</code>, point at <code>HELLO-WITCH</code>, press Enter, then <code>RUN</code>. <code>HELLO-DEMON</code> is the other hello. <code>ANSI-WITCH</code> paints her.</p>
+    <p>Under the glass, the keys are an emoji, a word, and a function key. Nothing there is a button.</p>
+    <ul>
+      <li>📜 LIST F1</li>
+      <li>🕯️ RUN F2</li>
+      <li>📚 SHELF F3</li>
+      <li>🧹 SCRUB F4</li>
+      <li>✨ MAGIC F5</li>
+      <li>🌑 EXORCISE F6</li>
+      <li>🔒 LATCH F7</li>
+      <li>⛶ FULL F11</li>
+      <li>⎋ BACK ESC</li>
+    </ul>
+    <p>She wakes latched. Up walks the lines that rolled off the glass. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>
+  </div>
+
+  <div id="witch-manual" class="witch-panel manual markdown-body" hidden="">
+    
+    <h1 id="witch-i">Witch I</h1>
+
+<p>The glass is 40 columns by 24 rows. The prompt is SPEAK. READY is a word from the machines next door, and she does not keep their hours. The language is WASIC. She has 666 lines of memory, and the dialect next door can sit down.</p>
+
+<p>A line with a number is stored. A line without one runs now. The words are the same either way.</p>
+
+<h2 id="when-she-wakes">When she wakes</h2>
+
+<p>The glass stays black. A pale bar blinks at the top left. Then she draws herself in the glass’s own colors, hat first. The sixteen, the 256, and a color mixed on the spot. It is the picture in <code class="language-plaintext highlighter-rouge">shelf/ansi-witch.wasic</code>. Under the stars the line says she woke in ink. Two low notes, and the drawing steps aside.</p>
+
+<p>The white witch from the banner stands in the upper glass, pixel for pixel, and a spark sits on the wand. Under her, the count climbs to 666. The glass says:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>         ┌────────────────────┐
+         │ **** WITCH I ****  │
+         │    WASIC · ONE     │
+         └────────────────────┘
+
+            40 COLUMN GLASS
+               MEMORY 666
+
+              SHE WOKE UP.
+           THE CIRCLE HOLDS.
+             WASIC SPEAKS.
+       BASIC CAN SIT IN THE DARK.
+
+            666 LINES FREE.
+SPEAK.
+</code></pre></div></div>
+
+<p>The frame is green. The name is white. WASIC · ONE is green. 40 COLUMN GLASS is faint. The count, and 666 LINES FREE, are the color of a low candle. The waking lines are ash. The line about BASIC is dark red. SPEAK is white. What you type after that is ash, until a program runs.</p>
+
+<p>The page is a desk. 🖥️ Boot fills the screen with the glass. Escape returns to the page. Boot opens the glass again. A program that was running has stopped. The lines you stored are still there.</p>
+
+<p>The two notes are low, a fifth apart. Then she fades, and the words roll to the top of the glass. Press a key if the notes stay silent. The browser holds the sound until a key arrives. The mouse is not a device here. The pointer is hidden over the glass, and a click does nothing.</p>
+
+<p>A refusal is red, with a mark in front of the words, and two notes going down. ENOUGH is candle-colored, and those two notes are softer. A line that will not take another character only clicks.</p>
+
+<p>The bezel under the glass names the mood, then the lines in use.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Bezel</th>
+      <th>Mood</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>WAKING</td>
+      <td>Still counting</td>
+    </tr>
+    <tr>
+      <td>READING</td>
+      <td>Fetching a program off the shelf</td>
+    </tr>
+    <tr>
+      <td>PICKING</td>
+      <td>The shelf is open. The arrows are hers</td>
+    </tr>
+    <tr>
+      <td>SPEAK n/666</td>
+      <td>Waiting for you</td>
+    </tr>
+    <tr>
+      <td>LINE n</td>
+      <td>Running that line</td>
+    </tr>
+    <tr>
+      <td>RUNNING</td>
+      <td>Running, between lines</td>
+    </tr>
+    <tr>
+      <td>WAITING</td>
+      <td>DEMAND wants an answer</td>
+    </tr>
+    <tr>
+      <td>AUTO n</td>
+      <td>Numbering for you</td>
+    </tr>
+    <tr>
+      <td>FROZEN</td>
+      <td>FREEZE is holding still</td>
+    </tr>
+    <tr>
+      <td>GAZE n</td>
+      <td>The glass is latched, n lines above the pen</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Under that, the keys. Each one is an emoji, a word, and a function key. They are not buttons. F5 is hers, not the browser’s reload. F11 fills the screen with the glass.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>📜 LIST F1</td>
+      <td>LIST</td>
+    </tr>
+    <tr>
+      <td>🕯️ RUN F2</td>
+      <td>RUN</td>
+    </tr>
+    <tr>
+      <td>📚 SHELF F3</td>
+      <td>SHELF</td>
+    </tr>
+    <tr>
+      <td>🧹 SCRUB F4</td>
+      <td>SCRUB. The letters go, and so do the lines that had rolled off. The minions stay</td>
+    </tr>
+    <tr>
+      <td>✨ MAGIC F5</td>
+      <td>MAGIC. The same as AUTO. Again, and the numbering stops</td>
+    </tr>
+    <tr>
+      <td>🌑 EXORCISE F6</td>
+      <td>EXORCISE</td>
+    </tr>
+    <tr>
+      <td>🔒 LATCH F7</td>
+      <td>Scroll lock. Scroll Lock does this too</td>
+    </tr>
+    <tr>
+      <td>⛶ FULL F11</td>
+      <td>The glass fills the screen. F11 again returns to the page</td>
+    </tr>
+    <tr>
+      <td>⎋ BACK ESC</td>
+      <td>Returns to the page. A program that was running stops</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The bar is quiet while she runs, and while the shelf is open. LATCH stays lit while she is latched at SPEAK, at AUTO, and while DEMAND waits. While MAGIC is numbering, the bar still lists, clears, exorcises, and latches. Typing those words on the numbered line stores them, the way RUN would. The function key does the thing.</p>
+
+<h2 id="typing">Typing</h2>
+
+<p>The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, Left, and Right edit the line. A line holds 255 characters, and one emoji is one. Past that she clicks once and takes no more.</p>
+
+<p>She wakes latched. That is the scroll lock, and the word is LATCH. Lines that roll off the top are kept, 666 of them. Up and Down walk those lines. Page Up and Page Down move a glassful, leaving one row so you can see where you were. Home is the oldest line still kept. End sits on the pen. A key that writes also sits on the pen, so the line you were typing is still there. The bezel says GAZE and how far above the pen you are. Ctrl-Up and Ctrl-Down still recall the last 32 lines you sent.</p>
+
+<p><code class="language-plaintext highlighter-rouge">LATCH</code> turns the hold on. <code class="language-plaintext highlighter-rouge">LATCH ON</code> does that too. <code class="language-plaintext highlighter-rouge">LATCH OFF</code>, or <code class="language-plaintext highlighter-rouge">LATCH</code> again, opens the glass. Then Up and Down recall, the way a shell does, and Page Up only clicks. Home and End edit the line. F7 and the Scroll Lock key do what the bare word does, without printing a line. The same hold is on while DEMAND waits, so you can walk up and read the question. AUTO keeps it. A program does not. While she runs, the arrows are hers, and the glass is text.</p>
+
+<p>While the shelf is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter unseals the name under the mark. Escape returns to the page. If the shelf was open she closes it, and she says <code class="language-plaintext highlighter-rouge">FINE. THE SHELF CAN WAIT.</code> The caret stays dark until the shelf closes.</p>
+
+<p>Enter stores a numbered line, or runs a bare one. A stored line does not print SPEAK. The caret just waits for the next one. An empty Enter at SPEAK prints SPEAK. again.</p>
+
+<p>Escape returns to the page. Ctrl-C stops a program, or a question that is waiting. She says:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✋ ENOUGH.
+</code></pre></div></div>
+
+<p>From inside a program the line number comes along: <code class="language-plaintext highlighter-rouge">✋ ENOUGH. IN 40</code></p>
+
+<p>Paste a block and she takes it one line at a time. Paste into a DEMAND and she takes the first line.</p>
+
+<h2 id="lines">Lines</h2>
+
+<p>A line number is an integer from 0 to 63999. The number, then the words. She stores the line. She does not run it. That is the old way, C64 and Apple II, and she kept it. MARK, junk, PRINT, POKE: all of it sits down. She reads it when you say RUN.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 CHANT "WHO?"
+20 MARK MARCO
+30 POKE 53280, 0
+</code></pre></div></div>
+
+<p>A number with nothing after it deletes that line. Above 63999:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔢 NO. LINES STOP AT 63999.
+</code></pre></div></div>
+
+<p>666 stored lines is the wall.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🛑 FULL. 666 LINES. STOP.
+</code></pre></div></div>
+
+<p>She will store a line she cannot parse. PRINT can sit in the program. POKE can sit in the program. <code class="language-plaintext highlighter-rouge">10 MARCO</code> can sit in the program. It fails when she reaches it. She likes to wait.</p>
+
+<h2 id="at-speak">At SPEAK</h2>
+
+<p>These words work from the prompt. Inside a program they are <code class="language-plaintext highlighter-rouge">🚪 NO. NOT FROM IN HERE.</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Words</th>
+      <th>What she does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>REVEAL</td>
+      <td>Print the program, low number first</td>
+    </tr>
+    <tr>
+      <td>REVEAL n</td>
+      <td>That line</td>
+    </tr>
+    <tr>
+      <td>REVEAL n-m</td>
+      <td>That range</td>
+    </tr>
+    <tr>
+      <td>REVEAL n-</td>
+      <td>From n through the end</td>
+    </tr>
+    <tr>
+      <td>REVEAL -m</td>
+      <td>From 0 through m</td>
+    </tr>
+    <tr>
+      <td>OBLITERATE n</td>
+      <td>Delete line n</td>
+    </tr>
+    <tr>
+      <td>OBLITERATE n-m</td>
+      <td>Delete the range. Same open ends as REVEAL</td>
+    </tr>
+    <tr>
+      <td>RENUMBER</td>
+      <td>Renumber from 10, step 10</td>
+    </tr>
+    <tr>
+      <td>VANISH</td>
+      <td>Wipe the program, the minions, and the glass</td>
+    </tr>
+    <tr>
+      <td>AUTO</td>
+      <td>From 10 if the program is empty, otherwise ten past the last line, step 10</td>
+    </tr>
+    <tr>
+      <td>AUTO start</td>
+      <td>From that number, step 10</td>
+    </tr>
+    <tr>
+      <td>AUTO start, step</td>
+      <td>Both. The step has to be at least 1</td>
+    </tr>
+    <tr>
+      <td>AUTO OFF</td>
+      <td>Stop numbering</td>
+    </tr>
+    <tr>
+      <td>MAGIC</td>
+      <td>The same as AUTO. MAGIC OFF stops it</td>
+    </tr>
+    <tr>
+      <td>RUN</td>
+      <td>Start at the first line</td>
+    </tr>
+    <tr>
+      <td>RUN n</td>
+      <td>Start at the first line numbered n or higher</td>
+    </tr>
+    <tr>
+      <td>SHELF</td>
+      <td>Open the box. Arrows move. Enter unseals. Escape returns to the page</td>
+    </tr>
+    <tr>
+      <td>SEAL “NAME”</td>
+      <td>Keep the program here. She says SEALED.</td>
+    </tr>
+    <tr>
+      <td>UNSEAL “NAME”</td>
+      <td>Load it. She says UNSEALED. She does not run it</td>
+    </tr>
+    <tr>
+      <td>UNSEAL “shelf:NAME”</td>
+      <td>Load a program from the box</td>
+    </tr>
+    <tr>
+      <td>UPLOAD</td>
+      <td>Read a text file. Cancel returns to SPEAK with no speech</td>
+    </tr>
+    <tr>
+      <td>DOWNLOAD “NAME”</td>
+      <td>Save NAME.wasic. She says TAKE IT.</td>
+    </tr>
+    <tr>
+      <td>GRIMOIRE</td>
+      <td>The short list of words</td>
+    </tr>
+    <tr>
+      <td>HELP</td>
+      <td>She says GRIMOIRE. NOT HELP. Then the list. She says it again at the end, because the glass scrolls</td>
+    </tr>
+    <tr>
+      <td>LIST</td>
+      <td>Print the program. The line numbers are yellow. Same ranges as REVEAL</td>
+    </tr>
+    <tr>
+      <td>NEW</td>
+      <td>She says VANISH. NOT NEW. Then the program is gone. The glass stays</td>
+    </tr>
+    <tr>
+      <td>LOAD “NAME”</td>
+      <td>She says UNSEAL. NOT LOAD. Then UNSEAL</td>
+    </tr>
+    <tr>
+      <td>SAVE “NAME”</td>
+      <td>She says SEAL. NOT SAVE. Then SEAL</td>
+    </tr>
+    <tr>
+      <td>CLS</td>
+      <td>She says SCRUB. NOT CLS. Then the glass is clean</td>
+    </tr>
+    <tr>
+      <td>HOME</td>
+      <td>She says SCRUB. NOT HOME. Then the glass is clean</td>
+    </tr>
+    <tr>
+      <td>EXORCISE</td>
+      <td>Drive BASIC out of the lines in the circle. The sums stay</td>
+    </tr>
+    <tr>
+      <td>EXORCISE, and the circle is empty</td>
+      <td>Open the desk for a listing. Cancel returns to SPEAK with no further speech</td>
+    </tr>
+    <tr>
+      <td>LATCH</td>
+      <td>Toggle the scroll lock</td>
+    </tr>
+    <tr>
+      <td>LATCH ON</td>
+      <td>Up walks the lines that rolled off</td>
+    </tr>
+    <tr>
+      <td>LATCH OFF</td>
+      <td>Up and Down recall the last 32 lines you sent</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>An empty REVEAL prints nothing. OBLITERATE with no range is <code class="language-plaintext highlighter-rouge">❓ NO. SAY IT AGAIN.</code></p>
+
+<p>LIST prints the same lines, and she talks while she does it. <code class="language-plaintext highlighter-rouge">LIST. THEY WERE NOT HIDING.</code> Then <code class="language-plaintext highlighter-rouge">RETYPE THE NUMBER. THAT IS THE EDIT.</code> The number is yellow. The words of the line stay ash. An empty program is <code class="language-plaintext highlighter-rouge">A LIST OF AIR. STORE A LINE.</code> When there are lines, she ends with <code class="language-plaintext highlighter-rouge">THERE. RUIN ONE, OR RUN THE LOT.</code> LIST 10, LIST 10-40, LIST 10-, and LIST -40 are the same ranges as REVEAL.</p>
+
+<p>RENUMBER rewrites line numbers in FLYTO, SUMMON, REWIND, a THEN that is only a number, and WHEN. Labels stay labels. A number that points at no line stays as written. She says RENUMBERED.</p>
+
+<p>VANISH says GONE. The variables go with the program.</p>
+
+<p>AUTO prints the next number and waits. MAGIC does the same thing, and it is the name on the bar. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line she refuses to store keeps the same number. From SPEAK, AUTO OFF stops it too, and so does MAGIC OFF. RENUMBER that would push a line past 255 characters says 📏 TOO LONG. and leaves the numbers alone.</p>
+
+<p>A file name is a letter, then up to 15 letters, digits, or hyphens. She folds the case. No name:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔖 NAME IT.
+</code></pre></div></div>
+
+<p>Nothing there:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌑 NO. IT IS NOT THERE.
+</code></pre></div></div>
+
+<p>The shelf is only for reading. A browser that will not open its box:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📦 THE BOX IS SHUT.
+</code></pre></div></div>
+
+<p>DOWNLOAD of an empty program says 📭 NOTHING TO RUN. SEAL of an empty program seals an empty program. That is your business.</p>
+
+<h2 id="running">Running</h2>
+
+<p>RUN clears the variables, the loops, the calls, the offering pointer, the watch, and the minions. The pen turns green on black for the working. The letters already on the glass stay until SCRUB, or until they scroll off. What scrolls off is kept until the 666 are full, or until the glass is scrubbed. While she runs, that memory is not a window. The glass is text, and the arrows belong to the program. When she stops, the pen returns to ash, and the latch is how you walk back up.</p>
+
+<p>A bare FLYTO or SUMMON at SPEAK walks into the program and leaves the variables where they sit.</p>
+
+<p>DISPEL ends a run and says nothing. An error returns to SPEAK. The variables survive both. The next RUN does not spare them. VANISH does not either.</p>
+
+<p>No lines:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📭 NOTHING TO RUN.
+</code></pre></div></div>
+
+<p>No such line:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🚫 NO LINE.
+</code></pre></div></div>
+
+<p>She runs in short slices, so Ctrl-C still lands and the minions still move. Escape returns to the page, and a program that was running stops. A complaint from inside a program gains the line: <code class="language-plaintext highlighter-rouge">🚫 NO LINE. IN 40</code></p>
+
+<h2 id="the-words">The words</h2>
+
+<p>Case does not matter. A colon puts another statement on the line. A name is a letter, then up to 15 letters or digits. A string name ends in <code class="language-plaintext highlighter-rouge">$</code>. She keeps the whole word.</p>
+
+<p>A name that is already a word of hers is refused:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔒 NO. THAT WORD IS TAKEN.
+</code></pre></div></div>
+
+<p>A line she cannot parse:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❓ NO. SAY IT AGAIN.
+</code></pre></div></div>
+
+<h3 id="whisper">WHISPER</h3>
+
+<p>The rest of that line is a comment. She eats it, colons included.</p>
+
+<h3 id="chant">CHANT</h3>
+
+<p>CHANT writes. A comma jumps to the next column that is a multiple of 10. A semicolon stays. A trailing comma or semicolon holds the line open. CHANT alone writes a blank line.</p>
+
+<h3 id="veil">VEIL</h3>
+
+<p>VEIL writes one line through the glass’s own color codes. A <code class="language-plaintext highlighter-rouge">{31}</code> in the string is ink. <code class="language-plaintext highlighter-rouge">31</code> is dark red. <code class="language-plaintext highlighter-rouge">1;97</code> is bold white. <code class="language-plaintext highlighter-rouge">38;5;141</code> is one of the 256. <code class="language-plaintext highlighter-rouge">38;2;232;206;168</code> is a color mixed on the spot. <code class="language-plaintext highlighter-rouge">2</code> is faint. A background is <code class="language-plaintext highlighter-rouge">45</code>, purple. A doubled <code class="language-plaintext highlighter-rouge">{</code> is one brace. VEIL with nothing after it writes a blank line. A number where a string belongs is the wrong kind of thing.</p>
+
+<p>ANSI-WITCH is that picture. The lines live in <code class="language-plaintext highlighter-rouge">shelf/ansi-witch.wasic</code>. A line number changes one.</p>
+
+<p>A positive number grows a leading space. A whole number under a billion prints as a whole number. Anything else prints to eight digits, and the very large and the very small go scientific.</p>
+
+<p>TAB(n) and SPC(n) belong only inside CHANT. Column 0 is the left edge. TAB past the right edge starts a new line at column 0.</p>
+
+<h3 id="demand">DEMAND</h3>
+
+<p>DEMAND N$ waits for a line. DEMAND “NAME”; N$ writes <code class="language-plaintext highlighter-rouge">NAME? </code> and waits. A comma after the prompt skips the question mark: DEMAND “NAME”, N$</p>
+
+<p>One variable keeps the whole answer, commas included. Several variables split on commas. The wrong count:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔁 AGAIN.
+</code></pre></div></div>
+
+<p>A number variable that did not get a number:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔢 AGAIN. A NUMBER.
+</code></pre></div></div>
+
+<p>She asks again until the answer fits, or until Ctrl-C. Escape returns to the page and leaves the question waiting.</p>
+
+<h3 id="conjure">CONJURE</h3>
+
+<p>CONJURE A = 1 stores a number. A = 1 stores the same number. Strings and numbers do not change clothes.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🎭 NO. WRONG KIND OF THING.
+</code></pre></div></div>
+
+<p>A new number name starts at 0. A new string name starts empty.</p>
+
+<h3 id="flyto-summon-banish-mark">FLYTO, SUMMON, BANISH, MARK</h3>
+
+<p>FLYTO 100 jumps to that line. FLYTO start jumps to MARK start. The spot has to exist.</p>
+
+<p>SUMMON start calls it. BANISH returns. BANISH with nobody waiting:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📭 BANISH, AND NOBODY CALLED.
+</code></pre></div></div>
+
+<p>Two MARKs with one name:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔖 NO. THAT NAME IS TAKEN.
+</code></pre></div></div>
+
+<p>Calls and loops each stop at 32 deep.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📚 TOO DEEP.
+</code></pre></div></div>
+
+<h3 id="if">IF</h3>
+
+<p>IF N$ = “” THEN CHANT “LEAVE.” : DISPEL runs the rest of the line when the test is true. A false test skips the rest of the line. There is no second branch.</p>
+
+<p>IF N = 1 THEN 200 jumps when the test is true, and only when that number is the whole statement. Whatever follows it on the line still belongs to the IF, so a true jump leaves it behind and a false test skips it.</p>
+
+<h3 id="curse-and-break">CURSE and BREAK</h3>
+
+<p>CURSE I = 1 TO 13 counts. BREAK ends the lap. The body runs once even when the start is already past the end. That is the old way, and she kept it.</p>
+
+<p>STEP may be negative. STEP 0:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🚫 STEP OF NOTHING. NO.
+</code></pre></div></div>
+
+<p>BREAK I closes the loop named I, and any loop inside it. A new CURSE of the same name throws out the old one. BREAK with no CURSE:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➰ BREAK, AND NOTHING TO BREAK.
+</code></pre></div></div>
+
+<p>A string cannot count.</p>
+
+<h3 id="dispel-and-freeze">DISPEL and FREEZE</h3>
+
+<p>DISPEL ends the program. She does not announce it.</p>
+
+<p>FREEZE waits for a key. FREEZE 500 waits 500 milliseconds. The longest wait is 60000. A key or Escape ends a bare FREEZE. Escape also cuts a timed one, and returns to the page.</p>
+
+<h3 id="offering-take-rewind">OFFERING, TAKE, REWIND</h3>
+
+<p>OFFERING stores items for TAKE. An item is a number, a quoted string, or one bare word. A minus may sit in front of a number.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 OFFERING 3, "CUP", BONE, -1
+20 TAKE N, A$, W$, M
+</code></pre></div></div>
+
+<p>The kind has to match the variable. REWIND starts the pointer over. REWIND 100, or REWIND of a label, starts at the first item on or after that line. When the offering is spent:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📜 THE OFFERING IS GONE.
+</code></pre></div></div>
+
+<h3 id="when">WHEN</h3>
+
+<p>WHEN N FLYTO 10, 20, 30 jumps to the Nth target. The count starts at 1. WHEN N SUMMON start, later calls instead. Outside the list, she walks on to the next statement.</p>
+
+<h3 id="dim">DIM</h3>
+
+<p>DIM A(10) makes slots 0 through 10. DIM B$(3, 4) makes two axes. One or two axes, no more. The biggest index is 2000. One array holds at most 20000 cells.</p>
+
+<p>Ask for the same array twice, or ask for one that was never made:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📦 NO. IT HAS NO ROOM.
+</code></pre></div></div>
+
+<p>An index outside the array:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📐 NO. OUTSIDE THE ROOM.
+</code></pre></div></div>
+
+<h2 id="the-sums">The sums</h2>
+
+<p>The marks are <code class="language-plaintext highlighter-rouge">+ - * / ^</code>. Power binds tighter than the rest, and it binds to the right, so <code class="language-plaintext highlighter-rouge">2^3^2</code> is 512. A leading minus sits looser than power, so <code class="language-plaintext highlighter-rouge">-2^2</code> is -4.</p>
+
+<p>Comparisons are <code class="language-plaintext highlighter-rouge">= &lt;&gt; &lt; &gt; &lt;= &gt;=</code>. <code class="language-plaintext highlighter-rouge">&gt;&lt;</code> means <code class="language-plaintext highlighter-rouge">&lt;&gt;</code>. AND is tighter than OR. NOT flips the truth. A comparison, AND, OR, and NOT all answer 1 or 0. Any number but 0 counts as true. AND and OR leave the unused side alone.</p>
+
+<p>A string plus a string joins them. A string holds 255 characters, counted the same way as a line, and one emoji is one. Past that:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🧵 TOO LONG A STRING.
+</code></pre></div></div>
+
+<p>A string mixed with a number is the wrong kind of thing. Dividing by zero, or MOD by zero:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➗ CUTE. DIVIDE BY NOTHING.
+</code></pre></div></div>
+
+<p>A result that will not fit:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💥 TOO BIG.
+</code></pre></div></div>
+
+<p>Quotes wrap a string. Two quotes inside a string are one quote.</p>
+
+<h2 id="functions">Functions</h2>
+
+<p>Parentheses, then the arguments. LISTEN$, TICK, COLS, and ROWS may skip the parentheses.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>INT(n)</td>
+      <td>Down, toward the pit. INT(-1.2) is -2</td>
+    </tr>
+    <tr>
+      <td>ABS(n)</td>
+      <td>Distance from zero</td>
+    </tr>
+    <tr>
+      <td>SQR(n)</td>
+      <td>Square root. A negative is the wrong kind of thing</td>
+    </tr>
+    <tr>
+      <td>SIN COS TAN ATN</td>
+      <td>Radians</td>
+    </tr>
+    <tr>
+      <td>LOG(n)</td>
+      <td>Natural log. Zero and below are the wrong kind</td>
+    </tr>
+    <tr>
+      <td>EXP(n)</td>
+      <td>e to that power</td>
+    </tr>
+    <tr>
+      <td>SGN(n)</td>
+      <td>-1, 0, or 1</td>
+    </tr>
+    <tr>
+      <td>RND(n)</td>
+      <td>See below</td>
+    </tr>
+    <tr>
+      <td>LEN(s$)</td>
+      <td>Characters. One emoji is one</td>
+    </tr>
+    <tr>
+      <td>VAL(s$)</td>
+      <td>A number read from the front, or 0</td>
+    </tr>
+    <tr>
+      <td>ASC(s$)</td>
+      <td>The first code. An empty string is the wrong kind</td>
+    </tr>
+    <tr>
+      <td>STR$(n)</td>
+      <td>The number as CHANT would write it, leading space included</td>
+    </tr>
+    <tr>
+      <td>CHR$(n)</td>
+      <td>The character, codes 0 through 255</td>
+    </tr>
+    <tr>
+      <td>LEFT$(s$, n)</td>
+      <td>The first n characters. Count starts at 1</td>
+    </tr>
+    <tr>
+      <td>RIGHT$(s$, n)</td>
+      <td>The last n</td>
+    </tr>
+    <tr>
+      <td>MID$(s$, start)</td>
+      <td>From that character to the end. Start counts from 1</td>
+    </tr>
+    <tr>
+      <td>MID$(s$, start, n)</td>
+      <td>n characters from there</td>
+    </tr>
+    <tr>
+      <td>MOD(a, b)</td>
+      <td>The remainder, a - b * INT(a / b)</td>
+    </tr>
+    <tr>
+      <td>COL(id) ROW(id)</td>
+      <td>Where that minion is, in cells</td>
+    </tr>
+    <tr>
+      <td>VX(id) VY(id)</td>
+      <td>Its speed, in cells per second</td>
+    </tr>
+    <tr>
+      <td>HELD(s$)</td>
+      <td>1 while that key is down. “ArrowLeft”, “a”, “A”</td>
+    </tr>
+    <tr>
+      <td>LISTEN$</td>
+      <td>The next key seen while running, or “”</td>
+    </tr>
+    <tr>
+      <td>TICK</td>
+      <td>Milliseconds since she woke</td>
+    </tr>
+    <tr>
+      <td>FRE(n)</td>
+      <td>666 minus the lines stored. n is required, numeric, and ignored</td>
+    </tr>
+    <tr>
+      <td>COLS ROWS</td>
+      <td>40 and 24</td>
+    </tr>
+    <tr>
+      <td>MINION(picture$, x, y)</td>
+      <td>Make one. Size defaults to 28. The number comes back, and IT is set</td>
+    </tr>
+    <tr>
+      <td>MINION(picture$, x, y, size)</td>
+      <td>Same, with a size</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>RND(1), or any positive number, draws the next value from 0 up to but not including 1. RND(0) repeats the last draw. RND of a negative number plants a new seed from its absolute whole part. The seed starts at 1. The roll is the usual cheap one: multiply by 1664525, add 1013904223, keep the low 32 bits, divide by 2^32.</p>
+
+<p>A letter in HELD matches either case. LISTEN$ keeps the case of the key, and she only collects keys while a program is running. The queue holds 32.</p>
+
+<h2 id="the-glass">The glass</h2>
+
+<p>Places are cells. The left top is 0, 0. The right bottom is 39, 23. A mark that falls off the glass is ignored.</p>
+
+<p>COLOR fg, bg sets the pen. Leave the bg off and the old background stays. The numbers:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>n</th>
+      <th>Color</th>
+      <th>n</th>
+      <th>Color</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>black</td>
+      <td>8</td>
+      <td>dark gray</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>dark red</td>
+      <td>9</td>
+      <td>red</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>dark green</td>
+      <td>10</td>
+      <td>green</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>brown</td>
+      <td>11</td>
+      <td>yellow</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>dark blue</td>
+      <td>12</td>
+      <td>blue</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>purple</td>
+      <td>13</td>
+      <td>pink</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>teal</td>
+      <td>14</td>
+      <td>cyan</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>gray</td>
+      <td>15</td>
+      <td>white</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>She wakes in COLOR 7, 0. Ash on black. SPEAK is written in white. RUN sets the pen to COLOR 10, 0 for the working. When she stops, the ash returns.</p>
+
+<p>SCRUB clears the letters and sends the caret home. Minions stay.</p>
+
+<p>AT col, row puts the caret there, clamped onto the glass.</p>
+
+<p>CIRCLE x, y, r draws a circle of ●. LINE x1, y1, x2, y2 draws a line of ●. FILL x, y floods connected empty cells with ●, up, down, left, and right. FILL does nothing when the cell is off the glass or already marked.</p>
+
+<p>TONE freq, ms plays a square note and waits, so a tune stays in order. Frequency runs from 20 to 8000. The wait runs from 0 to 8000 milliseconds. Escape cuts it and returns to the page.</p>
+
+<h2 id="minions">Minions</h2>
+
+<p>A minion is an emoji on the same glass, drawn in front of the letters. The cell you name is where she parks it, on the center of that cell.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MINION "👻", 3, 6, 30
+</code></pre></div></div>
+
+<p>The size is in pixels, from 1 to 180. Skip it and the size is 28. An empty picture becomes ●. The number starts at 1 and is never reused. IT holds the latest one.</p>
+
+<p>SEND id, vx, vy sets the speed in cells per second. DESTROY id removes one. DESTROY with no number removes every one of them.</p>
+
+<p>Thirty-two living minions is the house limit.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>👻 NO. TOO MANY MINIONS.
+</code></pre></div></div>
+
+<p>A number that is not alive:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>👻 NO. THAT MINION IS GONE.
+</code></pre></div></div>
+
+<p>They touch when the circles overlap. The radius is half the size. WATCH hit names a MARK. The moment two minions start to overlap, she sets HIT and OTHER to their numbers and SUMMONs that label. BANISH returns to the statement she interrupted. She does not call again until they separate and meet once more. The handler has to BANISH. Forget, and the calls pile up until 📚 TOO DEEP.</p>
+
+<h2 id="what-she-refuses">What she refuses</h2>
+
+<p>These are stored, and they fail when she reaches them.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🙊 NO. SHE DOES NOT SPEAK THAT.
+</code></pre></div></div>
+
+<p>PRINT GOTO GOSUB RETURN FOR NEXT LET INPUT REM DATA READ RESTORE END STOP NEW LIST LOAD SAVE CLS LOCATE SOUND PLOT DRAW SLEEP GET</p>
+
+<p>These are recognized. She stores them. When she reaches them she complains, because you peeked, poked, or sysed her, and she is not a kernel.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Word</th>
+      <th>What she says</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PEEK</td>
+      <td>👀 STOP PEEKING.</td>
+    </tr>
+    <tr>
+      <td>POKE</td>
+      <td>👉 DON’T POKE ME.</td>
+    </tr>
+    <tr>
+      <td>SYS</td>
+      <td>🛑 NO SYS. I WOKE ON MY OWN.</td>
+    </tr>
+    <tr>
+      <td>WAIT</td>
+      <td>⏳ I DO NOT WAIT ON THAT WIRE.</td>
+    </tr>
+    <tr>
+      <td>USR</td>
+      <td>🪝 USR. I AM NOT A HOOK.</td>
+    </tr>
+    <tr>
+      <td>CALL</td>
+      <td>📞 DO NOT CALL ME THAT WAY.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">A = PEEK(1)</code> is a peek. <code class="language-plaintext highlighter-rouge">POKE 1, 2</code> is a poke. <code class="language-plaintext highlighter-rouge">SYS 64738</code> is a sys. Direct or stored, same speech. The leftover wire, if you find one:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔌 NO. THAT WIRE IS DEAD.
+</code></pre></div></div>
+
+<h2 id="the-exorcism">The exorcism</h2>
+
+<p>EXORCISE rewrites the lines in the circle so an old listing can run. The names move. The sums stay: INT, ABS, SQR, SIN, COS, TAN, ATN, LOG, EXP, SGN, RND, and the string sums that already had the same names here. LEN, VAL, ASC, STR$, CHR$, LEFT$, RIGHT$, MID$, TAB, SPC, MOD. A second EXORCISE finds nothing left to drive out.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>From</th>
+      <th>To</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PRINT, and ?</td>
+      <td>CHANT</td>
+    </tr>
+    <tr>
+      <td>GOTO, and GO TO</td>
+      <td>FLYTO</td>
+    </tr>
+    <tr>
+      <td>GOSUB, and GO SUB</td>
+      <td>SUMMON</td>
+    </tr>
+    <tr>
+      <td>RETURN</td>
+      <td>BANISH</td>
+    </tr>
+    <tr>
+      <td>FOR</td>
+      <td>CURSE</td>
+    </tr>
+    <tr>
+      <td>NEXT</td>
+      <td>BREAK. NEXT I, J is two of them</td>
+    </tr>
+    <tr>
+      <td>LET</td>
+      <td>CONJURE</td>
+    </tr>
+    <tr>
+      <td>INPUT</td>
+      <td>DEMAND</td>
+    </tr>
+    <tr>
+      <td>REM, and ‘</td>
+      <td>WHISPER</td>
+    </tr>
+    <tr>
+      <td>DATA</td>
+      <td>OFFERING</td>
+    </tr>
+    <tr>
+      <td>READ</td>
+      <td>TAKE</td>
+    </tr>
+    <tr>
+      <td>RESTORE</td>
+      <td>REWIND</td>
+    </tr>
+    <tr>
+      <td>END, and STOP</td>
+      <td>DISPEL</td>
+    </tr>
+    <tr>
+      <td>CLS</td>
+      <td>SCRUB</td>
+    </tr>
+    <tr>
+      <td>LOCATE row, col</td>
+      <td>AT col, row</td>
+    </tr>
+    <tr>
+      <td>SLEEP n</td>
+      <td>FREEZE, and the wait is in milliseconds. A bare SLEEP waits for a key</td>
+    </tr>
+    <tr>
+      <td>GET A$</td>
+      <td>A$ = LISTEN$</td>
+    </tr>
+    <tr>
+      <td>INKEY$</td>
+      <td>LISTEN$</td>
+    </tr>
+    <tr>
+      <td>ON n GOTO</td>
+      <td>WHEN n FLYTO</td>
+    </tr>
+    <tr>
+      <td>ON n GOSUB</td>
+      <td>WHEN n SUMMON</td>
+    </tr>
+    <tr>
+      <td>CIRCLE (x, y), r</td>
+      <td>CIRCLE x, y, r</td>
+    </tr>
+    <tr>
+      <td>LINE (x1, y1)-(x2, y2)</td>
+      <td>LINE x1, y1, x2, y2</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">IF A THEN PRINT "Y" ELSE PRINT "N"</code> becomes two lines when a free number sits between this line and the next. The true side runs, then jumps over the false side. No free number, and she buries the line. One ELSE on a line. Two IFs and one ELSE, and she buries that line rather than guess.</p>
+
+<p>POKE, SYS, WAIT, and CALL become a WHISPER at the end of the line, so the rest can still run. PEEK and USR answer 0. She says the wires stay dead. A line she still cannot say becomes a WHISPER of itself. LIST shows it. RUN steps over it. A line that was already hers, and already ran, she leaves alone.</p>
+
+<p>A file with no line numbers is numbered from 10, step 10. A bare line among numbered ones takes a hole, so it stays where you put it. No hole, and it is numbered past the end. She says so.</p>
+
+<p>An empty circle opens the desk. <code class="language-plaintext highlighter-rouge">.BAS</code>, <code class="language-plaintext highlighter-rouge">.BASIC</code>, <code class="language-plaintext highlighter-rouge">.TXT</code>, or <code class="language-plaintext highlighter-rouge">.WASIC</code>. She drives the BASIC out and leaves the lines sitting there. She does not run them. Cancel says nothing more. UPLOAD still reads a file as it stands. A listing that is already WASIC comes in as itself, and she says ALREADY WASIC.</p>
+
+<p>The bar’s EXORCISE does this. F6 does this. So does the word.</p>
+
+<h2 id="the-box">The box</h2>
+
+<p>The programs are files in <code class="language-plaintext highlighter-rouge">shelf/</code>. The extension is <code class="language-plaintext highlighter-rouge">.wasic</code>. <code class="language-plaintext highlighter-rouge">catalog.txt</code> is the order. SHELF opens the box on the glass. The mark starts on the first name. Up and down move it. Enter unseals that name and does not run it. She says <code class="language-plaintext highlighter-rouge">LIST. A NUMBER CHANGES A LINE.</code> Escape says <code class="language-plaintext highlighter-rouge">FINE. THE SHELF CAN WAIT.</code> Anything sealed in this browser sits under <code class="language-plaintext highlighter-rouge">SEALED, IF YOU INSIST</code>. <code class="language-plaintext highlighter-rouge">UNSEAL "shelf:HELLO-WITCH"</code> still loads one if you would rather type. Then RUN. She lowercases the name and adds the extension herself.</p>
+
+<p>HELLO-WITCH asks once.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 COLOR 13, 0
+30 CHANT "☾"
+40 COLOR 15, 0
+50 CHANT "HELLO, WITCH."
+60 COLOR 10, 0
+70 CHANT "THE GLASS KNOWS YOUR NAME."
+80 COLOR 7, 0
+90 DEMAND "SPEAK IT"; N$
+100 IF N$ = "" THEN COLOR 1, 0 : CHANT "SHY. THE CIRCLE STAYS SHUT." : DISPEL
+110 COLOR 11, 0
+120 CHANT "HELLO, "; N$; "."
+130 COLOR 13, 0
+140 CHANT "ONCE. THAT IS THE WHOLE SPELL. 🧙"
+150 TONE 523, 90
+160 TONE 659, 160
+170 DISPEL
+</code></pre></div></div>
+
+<p>HELLO-DEMON asks, and runs warmer.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 COLOR 9, 0
+30 CHANT "😈"
+40 CHANT "HELLO, DEMON."
+50 COLOR 1, 0
+60 CHANT "YOU BROUGHT THE NAME. I BROUGHT THE HEAT."
+70 COLOR 7, 0
+80 DEMAND "WHAT DO THEY CALL YOU"; N$
+90 IF N$ = "" THEN COLOR 9, 0 : CHANT "NO NAME. NO DEAL. 🔥" : DISPEL
+100 COLOR 9, 0
+110 CHANT "HELLO, "; N$; "."
+120 CHANT "TRY NOT TO SCORCH THE GLASS."
+130 TONE 98, 80
+140 TONE 73, 180
+150 COLOR 3, 0
+160 CHANT "SHE IS WATCHING."
+170 DISPEL
+</code></pre></div></div>
+
+<p>GUESS wants 1 to 100 and comments on the route. Higher is green. Lower is red.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 COLOR 11, 0
+30 CHANT "A NUMBER. 1 TO 100."
+40 COLOR 7, 0
+50 CONJURE S = INT(RND(1) * 100) + 1
+60 CONJURE T = 0
+70 MARK AGAIN
+80 T = T + 1
+90 DEMAND "GUESS"; G
+100 IF G = S THEN FLYTO YES
+110 IF G &lt; S THEN COLOR 10, 0 : CHANT "HIGHER. OBVIOUSLY." : COLOR 7, 0 : FLYTO AGAIN
+120 COLOR 9, 0
+130 CHANT "LOWER. DO KEEP UP."
+140 COLOR 7, 0
+150 FLYTO AGAIN
+160 MARK YES
+170 COLOR 11, 0
+180 CHANT "YES."; T; " TRIES. ADORABLE."
+190 DISPEL
+</code></pre></div></div>
+
+<p>DICE rolls from one to twelve bones, and shows the face.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 COLOR 11, 0
+30 CHANT "THE BONES. 🎲"
+40 COLOR 7, 0
+50 DEMAND "HOW MANY BONES"; N
+60 IF N &lt; 1 OR N &gt; 12 THEN COLOR 9, 0 : CHANT "BETWEEN 1 AND 12." : COLOR 7, 0 : FLYTO 50
+70 F$ = "⚀⚁⚂⚃⚄⚅"
+80 CURSE I = 1 TO N
+90 CONJURE R = INT(RND(1) * 6) + 1
+100 COLOR 15, 0
+110 CHANT MID$(F$, R, 1); "  BONE"; I; ":"; R
+120 BREAK
+130 COLOR 3, 0
+140 CHANT "THAT IS ALL THE FATE YOU GET."
+150 DISPEL
+</code></pre></div></div>
+
+<p>OMEN reads three lines and sends you home.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 COLOR 13, 0
+30 CHANT "THREE OMENS. DO NOT BLINK."
+40 COLOR 7, 0
+50 OFFERING "THE CUP IS EMPTY.", "SHE COUNTS THE KNIVES.", "A DOOR OPENS IN THE WALL.", "NOTHING ANSWERS. THAT IS AN ANSWER."
+60 CURSE I = 1 TO 3
+70 TAKE A$
+80 CHANT I; ". "; A$
+90 BREAK
+100 COLOR 3, 0
+110 CHANT "GO HOME."
+120 DISPEL
+</code></pre></div></div>
+
+<p>CIRCLES draws, beeps, and calls it art.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 COLOR 10, 0
+30 CURSE R = 2 TO 10 STEP 2
+40 CIRCLE 20, 12, R
+50 TONE 200 + R * 40, 20
+60 BREAK
+70 COLOR 11, 0
+80 LINE 0, 12, 39, 12
+90 LINE 20, 0, 20, 23
+100 AT 0, 23
+110 CHANT "THERE. ART.";
+120 DISPEL
+</code></pre></div></div>
+
+<p>MINIONS puts a ghost and a bat on the glass. Escape stops them and returns to the page. Ctrl-C stops them and stays. HIT is the collision’s variable. The label HIT is a different thing, and she can tell.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 AT 0, 0
+30 CHANT "TWO OF THEM. ESC STOPS IT.";
+40 CONJURE A = MINION("👻", 3, 6, 30)
+50 CONJURE B = MINION("🦇", 30, 16, 30)
+60 SEND A, 10, 4
+70 SEND B, -8, -3
+80 WATCH HIT
+90 MARK LOOP
+100 IF (COL(A) &lt;= 1 AND VX(A) &lt; 0) OR (COL(A) &gt;= 36 AND VX(A) &gt; 0) THEN SEND A, -VX(A), VY(A)
+110 IF (ROW(A) &lt;= 2 AND VY(A) &lt; 0) OR (ROW(A) &gt;= 21 AND VY(A) &gt; 0) THEN SEND A, VX(A), -VY(A)
+120 IF (COL(B) &lt;= 1 AND VX(B) &lt; 0) OR (COL(B) &gt;= 36 AND VX(B) &gt; 0) THEN SEND B, -VX(B), VY(B)
+130 IF (ROW(B) &lt;= 2 AND VY(B) &lt; 0) OR (ROW(B) &gt;= 21 AND VY(B) &gt; 0) THEN SEND B, VX(B), -VY(B)
+140 FREEZE 20
+150 FLYTO LOOP
+160 MARK HIT
+170 SEND HIT, -VX(HIT), -VY(HIT)
+180 SEND OTHER, -VX(OTHER), -VY(OTHER)
+190 TONE 480, 20
+200 BANISH
+</code></pre></div></div>
+
+<p>KEYS prints the key you press. Q leaves.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 SCRUB
+20 AT 0, 0
+30 CHANT "PRESS KEYS. Q LEAVES.";
+40 MARK LOOP
+50 K$ = LISTEN$()
+60 IF K$ = "Q" OR K$ = "q" THEN DISPEL
+70 IF K$ &lt;&gt; "" THEN AT 2, 2 : CHANT K$; "   ";
+80 FREEZE 20
+90 FLYTO LOOP
+</code></pre></div></div>
+
+<p>CAROL plays eight notes and leaves the last number on the glass. FAMILIAR puts a cat on the glass. She turns at the edges and meows when she does. Ctrl-C sends her home. Escape returns to the page. Both are in <code class="language-plaintext highlighter-rouge">shelf/</code>, with the rest.</p>
+
+<p>ANSI-WITCH paints a witch. The hat is white. The face is mixed. The dress is purple. A star over her uses one of the 256. She says the hat is the point, names VEIL, and tells you to LIST if you mean to meddle. Two low notes, and she stops. The waking glass draws that picture first.</p>
+
+<h2 id="three-that-have-to-run">Three that have to run</h2>
+
+<p>A question:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 WHISPER Start
+20 CHANT "WHO?"
+30 DEMAND "NAME"; N$
+40 IF N$ = "" THEN CHANT "LEAVE." : DISPEL
+50 CHANT "ENTER "; N$
+60 DISPEL
+</code></pre></div></div>
+
+<p>A count:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 CURSE I = 1 TO 13
+20 CHANT I
+30 BREAK
+</code></pre></div></div>
+
+<p>A label:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 MARK start
+20 CHANT "AGAIN"
+30 FLYTO start
+</code></pre></div></div>
+
+<p>The third one does not stop. Ctrl-C is the door. Escape returns to the page.</p>
+
+<h2 id="what-she-says">What she says</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>Text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>She cannot parse it</td>
+      <td>❓ NO. SAY IT AGAIN.</td>
+    </tr>
+    <tr>
+      <td>A BASIC word</td>
+      <td>🙊 NO. SHE DOES NOT SPEAK THAT.</td>
+    </tr>
+    <tr>
+      <td>PEEK</td>
+      <td>👀 STOP PEEKING.</td>
+    </tr>
+    <tr>
+      <td>POKE</td>
+      <td>👉 DON’T POKE ME.</td>
+    </tr>
+    <tr>
+      <td>SYS</td>
+      <td>🛑 NO SYS. I WOKE ON MY OWN.</td>
+    </tr>
+    <tr>
+      <td>WAIT</td>
+      <td>⏳ I DO NOT WAIT ON THAT WIRE.</td>
+    </tr>
+    <tr>
+      <td>USR</td>
+      <td>🪝 USR. I AM NOT A HOOK.</td>
+    </tr>
+    <tr>
+      <td>CALL</td>
+      <td>📞 DO NOT CALL ME THAT WAY.</td>
+    </tr>
+    <tr>
+      <td>No such line</td>
+      <td>🚫 NO LINE.</td>
+    </tr>
+    <tr>
+      <td>Wrong kind of value</td>
+      <td>🎭 NO. WRONG KIND OF THING.</td>
+    </tr>
+    <tr>
+      <td>Line 667</td>
+      <td>🛑 FULL. 666 LINES. STOP.</td>
+    </tr>
+    <tr>
+      <td>Divide by zero</td>
+      <td>➗ CUTE. DIVIDE BY NOTHING.</td>
+    </tr>
+    <tr>
+      <td>Dead minion</td>
+      <td>👻 NO. THAT MINION IS GONE.</td>
+    </tr>
+    <tr>
+      <td>Line longer than 255</td>
+      <td>📏 TOO LONG.</td>
+    </tr>
+    <tr>
+      <td>String longer than 255</td>
+      <td>🧵 TOO LONG A STRING.</td>
+    </tr>
+    <tr>
+      <td>BREAK with no CURSE</td>
+      <td>➰ BREAK, AND NOTHING TO BREAK.</td>
+    </tr>
+    <tr>
+      <td>BANISH with no SUMMON</td>
+      <td>📭 BANISH, AND NOBODY CALLED.</td>
+    </tr>
+    <tr>
+      <td>TAKE past the end</td>
+      <td>📜 THE OFFERING IS GONE.</td>
+    </tr>
+    <tr>
+      <td>Wrong number of answers</td>
+      <td>🔁 AGAIN.</td>
+    </tr>
+    <tr>
+      <td>Answer was not a number</td>
+      <td>🔢 AGAIN. A NUMBER.</td>
+    </tr>
+    <tr>
+      <td>The math overflowed</td>
+      <td>💥 TOO BIG.</td>
+    </tr>
+    <tr>
+      <td>More than 32 calls or loops</td>
+      <td>📚 TOO DEEP.</td>
+    </tr>
+    <tr>
+      <td>Editor words inside a program</td>
+      <td>🚪 NO. NOT FROM IN HERE.</td>
+    </tr>
+    <tr>
+      <td>RUN with no program</td>
+      <td>📭 NOTHING TO RUN.</td>
+    </tr>
+    <tr>
+      <td>STEP 0</td>
+      <td>🚫 STEP OF NOTHING. NO.</td>
+    </tr>
+    <tr>
+      <td>DIM refused, or no such array</td>
+      <td>📦 NO. IT HAS NO ROOM.</td>
+    </tr>
+    <tr>
+      <td>Index outside the array</td>
+      <td>📐 NO. OUTSIDE THE ROOM.</td>
+    </tr>
+    <tr>
+      <td>A 33rd minion</td>
+      <td>👻 NO. TOO MANY MINIONS.</td>
+    </tr>
+    <tr>
+      <td>A name that is already a word</td>
+      <td>🔒 NO. THAT WORD IS TAKEN.</td>
+    </tr>
+    <tr>
+      <td>A label used twice</td>
+      <td>🔖 NO. THAT NAME IS TAKEN.</td>
+    </tr>
+    <tr>
+      <td>Line number past 63999</td>
+      <td>🔢 NO. LINES STOP AT 63999.</td>
+    </tr>
+    <tr>
+      <td>Escape or Ctrl-C</td>
+      <td>✋ ENOUGH.</td>
+    </tr>
+    <tr>
+      <td>SEAL with no name</td>
+      <td>🔖 NAME IT.</td>
+    </tr>
+    <tr>
+      <td>SEAL worked</td>
+      <td>SEALED.</td>
+    </tr>
+    <tr>
+      <td>UNSEAL worked</td>
+      <td>UNSEALED.</td>
+    </tr>
+    <tr>
+      <td>No such program</td>
+      <td>🌑 NO. IT IS NOT THERE.</td>
+    </tr>
+    <tr>
+      <td>The browser refused the box</td>
+      <td>📦 THE BOX IS SHUT.</td>
+    </tr>
+    <tr>
+      <td>RENUMBER worked</td>
+      <td>RENUMBERED.</td>
+    </tr>
+    <tr>
+      <td>VANISH</td>
+      <td>GONE.</td>
+    </tr>
+    <tr>
+      <td>DOWNLOAD</td>
+      <td>TAKE IT.</td>
+    </tr>
+    <tr>
+      <td>Left AUTO</td>
+      <td>AUTO OFF.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>SPEAK.</p>
+
+<h2 id="limits-in-one-place">Limits, in one place</h2>
+
+<p>The same numbers, and the rest of the walls, are in <code class="language-plaintext highlighter-rouge">SYSTEM.md</code> at the root of this repo. She keeps them.</p>
+
+<ul>
+  <li>666 lines.</li>
+  <li>255 characters on a typed line, and 255 in a string. One emoji is one.</li>
+  <li>Line numbers 0 through 63999.</li>
+  <li>Names are the whole word, up to 16 letters and digits, then <code class="language-plaintext highlighter-rouge">$</code> if it is a string.</li>
+  <li>File names add hyphens, and stop at 16 characters.</li>
+  <li>32 loops, 32 calls, 32 living minions, 32 remembered lines, 32 keys waiting, 8 meetings waiting.</li>
+  <li>One or two axes. Each array holds at most 20000 cells. Indexes run 0 through 2000.</li>
+  <li>The shelf is a folder of <code class="language-plaintext highlighter-rouge">.wasic</code> files, and it is only for reading. SEAL and UNSEAL without <code class="language-plaintext highlighter-rouge">shelf:</code> use this browser. UPLOAD and DOWNLOAD use the desk.</li>
+  <li>Sprites are emoji. The touch radius is half the size. They share the glass with the letters, and they are drawn in front.</li>
+</ul>
+
+  </div>
+</div>
+
+<div id="witch-stage" class="witch-stage" hidden="">
+  <div id="game" data-shelf="/emojigames/games/witch-1/shelf/" data-witch="/emojigames/assets/images/site.jpg"></div>
+</div>
+
+<script src="/emojigames/assets/js/emoji-engine-2d.js"></script>
+
+<script src="/emojigames/games/witch-1/wasic.js"></script>
+
+<script src="/emojigames/games/witch-1/witch-1.js"></script>
+
+<script>
+(function () {
+  var stage = document.getElementById("witch-stage");
+  var boot = document.getElementById("witch-boot");
+  var startedBtn = document.getElementById("witch-started-btn");
+  var manualBtn = document.getElementById("witch-manual-btn");
+  var started = document.getElementById("witch-started");
+  var manual = document.getElementById("witch-manual");
+  var open = false;
+  var inFull = false;
+
+  function togglePanel(btn, panel, otherBtn, other) {
+    var show = btn.getAttribute("aria-expanded") !== "true";
+    btn.setAttribute("aria-expanded", show ? "true" : "false");
+    panel.hidden = !show;
+    if (show) {
+      otherBtn.setAttribute("aria-expanded", "false");
+      other.hidden = true;
+      panel.scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function closeStage() {
+    if (!open) return;
+    open = false;
+    stage.classList.remove("witch-open");
+    stage.hidden = true;
+    document.body.classList.remove("witch-glass-on");
+    if (document.fullscreenElement) {
+      Promise.resolve(document.exitFullscreen()).catch(function () {});
+    }
+    if (window.WITCH && WITCH.leave) WITCH.leave();
+    boot.focus();
+  }
+
+  function openStage() {
+    open = true;
+    stage.hidden = false;
+    stage.classList.add("witch-open");
+    document.body.classList.add("witch-glass-on");
+    var root = stage;
+    var pending = root.requestFullscreen ? root.requestFullscreen() : Promise.reject();
+    Promise.resolve(pending).catch(function () {});
+    if (window.WITCH && WITCH.power) WITCH.power();
+  }
+
+  boot.addEventListener("click", openStage);
+  startedBtn.addEventListener("click", function () {
+    togglePanel(startedBtn, started, manualBtn, manual);
+  });
+  manualBtn.addEventListener("click", function () {
+    togglePanel(manualBtn, manual, startedBtn, started);
+  });
+
+  document.addEventListener("fullscreenchange", function () {
+    if (document.fullscreenElement) {
+      inFull = true;
+      return;
+    }
+    if (!inFull) return;
+    inFull = false;
+    if (!open) return;
+    closeStage();
+  });
+
+  window.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape" || !open) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closeStage();
+  }, true);
+})();
+</script>
+
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="footer-links">
+    <a href="http://localhost:4019/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <span>•</span>
+    <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
+    <span>•</span>
+    <a href="#" title="Contribute (PayPal coming soon)">💸 Contribute</a>
+    <span>•</span>
+    <a href="https://thewhitewitchtm.github.io/whitewitch/" title="The White Witch™">🧙‍♀️ The White Witch</a>
+  </div>
+</footer>
+
+  <script>
+document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    btn.nextElementSibling.classList.toggle('open');
+  });
+});
+</script>
+
+</body>
+</html>

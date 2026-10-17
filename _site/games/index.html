@@ -1,0 +1,256 @@
+<div id="storefront"></div>
+
+<script src="/emojigames/assets/js/components.js"></script>
+
+<script>
+useEffect(() => {
+  const root = document.getElementById('storefront');
+  const games = [
+    
+    {
+      title: "🌲 Adventureland",
+      url: "/emojigames/games/adventureland/",
+      image: "/emojigames/games/adventureland/banner.jpg",
+      tags: ["terminal","adventure"],
+      description: "Classic text adventure.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🚀 Galaxy Hunt",
+      url: "/emojigames/games/galaxy-hunt/",
+      image: "/emojigames/games/galaxy-hunt/banner.jpg",
+      tags: ["terminal","action"],
+      description: "Classic space shooter. Clear the waves.",
+      style: "terminal"
+    },
+    
+    {
+      title: "Hack",
+      url: "/emojigames/games/hack/",
+      image: "/emojigames/games/hack/banner.jpg",
+      tags: ["terminal","roguelike"],
+      description: "A close terminal homage to the original Hack roguelike.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🐂 The Oregon Trail",
+      url: "/emojigames/games/oregon-trail/",
+      image: "/emojigames/games/oregon-trail/banner.jpg",
+      tags: ["terminal","strategy"],
+      description: "A terminal homage to the 1985 Apple II Oregon Trail.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🏴‍☠️ Pirate Adventure",
+      url: "/emojigames/games/pirate/",
+      image: "/emojigames/games/pirate/banner.jpg",
+      tags: ["terminal","adventure"],
+      description: "Sail the seas, find treasure.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🏓Pong",
+      url: "/emojigames/games/pong/",
+      image: "/emojigames/games/pong/banner.jpg",
+      tags: ["terminal","action"],
+      description: "Classic terminal Pong. First to 5 wins.",
+      style: "terminal"
+    },
+    
+    {
+      title: "Rogue",
+      url: "/emojigames/games/rogue/",
+      image: "/emojigames/games/rogue/banner.jpg",
+      tags: ["terminal","roguelike"],
+      description: "A close terminal homage to the 1980 classic. Descend, fight, and find the Amulet.",
+      style: "terminal"
+    },
+    
+    {
+      title: "Snake",
+      url: "/emojigames/games/snake/",
+      image: "/emojigames/games/snake/banner.jpg",
+      tags: ["terminal","action"],
+      description: "Classic terminal Snake. Eat, grow, don’t crash.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🤖 Trump Super Intelligence",
+      url: "/emojigames/games/trump-si/",
+      image: "/emojigames/games/trump-si/banner.jpg",
+      tags: ["terminal","joke"],
+      description: "The most tremendous chatbot. Many people are saying it.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🖥️ Witch I",
+      url: "/emojigames/games/witch-1/",
+      image: "/emojigames/games/witch-1/banner.jpg",
+      tags: ["terminal","computer"],
+      description: "A 40-column machine. It speaks WASIC.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🧙‍♀️ Witch Hunt",
+      url: "/emojigames/games/witch-hunt/",
+      image: "/emojigames/games/witch-hunt/banner.jpg",
+      tags: ["terminal","action","arcade"],
+      description: "Survive 10 levels. Religious symbols chase the White Witch. Cast spells, grab power-ups, clear the pellets. Alpha.",
+      style: "terminal"
+    },
+    
+    {
+      title: "🧙 A Witch's Tale",
+      url: "/emojigames/games/witch-tales/",
+      image: "/emojigames/games/witch-tales/banner.jpg",
+      tags: ["terminal","rpg","adventure"],
+      description: "A chaptered tile RPG. You are a witch. The land has problems. Alpha.",
+      style: "terminal"
+    }
+    
+  ];
+
+  // Collect unique styles and tags
+  const styles = [...new Set(games.map(g => g.style))].sort();
+  const allTags = [...new Set(games.flatMap(g => g.tags))].sort();
+
+  let query = '';
+  let currentStyle = null;
+  let currentTag = null;
+
+  function hashValue() {
+    return decodeURIComponent((location.hash || '').replace(/^#/, '')).trim().toLowerCase();
+  }
+
+  function writeHash(value) {
+    const next = value ? '#' + encodeURIComponent(value) : location.pathname + location.search;
+    const now = location.pathname + location.search + location.hash;
+    const target = value ? location.pathname + location.search + next : next;
+    if (now !== target) history.replaceState(null, '', target);
+  }
+
+  function applyHash() {
+    const raw = hashValue();
+    currentStyle = null;
+    currentTag = null;
+    if (raw && raw !== 'all') {
+      const style = styles.find(s => s.toLowerCase() === raw);
+      const tag = allTags.find(t => t.toLowerCase() === raw);
+      if (style) currentStyle = style;
+      else if (tag) currentTag = tag;
+    }
+    styleTabs.querySelectorAll('.tab').forEach((btn, i) => {
+      const on = i === 0 ? !currentStyle : styles[i - 1] === currentStyle;
+      btn.classList.toggle('active', on);
+    });
+    const toggle = tagDrop.querySelector('.dropdown-toggle');
+    if (toggle) toggle.textContent = currentTag || 'All tags';
+  }
+
+  // Search
+  const search = input('Search games…', 'store-search', e => {
+    query = e.target.value.toLowerCase();
+    render();
+  });
+
+  // Style tabs. The hash keeps the choice: #terminal, #action, or empty for all.
+  const styleTabs = tabs(['All', ...styles], 'store-tabs', i => {
+    currentStyle = i === 0 ? null : styles[i - 1];
+    currentTag = null;
+    writeHash(currentStyle || '');
+    applyHash();
+    render();
+  });
+
+  // Tag dropdown
+  const tagDrop = dropdown('All tags', ['All', ...allTags], 'store-tags', val => {
+    currentTag = val === 'All' ? null : val;
+    currentStyle = null;
+    writeHash(currentTag || '');
+    applyHash();
+    render();
+  });
+
+  const controls = document.createElement('div');
+  controls.className = 'store-controls';
+  controls.append(search, styleTabs, tagDrop);
+
+  const grid = document.createElement('div');
+  grid.className = 'game-grid';
+
+  root.append(controls, grid);
+
+  function render() {
+    grid.innerHTML = '';
+    const filtered = games.filter(g => {
+      const matchesQuery = !query ||
+        g.title.toLowerCase().includes(query) ||
+        g.description.toLowerCase().includes(query) ||
+        g.tags.some(t => t.toLowerCase().includes(query));
+      const matchesStyle = !currentStyle || g.style === currentStyle;
+      const matchesTag = !currentTag || g.tags.includes(currentTag);
+      return matchesQuery && matchesStyle && matchesTag;
+    });
+
+    if (!filtered.length) {
+      grid.innerHTML = '<p class="empty">No games match.</p>';
+      return;
+    }
+
+    filtered.forEach(g => {
+      const el = card(`
+        <a href="${g.url}" class="game-card">
+          <img src="${g.image}" alt="" class="game-thumb" loading="lazy" width="240" height="135">
+          <div class="game-title">${g.title}</div>
+          <div class="game-desc">${g.description}</div>
+          <div class="game-tags">${g.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        </a>
+      `, 'game-card-wrap');
+      grid.appendChild(el);
+    });
+  }
+
+  applyHash();
+  render();
+  window.addEventListener('hashchange', () => {
+    applyHash();
+    render();
+  });
+});
+</script>
+
+<style>
+.page-frame:has(#storefront),
+.page-frame:has(#storefront) .content-area {
+  max-width: 1040px;
+}
+.store-controls { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0 auto 1.5rem; align-items: center; justify-content: center; }
+.store-search { flex: 1; min-width: 180px; max-width: 420px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 0.35rem; justify-content: center; }
+.tab {
+  background: transparent;
+  color: #e8e8e8;
+  border: 1px solid #2a2a2a;
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  font: inherit;
+  cursor: pointer;
+}
+.tab.active { border-color: #c9a6ff; color: #c9a6ff; }
+.game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+.game-card { display: block; text-decoration: none; color: inherit; }
+.game-thumb { width: 100%; height: auto; border-radius: 8px; background: #111; }
+.game-title { font-weight: 600; margin: 0.4rem 0 0.2rem; }
+.game-desc { font-size: 0.85rem; opacity: 0.8; }
+.game-tags { margin-top: 0.4rem; }
+.tag { display: inline-block; font-size: 0.7rem; padding: 0.15rem 0.4rem; margin-right: 0.25rem; border-radius: 4px; background: #1a3a1a; color: #39ff14; }
+.empty { opacity: 0.6; }
+</style>
+

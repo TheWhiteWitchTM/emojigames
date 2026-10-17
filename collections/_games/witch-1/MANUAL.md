@@ -30,6 +30,8 @@ SPEAK.
 
 The frame is green. The name is white. WASIC · ONE is green. 40 COLUMN GLASS is faint. The count, and 666 LINES FREE, are the color of a low candle. The waking lines are ash. The line about BASIC is dark red. SPEAK is white. What you type after that is ash, until a program runs.
 
+The page is a desk. 🖥️ Boot fills the screen with the glass. Escape returns to the page. Boot opens the glass again. A program that was running has stopped. The lines you stored are still there.
+
 The two notes are low, a fifth apart. Then she fades, and the words roll to the top of the glass. Press a key if the notes stay silent. The browser holds the sound until a key arrives. The mouse is not a device here. The pointer is hidden over the glass, and a click does nothing.
 
 A refusal is red, with a mark in front of the words, and two notes going down. ENOUGH is candle-colored, and those two notes are softer. A line that will not take another character only clicks.
@@ -60,7 +62,8 @@ Under that, the keys. Each one is an emoji, a word, and a function key. They are
 | ✨ MAGIC F5 | MAGIC. The same as AUTO. Again, and the numbering stops |
 | 🌑 EXORCISE F6 | EXORCISE |
 | 🔒 LATCH F7 | Scroll lock. Scroll Lock does this too |
-| ⛶ FULL F11 | The glass fills the screen. F11 again sits it back on the page. Escape leaves a full screen too, because the browser keeps that key |
+| ⛶ FULL F11 | The glass fills the screen. F11 again returns to the page |
+| ⎋ BACK ESC | Returns to the page. A program that was running stops |
 
 The bar is quiet while she runs, and while the shelf is open. LATCH stays lit while she is latched at SPEAK, at AUTO, and while DEMAND waits. While MAGIC is numbering, the bar still lists, clears, exorcises, and latches. Typing those words on the numbered line stores them, the way RUN would. The function key does the thing.
 
@@ -72,11 +75,11 @@ She wakes latched. That is the scroll lock, and the word is LATCH. Lines that ro
 
 `LATCH` turns the hold on. `LATCH ON` does that too. `LATCH OFF`, or `LATCH` again, opens the glass. Then Up and Down recall, the way a shell does, and Page Up only clicks. Home and End edit the line. F7 and the Scroll Lock key do what the bare word does, without printing a line. The same hold is on while DEMAND waits, so you can walk up and read the question. AUTO keeps it. A program does not. While she runs, the arrows are hers, and the glass is text.
 
-While the shelf is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter unseals the name under the mark. Escape leaves, and she says `FINE. THE SHELF CAN WAIT.` The caret stays dark until the shelf closes.
+While the shelf is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter unseals the name under the mark. Escape returns to the page. If the shelf was open she closes it, and she says `FINE. THE SHELF CAN WAIT.` The caret stays dark until the shelf closes.
 
 Enter stores a numbered line, or runs a bare one. A stored line does not print SPEAK. The caret just waits for the next one. An empty Enter at SPEAK prints SPEAK. again.
 
-Escape at SPEAK clears the line you have not sent. Escape while she runs, or while she waits for an answer, stops her. Ctrl-C does that too. She says:
+Escape returns to the page. Ctrl-C stops a program, or a question that is waiting. She says:
 
 ```
 ✋ ENOUGH.
@@ -132,7 +135,7 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | MAGIC | The same as AUTO. MAGIC OFF stops it |
 | RUN | Start at the first line |
 | RUN n | Start at the first line numbered n or higher |
-| SHELF | Open the box. Arrows move. Enter unseals. Escape leaves |
+| SHELF | Open the box. Arrows move. Enter unseals. Escape returns to the page |
 | SEAL "NAME" | Keep the program here. She says SEALED. |
 | UNSEAL "NAME" | Load it. She says UNSEALED. She does not run it |
 | UNSEAL "shelf:NAME" | Load a program from the box |
@@ -202,7 +205,7 @@ No such line:
 🚫 NO LINE.
 ```
 
-She runs in short slices, so Escape still lands and the minions still move. A complaint from inside a program gains the line: `🚫 NO LINE. IN 40`
+She runs in short slices, so Ctrl-C still lands and the minions still move. Escape returns to the page, and a program that was running stops. A complaint from inside a program gains the line: `🚫 NO LINE. IN 40`
 
 ## The words
 
@@ -230,7 +233,7 @@ CHANT writes. A comma jumps to the next column that is a multiple of 10. A semic
 
 ### VEIL
 
-VEIL writes one line through the glass's own color codes. A `{31}` in the string is ink. `31` is dark red. `1;97` is bold white. `38;5;141` is one of the 256. `38;2;232;206;168` is a color mixed on the spot. `2` is faint. A background is `45`, purple. `{{` is one brace. VEIL with nothing after it writes a blank line. A number where a string belongs is the wrong kind of thing.
+VEIL writes one line through the glass's own color codes. A `{31}` in the string is ink. `31` is dark red. `1;97` is bold white. `38;5;141` is one of the 256. `38;2;232;206;168` is a color mixed on the spot. `2` is faint. A background is `45`, purple. A doubled `{` is one brace. VEIL with nothing after it writes a blank line. A number where a string belongs is the wrong kind of thing.
 
 ANSI-WITCH is that picture. The lines live in `shelf/ansi-witch.wasic`. A line number changes one.
 
@@ -254,7 +257,7 @@ A number variable that did not get a number:
 🔢 AGAIN. A NUMBER.
 ```
 
-She asks again until the answer fits, or until Escape.
+She asks again until the answer fits, or until Ctrl-C. Escape returns to the page and leaves the question waiting.
 
 ### CONJURE
 
@@ -316,7 +319,7 @@ A string cannot count.
 
 DISPEL ends the program. She does not announce it.
 
-FREEZE waits for a key. FREEZE 500 waits 500 milliseconds. The longest wait is 60000. A key or Escape ends a bare FREEZE. Escape also cuts a timed one.
+FREEZE waits for a key. FREEZE 500 waits 500 milliseconds. The longest wait is 60000. A key or Escape ends a bare FREEZE. Escape also cuts a timed one, and returns to the page.
 
 ### OFFERING, TAKE, REWIND
 
@@ -442,7 +445,7 @@ AT col, row puts the caret there, clamped onto the glass.
 
 CIRCLE x, y, r draws a circle of ●. LINE x1, y1, x2, y2 draws a line of ●. FILL x, y floods connected empty cells with ●, up, down, left, and right. FILL does nothing when the cell is off the glass or already marked.
 
-TONE freq, ms plays a square note and waits, so a tune stays in order. Frequency runs from 20 to 8000. The wait runs from 0 to 8000 milliseconds. Escape cuts it.
+TONE freq, ms plays a square note and waits, so a tune stays in order. Frequency runs from 20 to 8000. The wait runs from 0 to 8000 milliseconds. Escape cuts it and returns to the page.
 
 ## Minions
 
@@ -662,7 +665,7 @@ CIRCLES draws, beeps, and calls it art.
 120 DISPEL
 ```
 
-MINIONS puts a ghost and a bat on the glass. Escape stops them. HIT is the collision's variable. The label HIT is a different thing, and she can tell.
+MINIONS puts a ghost and a bat on the glass. Escape stops them and returns to the page. Ctrl-C stops them and stays. HIT is the collision's variable. The label HIT is a different thing, and she can tell.
 
 ```
 10 SCRUB
@@ -701,7 +704,7 @@ KEYS prints the key you press. Q leaves.
 90 FLYTO LOOP
 ```
 
-CAROL plays eight notes and leaves the last number on the glass. FAMILIAR puts a cat on the glass. She turns at the edges and meows when she does. Escape sends her home. Both are in `shelf/`, with the rest.
+CAROL plays eight notes and leaves the last number on the glass. FAMILIAR puts a cat on the glass. She turns at the edges and meows when she does. Ctrl-C sends her home. Escape returns to the page. Both are in `shelf/`, with the rest.
 
 ANSI-WITCH paints a witch. The hat is white. The face is mixed. The dress is purple. A star over her uses one of the 256. She says the hat is the point, names VEIL, and tells you to LIST if you mean to meddle. Two low notes, and she stops. The waking glass draws that picture first.
 
@@ -734,7 +737,7 @@ A label:
 30 FLYTO start
 ```
 
-The third one does not stop. Escape is the door.
+The third one does not stop. Ctrl-C is the door. Escape returns to the page.
 
 ## What she says
 

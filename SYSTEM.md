@@ -78,7 +78,7 @@ collections/_games/witch-1/shelf/<name>.wasic
 collections/_games/witch-1/shelf/catalog.txt
 ```
 
-`SHELF` opens that list on the glass. Up and down move. Enter unseals the name under the mark and does not run it. Escape leaves. `catalog.txt` is the order. A `#` line is a note. A name is a letter, then up to 15 letters, digits, or hyphens.
+`SHELF` opens that list on the glass. Up and down move. Enter unseals the name under the mark and does not run it. Escape returns to the page, and an open shelf closes. `catalog.txt` is the order. A `#` line is a note. A name is a letter, then up to 15 letters, digits, or hyphens.
 
 `UNSEAL "shelf:HELLO-WITCH"` reads `hello-witch.wasic`. She lowercases the name and adds `.wasic`. She does not run it. The shelf is only for reading.
 
@@ -116,7 +116,7 @@ A refusal is red. A mark sits in front of the words. From inside a program the l
 
 The sound is two square notes going down, 440 then 220. The lamp under the glass flashes red.
 
-ENOUGH, from Escape or Ctrl-C, is candle-colored: `✋ ENOUGH.` The two notes are softer, 330 then 247, and the lamp flashes candle.
+ENOUGH, from Ctrl-C, or from Escape while a program is running, is candle-colored: `✋ ENOUGH.` The two notes are softer, 330 then 247, and the lamp flashes candle. Escape also returns to the page. The glass stays where you left it.
 
 A line that will not take another character does not refuse in words. She clicks once and drops the rest. That click is not the refusal.
 

@@ -8,15 +8,96 @@ tags: [terminal, computer]
 ---
 
 <style>
-  #game { width: min(100%, 820px); }
+  .witch-front {
+    width: min(72ch, 100%);
+    color: #e8e8e8;
+  }
+  .witch-front h1 {
+    margin: 0.2rem 0 0.6rem;
+  }
+  .witch-lead {
+    margin: 0.4rem 0 0;
+    color: #ccc;
+  }
+  .witch-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 1.1rem 0 0.7rem;
+  }
+  .witch-actions button {
+    font: inherit;
+    font-size: 1.05rem;
+    color: #e8e8e8;
+    background: transparent;
+    border: 1px solid #3a2a4a;
+    border-radius: 8px;
+    padding: 0.55rem 0.95rem;
+    cursor: pointer;
+  }
+  .witch-actions button:hover,
+  .witch-actions button:focus-visible,
+  .witch-actions button[aria-expanded="true"] {
+    border-color: #c9a6ff;
+    color: #e8d5ff;
+    outline: none;
+  }
+  .witch-actions button.boot {
+    border-color: #c9a6ff;
+    color: #e8d5ff;
+  }
+  .witch-hint {
+    margin: 0.2rem 0 0.8rem;
+    color: #9a9a9a;
+  }
+  .witch-panel {
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    background: #111;
+    padding: 0.3rem 1rem 0.8rem;
+    margin: 0.4rem 0 1rem;
+  }
+  .witch-panel[hidden] { display: none !important; }
+  .witch-panel.manual {
+    max-height: min(70vh, 680px);
+    overflow: auto;
+  }
+  body.witch-glass-on { overflow: hidden; }
+  .witch-stage[hidden] { display: none !important; }
+  .witch-stage.witch-open,
+  .witch-stage:fullscreen {
+    display: flex !important;
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 12px;
+    box-sizing: border-box;
+    background: #050305;
+    align-items: center;
+    justify-content: center;
+  }
+  .witch-stage.witch-open #game,
+  .witch-stage:fullscreen #game {
+    width: min(100%, calc((100vh - 128px) * 720 / 576));
+    width: min(100%, calc((100dvh - 128px) * 720 / 576));
+    max-width: 100%;
+    margin: 0;
+  }
   .ee-wrap {
     width: 100% !important;
-    max-width: 820px;
+    max-width: none;
     background: #0b090a !important;
     color: #cbbfa6 !important;
     border-radius: 18px;
     box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
     font-family: ui-monospace, "Courier New", monospace !important;
+  }
+  .witch-stage:fullscreen .ee-wrap,
+  .witch-stage.witch-open .ee-wrap {
+    border-radius: 12px;
   }
   .ee-header { border-bottom: 1px solid #2a211c; }
   .ee-title { letter-spacing: .22em; color: #d7c7a2; font-weight: 500; }
@@ -24,7 +105,7 @@ tags: [terminal, computer]
   .ee-wrap { user-select: none; }
   .crt {
     position: relative;
-    margin: 10px;
+    margin: 8px 10px;
     background: #000;
     border-radius: 12px;
     overflow: hidden;
@@ -82,41 +163,127 @@ tags: [terminal, computer]
   .witch-key.lit, .witch-key.lit kbd { color: #e2b657; }
   .witch-key.quiet { opacity: .38; }
   .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
-  .ee-wrap:fullscreen {
-    width: 100% !important;
-    height: 100% !important;
-    max-width: none !important;
-    border-radius: 0;
-    justify-content: center;
-  }
-  .ee-wrap:fullscreen .crt {
-    width: min(100%, calc(100vh * 720 / 640));
-    margin: 0 auto;
-  }
 </style>
 
-<div id="game" data-shelf="{{ '/games/witch-1/shelf/' | relative_url }}" data-witch="{{ '/assets/images/site.jpg' | relative_url }}"></div>
+<div class="witch-front markdown-body">
+  <h1>🖥️ Witch I</h1>
+  <p class="witch-lead">Forty columns, twenty-four rows. She speaks WASIC.</p>
 
-Forty columns, twenty-four rows. The glass is black. She speaks WASIC.
+  <div class="witch-actions">
+    <button type="button" class="boot" id="witch-boot">🖥️ Boot</button>
+    <button type="button" id="witch-started-btn" aria-expanded="false" aria-controls="witch-started">📖 Getting Started</button>
+    <button type="button" id="witch-manual-btn" aria-expanded="false" aria-controls="witch-manual">📜 Manual</button>
+  </div>
+  <p class="witch-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
 
-When she wakes, she draws herself in the glass's own colors, hat first. The same picture is `ANSI-WITCH`. Two low notes, and that drawing steps aside. The white witch from the banner stands in. The count climbs to 666. The words roll to the top, and the glass says SPEAK.
+  <div id="witch-started" class="witch-panel" hidden>
+    <h2>📖 Getting Started</h2>
+    <p>The prompt is <strong>SPEAK</strong>. A line with a number is stored. A line without one runs now.</p>
+    <ul>
+      <li>📚 <code>SHELF</code> opens the box. The arrows move. Enter takes a program down and does not run it.</li>
+      <li>🕯️ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
+      <li>🧹 <code>SCRUB</code> clears the glass. ✨ <code>MAGIC</code> numbers the next lines.</li>
+      <li>✋ Ctrl-C stops a program that will not stop.</li>
+    </ul>
+    <p>Try <code>SHELF</code>, point at <code>HELLO-WITCH</code>, press Enter, then <code>RUN</code>. <code>HELLO-DEMON</code> is the other hello. <code>ANSI-WITCH</code> paints her.</p>
+    <p>Under the glass, the keys are an emoji, a word, and a function key. Nothing there is a button.</p>
+    <ul>
+      <li>📜 LIST F1</li>
+      <li>🕯️ RUN F2</li>
+      <li>📚 SHELF F3</li>
+      <li>🧹 SCRUB F4</li>
+      <li>✨ MAGIC F5</li>
+      <li>🌑 EXORCISE F6</li>
+      <li>🔒 LATCH F7</li>
+      <li>⛶ FULL F11</li>
+      <li>⎋ BACK ESC</li>
+    </ul>
+    <p>She wakes latched. Up walks the lines that rolled off the glass. The walls are in <a href="{{ '/SYSTEM.md' | relative_url }}">SYSTEM.md</a>.</p>
+  </div>
 
-A line with a number is stored. A line without one runs now. That is the C64 way, and she kept it. `RUN` starts at the top. The programs live in `shelf/`, and the names end in `.wasic`. `SHELF` opens the box. The arrows move. Enter takes one down and leaves it sitting there, so a line number can change it. `UNSEAL "shelf:HELLO-WITCH"` still types the long way. `HELLO-DEMON` is the other hello. `ANSI-WITCH` paints her in the glass's own colors. `LIST` shows the lines, numbers in yellow. `REVEAL` is the quiet copy. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. PEEK, POKE, and SYS sit in a line if you type them. When she reaches them she complains, in red, with a mark, and the glass rings. She does not answer to READY. When the glass says SPEAK, the turn is yours.
+  <div id="witch-manual" class="witch-panel manual markdown-body" hidden>
+    {% capture witch_manual %}{% include_relative MANUAL.md %}{% endcapture %}
+    {{ witch_manual | markdownify }}
+  </div>
+</div>
 
-Under the glass, the bezel names the mood and the lines. Beside that, the keys. An emoji, a word, then the function key. Nothing there is a button. The mouse is not plugged in.
-
-📜 LIST F1. 🕯️ RUN F2. 📚 SHELF F3. 🧹 SCRUB F4. ✨ MAGIC F5. 🌑 EXORCISE F6. 🔒 LATCH F7. ⛶ FULL F11.
-
-MAGIC numbers the next lines. AUTO is the same word. EXORCISE drives BASIC out of a listing and leaves the sums where they are. An empty circle opens the desk for a file. UPLOAD still reads a file as it stands.
-
-LATCH is the scroll lock. She wakes latched. Up walks the lines that rolled off the glass, six hundred and sixty-six of them. Down walks back to the pen. Page Up and Page Down move a glassful. While a program runs, the glass is text again, and the arrows belong to the program. LATCH OFF, and Up recalls what you typed.
-
-Escape ends a working that will not end. Ctrl-C does too, if you were raised on the other machines. The pale bar blinks from the moment the glass is dark, before she bothers to introduce herself.
-
-Press a key if the two notes stay buried. They are low, a fifth apart. The browser holds sound until a key arrives. A refusal is two notes going down.
-
-The walls are written in [SYSTEM.md]({{ '/SYSTEM.md' | relative_url }}). She keeps them.
+<div id="witch-stage" class="witch-stage" hidden>
+  <div id="game" data-shelf="{{ '/games/witch-1/shelf/' | relative_url }}" data-witch="{{ '/assets/images/site.jpg' | relative_url }}"></div>
+</div>
 
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
 <script src="{{ '/games/witch-1/wasic.js' | relative_url }}"></script>
 <script src="{{ '/games/witch-1/witch-1.js' | relative_url }}"></script>
+<script>
+(function () {
+  var stage = document.getElementById("witch-stage");
+  var boot = document.getElementById("witch-boot");
+  var startedBtn = document.getElementById("witch-started-btn");
+  var manualBtn = document.getElementById("witch-manual-btn");
+  var started = document.getElementById("witch-started");
+  var manual = document.getElementById("witch-manual");
+  var open = false;
+  var inFull = false;
+
+  function togglePanel(btn, panel, otherBtn, other) {
+    var show = btn.getAttribute("aria-expanded") !== "true";
+    btn.setAttribute("aria-expanded", show ? "true" : "false");
+    panel.hidden = !show;
+    if (show) {
+      otherBtn.setAttribute("aria-expanded", "false");
+      other.hidden = true;
+      panel.scrollIntoView({ block: "nearest" });
+    }
+  }
+
+  function closeStage() {
+    if (!open) return;
+    open = false;
+    stage.classList.remove("witch-open");
+    stage.hidden = true;
+    document.body.classList.remove("witch-glass-on");
+    if (document.fullscreenElement) {
+      Promise.resolve(document.exitFullscreen()).catch(function () {});
+    }
+    if (window.WITCH && WITCH.leave) WITCH.leave();
+    boot.focus();
+  }
+
+  function openStage() {
+    open = true;
+    stage.hidden = false;
+    stage.classList.add("witch-open");
+    document.body.classList.add("witch-glass-on");
+    var root = stage;
+    var pending = root.requestFullscreen ? root.requestFullscreen() : Promise.reject();
+    Promise.resolve(pending).catch(function () {});
+    if (window.WITCH && WITCH.power) WITCH.power();
+  }
+
+  boot.addEventListener("click", openStage);
+  startedBtn.addEventListener("click", function () {
+    togglePanel(startedBtn, started, manualBtn, manual);
+  });
+  manualBtn.addEventListener("click", function () {
+    togglePanel(manualBtn, manual, startedBtn, started);
+  });
+
+  document.addEventListener("fullscreenchange", function () {
+    if (document.fullscreenElement) {
+      inFull = true;
+      return;
+    }
+    if (!inFull) return;
+    inFull = false;
+    if (!open) return;
+    closeStage();
+  });
+
+  window.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape" || !open) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    closeStage();
+  }, true);
+})();
+</script>

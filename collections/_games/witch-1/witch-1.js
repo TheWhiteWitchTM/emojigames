@@ -98,6 +98,13 @@
     toolHints.push(hint);
     bar.append(hint);
   });
+  var escHint = document.createElement("span");
+  escHint.className = "witch-key";
+  escHint.append(document.createTextNode("⎋ BACK "));
+  var escKbd = document.createElement("kbd");
+  escKbd.textContent = "ESC";
+  escHint.append(escKbd);
+  bar.append(escHint);
   ui.footer.textContent = "";
   ui.footer.append(mood, bar);
   var fsBtn = ui.wrap.querySelector(".ee-fullscreen");
@@ -121,6 +128,12 @@
   ui.wrap.addEventListener("wheel", eatMouse, { capture: true, passive: false });
 
   var mode = "boot";
+  var glassLive = false;
+  var frameOn = false;
+  var generation = 0;
+  var activeBoot = -1;
+  var awake = false;
+  var booting = false;
   var shelfState = "";
   var shelfBase = mount.getAttribute("data-shelf") || "shelf/";
   if (shelfBase.slice(-1) !== "/") shelfBase += "/";
@@ -258,6 +271,7 @@
   }
 
   function tone(freq, ms, level) {
+    if (!glassLive) return;
     unlock();
     var audio = engine.audio;
     if (!audio) return;
@@ -613,6 +627,7 @@
       return cell && cell.ch ? cell.ch : " ";
     },
     beep: function (freq, ms) {
+      if (!glassLive) return;
       unlock();
       engine.beep(freq, ms);
     },
@@ -697,6 +712,7 @@
   var wokeAt = performance.now();
   var lastFrame = wokeAt;
   function frame(t) {
+    if (!glassLive) { frameOn = false; return; }
     term.cursorLit = Math.floor((t - wokeAt) / 500) % 2 === 0;
     var dt = Math.min(0.05, Math.max(0.001, (t - lastFrame) / 1000));
     lastFrame = t;
@@ -721,7 +737,6 @@
     try { canvas.draw(); } catch (err) {}
     requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
 
   function storeUserLine(trimmed) {
     if (cp(trimmed).length > LINE_CHARS) { fault(say("long")); return false; }
@@ -1227,8 +1242,13 @@
     updateFooter();
   }
 
+  function screenRoot() {
+    return document.getElementById("witch-stage") || ui.wrap;
+  }
+
   function toggleFull() {
-    var request = document.fullscreenElement ? document.exitFullscreen() : ui.wrap.requestFullscreen();
+    var root = screenRoot();
+    var request = document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen();
     Promise.resolve(request).catch(function () {});
   }
 
@@ -1313,7 +1333,7 @@
     paintAnsiRow(2, "40", "");
     paintAnsiRow(19, "40", "");
     paintAnsiRow(21, "40", "");
-    paintAnsiRow(22, "2;33;40", "ARROWS. ENTER TAKES IT. ESCAPE FLEES.");
+    paintAnsiRow(22, "2;33;40", "ARROWS. ENTER TAKES IT. ESC GOES BACK.");
     paintAnsiRow(23, "40", "");
   }
 
@@ -1797,7 +1817,65 @@
   }
 
   function sleep(ms) {
-    return new Promise(function (r) { setTimeout(r, ms); });
+    var gen = generation;
+    return new Promise(function (r) { setTimeout(r, ms); }).then(function () {
+      if (gen !== generation || !glassLive) {
+        var err = new Error("cut");
+        err.cut = true;
+        throw err;
+      }
+    });
+  }
+
+  function showGlass() {
+    glassLive = true;
+    unhush();
+    if (frameOn) return;
+    frameOn = true;
+    lastFrame = performance.now();
+    requestAnimationFrame(frame);
+  }
+
+  function unhush() {
+    try {
+      if (engine.audio && engine.audio.state === "suspended") engine.audio.resume();
+    } catch (err) {}
+  }
+
+  function hush() {
+    try {
+      if (engine.audio && engine.audio.state === "running") engine.audio.suspend();
+    } catch (err) {}
+  }
+
+  function power() {
+    showGlass();
+    if (awake) return;
+    var gen = generation;
+    if (booting && gen === activeBoot) return;
+    activeBoot = gen;
+    booting = true;
+    boot().then(function (done) {
+      if (done && gen === generation) awake = true;
+    }).catch(function () {}).finally(function () {
+      if (gen === generation) booting = false;
+    });
+  }
+
+  function leave() {
+    generation += 1;
+    glassLive = false;
+    if (mode === "shelf") cancelPick();
+    if (mode === "run" || mode === "freeze") {
+      wasic.breakRequested = true;
+      if (keyWait) {
+        var go = keyWait;
+        keyWait = null;
+        mode = "run";
+        go("Escape");
+      }
+    }
+    hush();
   }
 
   function witchBox() {
@@ -1901,6 +1979,8 @@
   async function boot() {
     var SIGN = 10;
     mode = "boot";
+    waking = true;
+    try {
     term.clear();
     term.cursor.col = 0;
     term.cursor.row = 0;
@@ -1958,9 +2038,9 @@
     var last = SIGN + 13;
     cup(last, centerOf(free), free, "93");
     unlock();
-    try { engine.beep(98, 160); } catch (err) {}
+    if (glassLive) { try { engine.beep(98, 160); } catch (err) {} }
     await sleep(190);
-    try { engine.beep(146, 260); } catch (err) {}
+    if (glassLive) { try { engine.beep(146, 260); } catch (err) {} }
     await sleep(240);
     waking = false;
     portrait.target = 0;
@@ -1970,6 +2050,11 @@
     term.cursor.col = 0;
     term.write("\x1b[0m");
     promptReady();
+    return true;
+    } catch (err) {
+      if (err && err.cut) return false;
+      throw err;
+    }
   }
 
   globalThis.WITCH = {
@@ -1980,6 +2065,8 @@
     get gaze() { return gaze; },
     get latch() { return latch; },
     get kept() { return back.length; },
+    power: power,
+    leave: leave,
     glass: function () {
       var rows = reading() ? composedRows() : term.cells;
       var out = [];
@@ -1992,6 +2079,4 @@
       return out;
     }
   };
-
-  boot();
 })();

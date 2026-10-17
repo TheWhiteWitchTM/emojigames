@@ -4,6 +4,10 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-17
 
+### Witch I, the desk
+
+The page is a desk. 🖥️ Boot fills the screen with the glass. Escape brings the site back, and Boot opens the same glass again. 📖 Getting Started and 📜 Manual sit on the page.
+
 ### Witch I
 
 A long listing used to roll off the top and vanish. Up walked the last lines you had typed, the way a shell does, and the lines themselves were gone. The glass keeps them now. Six hundred and sixty-six.

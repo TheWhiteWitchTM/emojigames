@@ -34,7 +34,7 @@ Trump Super Intelligence is a conversation. Type a line and press Enter. The fac
 
 The Oregon Trail asks for a number, then RETURN. On the road, RETURN stops the wagon so you can look around. Hunt and the Columbia raft use the arrows.
 
-Witch I is a computer. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF opens the box, and the arrows take a program down. LIST shows the lines. PEEK and POKE make her complain. Escape stops one that will not stop.
+Witch I is a computer. The page has a boot button, and she fills the screen. Escape brings the site back. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF opens the box, and the arrows take a program down. LIST shows the lines. PEEK and POKE make her complain. Ctrl-C stops one that will not stop.
 
 ## What shipped
 

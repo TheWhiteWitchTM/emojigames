@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="http://localhost:4019/emojigames/feed/releases.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4019/emojigames/" rel="alternate" type="text/html" /><updated>2026-10-17T05:11:31+02:00</updated><id>http://localhost:4019/emojigames/feed/releases.xml</id><title type="html">Emoji Games | Releases</title><subtitle>A White Witch spinoff. Emoji games, no accounts.</subtitle><entry><title type="html">🖥️ Witch I, on the shelf</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/" rel="alternate" type="text/html" title="🖥️ Witch I, on the shelf" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-shelf</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/"><![CDATA[<h1 id="️-witch-i-on-the-shelf">🖥️ Witch I, on the shelf</h1>
+
+<p>17 October 2026. The box has a door.</p>
+
+<p>The programs are files now, under <code class="language-plaintext highlighter-rouge">shelf/</code>, and the extension is <code class="language-plaintext highlighter-rouge">.wasic</code>. <code class="language-plaintext highlighter-rouge">SHELF</code> reads the catalog. <code class="language-plaintext highlighter-rouge">UNSEAL "shelf:HELLO-WITCH"</code> takes one down. <code class="language-plaintext highlighter-rouge">HELLO-DEMON</code> is the other hello. CAROL hums. FAMILIAR paces.</p>
+
+<p>When she wakes, the white witch from the banner stands in the glass while the count climbs. Then the words roll up and the glass says SPEAK.</p>
+
+<p>A refusal is red, with a mark, and two notes going down. The walls she keeps are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The programs left the script and moved into the box. She rings when she refuses.]]></summary></entry><entry><title type="html">🖥️ Witch I points</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-picker/" rel="alternate" type="text/html" title="🖥️ Witch I points" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-picker</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-picker/"><![CDATA[<h1 id="️-witch-i-points">🖥️ Witch I points</h1>
+
+<p>17 October 2026. The box learned to point.</p>
+
+<p><code class="language-plaintext highlighter-rouge">SHELF</code> opens the programs on the glass. Up and down move the mark. Enter takes that one down and does not run it. She tells you that a number changes a line. Escape leaves the shelf where it is.</p>
+
+<p><code class="language-plaintext highlighter-rouge">LIST</code> prints the program. The line numbers are yellow. Retype one, and that line is the new line. <code class="language-plaintext highlighter-rouge">REVEAL</code> still prints them with no color and no lecture.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ANSI-WITCH</code> is a picture. <code class="language-plaintext highlighter-rouge">VEIL</code> sends the glass its own color codes: the sixteen, the 256, and a color mixed on the spot. The lines are in <code class="language-plaintext highlighter-rouge">shelf/ansi-witch.wasic</code>. Change a number, run it again.</p>
+
+<p><a href="/emojigames/games/witch-1/">Witch I</a>. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The shelf takes the arrows. LIST shows the lines. A witch paints in ANSI.]]></summary></entry><entry><title type="html">🖥️ Witch I, the exorcism</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-exorcism/" rel="alternate" type="text/html" title="🖥️ Witch I, the exorcism" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-exorcism</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-exorcism/"><![CDATA[<h1 id="️-witch-i-the-exorcism">🖥️ Witch I, the exorcism</h1>
+
+<p>17 October 2026. She draws herself before she speaks.</p>
+
+<p>When the glass wakes, the ANSI witch from <code class="language-plaintext highlighter-rouge">ANSI-WITCH</code> paints in, hat first. The sixteen, the 256, and a color mixed on the spot. Two low notes, and the drawing steps aside for the portrait and the count.</p>
+
+<p>Under the glass, six keys sit beside the lines in use. LIST, RUN, SHELF, SCRUB, MAGIC, EXORCISE. The chords are Alt+Shift and a letter. A browser does not spend those on tabs, reload, or the address line. MAGIC numbers the next lines. AUTO is the same word.</p>
+
+<p>EXORCISE rewrites a BASIC listing into WASIC. PRINT becomes CHANT, GOTO becomes FLYTO, FOR becomes CURSE, and the rest of the old names follow. INT, SIN, RND, and the other sums stay. PEEK answers 0. A line she still cannot say is buried as a whisper, and RUN steps over it. An empty circle opens the desk for a <code class="language-plaintext highlighter-rouge">.BAS</code> file. She leaves the lines sitting there. You run them.</p>
+
+<p><a href="/emojigames/games/witch-1/">Witch I</a>. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[She draws herself in ink. The bezel grows six keys. EXORCISE drives BASIC out.]]></summary></entry><entry><title type="html">🧙 A Witch’s Tale</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/" rel="alternate" type="text/html" title="🧙 A Witch’s Tale" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-tales</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/"><![CDATA[<h1 id="-a-witchs-tale">🧙 A Witch’s Tale</h1>
+
+<p>16 October 2026. A chapter, and a save.</p>
+
+<p><a href="/emojigames/games/witch-tales/">A Witch’s Tale</a> is a tile RPG told in parts. You are a witch. The land has problems. The first chapter is a cottage, a yard, and the trees south of it.</p>
+
+<p>You wake with very little. The wards on the door have gone quiet. A crow at the window has opinions. Something that should not be there took the iron key off the nail and went into the woods. The far gate still wants that key.</p>
+
+<p>Arrows or WASD move. T talks. L looks. Combat is a strike, a spark, or a step back. If you fall, you wake in the bed. The flags you set stay set.</p>
+
+<p>The game stores your chapter, your place, your health, and those flags in this browser. When a chapter ends it looks for the next numbered folder. Chapter 02 is not written yet. The save waits.</p>
+
+<p>That is ten games on the shelf.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Chapter 01 of a tile RPG. A cold kettle, a crow, and a key that walked off.]]></summary></entry><entry><title type="html">🖥️ Witch I</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-witch-1/" rel="alternate" type="text/html" title="🖥️ Witch I" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-witch-1/"><![CDATA[<h1 id="️-witch-i">🖥️ Witch I</h1>
+
+<p>16 October 2026. She woke up.</p>
+
+<p><a href="/emojigames/games/witch-1/">Witch I</a> is a small computer on a black glass. Forty columns, twenty-four rows, a line number, and SPEAK.</p>
+
+<p>The language is WASIC. <code class="language-plaintext highlighter-rouge">CHANT</code> writes a line. <code class="language-plaintext highlighter-rouge">DEMAND</code> asks. <code class="language-plaintext highlighter-rouge">CURSE</code> and <code class="language-plaintext highlighter-rouge">BREAK</code> count. <code class="language-plaintext highlighter-rouge">FLYTO</code> jumps. A line with a number is stored, junk included. A BASIC word fails when she reaches it. PEEK, POKE, and SYS make her complain. She is Witch I. One.</p>
+
+<p><code class="language-plaintext highlighter-rouge">SHELF</code> lists what shipped in the box: HELLO, GUESS, DICE, OMEN, CIRCLES, MINIONS, KEYS. <code class="language-plaintext highlighter-rouge">UNSEAL "shelf:GUESS"</code> loads one. <code class="language-plaintext highlighter-rouge">RUN</code> starts it. Escape stops it.</p>
+
+<p><code class="language-plaintext highlighter-rouge">SEAL</code> keeps a program in this browser. <code class="language-plaintext highlighter-rouge">GRIMOIRE</code> prints the words.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A 40-column machine. It speaks WASIC.]]></summary></entry><entry><title type="html">🤖 Trump Super Intelligence</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-trump-super-intelligence/" rel="alternate" type="text/html" title="🤖 Trump Super Intelligence" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/trump-super-intelligence</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-trump-super-intelligence/"><![CDATA[<h1 id="-trump-super-intelligence">🤖 Trump Super Intelligence</h1>
+
+<p>16 October 2026. The rest of the shelf.</p>
+
+<p><a href="/emojigames/games/trump-si/">Trump Super Intelligence</a> is not a port, and it is not a model. You type a line, press Enter, and it answers from a pile of written replies. The line you typed is matched against a list of words. Praise, insults, China, the news, winning, a greeting: each one has its own stack of answers, and the game picks one.</p>
+
+<p>The face above the text is part of the answer. Five pictures. Happy, smug, ranting, winning, and a neutral that does not get much use, because the default mood is smug. Call it great and the face softens. Call it a liar, a fake, or a fool and it rants, and the little square-wave noise drops in pitch like something powering down in a bad mood.</p>
+
+<p>There is no score and no win. There is a cursor. Many people are saying that is the whole game.</p>
+
+<p>That is the shelf as of today. <a href="/emojigames/games/pong/">Pong</a> through <a href="/emojigames/games/hack/">Hack</a> are the four days before this one. The <a href="/emojigames/games/">catalog</a> has all eight.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A terminal chatbot with five faces, a square wave, and a lot of opinions.]]></summary></entry><entry><title type="html">🐂 The Oregon Trail</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-oregon-trail/" rel="alternate" type="text/html" title="🐂 The Oregon Trail" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/oregon-trail</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-oregon-trail/"><![CDATA[<h1 id="-the-oregon-trail">🐂 The Oregon Trail</h1>
+
+<p>16 October 2026. A wagon, and the long way west.</p>
+
+<p><a href="/emojigames/games/oregon-trail/">The Oregon Trail</a> is a terminal homage to the 1985 Apple II game. The screen keeps that shape. “You may:”, a number, RETURN. The words are written for this shelf.</p>
+
+<p>The year is 1848. The road runs from Independence, Missouri, to the Willamette Valley, a little over two thousand miles if you take the long forks. The party is five people. You name all five. The first name is the wagon leader.</p>
+
+<h2 id="who-you-are">Who you are</h2>
+
+<p>A banker from Boston starts with $1600. The score at the end stands as scored. A carpenter from Ohio starts with $800, and the score is doubled. A farmer from Illinois starts with $400, and the score is tripled. A score is written only when the wagon reaches the valley.</p>
+
+<p>You can leave in March, April, May, June, or July. March is cold and early. July is a bet against snow in the Blue Mountains.</p>
+
+<h2 id="matts-general-store">Matt’s General Store</h2>
+
+<p>A yoke is two oxen and costs $40. Matt recommends three. Food is twenty cents a pound, and the wagon holds 2000 pounds. Clothing is $10 a set. Ammunition is $2 a box of 20 bullets. A spare wheel, axle, or tongue is $10.</p>
+
+<p>Forts sell the same goods, and the price rises as you go west. Fort Kearney is a quarter over Matt. Fort Laramie is half again. Fort Bridger is three quarters over. Fort Hall is double. Fort Boise is two and a quarter times the Independence price. Fort Walla Walla is two and a half.</p>
+
+<h2 id="on-the-trail">On the trail</h2>
+
+<p>The daily menu is the same nine choices.</p>
+
+<ol>
+  <li>Continue. The wagon rolls a day at a time. RETURN sizes up the situation and stops.</li>
+  <li>Check supplies.</li>
+  <li>Look at the map.</li>
+  <li>Change pace. Steady is half of what the oxen can do, strenuous is three quarters, grueling is all of it. Four healthy oxen, steady, on the plains, cover about twenty miles. Past Fort Laramie a hard day tops out near twenty-four.</li>
+  <li>Change rations. Filling is three pounds a person a day, meager is two, bare bones is one.</li>
+  <li>Rest, up to twenty days.</li>
+  <li>Trade.</li>
+  <li>Hunt. Arrows or WASD move. Space shoots, and each shot is one bullet. Q goes back to the wagon. You can carry 100 pounds back.</li>
+  <li>Matt’s, while you are still in Independence. Buy supplies, at a fort. Talk to people, everywhere else.</li>
+</ol>
+
+<p>Q on that menu asks if you want to abandon the trail. Ctrl-S toggles the sound.</p>
+
+<p>Rivers give the old choices: ford, caulk the wagon and float it, wait, or ask how deep it is. The Kansas has a ferry for $5. The Big Blue has no ferry. The Snake stays deep, and a guide there wants three sets of clothing, or $25. A crossing that goes badly still puts you on the far bank. It can take food, clothing, a spare part, an ox, cash, or a person.</p>
+
+<h2 id="where-the-road-splits">Where the road splits</h2>
+
+<p>South Pass. Fort Bridger is the longer road and has a store. The Green River cutoff is shorter, and the crossing is the price of those miles.</p>
+
+<p>The Blue Mountains. Fort Walla Walla can still sell you supplies. The cutoff to The Dalles has no store.</p>
+
+<p>The Dalles. The Barlow Road is a $5 toll and a hundred mountain miles. The Columbia is a raft. Arrows steer. The channel opens on the right. Miss it and you still reach Oregon, with less food.</p>
+
+<h2 id="the-end-of-the-road">The end of the road</h2>
+
+<p>Health runs from good down through fair, poor, and very poor. Rest and full meals pull a party back. The trail can hand you cholera, dysentery, typhoid, measles, fever, exhaustion, a broken bone, or a snake. If the wagon leader dies, the screen says so in the old way: YOU HAVE DIED OF, and then the cause. The rest of the party can press on. When the whole party is dead, the run ends with no score.</p>
+
+<p>A score counts the living, their health, the wagon, the oxen, the spare parts, the clothing, the bullets, the food, and the cash left, then multiplies by the profession. The Oregon Top Ten stays in this browser. The list starts with names from the emigration. R starts another run.</p>
+
+<p>That is nine games on the shelf.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A terminal homage to the 1985 Apple II trail, from Independence to the Willamette.]]></summary></entry><entry><title type="html">🗡️ Rogue and Hack</title><link href="http://localhost:4019/emojigames/releases/2026-10-14-rogue-and-hack/" rel="alternate" type="text/html" title="🗡️ Rogue and Hack" /><published>2026-10-14T00:00:00+02:00</published><updated>2026-10-14T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/rogue-and-hack</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-14-rogue-and-hack/"><![CDATA[<h1 id="️-rogue-and-hack">🗡️ Rogue and Hack</h1>
+
+<p>14 October 2026. Two dungeons, shipped the same day, on purpose. One of them ends. The other keeps the stairs going.</p>
+
+<h2 id="️-rogue"><a href="/emojigames/games/rogue/">🗡️ Rogue</a></h2>
+
+<p>A small homage to the 1980 game. One room, a wall around it, you as 🧑.</p>
+
+<p>The monsters are a kobold 👺, an orc 👹, a zombie 🧟, and a dragon 🐉. Deeper floors hold more of them, and the harder ones start to show up. Walk into a monster and you hit it. Stand next to one and it hits you back. Gold 💰 adds to the purse when you step on it. A potion 🧪 goes into your pack. Press Q to drink one and heal.</p>
+
+<p>Every floor through the fifth has stairs 🔽. Step on them. Floor six has no stairs. It has the amulet 💎. Pick it up and the run is over. You won.</p>
+
+<p>Arrows or WASD to move. R starts a new run from floor one, including after you die. Hit points start at 12. There is no save. A dead run is a dead run.</p>
+
+<h2 id="️-hack"><a href="/emojigames/games/hack/">🗡️ Hack</a></h2>
+
+<p>Closer to the original shape. Rooms carved out of rock, corridors between them, stairs up ⬆️ and stairs down ⬇️.</p>
+
+<p>Monsters are letters of a bestiary, drawn as pictures: ant, bat, centipede, dragon, floating eye, fungus, gnome, hobbit, imp, jackal, kobold, leprechaun. Deeper floors add more of them, and the ones that spawn hit harder and last longer. They walk toward you. If they reach you, they swing.</p>
+
+<p>The floor also holds daggers, short swords, leather and chain, potions of healing, scrolls, and gold. Step on a thing and it goes into your pack. I prints the pack. Weapons add to what you hit for. Your strength starts at 16, your hit points at 20.</p>
+
+<p>Move with the arrows, with WASD, or with the vi keys, diagonals included: y u b n, and q e z c. <code class="language-plaintext highlighter-rouge">?</code> prints the reminder. R, or Enter on the death screen, starts again.</p>
+
+<p>The win screen is written for the Amulet of Yendor. The dungeon you can walk today does not place one. The stairs keep going, and the question the game actually asks is whether you are still alive when you decide to stop.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Two dungeons. Rogue ends at an amulet on floor six. Hack keeps going down.]]></summary></entry><entry><title type="html">🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure</title><link href="http://localhost:4019/emojigames/releases/2026-10-13-galaxy-hunt-adventureland-pirate/" rel="alternate" type="text/html" title="🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure" /><published>2026-10-13T00:00:00+02:00</published><updated>2026-10-13T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/galaxy-hunt-adventureland-pirate</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-13-galaxy-hunt-adventureland-pirate/"><![CDATA[<h1 id="-galaxy-hunt--adventureland-️-pirate-adventure">🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure</h1>
+
+<p>13 October 2026. Three games that want you to type.</p>
+
+<h2 id="-galaxy-hunt"><a href="/emojigames/games/galaxy-hunt/">🚀 Galaxy Hunt</a></h2>
+
+<p>A Super Star Trek, played from a green prompt. The galaxy is 8 by 8 quadrants. Some of them hold raider ships, some hold an alliance outpost, all of them hold stars.</p>
+
+<p>The mission is on the opening screen: destroy every raider before the stardate runs out. Energy, missiles, and shields are finite. Dock by flying onto an outpost when the ship is falling apart. That resupplies and repairs you.</p>
+
+<p>Commands, short on purpose:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">NAV</code> course warp — course is 1 to 9 around a compass rose, warp is 0.1 to 8</li>
+  <li><code class="language-plaintext highlighter-rouge">SRS</code> and <code class="language-plaintext highlighter-rouge">LRS</code> — short-range map, long-range map</li>
+  <li><code class="language-plaintext highlighter-rouge">BEA</code> energy — beams</li>
+  <li><code class="language-plaintext highlighter-rouge">MIS</code> course — a missile</li>
+  <li><code class="language-plaintext highlighter-rouge">SHE</code> energy — shields</li>
+  <li><code class="language-plaintext highlighter-rouge">DAM</code>, <code class="language-plaintext highlighter-rouge">COM</code>, <code class="language-plaintext highlighter-rouge">STA</code> — damage, the library computer, status</li>
+  <li><code class="language-plaintext highlighter-rouge">HELP</code> — the rose, the emoji key, and this list again</li>
+  <li><code class="language-plaintext highlighter-rouge">QUIT</code> — abandon the mission</li>
+</ul>
+
+<p>The map key is the hunter 🚀, a raider 👾, a star ⭐, an outpost 🏢, and a dot for empty space. Stars block you and they block missiles. Run out of energy, or out of time, and the mission fails.</p>
+
+<h2 id="-adventureland"><a href="/emojigames/games/adventureland/">🌲 Adventureland</a></h2>
+
+<p>The classic chain, White Witch edition. You start in a dark forest. A sleeping dragon occupies the meadow and does not like mud. There is a lake, a bog, a swamp, a cypress you can climb, and a hollow stump.</p>
+
+<p>The stump is where the treasures go. There are thirteen of them. <code class="language-plaintext highlighter-rouge">SCORE</code> counts them out of 13.</p>
+
+<p>Move with <code class="language-plaintext highlighter-rouge">N</code> <code class="language-plaintext highlighter-rouge">S</code> <code class="language-plaintext highlighter-rouge">E</code> <code class="language-plaintext highlighter-rouge">W</code> <code class="language-plaintext highlighter-rouge">U</code> <code class="language-plaintext highlighter-rouge">D</code>, or <code class="language-plaintext highlighter-rouge">GO</code> and a direction. <code class="language-plaintext highlighter-rouge">LOOK</code>, <code class="language-plaintext highlighter-rouge">INVENTORY</code>, <code class="language-plaintext highlighter-rouge">GET</code>, <code class="language-plaintext highlighter-rouge">DROP</code>. The puzzles that are not directions are on the help list, and they are exact: <code class="language-plaintext highlighter-rouge">SAY BUNYON</code>, <code class="language-plaintext highlighter-rouge">SAY AWAY</code>, <code class="language-plaintext highlighter-rouge">RUB LAMP</code>, <code class="language-plaintext highlighter-rouge">LIGHT LAMP</code>, <code class="language-plaintext highlighter-rouge">UNLOCK DOOR</code>, <code class="language-plaintext highlighter-rouge">YELL</code>, <code class="language-plaintext highlighter-rouge">JUMP</code>, <code class="language-plaintext highlighter-rouge">FILL</code>, <code class="language-plaintext highlighter-rouge">CATCH</code>, <code class="language-plaintext highlighter-rouge">DAM</code>, <code class="language-plaintext highlighter-rouge">POUR</code>. If a line comes back as “I don’t understand,” <code class="language-plaintext highlighter-rouge">HELP</code> is that list again.</p>
+
+<h2 id="️-pirate-adventure"><a href="/emojigames/games/pirate/">🏴‍☠️ Pirate Adventure</a></h2>
+
+<p>You wake up in a London flat. A bookcase, a window, a book about pirates. East is the street, then the dock, a ship, a parrot, and a hold. South of the dock is the island: jungle, a clearing, a cave, a beach, a boat.</p>
+
+<p>Three of the objects are the point. The chest of pirate gold, the bag of jewels, and the pile of coins are treasures. The book, the parrot, the anchor, the machete, the map, the bottle, and the key are how you get to them. The skeleton does not come with you.</p>
+
+<p>Same shape as Adventureland. Directions, <code class="language-plaintext highlighter-rouge">GET</code>, <code class="language-plaintext highlighter-rouge">DROP</code>, and a few extra verbs: <code class="language-plaintext highlighter-rouge">READ</code>, <code class="language-plaintext highlighter-rouge">OPEN</code>, <code class="language-plaintext highlighter-rouge">SAY</code>, <code class="language-plaintext highlighter-rouge">CLIMB</code>, <code class="language-plaintext highlighter-rouge">BOARD</code>, <code class="language-plaintext highlighter-rouge">FILL</code>. <code class="language-plaintext highlighter-rouge">SCORE</code> tells you how many treasures you have secured. <code class="language-plaintext highlighter-rouge">HELP</code> if you would rather not guess.</p>
+
+<p>Pieces of eight.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A starship, then two treasure hunts. Type HELP when a sentence bounces.]]></summary></entry><entry><title type="html">🏓 Pong and 🐍 Snake</title><link href="http://localhost:4019/emojigames/releases/2026-10-12-pong-and-snake/" rel="alternate" type="text/html" title="🏓 Pong and 🐍 Snake" /><published>2026-10-12T00:00:00+02:00</published><updated>2026-10-12T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/pong-and-snake</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-12-pong-and-snake/"><![CDATA[<h1 id="-pong-and--snake">🏓 Pong and 🐍 Snake</h1>
+
+<p>12 October 2026. The corner opened with the two games that fit in one sentence.</p>
+
+<h2 id="-pong"><a href="/emojigames/games/pong/">🏓 Pong</a></h2>
+
+<p>You on the left, the machine on the right, a ball between you. First to 5 wins.</p>
+
+<p>Press S to start. W and S, or the up and down arrows, move your paddle. The machine follows the ball, a little late and a little short, which is the whole game. Each clean hit speeds the ball up. Miss, and the other side scores. R starts the match over.</p>
+
+<p>The screen is a text field, forty columns by twenty rows, green on black, with a small beep when the ball meets something.</p>
+
+<h2 id="-snake"><a href="/emojigames/games/snake/">🐍 Snake</a></h2>
+
+<p>Same kind of screen. You are a line that grows.</p>
+
+<p>Press S to start. Arrows or WASD turn. You cannot reverse into yourself. The apple is worth 10. Every 50 points the tick gets shorter, down to a floor where it will not get any faster.</p>
+
+<p>The field is not empty. Cactus, rock, bomb, skull, fire, and lightning sit on it from the start, and running into one of them is the same as running into a wall or your own tail. R after the crash.</p>
+
+<p>That was day one. Two games, both finished enough to lose.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Opening day. Pong, first to 5, and Snake on a field full of hazards.]]></summary></entry></feed>
