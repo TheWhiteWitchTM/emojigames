@@ -1,4 +1,4 @@
-// BASIC I. Complete 40-column machine shell.
+// BASIC I. 40-column machine with C64-style boot and function keys.
 "use strict";
 (function () {
   var COLS = 40;
@@ -39,14 +39,44 @@
   ui.wrap.setAttribute("role", "application");
   ui.wrap.setAttribute("aria-label", "BASIC I");
 
+  // Footer + function key bar
   var statusEl = document.createElement("span");
   statusEl.className = "status";
   statusEl.textContent = "WAKING 0/512";
   var mood = document.createElement("span");
   mood.className = "basic-mood";
   mood.appendChild(statusEl);
+
+  var TOOLS = [
+    { key: "F1", emoji: "📜", label: "LIST" },
+    { key: "F2", emoji: "🕯️", label: "RUN" },
+    { key: "F3", emoji: "📚", label: "SHELF" },
+    { key: "F4", emoji: "🧹", label: "CLS" },
+    { key: "F5", emoji: "✨", label: "AUTO" },
+    { key: "F7", emoji: "🔒", label: "LATCH" }
+  ];
+  var bar = document.createElement("div");
+  bar.className = "basic-bar";
+  TOOLS.forEach(function (t) {
+    var span = document.createElement("span");
+    span.className = "basic-key";
+    span.appendChild(document.createTextNode(t.emoji + " " + t.label + " "));
+    var kbd = document.createElement("kbd");
+    kbd.textContent = t.key;
+    span.appendChild(kbd);
+    bar.appendChild(span);
+  });
+  var esc = document.createElement("span");
+  esc.className = "basic-key";
+  esc.appendChild(document.createTextNode("⎋ BACK "));
+  var escK = document.createElement("kbd");
+  escK.textContent = "ESC";
+  esc.appendChild(escK);
+  bar.appendChild(esc);
+
   ui.footer.textContent = "";
   ui.footer.appendChild(mood);
+  ui.footer.appendChild(bar);
 
   var lines = new Map();
   var entry = "";
@@ -58,11 +88,17 @@
 
   function paintWelcome() {
     term.clear();
+    // Friendly C64-ish colors
+    term.color(14, 0); // cyan
+    term.write("┌──────────────────────────────────────┐\n");
+    term.write("│           **** BASIC I ****          │\n");
+    term.write("│                                      │\n");
+    term.color(11, 0); // yellow
+    term.write("│           512 LINES FREE             │\n");
     term.color(14, 0);
-    term.write("**** BASIC I ****\n");
-    term.color(15, 0);
-    term.write("512 LINES FREE\n\n");
-    term.color(14, 0);
+    term.write("│                                      │\n");
+    term.write("└──────────────────────────────────────┘\n\n");
+    term.color(15, 0); // white
     term.write("READY.\n");
     term.color(7, 0);
     term.dirty = true;
@@ -95,7 +131,6 @@
 
   function doNew() {
     lines.clear();
-    term.clear();
     paintWelcome();
   }
 
@@ -105,8 +140,7 @@
     keys.forEach(function (n) {
       var src = lines.get(n);
       if (/^PRINT\s+/i.test(src)) {
-        var arg = src.replace(/^PRINT\s+/i, "");
-        doPrint(arg);
+        doPrint(src.replace(/^PRINT\s+/i, ""));
       }
     });
     term.color(7, 0);
