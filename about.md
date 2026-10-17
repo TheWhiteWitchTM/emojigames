@@ -14,7 +14,6 @@ Politics broke me, so I started porting old games. Then I got bored of those too
 ## The rules
 
 No accounts.  
-No tracking.  
 No “please create an account to play a 50-year-old idea with pictures.”  
 No quiet sponsors.  
 Argue with the code, not the caption.

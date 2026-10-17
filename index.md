@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Emoji Games
-description: A White Witch spinoff. Emoji games, no accounts, no tracking.
+description: A White Witch spinoff. Emoji games, no accounts.
 image: /assets/images/preview.jpg
 ---
 
@@ -20,7 +20,6 @@ This is that corner. It opened on 12 October 2026.
 ---
 
 No accounts.  
-No tracking.  
 No “please create an account to play a 50-year-old idea with pictures.”  
 No quiet sponsors.  
 Argue with the code, not the caption.
