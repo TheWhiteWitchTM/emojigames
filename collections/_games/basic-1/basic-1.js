@@ -39,18 +39,27 @@
   function paintWelcome() {
     term.clear();
     term.color(15, 0);
-    term.cursor.row = 5;
+
+    // Banner at the top
+    term.cursor.row = 2;
     term.cursor.col = 8;
     term.write("**** BASIC I ****");
-    term.cursor.row = 7;
+
+    // Free lines directly under it
+    term.cursor.row = 4;
     term.cursor.col = 10;
     term.write("512 LINES FREE");
-    term.cursor.row = 10;
-    term.cursor.col = 14;
+
+    // READY right under the banner, classic style
+    term.cursor.row = 6;
+    term.cursor.col = 2;
     term.write("READY.");
+
     term.dirty = true;
     term.flush();
-    term.cursor.row = 12;
+
+    // Cursor on the next line so typing starts under READY
+    term.cursor.row = 7;
     term.cursor.col = 2;
   }
 
