@@ -21,13 +21,64 @@ tags: [terminal, computer]
   .basic-panel { border: 1px solid #2a2a2a; border-radius: 8px; background: #111; padding: 0.3rem 1rem 0.8rem; margin: 0.4rem 0 1rem; }
   .basic-panel[hidden] { display: none !important; }
   .basic-stage[hidden] { display: none !important; }
-  .basic-stage.basic-open, .basic-stage:fullscreen {
-    display: flex !important; position: fixed; inset: 0; z-index: 400;
-    width: 100%; height: 100%; margin: 0; padding: 12px; box-sizing: border-box;
-    background: #050305; align-items: center; justify-content: center;
+  .basic-stage.basic-open,
+  .basic-stage:fullscreen {
+    display: flex !important;
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 12px;
+    box-sizing: border-box;
+    background: #050305;
+    align-items: center;
+    justify-content: center;
   }
-  .crt { position: relative; margin: 8px 10px; background: #000; border-radius: 12px; overflow: hidden; border: 6px solid #4a90e2; }
-  .scan { pointer-events: none; position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.18) 1px, transparent 2px, transparent 3px); }
+  .basic-stage.basic-open #game,
+  .basic-stage:fullscreen #game {
+    width: min(100%, calc((100vh - 160px) * 720 / 576));
+    width: min(100%, calc((100dvh - 160px) * 720 / 576));
+    max-width: 100%;
+    max-height: calc(100vh - 48px);
+    max-height: calc(100dvh - 48px);
+    margin: 0;
+  }
+  .ee-wrap {
+    width: 100% !important;
+    max-width: none;
+    background: #0b090a !important;
+    color: #cbbfa6 !important;
+    border-radius: 12px;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
+    font-family: ui-monospace, "Courier New", monospace !important;
+    max-height: 100%;
+  }
+  .crt {
+    position: relative;
+    margin: 8px 10px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 6px solid #4a90e2;
+  }
+  .crt canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #000;
+  }
+  .scan {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(to bottom, rgba(0,0,0,.18), rgba(0,0,0,.18) 1px, transparent 2px, transparent 3px);
+  }
+  .ee-footer {
+    color: #8d7b68;
+    letter-spacing: .08em;
+  }
 </style>
 
 <div class="basic-front">
