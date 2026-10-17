@@ -88,8 +88,8 @@
   };
   var WIRE_WORDS = { POKE: 1, PEEK: 1, SYS: 1, WAIT: 1, USR: 1, CALL: 1 };
   var DIRECT_WORDS = {
-    REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, SEAL: 1, UNSEAL: 1,
-    UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1
+    REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
+    UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, EXORCISE: 1
   };
   var RESERVED = {};
   var wordBag;
@@ -1675,6 +1675,737 @@
     this.pc = { index: index, stmt: 0 };
     return this.startLoop().then(function () { self.directStmts = null; });
   };
+
+  // EXORCISE. Statement names move. INT, SIN, RND, and the rest of the sums stay.
+  var RENAME = {
+    PRINT: "CHANT", GOTO: "FLYTO", GOSUB: "SUMMON", RETURN: "BANISH", FOR: "CURSE",
+    LET: "CONJURE", INPUT: "DEMAND", DATA: "OFFERING", READ: "TAKE", RESTORE: "REWIND",
+    END: "DISPEL", STOP: "DISPEL", CLS: "SCRUB"
+  };
+  var BURY = {
+    POKE: 1, SYS: 1, WAIT: 1, CALL: 1, SOUND: 1, PLOT: 1, DRAW: 1, PSET: 1, PRESET: 1,
+    PAINT: 1, PALETTE: 1, SCREEN: 1, WIDTH: 1, KEY: 1, PLAY: 1, BEEP: 1, OUT: 1,
+    OPEN: 1, CLOSE: 1, FIELD: 1, PUT: 1, FILES: 1, KILL: 1, NAME: 1, CHAIN: 1, MERGE: 1,
+    COMMON: 1, DEF: 1, DEFINT: 1, DEFSNG: 1, DEFDBL: 1, DEFSTR: 1, RANDOMIZE: 1,
+    OPTION: 1, WHILE: 1, WEND: 1, DO: 1, LOOP: 1, SELECT: 1, CASE: 1, FUNCTION: 1,
+    SUB: 1, EXIT: 1, DECLARE: 1, CONST: 1, TYPE: 1, SHARED: 1, STATIC: 1, LPRINT: 1,
+    WRITE: 1, SWAP: 1, RESUME: 1, ERROR: 1, CLEAR: 1, CONT: 1, AUTO: 1, RENUM: 1,
+    NEW: 1, LIST: 1, LOAD: 1, SAVE: 1, LLIST: 1, SYSTEM: 1, SHELL: 1, VIEW: 1,
+    WINDOW: 1, PALETTE: 1, IOCTL: 1, ERASE: 1, TROFF: 1, TRON: 1, MOTOR: 1
+  };
+  var WIRE_STMT = { POKE: 1, SYS: 1, WAIT: 1, CALL: 1 };
+
+  function isLetterCh(ch) { return letter(ch); }
+  function isDigitCh(ch) { return digit(ch); }
+  function identChar(ch) { return isLetterCh(ch) || isDigitCh(ch) || ch === "$"; }
+
+  function readWordAt(src, i) {
+    while (i < src.length && (src[i] === " " || src[i] === "\t")) i += 1;
+    var from = i;
+    if (i >= src.length || !isLetterCh(src[i])) return { word: "", from: from, to: from };
+    i += 1;
+    while (i < src.length && (isLetterCh(src[i]) || isDigitCh(src[i]))) i += 1;
+    if (src[i] === "$") i += 1;
+    return { word: src.slice(from, i).toUpperCase(), from: from, to: i };
+  }
+
+  function findKeyword(src, word, from) {
+    var want = word.toUpperCase();
+    var inStr = false;
+    var depth = 0;
+    for (var i = from || 0; i < src.length; i += 1) {
+      var ch = src[i];
+      if (inStr) {
+        if (ch === "\"") {
+          if (src[i + 1] === "\"") { i += 1; continue; }
+          inStr = false;
+        }
+        continue;
+      }
+      if (ch === "\"") { inStr = true; continue; }
+      if (ch === "(") { depth += 1; continue; }
+      if (ch === ")") { if (depth) depth -= 1; continue; }
+      if (depth || !isLetterCh(ch)) continue;
+      if (i > 0 && identChar(src[i - 1])) continue;
+      var got = readWordAt(src, i);
+      if (got.word === want) return got.from;
+      if (got.to > i) i = got.to - 1;
+    }
+    return -1;
+  }
+
+  function countWord(src, word) {
+    var n = 0;
+    var at = 0;
+    while (at < src.length) {
+      var hit = findKeyword(src, word, at);
+      if (hit < 0) break;
+      n += 1;
+      at = hit + word.length;
+    }
+    return n;
+  }
+
+  function statementEnd(src, from) {
+    var inStr = false;
+    var depth = 0;
+    for (var i = from; i < src.length; i += 1) {
+      var ch = src[i];
+      if (inStr) {
+        if (ch === "\"") {
+          if (src[i + 1] === "\"") { i += 1; continue; }
+          inStr = false;
+        }
+        continue;
+      }
+      if (ch === "\"") { inStr = true; continue; }
+      if (ch === "(") { depth += 1; continue; }
+      if (ch === ")") { if (depth) depth -= 1; continue; }
+      if (ch === ":" && depth === 0) return i;
+    }
+    return src.length;
+  }
+
+  function matchParen(src, open) {
+    var depth = 0;
+    var inStr = false;
+    for (var i = open; i < src.length; i += 1) {
+      var ch = src[i];
+      if (inStr) {
+        if (ch === "\"") {
+          if (src[i + 1] === "\"") { i += 1; continue; }
+          inStr = false;
+        }
+        continue;
+      }
+      if (ch === "\"") { inStr = true; continue; }
+      if (ch === "(") depth += 1;
+      else if (ch === ")") {
+        depth -= 1;
+        if (depth === 0) return i + 1;
+      }
+    }
+    return -1;
+  }
+
+  function splitArgs(body) {
+    var args = [];
+    var buf = "";
+    var inStr = false;
+    var depth = 0;
+    for (var i = 0; i < body.length; i += 1) {
+      var ch = body[i];
+      if (inStr) {
+        buf += ch;
+        if (ch === "\"") {
+          if (body[i + 1] === "\"") { buf += "\""; i += 1; continue; }
+          inStr = false;
+        }
+        continue;
+      }
+      if (ch === "\"") { inStr = true; buf += ch; continue; }
+      if (ch === "(") { depth += 1; buf += ch; continue; }
+      if (ch === ")") { depth -= 1; buf += ch; continue; }
+      if (ch === "," && depth === 0) { args.push(buf); buf = ""; continue; }
+      buf += ch;
+    }
+    if (buf.length || args.length) args.push(buf);
+    return args;
+  }
+
+  function consumesRest(src, pos) {
+    var rest = src.slice(pos);
+    var mark = rest.match(/^\s*(['A-Za-z])/);
+    if (!mark) return false;
+    if (mark[1] === "'") return true;
+    var word = readWordAt(rest, 0).word;
+    return word === "IF" || word === "REM" || word === "WHISPER";
+  }
+
+  function splitConsuming(src) {
+    var pieces = [];
+    var start = 0;
+    var i = 0;
+    var inStr = false;
+    var depth = 0;
+    var consume = consumesRest(src, 0);
+    while (i < src.length) {
+      var ch = src[i];
+      if (inStr) {
+        if (ch === "\"") {
+          if (src[i + 1] === "\"") { i += 2; continue; }
+          inStr = false;
+        }
+        i += 1;
+        continue;
+      }
+      if (ch === "\"") { inStr = true; i += 1; continue; }
+      if (ch === "(") { depth += 1; i += 1; continue; }
+      if (ch === ")") { if (depth) depth -= 1; i += 1; continue; }
+      if (ch === ":" && depth === 0 && !consume) {
+        pieces.push(src.slice(start, i));
+        i += 1;
+        start = i;
+        consume = consumesRest(src, start);
+        continue;
+      }
+      i += 1;
+    }
+    if (start <= src.length) pieces.push(src.slice(start));
+    return pieces;
+  }
+
+  function walkBasic(src) {
+    var empty = { src: "", wires: 0, buriedAll: false };
+    if (!src || !String(src).trim()) return empty;
+    var i = 0;
+    var out = "";
+    var at = true;
+    var inStr = false;
+    var drops = [];
+    var wires = 0;
+    var comment = "";
+    function finish() {
+      var live = out.replace(/(?:\s*:\s*)+$/g, "").trim();
+      var notes = drops.slice();
+      if (comment) notes.push(comment);
+      var text = live;
+      if (notes.length) {
+        var whisper = "WHISPER " + notes.join(" : ");
+        text = live ? live + " : " + whisper : whisper;
+      }
+      return { src: text.trim(), wires: wires, buriedAll: !live && drops.length > 0 };
+    }
+    function dropRange(from, to) {
+      var chunk = src.slice(from, to).trim();
+      if (chunk) drops.push(chunk);
+      var head = readWordAt(src, from);
+      if (WIRE_STMT[head.word]) wires += 1;
+    }
+    while (i < src.length) {
+      var ch = src[i];
+      if (inStr) {
+        out += ch;
+        if (ch === "\"") {
+          if (src[i + 1] === "\"") { out += "\""; i += 2; continue; }
+          inStr = false;
+        }
+        i += 1;
+        continue;
+      }
+      if (ch === "\"") { inStr = true; out += ch; i += 1; at = false; continue; }
+      if (at && (ch === " " || ch === "\t")) { out += ch; i += 1; continue; }
+      if (at && ch === "'") {
+        comment = src.slice(i + 1).trim();
+        return finish();
+      }
+      if (at && ch === "?") {
+        var nxt = src[i + 1];
+        if (!nxt || nxt === " " || nxt === "\t" || nxt === "\"" || nxt === "," || nxt === ";" || nxt === ":" || nxt === "(") {
+          var afterQ = readWordAt(src, i + 1);
+          if (afterQ.word === "USING") {
+            var qEnd = statementEnd(src, i);
+            dropRange(i, qEnd);
+            i = qEnd;
+            if (src[i] === ":") i += 1;
+            at = true;
+            continue;
+          }
+          out += "CHANT";
+          i += 1;
+          at = false;
+          continue;
+        }
+      }
+      if (isLetterCh(ch)) {
+        var id = readWordAt(src, i);
+        if (at && id.word === "WHISPER") {
+          return { src: src.trim(), wires: wires, buriedAll: false };
+        }
+        if (at && id.word === "REM") {
+          comment = src.slice(id.to).trim();
+          return finish();
+        }
+        if (at && id.word === "GO") {
+          var step = readWordAt(src, id.to);
+          if (step.word === "TO" || step.word === "SUB") {
+            out += step.word === "TO" ? "FLYTO" : "SUMMON";
+            i = step.to;
+            at = false;
+            continue;
+          }
+        }
+        if (at && id.word === "NEXT") {
+          var nEnd = statementEnd(src, id.to);
+          var names = splitArgs(src.slice(id.to, nEnd)).map(function (s) { return s.trim(); }).filter(Boolean);
+          out += names.length ? names.map(function (nm) { return "BREAK " + nm; }).join(" : ") : "BREAK";
+          i = nEnd;
+          at = false;
+          continue;
+        }
+        if (at && (id.word === "PRINT" || id.word === "LPRINT" || id.word === "INPUT")) {
+          var look = readWordAt(src, id.to);
+          var hashAt = id.to;
+          while (hashAt < src.length && (src[hashAt] === " " || src[hashAt] === "\t")) hashAt += 1;
+          var hashed = src[hashAt] === "#";
+          if (id.word === "LPRINT" || hashed || look.word === "USING") {
+            var pEnd = statementEnd(src, i);
+            dropRange(i, pEnd);
+            i = pEnd;
+            if (src[i] === ":") i += 1;
+            at = true;
+            continue;
+          }
+          if (id.word === "LINE") { /* unreachable */ }
+          out += id.word === "INPUT" ? "DEMAND" : "CHANT";
+          i = id.to;
+          at = false;
+          continue;
+        }
+        if (at && id.word === "LINE") {
+          var lineNext = readWordAt(src, id.to);
+          if (lineNext.word === "INPUT") {
+            out += "DEMAND";
+            i = lineNext.to;
+            at = false;
+            continue;
+          }
+          var lineEnd = statementEnd(src, id.to);
+          var lineBody = src.slice(id.to, lineEnd).trim();
+          var box = /,\s*BF?\b/i.test(lineBody);
+          var seg = lineBody.match(/^\(\s*([^)]+)\s*\)\s*-\s*\(\s*([^)]+)\s*\)/);
+          if (!box && seg) {
+            out += "LINE " + seg[1].trim() + ", " + seg[2].trim();
+            i = lineEnd;
+            at = false;
+            continue;
+          }
+          if (box || lineBody.charAt(0) === "(" || lineBody.charAt(0) === "-") {
+            dropRange(i, lineEnd);
+            i = lineEnd;
+            if (src[i] === ":") i += 1;
+            at = true;
+            continue;
+          }
+        }
+        if (at && id.word === "CIRCLE") {
+          var cEnd = statementEnd(src, id.to);
+          var cBody = src.slice(id.to, cEnd).trim();
+          var circ = cBody.match(/^\(\s*([^)]+)\s*\)\s*,\s*([^,]+)/);
+          if (circ) {
+            var xy = splitArgs(circ[1]);
+            if (xy.length >= 2) {
+              out += "CIRCLE " + xy[0].trim() + ", " + xy[1].trim() + ", " + circ[2].trim();
+              i = cEnd;
+              at = false;
+              continue;
+            }
+          }
+        }
+        if (at && id.word === "LOCATE") {
+          var locEnd = statementEnd(src, id.to);
+          var locArgs = splitArgs(src.slice(id.to, locEnd)).map(function (s) { return s.trim(); });
+          if (locArgs.length === 1 && locArgs[0]) out += "AT 0, " + locArgs[0];
+          else if (locArgs.length === 2) out += "AT " + (locArgs[1] || "0") + ", " + (locArgs[0] || "0");
+          else dropRange(i, locEnd);
+          i = locEnd;
+          at = false;
+          continue;
+        }
+        if (at && id.word === "GET") {
+          var gEnd = statementEnd(src, id.to);
+          var gBody = src.slice(id.to, gEnd).trim();
+          var gArgs = (!gBody || gBody.charAt(0) === "(" || gBody.charAt(0) === "#") ? null : splitArgs(gBody);
+          var bits = [];
+          var gOk = !!gArgs && gArgs.length > 0;
+          if (gOk) {
+            for (var g = 0; g < gArgs.length; g += 1) {
+              var nm = gArgs[g].trim();
+              if (!/^[A-Za-z][A-Za-z0-9]*\$?$/.test(nm)) { gOk = false; break; }
+              bits.push(nm.slice(-1) === "$" ? nm + " = LISTEN$" : nm + " = VAL(LISTEN$)");
+            }
+          }
+          if (!gOk) dropRange(i, gEnd);
+          else out += bits.join(" : ");
+          i = gEnd;
+          at = false;
+          continue;
+        }
+        if (at && id.word === "SLEEP") {
+          var sEnd = statementEnd(src, id.to);
+          var sArg = src.slice(id.to, sEnd).trim();
+          if (!sArg) out += "FREEZE";
+          else if (/^\d+(\.\d+)?$/.test(sArg)) out += "FREEZE " + String(Math.min(60000, Math.round(Number(sArg) * 1000)));
+          else out += "FREEZE (" + sArg + ") * 1000";
+          i = sEnd;
+          at = false;
+          continue;
+        }
+        if (at && id.word === "ON") {
+          var oEnd = statementEnd(src, id.to);
+          var oBody = src.slice(id.to, oEnd);
+          if (/^\s*ERROR\b/i.test(oBody)) {
+            dropRange(i, oEnd);
+            i = oEnd;
+            at = false;
+            continue;
+          }
+          var gsub = findKeyword(oBody, "GOSUB", 0);
+          var gto = findKeyword(oBody, "GOTO", 0);
+          var mode = "";
+          var use = -1;
+          var width = 0;
+          if (gsub >= 0 && (gto < 0 || gsub < gto)) { use = gsub; width = 5; mode = "SUMMON"; }
+          else if (gto >= 0) { use = gto; width = 4; mode = "FLYTO"; }
+          if (use < 0) {
+            var goAt = findKeyword(oBody, "GO", 0);
+            if (goAt >= 0) {
+              var second = readWordAt(oBody, goAt + 2);
+              if (second.word === "TO") { use = goAt; width = second.to - goAt; mode = "FLYTO"; }
+              else if (second.word === "SUB") { use = goAt; width = second.to - goAt; mode = "SUMMON"; }
+            }
+          }
+          if (use < 0 || !mode) dropRange(i, oEnd);
+          else {
+            var expr = oBody.slice(0, use).trim();
+            var targets = oBody.slice(use + width).trim();
+            var exprWalk = walkBasic(expr);
+            wires += exprWalk.wires;
+            out += "WHEN " + exprWalk.src + " " + mode + " " + targets;
+          }
+          i = oEnd;
+          at = false;
+          continue;
+        }
+        if (at && RENAME[id.word]) {
+          out += RENAME[id.word];
+          i = id.to;
+          at = false;
+          continue;
+        }
+        if (at && BURY[id.word]) {
+          var bEnd = statementEnd(src, i);
+          dropRange(i, bEnd);
+          i = bEnd;
+          if (src[i] === ":") i += 1;
+          at = true;
+          continue;
+        }
+        if (id.word === "INKEY$") {
+          out += "LISTEN$";
+          i = id.to;
+          at = false;
+          continue;
+        }
+        if (id.word === "PEEK" || id.word === "USR") {
+          var parenAt = id.to;
+          while (parenAt < src.length && (src[parenAt] === " " || src[parenAt] === "\t")) parenAt += 1;
+          if (src[parenAt] === "(") {
+            var close = matchParen(src, parenAt);
+            if (close > parenAt) {
+              out += "0";
+              i = close;
+              wires += 1;
+              at = false;
+              continue;
+            }
+          }
+        }
+        if (id.word === "THEN") {
+          out += src.slice(i, id.to);
+          i = id.to;
+          at = true;
+          continue;
+        }
+        out += src.slice(i, id.to);
+        i = id.to;
+        at = false;
+        continue;
+      }
+      if (ch === ":") { out += ch; i += 1; at = true; continue; }
+      out += ch;
+      i += 1;
+      if (ch !== " " && ch !== "\t") at = false;
+    }
+    return finish();
+  }
+
+  function pureJump(src) {
+    var s = String(src || "").trim();
+    return /^\d+$/.test(s) || /^FLYTO\s+\S+$/.test(s);
+  }
+
+  function elseSplit(src) {
+    if (!/^\s*IF\b/i.test(src)) return null;
+    var elseAt = findKeyword(src, "ELSE", 0);
+    if (elseAt < 0) return null;
+    var before = src.slice(0, elseAt);
+    if (countWord(before, "IF") !== 1) return null;
+    var lead = src.match(/^\s*IF\b/i)[0].length;
+    var thenAt = findKeyword(before, "THEN", 0);
+    if (thenAt >= 0) {
+      return {
+        cond: src.slice(lead, thenAt).trim(),
+        thenPart: src.slice(thenAt + 4, elseAt).trim(),
+        elsePart: src.slice(elseAt + 4).trim()
+      };
+    }
+    var gotoAt = findKeyword(before, "GOTO", 0);
+    if (gotoAt < 0) {
+      var goAt = findKeyword(before, "GO", 0);
+      if (goAt >= 0 && readWordAt(before, goAt + 2).word === "TO") gotoAt = goAt;
+    }
+    if (gotoAt < 0) return null;
+    return {
+      cond: src.slice(lead, gotoAt).trim(),
+      thenPart: src.slice(gotoAt, elseAt).trim(),
+      elsePart: src.slice(elseAt + 4).trim()
+    };
+  }
+
+  function buildElse(parts) {
+    var cond = walkBasic(parts.cond || "0");
+    var thenW = walkBasic(parts.thenPart || "");
+    var elseW = walkBasic(parts.elsePart || "");
+    var wires = cond.wires + thenW.wires + elseW.wires;
+    var elseSrc = elseW.src.trim();
+    if (/^\d+$/.test(elseSrc)) elseSrc = "FLYTO " + elseSrc;
+    var thenSrc = thenW.src.trim();
+    var thenLine;
+    var needs = false;
+    if (!thenSrc) {
+      thenLine = "IF " + cond.src + " THEN FLYTO {{SKIP}}";
+      needs = true;
+    } else if (pureJump(thenSrc)) thenLine = "IF " + cond.src + " THEN " + thenSrc;
+    else {
+      thenLine = "IF " + cond.src + " THEN " + thenSrc + " : FLYTO {{SKIP}}";
+      needs = true;
+    }
+    return { thenLine: thenLine, elseSrc: elseSrc, needs: needs, wires: wires };
+  }
+
+  function lineFits(num, source) {
+    return span(String(num) + " " + source) <= MAX_CHARS;
+  }
+
+  function sourceCompiles(source) {
+    try { new Parser(source).parseSequence(); return true; }
+    catch (err) { return false; }
+  }
+
+  function asWhisper(num, original) {
+    var body = String(original || "").trim();
+    var chars = Array.from(body);
+    var src = "WHISPER " + chars.join("");
+    while (chars.length && !lineFits(num, src)) {
+      chars.pop();
+      src = "WHISPER " + chars.join("");
+    }
+    return src;
+  }
+
+  function parseRows(text) {
+    var rows = [];
+    String(text || "").replace(/^\uFEFF/, "").split(/\r?\n/).forEach(function (raw) {
+      var line = raw.replace(/\t/g, " ").replace(/\s+$/, "");
+      if (!line.trim()) return;
+      var m = line.match(/^\s*(\d+)\s*(.*)$/);
+      if (m && m[2].trim() && Number(m[1]) <= MAX_LINE) {
+        rows.push({ n: Number(m[1]), src: m[2].trim(), bare: false });
+        return;
+      }
+      rows.push({ n: null, src: line.trim(), bare: true });
+    });
+    return rows;
+  }
+
+  function assignNumbers(rows) {
+    var moved = 0;
+    var any = false;
+    for (var i = 0; i < rows.length; i += 1) if (rows[i].n != null) any = true;
+    if (!any) {
+      for (var b = 0; b < rows.length; b += 1) {
+        rows[b].n = (b + 1) * 10;
+        rows[b].bare = true;
+      }
+      return { numbered: rows.length, moved: 0 };
+    }
+    var used = {};
+    rows.forEach(function (row) { if (row.n != null) used[row.n] = 1; });
+    var numbered = 0;
+    var prev = -1;
+    for (var r = 0; r < rows.length; r += 1) {
+      if (rows[r].n != null) { prev = rows[r].n; continue; }
+      var nextEx = null;
+      for (var k = r + 1; k < rows.length; k += 1) {
+        if (rows[k].n != null) { nextEx = rows[k].n; break; }
+      }
+      var cand = prev + 1;
+      var past = false;
+      if (nextEx != null && cand >= nextEx) {
+        cand = 0;
+        Object.keys(used).forEach(function (key) { cand = Math.max(cand, Number(key)); });
+        cand += 1;
+        past = true;
+      }
+      while (used[cand]) cand += 1;
+      if (cand > MAX_LINE) cand = MAX_LINE;
+      rows[r].n = cand;
+      rows[r].bare = true;
+      used[cand] = 1;
+      prev = cand;
+      numbered += 1;
+      if (past) moved += 1;
+    }
+    return { numbered: numbered, moved: moved };
+  }
+
+  function convertSource(src) {
+    var pieces = splitConsuming(src);
+    var live = [];
+    var notes = [];
+    var wires = 0;
+    var elseBuild = null;
+    function take(walked) {
+      if (!walked || !walked.src) return;
+      wires += walked.wires;
+      if (walked.buriedAll || /^\s*WHISPER\b/i.test(walked.src)) notes.push(walked.src.replace(/^\s*WHISPER\s*/i, ""));
+      else live.push(walked.src);
+    }
+    for (var p = 0; p < pieces.length; p += 1) {
+      var piece = pieces[p];
+      if (!piece || !piece.trim()) continue;
+      var split = elseSplit(piece);
+      if (split) {
+        elseBuild = buildElse(split);
+        wires += elseBuild.wires;
+        take(walkBasic(elseBuild.thenLine));
+        continue;
+      }
+      take(walkBasic(piece));
+    }
+    var text = live.join(" : ");
+    if (notes.length) {
+      var whisper = "WHISPER " + notes.join(" : ");
+      text = text ? text + " : " + whisper : whisper;
+    }
+    return { src: text.trim(), wires: wires, elseBuild: elseBuild };
+  }
+
+  function placeElse(num, nextN, used, built) {
+    var slot = num + 1;
+    while (used[slot]) slot += 1;
+    if (nextN != null && slot >= nextN) return null;
+    if (slot > MAX_LINE) return null;
+    var pad = null;
+    var landing = nextN;
+    if (built.needs) {
+      if (nextN == null) {
+        pad = slot + 1;
+        while (used[pad]) pad += 1;
+        if (pad > MAX_LINE) return null;
+        landing = pad;
+      }
+    }
+    var landingNo = landing == null ? pad : landing;
+    var thenLine = built.thenLine.split("{{SKIP}}").join(String(landingNo));
+    if (thenLine.indexOf("{{SKIP}}") >= 0) return null;
+    used[slot] = 1;
+    if (pad != null) used[pad] = 1;
+    return { thenLine: thenLine, elseSrc: built.elseSrc, slot: slot, pad: pad, landing: landingNo };
+  }
+
+  function exorciseListing(text) {
+    var rows = parseRows(text);
+    var numbers = assignNumbers(rows);
+    var used = {};
+    rows.forEach(function (row) { if (row.n != null) used[row.n] = 1; });
+    var produced = [];
+    var renamed = 0;
+    var buried = 0;
+    var wires = 0;
+    var tight = 0;
+    for (var i = 0; i < rows.length; i += 1) {
+      var row = rows[i];
+      var nextN = null;
+      for (var k = i + 1; k < rows.length; k += 1) {
+        if (rows[k].n > row.n) { nextN = rows[k].n; break; }
+      }
+      var original = row.src;
+      var built = convertSource(original);
+      var slots = null;
+      if (built.elseBuild) slots = placeElse(row.n, nextN, used, built.elseBuild);
+      var main = built.src;
+      var extras = [];
+      if (built.elseBuild && slots) {
+        main = main.split("{{SKIP}}").join(String(slots.landing));
+        extras.push({ n: slots.slot, src: slots.elseSrc });
+        if (slots.pad != null) extras.push({ n: slots.pad, src: "WHISPER" });
+      } else if (built.elseBuild) main = asWhisper(row.n, original);
+      var kind = "same";
+      if (main !== original || extras.length) {
+        var ok = main && lineFits(row.n, main) && sourceCompiles(main);
+        var extrasOk = ok;
+        for (var e = 0; e < extras.length; e += 1) {
+          if (!lineFits(extras[e].n, extras[e].src) || !sourceCompiles(extras[e].src)) extrasOk = false;
+        }
+        if (!ok || !extrasOk) {
+          if (slots) {
+            delete used[slots.slot];
+            if (slots.pad != null) delete used[slots.pad];
+            slots = null;
+          }
+          if (sourceCompiles(original) && lineFits(row.n, original)) {
+            main = original;
+            extras = [];
+            kind = "same";
+          } else if (!lineFits(row.n, main) && sourceCompiles(main) && lineFits(row.n, original)) {
+            main = original;
+            extras = [];
+            kind = "same";
+            tight += 1;
+          } else {
+            main = asWhisper(row.n, original);
+            extras = [];
+            kind = "buried";
+          }
+        } else {
+          var wasComment = /^\s*(REM\b|WHISPER\b|')/i.test(original);
+          var onlyWhisper = /^\s*WHISPER\b/i.test(main);
+          kind = onlyWhisper && !wasComment ? "buried" : "renamed";
+          if (main === original && !extras.length) kind = "same";
+          else if (main === original && extras.length) kind = "renamed";
+        }
+      }
+      if (kind !== "same") wires += built.wires;
+      if (kind === "renamed") renamed += 1;
+      if (kind === "buried") buried += 1;
+      produced.push({ n: row.n, src: main });
+      for (var x = 0; x < extras.length; x += 1) produced.push(extras[x]);
+    }
+    produced.sort(function (a, b) { return a.n - b.n; });
+    var seen = {};
+    var finalRows = [];
+    for (var f = 0; f < produced.length; f += 1) {
+      if (seen[produced[f].n]) continue;
+      seen[produced[f].n] = 1;
+      if (produced[f].src) finalRows.push(produced[f]);
+    }
+    var textOut = finalRows.map(function (row) { return row.n + " " + row.src; }).join("\n");
+    var changed = renamed + buried + wires + numbers.numbered + numbers.moved + tight > 0;
+    return {
+      text: textOut,
+      renamed: renamed,
+      buried: buried,
+      wires: wires,
+      numbered: numbers.numbered,
+      moved: numbers.moved,
+      tight: tight,
+      changed: changed
+    };
+  }
+
+  Wasic.exorcise = exorciseListing;
 
   root.Wasic = Wasic;
   root.WasicFail = WasicFail;

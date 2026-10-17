@@ -6,7 +6,9 @@ A line with a number is stored. A line without one runs now. The words are the s
 
 ## When she wakes
 
-The glass stays black. A pale bar blinks at the top left. Then the white witch from the banner stands in the upper glass, pixel for pixel, and a spark sits on the wand. Under her, the count climbs to 666. The glass says:
+The glass stays black. A pale bar blinks at the top left. Then she draws herself in the glass's own colors, hat first. The sixteen, the 256, and a color mixed on the spot. It is the picture in `shelf/ansi-witch.wasic`. Under the stars the line says she woke in ink. Two low notes, and the drawing steps aside.
+
+The white witch from the banner stands in the upper glass, pixel for pixel, and a spark sits on the wand. Under her, the count climbs to 666. The glass says:
 
 ```
          ┌────────────────────┐
@@ -45,6 +47,19 @@ The bezel under the glass names the mood, then the lines in use.
 | WAITING | DEMAND wants an answer |
 | AUTO n | Numbering for you |
 | FROZEN | FREEZE is holding still |
+
+Under that, six keys. The bar says Alt+Shift once, and each key carries its letter. A browser does not take those chords for tabs, reload, find, or the address line. Ctrl stays with the browser, and with Ctrl-C, which still stops a working. Alt alone is back, forward, and the menu. She does not use those.
+
+| Chord | What it does |
+| --- | --- |
+| Alt+Shift+L | LIST |
+| Alt+Shift+R | RUN |
+| Alt+Shift+S | SHELF |
+| Alt+Shift+C | SCRUB. The letters go. The minions stay |
+| Alt+Shift+M | MAGIC. The same as AUTO. Again, and the numbering stops |
+| Alt+Shift+X | EXORCISE |
+
+The bar is quiet while she runs, while she waits, and while the shelf is open. A click does what the chord does. While MAGIC is numbering, the bar still lists, clears, and exorcises. Typing those words on the numbered line stores them, the way RUN would. The bar does the thing.
 
 ## Typing
 
@@ -107,6 +122,7 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | AUTO start | From that number, step 10 |
 | AUTO start, step | Both. The step has to be at least 1 |
 | AUTO OFF | Stop numbering |
+| MAGIC | The same as AUTO. MAGIC OFF stops it |
 | RUN | Start at the first line |
 | RUN n | Start at the first line numbered n or higher |
 | SHELF | Open the box. Arrows move. Enter unseals. Escape leaves |
@@ -123,6 +139,8 @@ These words work from the prompt. Inside a program they are `🚪 NO. NOT FROM I
 | SAVE "NAME" | She says SEAL. NOT SAVE. Then SEAL |
 | CLS | She says SCRUB. NOT CLS. Then the glass is clean |
 | HOME | She says SCRUB. NOT HOME. Then the glass is clean |
+| EXORCISE | Drive BASIC out of the lines in the circle. The sums stay |
+| EXORCISE, and the circle is empty | Open the desk for a listing. Cancel returns to SPEAK with no further speech |
 
 An empty REVEAL prints nothing. OBLITERATE with no range is `❓ NO. SAY IT AGAIN.`
 
@@ -132,7 +150,7 @@ RENUMBER rewrites line numbers in FLYTO, SUMMON, REWIND, a THEN that is only a n
 
 VANISH says GONE. The variables go with the program.
 
-AUTO prints the next number and waits. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line she refuses to store keeps the same number. From SPEAK, AUTO OFF stops it too. RENUMBER that would push a line past 255 characters says 📏 TOO LONG. and leaves the numbers alone.
+AUTO prints the next number and waits. MAGIC does the same thing, and it is the name on the bar. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line she refuses to store keeps the same number. From SPEAK, AUTO OFF stops it too, and so does MAGIC OFF. RENUMBER that would push a line past 255 characters says 📏 TOO LONG. and leaves the numbers alone.
 
 A file name is a letter, then up to 15 letters, digits, or hyphens. She folds the case. No name:
 
@@ -469,6 +487,45 @@ These are recognized. She stores them. When she reaches them she complains, beca
 🔌 NO. THAT WIRE IS DEAD.
 ```
 
+## The exorcism
+
+EXORCISE rewrites the lines in the circle so an old listing can run. The names move. The sums stay: INT, ABS, SQR, SIN, COS, TAN, ATN, LOG, EXP, SGN, RND, and the string sums that already had the same names here. LEN, VAL, ASC, STR$, CHR$, LEFT$, RIGHT$, MID$, TAB, SPC, MOD. A second EXORCISE finds nothing left to drive out.
+
+| From | To |
+| --- | --- |
+| PRINT, and ? | CHANT |
+| GOTO, and GO TO | FLYTO |
+| GOSUB, and GO SUB | SUMMON |
+| RETURN | BANISH |
+| FOR | CURSE |
+| NEXT | BREAK. NEXT I, J is two of them |
+| LET | CONJURE |
+| INPUT | DEMAND |
+| REM, and ' | WHISPER |
+| DATA | OFFERING |
+| READ | TAKE |
+| RESTORE | REWIND |
+| END, and STOP | DISPEL |
+| CLS | SCRUB |
+| LOCATE row, col | AT col, row |
+| SLEEP n | FREEZE, and the wait is in milliseconds. A bare SLEEP waits for a key |
+| GET A$ | A$ = LISTEN$ |
+| INKEY$ | LISTEN$ |
+| ON n GOTO | WHEN n FLYTO |
+| ON n GOSUB | WHEN n SUMMON |
+| CIRCLE (x, y), r | CIRCLE x, y, r |
+| LINE (x1, y1)-(x2, y2) | LINE x1, y1, x2, y2 |
+
+`IF A THEN PRINT "Y" ELSE PRINT "N"` becomes two lines when a free number sits between this line and the next. The true side runs, then jumps over the false side. No free number, and she buries the line. One ELSE on a line. Two IFs and one ELSE, and she buries that line rather than guess.
+
+POKE, SYS, WAIT, and CALL become a WHISPER at the end of the line, so the rest can still run. PEEK and USR answer 0. She says the wires stay dead. A line she still cannot say becomes a WHISPER of itself. LIST shows it. RUN steps over it. A line that was already hers, and already ran, she leaves alone.
+
+A file with no line numbers is numbered from 10, step 10. A bare line among numbered ones takes a hole, so it stays where you put it. No hole, and it is numbered past the end. She says so.
+
+An empty circle opens the desk. `.BAS`, `.BASIC`, `.TXT`, or `.WASIC`. She drives the BASIC out and leaves the lines sitting there. She does not run them. Cancel says nothing more. UPLOAD still reads a file as it stands. A listing that is already WASIC comes in as itself, and she says ALREADY WASIC.
+
+The bar's EXORCISE does this. Alt+Shift+X does this. So does the word.
+
 ## The box
 
 The programs are files in `shelf/`. The extension is `.wasic`. `catalog.txt` is the order. SHELF opens the box on the glass. The mark starts on the first name. Up and down move it. Enter unseals that name and does not run it. She says `LIST. A NUMBER CHANGES A LINE.` Escape says `FINE. THE SHELF CAN WAIT.` Anything sealed in this browser sits under `SEALED, IF YOU INSIST`. `UNSEAL "shelf:HELLO-WITCH"` still loads one if you would rather type. Then RUN. She lowercases the name and adds the extension herself.
@@ -636,7 +693,7 @@ KEYS prints the key you press. Q leaves.
 
 CAROL plays eight notes and leaves the last number on the glass. FAMILIAR puts a cat on the glass. She turns at the edges and meows when she does. Escape sends her home. Both are in `shelf/`, with the rest.
 
-ANSI-WITCH paints a witch. The hat is white. The face is mixed. The dress is purple. A star over her uses one of the 256. She says the hat is the point, names VEIL, and tells you to LIST if you mean to meddle. Two low notes, and she stops.
+ANSI-WITCH paints a witch. The hat is white. The face is mixed. The dress is purple. A star over her uses one of the 256. She says the hat is the point, names VEIL, and tells you to LIST if you mean to meddle. Two low notes, and she stops. The waking glass draws that picture first.
 
 ## Three that have to run
 

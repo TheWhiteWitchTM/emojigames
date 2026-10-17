@@ -68,8 +68,46 @@
   led.textContent = "● ";
   var statusEl = document.createElement("span");
   statusEl.className = "status";
+  var mood = document.createElement("span");
+  mood.className = "witch-mood";
+  mood.append(led, statusEl);
+  var toolByKey = {};
+  var toolButtons = [];
+  var TOOLS = [
+    { act: "list", key: "L", label: "LIST", hint: "List the lines" },
+    { act: "run", key: "R", label: "RUN", hint: "Run the program" },
+    { act: "shelf", key: "S", label: "SHELF", hint: "Open the shelf" },
+    { act: "scrub", key: "C", label: "SCRUB", hint: "Clear the glass" },
+    { act: "magic", key: "M", label: "MAGIC", hint: "Number the next lines. AUTO does this too" },
+    { act: "exorcise", key: "X", label: "EXORCISE", hint: "Turn BASIC into WASIC. An empty circle takes a file" }
+  ];
+  var bar = document.createElement("div");
+  bar.className = "witch-bar";
+  bar.setAttribute("role", "toolbar");
+  bar.setAttribute("aria-label", "Spells");
+  var legend = document.createElement("span");
+  legend.className = "witch-mod";
+  legend.textContent = "Alt+Shift";
+  bar.append(legend);
+  TOOLS.forEach(function (spec) {
+    toolByKey[spec.key] = spec.act;
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "witch-key";
+    btn.dataset.act = spec.act;
+    btn.title = spec.hint + ". Alt+Shift+" + spec.key;
+    btn.setAttribute("aria-keyshortcuts", "Alt+Shift+" + spec.key);
+    btn.append(document.createTextNode(spec.label + " "));
+    var kbd = document.createElement("kbd");
+    kbd.textContent = spec.key;
+    btn.append(kbd);
+    btn.addEventListener("mousedown", function (event) { event.preventDefault(); });
+    btn.addEventListener("click", function () { invokeTool(spec.act); });
+    toolButtons.push(btn);
+    bar.append(btn);
+  });
   ui.footer.textContent = "";
-  ui.footer.append(led, statusEl);
+  ui.footer.append(mood, bar);
 
   var mode = "boot";
   var shelfState = "";
@@ -116,6 +154,15 @@
     else if (mode === "freeze") state = "FROZEN";
     else if (mode === "auto") state = "AUTO " + auto.num;
     statusEl.textContent = state + " " + used + "/666";
+    var live = mode === "ready" || mode === "auto";
+    for (var b = 0; b < toolButtons.length; b += 1) {
+      var btn = toolButtons[b];
+      btn.disabled = !live;
+      if (btn.dataset.act === "magic") {
+        btn.classList.toggle("lit", !!auto.on);
+        btn.setAttribute("aria-pressed", auto.on ? "true" : "false");
+      }
+    }
   }
 
   function setPen(fg, bg) {
@@ -607,9 +654,10 @@
       "",
       "FROM OUT HERE:",
       "RUN REVEAL OBLITERATE",
-      "RENUMBER VANISH AUTO",
+      "RENUMBER VANISH AUTO MAGIC",
       "SEAL UNSEAL UPLOAD",
       "DOWNLOAD SHELF GRIMOIRE",
+      "EXORCISE",
       "",
       "UNSEAL \"shelf:HELLO-WITCH\"",
       "OR SHELF, AND POINT.",
@@ -617,8 +665,12 @@
       "THEN RUN. HELLO-DEMON TOO.",
       "ESCAPE LEAVES A CIRCLE THAT WILL NOT.",
       "A NUMBER STORES THE LINE. RUN LATER.",
+      "MAGIC NUMBERS. AUTO DOES TOO.",
       "BASIC MAY SIT IN A LINE.",
       "IT FALLS OVER WHEN SHE REACHES IT.",
+      "EXORCISE DRIVES IT OUT.",
+      "EMPTY, SHE TAKES A FILE.",
+      "THE SUMS STAY.",
       "PEEK POKE SYS. SHE COMPLAINS."
     ];
     for (var i = 0; i < lines.length; i += 1) writeRaw(lines[i] + "\n");
@@ -651,8 +703,8 @@
     if (!m) return false;
     var word = m[1].toUpperCase();
     var known = {
-      REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, SEAL: 1, UNSEAL: 1,
-      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1,
+      REVEAL: 1, OBLITERATE: 1, RENUMBER: 1, VANISH: 1, AUTO: 1, MAGIC: 1, SEAL: 1, UNSEAL: 1,
+      UPLOAD: 1, DOWNLOAD: 1, SHELF: 1, GRIMOIRE: 1, RUN: 1, HELP: 1, EXORCISE: 1,
       LIST: 1, NEW: 1, LOAD: 1, SAVE: 1, CLS: 1, HOME: 1
     };
     if (!known[word]) return false;
@@ -719,7 +771,11 @@
       writeRaw("GONE.\n");
       return true;
     }
-    if (word === "AUTO") { return doAuto(rest); }
+    if (word === "AUTO" || word === "MAGIC") { return doAuto(rest); }
+    if (word === "EXORCISE") {
+      if (rest) { fault(say("syntax")); return true; }
+      return doExorcise();
+    }
     if (word === "SEAL") { return doSeal(rest); }
     if (word === "UNSEAL") { return doUnseal(rest); }
     if (word === "DOWNLOAD") { return doDownload(rest); }
@@ -901,6 +957,151 @@
     });
     input.click();
     return true;
+  }
+
+  function countSpeech(n, one, many) {
+    return String(n) + " " + (n === 1 ? one : many);
+  }
+
+  function reportSpell(spell, fromFile) {
+    writeAnsi("\x1b[1;95mEXORCISE. THE SUMS STAY.\n");
+    setPen(7, 0);
+    if (spell.renamed) writeRaw(countSpeech(spell.renamed, "LINE TOOK A NEW NAME.", "LINES TOOK A NEW NAME.") + "\n");
+    if (spell.buried) {
+      setPen(1, 0);
+      writeRaw(countSpeech(spell.buried, "LINE I BURIED.", "LINES I BURIED.") + "\n");
+      setPen(7, 0);
+    }
+    if (spell.wires) writeRaw("PEEK ANSWERS 0. THE WIRES STAY DEAD.\n");
+    if (spell.numbered) writeRaw("BARE LINES GOT NUMBERS.\n");
+    if (spell.moved) writeRaw(countSpeech(spell.moved, "LINE NUMBERED PAST THE END.", "LINES NUMBERED PAST THE END.") + "\n");
+    if (spell.tight) writeRaw(countSpeech(spell.tight, "LINE WOULD NOT FIT.", "LINES WOULD NOT FIT.") + "\n");
+    if (fromFile) writeRaw("IT SITS IN THE CIRCLE.\n");
+    writeRaw("RUN IT, OR LIST AND MEDDLE.\n");
+  }
+
+  function applySpell(text, fromFile) {
+    var spell;
+    try { spell = globalThis.Wasic.exorcise(String(text || "")); }
+    catch (err) { fault(err.message || say("syntax")); return; }
+    if (!spell || !String(spell.text || "").trim()) { fault(say("empty")); return; }
+    if (!spell.changed) {
+      if (!fromFile) { writeRaw("NOTHING HERE SPEAKS BASIC.\n"); return; }
+      try {
+        wasic.load(spell.text);
+        clearMinions();
+        writeRaw("ALREADY WASIC.\n");
+      } catch (err) { fault(err.message || say("syntax")); }
+      return;
+    }
+    try {
+      wasic.load(spell.text);
+      clearMinions();
+    } catch (err) { fault(err.message || say("syntax")); return; }
+    reportSpell(spell, fromFile);
+  }
+
+  function pickBasic() {
+    holdPrompt = true;
+    setPen(5, 0);
+    writeRaw("☾ BRING THE LISTING.\n");
+    setPen(7, 0);
+    var input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".bas,.basic,.txt,.wasic,text/plain";
+    var settled = false;
+    function settle(text) {
+      if (settled) return;
+      settled = true;
+      holdPrompt = false;
+      if (text != null) applySpell(text, true);
+      promptReady();
+    }
+    input.addEventListener("change", function () {
+      var file = input.files && input.files[0];
+      if (!file) { settle(null); return; }
+      var reader = new FileReader();
+      reader.onload = function () { settle(String(reader.result || "")); };
+      reader.onerror = function () { fault(say("missing")); settle(null); };
+      reader.readAsText(file);
+    });
+    window.addEventListener("focus", function onFocus() {
+      setTimeout(function () {
+        if (!settled && (!input.files || !input.files.length)) {
+          window.removeEventListener("focus", onFocus);
+          settle(null);
+        }
+      }, 500);
+    });
+    input.click();
+    return true;
+  }
+
+  function doExorcise() {
+    if (wasic.lines.size) {
+      applySpell(wasic.listing(), false);
+      return true;
+    }
+    return pickBasic();
+  }
+
+  async function invokeTool(act) {
+    if (busy || holdKeys || holdPrompt) return;
+    if (mode !== "ready" && mode !== "auto") return;
+    if (entry) {
+      entry = "";
+      caret = 0;
+      histAt = -1;
+      paintEntry();
+    }
+    if (term.cursor.col !== 0) writeRaw("\n");
+    var keep = auto.on && act !== "run" && act !== "shelf";
+    busy = true;
+    try {
+      if (act === "list") printList({ from: 0, to: MAX_LINE });
+      else if (act === "run") {
+        auto.on = false;
+        keep = false;
+        mode = "run";
+        updateFooter();
+        await doRun("");
+      } else if (act === "shelf") {
+        auto.on = false;
+        keep = false;
+        await doShelf();
+      } else if (act === "scrub") {
+        term.write("\x1b[0m");
+        setPen(7, 0);
+        term.clear();
+      } else if (act === "magic") {
+        if (auto.on) {
+          auto.on = false;
+          keep = false;
+          writeRaw("AUTO OFF.\n");
+        } else {
+          doAuto("");
+          keep = true;
+        }
+      } else if (act === "exorcise") doExorcise();
+    } catch (err) {
+      fault(err && err.message ? err.message : "NO.");
+    } finally {
+      busy = false;
+      if (holdPrompt || mode === "shelf") return;
+      if (mode === "demand" || mode === "freeze") return;
+      if (keep && auto.on) {
+        mode = "auto";
+        beginEntry(String(auto.num) + " ");
+        updateFooter();
+      } else promptReady();
+    }
+  }
+
+  function chordLetter(event) {
+    if (!event.altKey || !event.shiftKey || event.ctrlKey || event.metaKey || event.repeat) return "";
+    var code = event.code || "";
+    if (code.length === 4 && code.slice(0, 3) === "Key") return code.charAt(3);
+    return "";
   }
 
   function fitCells(text, width) {
@@ -1326,6 +1527,18 @@
 
   window.addEventListener("keydown", function (event) {
     if (typingTarget(event)) return;
+    var chord = chordLetter(event);
+    if (chord && toolByKey[chord]) {
+      event.preventDefault();
+      event.stopPropagation();
+      unlock();
+      invokeTool(toolByKey[chord]);
+      return;
+    }
+  }, true);
+
+  window.addEventListener("keydown", function (event) {
+    if (typingTarget(event)) return;
     if (event.target && event.target.closest && event.target.closest("button") && !ui.wrap.contains(event.target)) return;
     unlock();
     if (holdKeys) { event.preventDefault(); return; }
@@ -1420,17 +1633,57 @@
   }
 
   var waking = true;
+  var inkHold = true;
   var witchSrc = mount.getAttribute("data-witch");
   if (witchSrc) {
     var witchImg = new Image();
     witchImg.onload = function () {
       portrait.image = witchImg;
-      if (waking) {
+      if (waking && !inkHold) {
         portrait.target = 1;
         lightSpark();
       }
     };
     witchImg.src = witchSrc;
+  }
+
+  // The same picture as shelf/ansi-witch.wasic, drawn on the glass before the sign-on.
+  var INK_WITCH = [
+    [1, ["1;95", "               ANSI WITCH"]],
+    [2, ["2;31", "        THE INK IS HERS. SIT DOWN."]],
+    [4, ["2;37", "             ·    ", "38;5;226", "*", "2;37", "    ·"]],
+    [5, ["1;97", "                 .-^-. "]],
+    [6, ["97", "              .-'     '-."]],
+    [7, ["38;5;54", "            .'    ", "38;5;141", "☾", "38;5;54", "    '."]],
+    [8, ["38;2;232;206;168", "           :   ", "1;91", "•", "38;2;232;206;168", "     ", "1;91", "•", "38;2;232;206;168", "   :"]],
+    [9, ["38;2;232;206;168", "            '.   ", "1;31", "—", "38;2;232;206;168", "   .'"]],
+    [10, ["97", "              '-._____.-'"]],
+    [11, ["35", "                 | |"]],
+    [12, ["45;97", "            .-'|     |'-."]],
+    [13, ["45;97", "          .'   |     |   '."]],
+    [14, ["45;97", "         :     |  ", "38;5;226", "*", "45;97", "  |     :"]],
+    [15, ["45;97", "          '.   |     |   .'"]],
+    [16, ["35", "            '-.|_____|.-'"]],
+    [17, ["93", "                \\   /"]],
+    [18, ["38;5;226", "               *     *"]],
+    [20, ["2;31", "            SHE WOKE IN INK."]]
+  ];
+
+  function paintInkRow(row, parts) {
+    var seq = "\x1b[" + (row + 1) + ";1H";
+    for (var i = 0; i < parts.length; i += 2) seq += "\x1b[" + parts[i] + "m" + parts[i + 1];
+    seq += "\x1b[0m";
+    term.write(seq);
+    term.cursor.row = 23;
+    term.cursor.col = 0;
+    term.dirty = true;
+  }
+
+  async function paintInkWitch() {
+    for (var i = 0; i < INK_WITCH.length; i += 1) {
+      paintInkRow(INK_WITCH[i][0], INK_WITCH[i][1]);
+      await sleep(40);
+    }
   }
 
   async function boot() {
@@ -1441,9 +1694,21 @@
     term.cursor.row = 0;
     term.cursorLit = true;
     term.flush();
+    inkHold = true;
+    portrait.target = 0;
     updateFooter();
     loadCatalog();
-    await sleep(280);
+    await sleep(220);
+    await paintInkWitch();
+    await sleep(380);
+    tone(196, 90, 0.04);
+    await sleep(110);
+    tone(247, 150, 0.035);
+    await sleep(260);
+    term.write("\x1b[0m");
+    term.clear();
+    setPen(7, 0);
+    inkHold = false;
     if (portrait.image) {
       portrait.target = 1;
       lightSpark();

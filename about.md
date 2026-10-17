@@ -49,7 +49,7 @@ Witch I is a computer. The prompt is SPEAK. A line number stores a line. RUN sta
 
 **16 October.** [Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}). Not a port. You type, it answers, the picture of the face swaps. [Notes]({{ '/releases/2026-10-16-trump-super-intelligence/' | relative_url }}). [The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}). A wagon, five names, and the road to the Willamette. [Notes]({{ '/releases/2026-10-16-oregon-trail/' | relative_url }}). [Witch I]({{ '/games/witch-1/' | relative_url }}). A 40-column machine that speaks WASIC. [Notes]({{ '/releases/2026-10-16-witch-1/' | relative_url }}).
 
-**17 October.** [Witch I]({{ '/games/witch-1/' | relative_url }}), again. The shelf points. Enter takes a program down and leaves the lines where a number can change them. LIST shows those lines. ANSI-WITCH paints with the colors the glass already speaks. [Notes]({{ '/releases/2026-10-17-witch-1-picker/' | relative_url }}).
+**17 October.** [Witch I]({{ '/games/witch-1/' | relative_url }}), again. The shelf points. Enter takes a program down and leaves the lines where a number can change them. LIST shows those lines. ANSI-WITCH paints with the colors the glass already speaks. [Notes]({{ '/releases/2026-10-17-witch-1-picker/' | relative_url }}). Later the same day she draws that picture when she wakes, the bezel grows six keys, and EXORCISE drives BASIC out of a listing. [Notes]({{ '/releases/2026-10-17-witch-1-exorcism/' | relative_url }}).
 
 The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release notes]({{ '/releases/' | relative_url }}) are the log.
 

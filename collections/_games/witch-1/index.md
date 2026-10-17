@@ -53,7 +53,56 @@ tags: [terminal, computer]
     );
     mix-blend-mode: multiply;
   }
-  .ee-footer { color: #8d7b68; letter-spacing: .08em; }
+  .ee-footer {
+    color: #8d7b68;
+    letter-spacing: .08em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+  }
+  .witch-mood { white-space: nowrap; }
+  .witch-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+  }
+  .witch-mod {
+    color: #8d7b68;
+    font-size: 11px;
+    letter-spacing: 0;
+    margin-right: 2px;
+  }
+  .witch-key {
+    font: inherit;
+    letter-spacing: .06em;
+    font-size: 11px;
+    color: #cbbfa6;
+    background: transparent;
+    border: 1px solid #4a3b32;
+    border-radius: 4px;
+    padding: 2px 6px;
+    cursor: pointer;
+  }
+  .witch-key kbd {
+    color: #8d7b68;
+    font: inherit;
+    letter-spacing: 0;
+  }
+  .witch-key:hover:not(:disabled) {
+    color: #e6d3b0;
+    border-color: #7a2e24;
+  }
+  .witch-key.lit {
+    color: #e2b657;
+    border-color: #7a5a28;
+  }
+  .witch-key:disabled {
+    opacity: .38;
+    cursor: default;
+  }
   .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
   .ee-wrap:fullscreen {
     width: 100% !important;
@@ -72,9 +121,11 @@ tags: [terminal, computer]
 
 Forty columns, twenty-four rows. The glass is black. She speaks WASIC.
 
-When she wakes, the white witch from the banner stands in the glass. The count climbs to 666. Then she steps back, the words roll to the top, and the glass says SPEAK.
+When she wakes, she draws herself in the glass's own colors, hat first. The same picture is `ANSI-WITCH`. Two low notes, and that drawing steps aside. The white witch from the banner stands in. The count climbs to 666. The words roll to the top, and the glass says SPEAK.
 
 A line with a number is stored. A line without one runs now. That is the C64 way, and she kept it. `RUN` starts at the top. The programs live in `shelf/`, and the names end in `.wasic`. `SHELF` opens the box. The arrows move. Enter takes one down and leaves it sitting there, so a line number can change it. `UNSEAL "shelf:HELLO-WITCH"` still types the long way. `HELLO-DEMON` is the other hello. `ANSI-WITCH` paints her in the glass's own colors. `LIST` shows the lines, numbers in yellow. `REVEAL` is the quiet copy. `GRIMOIRE` prints the words she will hear. `HELP` gets you the same list and a small lecture. PEEK, POKE, and SYS sit in a line if you type them. When she reaches them she complains, in red, with a mark, and the glass rings. She does not answer to READY. When the glass says SPEAK, the turn is yours.
+
+Under the glass, the bezel names the mood and the lines. Beside that, six keys: LIST, RUN, SHELF, SCRUB, MAGIC, EXORCISE. They are Alt+Shift and a letter, the chords a browser leaves alone. MAGIC numbers the next lines. AUTO is the same word. EXORCISE drives BASIC out of a listing and leaves the sums where they are. An empty circle opens the desk for a file. UPLOAD still reads a file as it stands.
 
 Escape ends a working that will not end. Ctrl-C does too, if you were raised on the other machines. The pale bar blinks from the moment the glass is dark, before she bothers to introduce herself.
 
