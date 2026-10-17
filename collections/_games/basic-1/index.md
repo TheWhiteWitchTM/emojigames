@@ -109,9 +109,10 @@ tags: [terminal, computer]
     background: #000;
     border-radius: 12px;
     overflow: hidden;
+    border: 3px solid #4a90e2;
     box-shadow:
       inset 0 0 0 1px #1a1012,
-      inset 0 0 80px rgba(36, 0, 12, .55);
+      inset 0 0 40px rgba(74, 144, 226, 0.25);
   }
   .crt canvas {
     display: block;
@@ -175,6 +176,7 @@ tags: [terminal, computer]
     <button type="button" id="basic-manual-btn" aria-expanded="false" aria-controls="basic-manual">📜 Manual</button>
   </div>
   <p class="basic-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
+  <p class="basic-hint"><a href="{{ '/games/basic-1/learning/' | relative_url }}">Learning BASIC</a> — short introduction for anyone who wants to learn line-numbered BASIC.</p>
 
   <div id="basic-started" class="basic-panel" hidden>
     {% capture basic_started %}{% include_relative GETTING-STARTED.md %}{% endcapture %}
