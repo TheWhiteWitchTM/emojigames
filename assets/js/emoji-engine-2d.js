@@ -2166,22 +2166,27 @@ var EmojiEngine = (() => {
           textAlign: "center",
           minWidth: "0"
         });
-        const button = document.createElement("button");
-        button.className = "ee-fullscreen";
-        button.setAttribute("type", "button");
-        assign(button, {
-          marginLeft: "8px",
-          cursor: "pointer",
-          background: "transparent",
-          color: "inherit",
-          border: "1px solid #666",
-          borderRadius: "4px",
-          padding: "2px 8px"
-        });
-        syncFullscreenButton(button);
-        button.addEventListener("click", () => toggleFullscreen(wrap));
-        document.addEventListener("fullscreenchange", () => syncFullscreenButton(button));
-        header.append(titleEl, headerMiddle, button);
+        header.append(titleEl, headerMiddle);
+        // A desk page is already fullscreen. Escape ends it.
+        // The old button toggled the terminal and said "Esc Exit".
+        if (typeof window === "undefined" || !window.GameDesk) {
+          const button = document.createElement("button");
+          button.className = "ee-fullscreen";
+          button.setAttribute("type", "button");
+          assign(button, {
+            marginLeft: "8px",
+            cursor: "pointer",
+            background: "transparent",
+            color: "inherit",
+            border: "1px solid #666",
+            borderRadius: "4px",
+            padding: "2px 8px"
+          });
+          syncFullscreenButton(button);
+          button.addEventListener("click", () => toggleFullscreen(wrap));
+          document.addEventListener("fullscreenchange", () => syncFullscreenButton(button));
+          header.append(button);
+        }
         wrap.append(header);
       }
       assign(surface, { display: "block" });

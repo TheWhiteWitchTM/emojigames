@@ -36,7 +36,7 @@ Trump Super Intelligence is a conversation, not a match. There is no title card 
 
 The Oregon Trail opens on a title. Return goes to the menu. R from that title, or from a finished trail, starts the next party without showing the title again. On the road, Return stops the wagon. Hunt and the Columbia raft use the arrows.
 
-Witch I is a computer. The page has a boot button, and she fills the screen. Escape brings the site back. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF opens the box, and the arrows take a program down. LIST shows the lines. PEEK and POKE make her complain. Ctrl-C stops one that will not stop.
+Witch I is a computer. Play fills the screen, and she stays there until Escape ends the session. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF opens the box, and the arrows take a program down. LIST shows the lines. PEEK and POKE make her complain. Ctrl-C stops one that will not stop. Basic I is the same glass, and the prompt is READY.
 
 ## What shipped
 

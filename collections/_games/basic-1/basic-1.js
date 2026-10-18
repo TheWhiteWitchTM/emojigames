@@ -90,13 +90,7 @@
   ui.footer.textContent = "";
   ui.footer.append(mood, bar);
   var fsBtn = ui.wrap.querySelector(".ee-fullscreen");
-  var fsHint = document.createElement("span");
-  fsHint.className = "witch-key";
-  fsHint.append(document.createTextNode("⛶ FULL "));
-  var fsKbd = document.createElement("kbd");
-  fsKbd.textContent = "F11";
-  fsHint.append(fsKbd);
-  if (fsBtn) fsBtn.replaceWith(fsHint);
+  if (fsBtn) fsBtn.remove();
   ui.wrap.style.cursor = "none";
   canvasEl.style.cursor = "none";
   crt.style.cursor = "none";
@@ -1187,16 +1181,6 @@
     updateFooter();
   }
 
-  function screenRoot() {
-    return document.getElementById("witch-stage") || ui.wrap;
-  }
-
-  function toggleFull() {
-    var root = screenRoot();
-    var request = document.fullscreenElement ? document.exitFullscreen() : root.requestFullscreen();
-    Promise.resolve(request).catch(function () {});
-  }
-
   async function invokeTool(act) {
     if (busy || holdKeys || holdPrompt) return;
     if (mode !== "ready" && mode !== "auto") return;
@@ -1697,14 +1681,9 @@
   }
 
   window.addEventListener("keydown", function (event) {
+    if (!glassLive) return;
     if (typingTarget(event)) return;
     if (event.metaKey || event.ctrlKey || event.altKey) return;
-    if (event.key === "F11") {
-      event.preventDefault();
-      event.stopPropagation();
-      if (!event.repeat) toggleFull();
-      return;
-    }
     var act = toolByKey[event.key];
     var scrollKey = event.key === "ScrollLock";
     if (!act && !scrollKey) return;
@@ -1719,6 +1698,7 @@
   }, true);
 
   window.addEventListener("keydown", function (event) {
+    if (!glassLive) return;
     if (typingTarget(event)) return;
     if (event.target && event.target.closest && event.target.closest("button") && !ui.wrap.contains(event.target)) return;
     unlock();
@@ -1733,6 +1713,7 @@
   });
 
   window.addEventListener("paste", function (event) {
+    if (!glassLive) return;
     if (typingTarget(event)) return;
     if (mode !== "ready" && mode !== "auto" && mode !== "demand") return;
     var text = event.clipboardData && event.clipboardData.getData("text");
@@ -1936,4 +1917,11 @@
       return out;
     }
   };
+
+  if (window.GameDesk) {
+    window.GameDesk.onOpen = function () { power(); };
+    window.GameDesk.onClose = function () { leave(); };
+  } else {
+    power();
+  }
 })();

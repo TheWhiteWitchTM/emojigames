@@ -8,7 +8,7 @@ The glass keeps this record. Newest first.
 
 Every game page is a desk now. ▶️ Play fills the screen. Escape returns to the page. It does not shrink the glass back into the article.
 
-Witch I and Basic I still boot. Their lines stay.
+Witch I and Basic I open the same way. Play fills the screen, and they stay there until Escape ends the session. Their lines stay. Witch Hunt fits the whole maze on that screen. Trump Super Intelligence keeps the caret on the bottom row, and the face sits in the glass above the prompt.
 
 Adventureland, Pirate Adventure, Galaxy Hunt, The Oregon Trail, and Trump Super Intelligence keep a blinking block caret at the prompt.
 

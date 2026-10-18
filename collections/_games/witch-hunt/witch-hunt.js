@@ -1,6 +1,6 @@
 // Witch Hunt — ten maze levels. Hunters wait in the pen, then chase like ghosts.
-// scale 2 draws each cell at four times the area (2×2). fitWidth then
-// stretches that window to the page column, so the maze fills the width.
+// scale 2 draws each cell at four times the area (2×2). fitWidth grows the
+// window to the column, and the desk shrinks it so the whole maze stays on screen.
 const term = new Terminal({
   cols: 40,
   rows: 22,

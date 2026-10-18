@@ -23,6 +23,7 @@
 
   function closeStage() {
     if (!desk.open) return;
+    if (typeof desk.onClose === "function") desk.onClose();
     desk.open = false;
     stage.classList.remove("game-open");
     stage.hidden = true;
@@ -42,7 +43,11 @@
     document.body.classList.add("game-glass-on");
     var pending = stage.requestFullscreen ? stage.requestFullscreen() : Promise.reject();
     Promise.resolve(pending).catch(function () {});
+    if (typeof desk.onOpen === "function") desk.onOpen();
     focusGame();
+    requestAnimationFrame(function () {
+      window.dispatchEvent(new Event("resize"));
+    });
   }
 
   play.addEventListener("click", openStage);

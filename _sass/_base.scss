@@ -262,6 +262,11 @@ body.game-glass-on {
   margin: 0;
 }
 
+.game-stage.game-stage-aspect.game-open #game,
+.game-stage.game-stage-aspect:fullscreen #game {
+  width: min(100%, calc((100dvh - 128px) * var(--stage-aspect, 1.25)));
+}
+
 .game-stage.game-open .ee-wrap,
 .game-stage:fullscreen .ee-wrap,
 .game-stage.game-open .terminal-outer,
@@ -271,9 +276,14 @@ body.game-glass-on {
   max-height: 100%;
 }
 
-.game-stage.game-open canvas,
-.game-stage:fullscreen canvas {
+.game-stage.game-open .ee-wrap canvas,
+.game-stage:fullscreen .ee-wrap canvas {
   width: 100% !important;
   height: auto !important;
   max-height: calc(100dvh - 7rem);
+}
+
+.game-stage.game-stage-aspect.game-open .ee-wrap canvas,
+.game-stage.game-stage-aspect:fullscreen .ee-wrap canvas {
+  max-height: none;
 }

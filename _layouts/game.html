@@ -16,8 +16,8 @@
     {% if page.desk == false %}
     {{ content }}
     {% else %}
-    <div id="game-stage" class="game-stage" hidden>
-      <div id="game"{% if page.game_base %} data-base="{{ page.game_base | relative_url }}"{% endif %}></div>
+    <div id="game-stage" class="game-stage{% if page.stage_aspect %} game-stage-aspect{% endif %}"{% if page.stage_aspect %} style="--stage-aspect: {{ page.stage_aspect }}"{% endif %} hidden>
+      <div id="game"{% if page.game_base %} data-base="{{ page.game_base | relative_url }}"{% endif %}{% if page.game_shelf %} data-shelf="{{ page.game_shelf | relative_url }}"{% endif %}{% if page.game_modules %} data-modules="{{ page.game_modules | relative_url }}"{% endif %}{% if page.game_witch %} data-witch="{{ page.game_witch | relative_url }}"{% endif %}></div>
     </div>
     <div class="game-front markdown-body">
       <h1>{{ page.title }}</h1>
