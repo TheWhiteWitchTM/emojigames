@@ -36,6 +36,8 @@ The menu carries these three. The [catalog]({{ '/games/' | relative_url }}) stil
 
 Super Star Trek, drawn with emoji. The galaxy is eight by eight. You are the Alliance hunter. Raiders sit in the quadrants, stars block a shot, and an outpost will repair you if you dock on its sector. Energy, missiles, shields, and a stardate. `HELP` prints the rose and the commands. Clear the fleet before the date runs out.
 
+The same mission stands up in [🚀 Galaxy Hunt 3D]({{ '/games/galaxy-hunt-3d/' | relative_url }}). It is written in Magic. The charts are flat, the quadrant is solid, and the bridge takes the orders.
+
 ### [🐂 The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }})
 
 <img class="home-banner" src="{{ '/games/oregon-trail/banner.jpg' | relative_url }}" alt="">
@@ -64,6 +66,7 @@ Rooms, corridors, and things that walk toward you. Weapons get wielded when they
 - [🖥️ Basic Learn]({{ '/games/basic-learn/' | relative_url }}) — BASIC with the picture, colored words, and plain errors. Basic I is the 40-column machine.
 - [🛸 Elite]({{ '/games/elite/' | relative_url }}) — a Cobra at Lave. Trade, fight, and dock. Eight galaxies.
 - [🌙 Pale March]({{ '/games/pale-march/' | relative_url }}) — you are the White Witch. Four seals, then the gate.
+- [🚀 Galaxy Hunt 3D]({{ '/games/galaxy-hunt-3d/' | relative_url }}) — the same hunt, in the quadrant. Written in Magic.
 
 ## Elsewhere
 

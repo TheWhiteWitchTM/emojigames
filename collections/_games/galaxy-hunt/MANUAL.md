@@ -22,3 +22,5 @@ Course is 1 to 9 around the compass rose. Warp is 0.1 to 8.
 🚀 is you. 👾 is a raider. ⭐ is a star. 🏢 is an outpost. A dot is empty space.
 
 Stars block you, and they block missiles. Dock by flying onto an outpost when the ship is falling apart. That resupplies and repairs you. Run out of energy, or out of time, and the mission fails.
+
+The same hunt stands up in [Galaxy Hunt 3D]({{ '/games/galaxy-hunt-3d/' | relative_url }}).

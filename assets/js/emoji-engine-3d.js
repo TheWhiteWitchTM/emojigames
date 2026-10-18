@@ -328,6 +328,10 @@ void main() {
       gl.viewport(0, 0, this.element.width, this.element.height);
       const [r, g, b] = parseColor(this.clearColor);
       gl.clearColor(r, g, b, 1);
+      // Emoji drawing turns the depth mask off. A clear with that mask left off
+      // keeps the old depth, so the next frame's solids fail the depth test.
+      gl.depthMask(true);
+      gl.colorMask(true, true, true, true);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
     /**

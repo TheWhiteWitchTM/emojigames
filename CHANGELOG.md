@@ -4,6 +4,10 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-18
 
+### Galaxy Hunt 3D
+
+The same eight-by-eight hunt, written in Magic. 2d draws the charts. 3d is the quadrant. ui is the bridge. The gold block ahead of the hunter is the course. Dock by flying onto an outpost, and leave by flying off it. Raiders hold their fire in the bay. A long-range scan remembers that neighborhood.
+
 ### Magic and Basic Learn
 
 Magic is a small language. It is Lua, with the sharp corners filed off. Run compiles it to JavaScript. The words are colored while you type. A mistake names the line.

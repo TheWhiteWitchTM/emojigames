@@ -1,0 +1,1757 @@
+-- Galaxy Hunt 3D
+-- The mission is Magic. 2d draws the charts. 3d is the quadrant. ui is the bridge.
+
+STEP = 4
+headingBug = 0
+sang = false
+warned = false
+mode = "boot"
+over = false
+docked = false
+chase = false
+reason = ""
+energy = 3000
+missiles = 10
+shields = 0
+date = 2000
+timeLeft = 30
+timeDebt = 0
+quadX = 1
+quadY = 1
+secX = 1
+secY = 1
+course = 1
+heading = -90
+totalRaiders = 0
+totalOutposts = 0
+ship = 0
+nose = 0
+flame = 0
+mark = 0
+galaxy = {}
+qRaiders = {}
+qStars = {}
+qOutpost = nil
+keys = {}
+titleStars = {}
+damage = { 0, 0, 0, 0, 0, 0, 0, 0 }
+systems = {
+  "warp",
+  "short-range sensors",
+  "long-range sensors",
+  "beams",
+  "missiles",
+  "damage control",
+  "shields",
+  "computer"
+}
+dirs = {
+  { dx = 1, dy = 0 },
+  { dx = 1, dy = -1 },
+  { dx = 0, dy = -1 },
+  { dx = -1, dy = -1 },
+  { dx = -1, dy = 0 },
+  { dx = -1, dy = 1 },
+  { dx = 0, dy = 1 },
+  { dx = 1, dy = 1 }
+}
+
+function tenths(n)
+  local v = math.floor(n * 10 + 0.5) / 10
+  local whole = math.floor(v)
+  local part = math.floor(v * 10 - whole * 10 + 0.5)
+  if part >= 10 then
+    whole = whole + 1
+    part = 0
+  end
+  if part < 0 then
+    part = 0
+  end
+  return whole .. "." .. part
+end
+
+function atan2deg(y, x)
+  if x > 0 then
+    return math.atan(y / x)
+  end
+  if x < 0 and y >= 0 then
+    return math.atan(y / x) + 180
+  end
+  if x < 0 and y < 0 then
+    return math.atan(y / x) - 180
+  end
+  if y > 0 then
+    return 90
+  end
+  if y < 0 then
+    return -90
+  end
+  return 0
+end
+
+-- Engine yaw: forward x = -sin(yaw), forward z = -cos(yaw). Yaw 0 looks north, -Z.
+function headingOf(dx, dy)
+  return atan2deg(-dx, -dy)
+end
+
+function face()
+  return { x = -math.sin(heading), z = -math.cos(heading) }
+end
+
+function courseFrom(dx, dy)
+  local deg = atan2deg(-dy, dx)
+  if deg < 0 then
+    deg = deg + 360
+  end
+  local n = math.floor(deg / 45 + 0.5) % 8
+  if n < 0 then
+    n = n + 8
+  end
+  return n + 1
+end
+
+function yawGap(got, want)
+  local diff = got - want
+  if diff < 0 then
+    diff = -diff
+  end
+  if diff > 180 then
+    diff = 360 - diff
+  end
+  return diff
+end
+
+function proveHeading()
+  headingBug = 0
+  local n = 1
+  while n <= 8 do
+    local dir = dirs[n]
+    heading = headingOf(dir.dx, dir.dy)
+    local f = face()
+    local span = math.sqrt(dir.dx * dir.dx + dir.dy * dir.dy)
+    local dot = f.x * (dir.dx / span) + f.z * (dir.dy / span)
+    if dot < 0.99 then
+      headingBug = headingBug + 1
+      print("HEADING FAIL " .. n)
+    end
+    if courseFrom(dir.dx, dir.dy) ~= n then
+      headingBug = headingBug + 1
+      print("COURSE FAIL " .. n)
+    end
+    n = n + 1
+  end
+  if yawGap(headingOf(1, 0), -90) > 1 then
+    headingBug = headingBug + 1
+    print("YAW FAIL east")
+  end
+  if yawGap(headingOf(0, -1), 0) > 1 then
+    headingBug = headingBug + 1
+    print("YAW FAIL north")
+  end
+  if yawGap(headingOf(-1, 0), 90) > 1 then
+    headingBug = headingBug + 1
+    print("YAW FAIL west")
+  end
+  if yawGap(headingOf(0, 1), 180) > 1 then
+    headingBug = headingBug + 1
+    print("YAW FAIL south")
+  end
+  if headingBug == 0 then
+    print("HEADING OK")
+  end
+end
+
+function tone(freq, ms)
+  if mode == "helm" then
+    3d.beep(freq, ms)
+  else
+    2d.beep(freq, ms)
+  end
+end
+
+function tune(notes)
+  local frames = 0
+  local i = 0
+  for item in notes do
+    tone(item.f, item.ms)
+    frames = math.floor(item.ms / 32)
+    if frames < 1 then
+      frames = 1
+    end
+    i = 1
+    while i <= frames do
+      if mode == "helm" then
+        3d.wait()
+      else
+        2d.wait()
+      end
+      i = i + 1
+    end
+  end
+end
+
+function whoosh()
+  tone(150, 70)
+  tone(210, 90)
+  tone(320, 110)
+end
+
+function edge(which, name)
+  local down = false
+  if which == "2d" then
+    down = 2d.key(name)
+  else
+    down = 3d.key(name)
+  end
+  local prev = keys[name]
+  keys[name] = down
+  if down and not prev then
+    return true
+  end
+  return false
+end
+
+function swallow(which)
+  local names = { "left", "right", "up", "down", "a", "d", "w", "s", "m", "v", "c", "h", "r", "enter", "return", "space", "1", "2" }
+  local down = false
+  for name in names do
+    down = false
+    if which == "2d" then
+      down = 2d.key(name)
+    else
+      down = 3d.key(name)
+    end
+    keys[name] = down
+  end
+end
+
+function placeHunter(x, z)
+  local f = face()
+  local wobble = math.sin(clock() * 480) * 0.06
+  3d.move(ship, x, 1.55, z)
+  3d.turn(ship, heading)
+  3d.move(nose, x + f.x * 1.75, 0.72, z + f.z * 1.75)
+  3d.move(flame, x - f.x * 1.25, 0.95 + wobble, z - f.z * 1.25)
+  3d.move(mark, x, 0.11, z)
+end
+
+function setCourse(n)
+  while n < 1 do
+    n = n + 8
+  end
+  while n > 8 do
+    n = n - 8
+  end
+  course = n
+  heading = headingOf(dirs[n].dx, dirs[n].dy)
+  if ship ~= 0 then
+    placeHunter(secX * STEP, secY * STEP)
+  end
+end
+
+function aimCamera()
+  local x = secX * STEP
+  local z = secY * STEP
+  if chase then
+    3d.follow(ship)
+  else
+    3d.camera(x, 26, z + 14)
+    3d.look(x, 0.4, z)
+  end
+end
+
+function paintSky()
+  if #qRaiders > 0 and not docked then
+    3d.paper("#240814")
+  else
+    3d.paper("#070b16")
+  end
+end
+
+function bob()
+  local t = clock()
+  local i = 1
+  for r in qRaiders do
+    if r.id ~= 0 then
+      3d.move(r.id, r.x * STEP, 1.4 + math.sin(t * 90 + i * 48) * 0.14, r.y * STEP)
+    end
+    i = i + 1
+  end
+end
+
+function layWall(along, edgeAt, rim)
+  local i = 1
+  while i <= 8 do
+    local h = 0.7
+    local tint = "#243044"
+    if rim then
+      h = 2.4
+      tint = "#5a2430"
+    end
+    if along == "x" then
+      3d.box(i * STEP, h / 2, edgeAt, 3.5, h, 0.32, tint)
+    else
+      3d.box(edgeAt, h / 2, i * STEP, 0.32, h, 3.5, tint)
+    end
+    i = i + 1
+  end
+end
+
+function showHelm()
+  mode = "helm"
+  ship = 0
+  nose = 0
+  flame = 0
+  mark = 0
+  3d.clear("#070b16")
+  paintSky()
+  local y = 1
+  while y <= 8 do
+    local x = 1
+    while x <= 8 do
+      local tint = "#12182a"
+      if (x + y) % 2 == 0 then
+        tint = "#1a2740"
+      end
+      3d.box(x * STEP, 0, y * STEP, 3.55, 0.08, 3.55, tint)
+      x = x + 1
+    end
+    y = y + 1
+  end
+  layWall("x", 1.15, quadY == 1)
+  layWall("x", 34.85, quadY == 8)
+  layWall("z", 1.15, quadX == 1)
+  layWall("z", 34.85, quadX == 8)
+  3d.emoji("⬆️", 18, 3.6, 0.2, 1.15)
+  3d.emoji("➡️", 35.8, 3.6, 18, 1.15)
+  3d.emoji("⬇️", 18, 3.6, 35.8, 1.15)
+  3d.emoji("⬅️", 0.2, 3.6, 18, 1.15)
+  local i = 1
+  while i <= 22 do
+    3d.emoji("✨", math.random(0, 36), math.random(6, 14), math.random(0, 36), 0.28)
+    i = i + 1
+  end
+  for s in qStars do
+    s.id = 3d.emoji("⭐", s.x * STEP, 2.35, s.y * STEP, 1.35)
+  end
+  if qOutpost ~= nil then
+    qOutpost.pad = 3d.box(qOutpost.x * STEP, 0.28, qOutpost.y * STEP, 2.3, 0.12, 2.3, "#3a4a68")
+    qOutpost.id = 3d.emoji("🏢", qOutpost.x * STEP, 1.55, qOutpost.y * STEP, 1.55)
+  end
+  for r in qRaiders do
+    r.id = 3d.emoji("👾", r.x * STEP, 1.4, r.y * STEP, 1.4)
+  end
+  ship = 3d.emoji("🚀", secX * STEP, 1.55, secY * STEP, 1.25)
+  nose = 3d.box(secX * STEP, 0.72, secY * STEP, 0.46, 0.32, 0.46, "gold")
+  flame = 3d.emoji("🔥", secX * STEP, 0.95, secY * STEP, 0.5)
+  mark = 3d.box(secX * STEP, 0.11, secY * STEP, 3.25, 0.05, 3.25, "#e6c36a")
+  placeHunter(secX * STEP, secY * STEP)
+  aimCamera()
+end
+
+function alert()
+  tone(880, 90)
+  3d.wait()
+  3d.wait()
+  tone(494, 140)
+end
+
+function taken(occ, x, y)
+  if occ[x .. "," .. y] then
+    return true
+  end
+  return false
+end
+
+function park(occ)
+  local x = 1
+  local y = 1
+  local guard = 0
+  repeat
+    x = math.random(1, 8)
+    y = math.random(1, 8)
+    guard = guard + 1
+  until not taken(occ, x, y) or guard > 80
+  occ[x .. "," .. y] = true
+  return { x = x, y = y, id = 0, pad = 0 }
+end
+
+function enterQuadrant()
+  local q = galaxy[quadY][quadX]
+  q.scanned = true
+  qRaiders = {}
+  qStars = {}
+  qOutpost = nil
+  local occ = {}
+  occ[secX .. "," .. secY] = true
+  local i = 1
+  while i <= q.raiders do
+    local p = park(occ)
+    p.energy = 200 + math.random(0, 199)
+    qRaiders[#qRaiders + 1] = p
+    i = i + 1
+  end
+  if q.outpost then
+    qOutpost = park(occ)
+  end
+  i = 1
+  while i <= q.stars do
+    qStars[#qStars + 1] = park(occ)
+    i = i + 1
+  end
+  docked = false
+  if qOutpost ~= nil and qOutpost.x == secX and qOutpost.y == secY then
+    docked = true
+  end
+end
+
+function setup()
+  over = false
+  reason = ""
+  warned = false
+  chase = false
+  docked = false
+  energy = 3000
+  missiles = 10
+  shields = 0
+  timeDebt = 0
+  date = 2000 + math.random(0, 1999)
+  timeLeft = 25 + math.random(0, 14)
+  quadX = math.random(1, 8)
+  quadY = math.random(1, 8)
+  secX = math.random(1, 8)
+  secY = math.random(1, 8)
+  local i = 1
+  while i <= 8 do
+    damage[i] = 0
+    i = i + 1
+  end
+  galaxy = {}
+  local y = 1
+  while y <= 8 do
+    galaxy[y] = {}
+    local x = 1
+    while x <= 8 do
+      galaxy[y][x] = { raiders = 0, outpost = false, stars = 1 + math.random(0, 7), scanned = false }
+      x = x + 1
+    end
+    y = y + 1
+  end
+  totalRaiders = 0
+  totalOutposts = 0
+  local rLeft = 15 + math.random(0, 7)
+  local oLeft = 2 + math.random(0, 2)
+  local guard = 0
+  while (rLeft > 0 or oLeft > 0) and guard < 4000 do
+    guard = guard + 1
+    local x = math.random(1, 8)
+    local y2 = math.random(1, 8)
+    local q = galaxy[y2][x]
+    if rLeft > 0 and q.raiders == 0 and math.random() > 0.55 then
+      local n = 1 + math.random(0, 2)
+      if n > rLeft then
+        n = rLeft
+      end
+      q.raiders = n
+      rLeft = rLeft - n
+      totalRaiders = totalRaiders + n
+    else if oLeft > 0 and not q.outpost and math.random() > 0.75 then
+      q.outpost = true
+      oLeft = oLeft - 1
+      totalOutposts = totalOutposts + 1
+    end
+  end
+  setCourse(1)
+  enterQuadrant()
+end
+
+function rememberRaiders()
+  galaxy[quadY][quadX].raiders = #qRaiders
+end
+
+function raidersLeft()
+  local n = 0
+  local y = 1
+  while y <= 8 do
+    local x = 1
+    while x <= 8 do
+      n = n + galaxy[y][x].raiders
+      x = x + 1
+    end
+    y = y + 1
+  end
+  return n
+end
+
+function findRaider(x, y)
+  for r in qRaiders do
+    if r.x == x and r.y == y then
+      return r
+    end
+  end
+  return nil
+end
+
+function starAt(x, y)
+  for s in qStars do
+    if s.x == x and s.y == y then
+      return true
+    end
+  end
+  return false
+end
+
+function checkEnd()
+  if over then
+    return
+  end
+  if energy <= 0 then
+    over = true
+    reason = "destroyed"
+  else if timeLeft <= 0 then
+    over = true
+    reason = "time"
+  else if raidersLeft() <= 0 then
+    over = true
+    reason = "won"
+  else if energy < 300 and not warned then
+    warned = true
+    ui.say("Energy is low. An outpost can refill the tanks.")
+  end
+end
+
+function spend(warpFactor)
+  local cost = math.floor(warpFactor * 8 + math.random(0, 4))
+  if cost < 0 then
+    cost = 0
+  end
+  if energy < cost then
+    return false
+  end
+  energy = energy - cost
+  date = date + warpFactor * 0.1
+  timeDebt = timeDebt + warpFactor * 0.2
+  while timeDebt >= 1 do
+    timeLeft = timeLeft - 1
+    timeDebt = timeDebt - 1
+  end
+  return true
+end
+
+function hitFlash()
+  local id = 3d.emoji("💥", secX * STEP, 1.7, secY * STEP, 1.35)
+  3d.paper("#4a1020")
+  tone(150, 50)
+  local i = 1
+  while i <= 4 do
+    3d.wait()
+    i = i + 1
+  end
+  3d.drop(id)
+  paintSky()
+end
+
+function explodeAt(x, y)
+  local id = 3d.emoji("💥", x * STEP, 1.55, y * STEP, 1.6)
+  tone(180, 80)
+  local i = 1
+  while i <= 4 do
+    3d.wait()
+    i = i + 1
+  end
+  3d.drop(id)
+end
+
+function glide(x0, z0, x1, z1)
+  if chase then
+    3d.follow(ship)
+  end
+  local f = 1
+  while f <= 4 do
+    local t = f / 4
+    local x = x0 + (x1 - x0) * t
+    local z = z0 + (z1 - z0) * t
+    placeHunter(x, z)
+    bob()
+    if not chase then
+      3d.camera(x, 26, z + 14)
+      3d.look(x, 0.4, z)
+    end
+    3d.wait()
+    f = f + 1
+  end
+end
+
+function wrapAxis(pos, quad, delta)
+  local next = pos + delta
+  local nq = quad
+  local crossed = false
+  local rim = false
+  if next < 1 then
+    if quad <= 1 then
+      next = 1
+      rim = true
+    else
+      next = next + 8
+      nq = quad - 1
+      crossed = true
+    end
+  end
+  if next > 8 then
+    if quad >= 8 then
+      next = 8
+      rim = true
+    else
+      next = next - 8
+      nq = quad + 1
+      crossed = true
+    end
+  end
+  return { pos = next, quad = nq, crossed = crossed, rim = rim }
+end
+
+function dockNow()
+  docked = true
+  energy = 3000
+  missiles = 10
+  shields = 0
+  warned = false
+  local i = 1
+  while i <= 8 do
+    damage[i] = 0
+    i = i + 1
+  end
+  paintSky()
+  tune({ { f = 523, ms = 80 }, { f = 659, ms = 80 }, { f = 784, ms = 150 } })
+  ui.say("Docked. The outpost fills the tanks, the tubes, and the hull. Shields stay down in the bay. Move off to leave.")
+end
+
+function arrive()
+  if starAt(secX, secY) then
+    energy = energy - (50 + math.random(0, 49))
+    tone(90, 160)
+    hitFlash()
+    ui.say("Collision with a star. The hunter stops.")
+    return true
+  end
+  if findRaider(secX, secY) ~= nil then
+    energy = energy - 100
+    tone(110, 160)
+    hitFlash()
+    ui.say("Collision with a raider.")
+    return true
+  end
+  if qOutpost ~= nil and qOutpost.x == secX and qOutpost.y == secY then
+    dockNow()
+    return true
+  end
+  docked = false
+  return false
+end
+
+function stepOnce()
+  local dir = dirs[course]
+  local ax = wrapAxis(secX, quadX, dir.dx)
+  local ay = wrapAxis(secY, quadY, dir.dy)
+  if ax.rim or ay.rim then
+    tone(90, 130)
+    if ax.crossed or ay.crossed then
+      quadX = ax.quad
+      quadY = ay.quad
+      secX = ax.pos
+      secY = ay.pos
+      enterQuadrant()
+      showHelm()
+    end
+    ui.say("The hunter reaches the rim of the galaxy and stops.")
+    return true
+  end
+  if ax.crossed or ay.crossed then
+    quadX = ax.quad
+    quadY = ay.quad
+    secX = ax.pos
+    secY = ay.pos
+    tone(196, 60)
+    enterQuadrant()
+    showHelm()
+    if #qRaiders > 0 then
+      alert()
+    end
+    return false
+  end
+  local x0 = secX * STEP
+  local z0 = secY * STEP
+  secX = ax.pos
+  secY = ay.pos
+  glide(x0, z0, secX * STEP, secY * STEP)
+  return arrive()
+end
+
+function maybeDamage()
+  if math.random() < 0.05 then
+    local idx = math.random(1, 8)
+    damage[idx] = damage[idx] + math.random(1, 3)
+    tone(140, 120)
+    ui.say("Damage to " .. systems[idx] .. ".")
+  end
+end
+
+function raiderTurn()
+  if #qRaiders == 0 or docked or over then
+    return
+  end
+  hitFlash()
+  local hurt = ""
+  local kept = {}
+  local dist = 0
+  local hit = 0
+  local idx = 0
+  for r in qRaiders do
+    if r.energy > 0 then
+      dist = math.sqrt((r.x - secX) * (r.x - secX) + (r.y - secY) * (r.y - secY))
+      if dist < 1 then
+        dist = 1
+      end
+      hit = math.floor((r.energy / 2) * (math.random() * 0.4 + 0.6) / dist)
+      shields = shields - hit
+      if shields < 0 then
+        energy = energy + shields
+        shields = 0
+        if math.random() < 0.4 then
+          idx = math.random(1, 8)
+          damage[idx] = damage[idx] + 1
+          if hurt ~= "" then
+            hurt = hurt .. ", "
+          end
+          hurt = hurt .. systems[idx]
+        end
+      end
+      r.energy = r.energy - 10
+    end
+    if r.energy <= 0 then
+      if r.id ~= 0 then
+        3d.drop(r.id)
+        r.id = 0
+      end
+      explodeAt(r.x, r.y)
+    else
+      kept[#kept + 1] = r
+    end
+  end
+  qRaiders = kept
+  rememberRaiders()
+  if #qRaiders == 0 then
+    paintSky()
+  end
+  if hurt ~= "" and energy > 0 then
+    ui.say("A hit gets through. Damage to " .. hurt .. ".")
+  end
+end
+
+function afterAction()
+  if over then
+    return
+  end
+  checkEnd()
+  if over then
+    return
+  end
+  maybeDamage()
+  if over then
+    return
+  end
+  raiderTurn()
+  checkEnd()
+end
+
+function impulse()
+  if damage[1] > 0 then
+    ui.say("Warp engines are damaged.")
+    return
+  end
+  if not spend(0.125) then
+    ui.say("Not enough energy to move.")
+    return
+  end
+  whoosh()
+  stepOnce()
+  afterAction()
+end
+
+function navigate(c, w)
+  if damage[1] > 0 then
+    ui.say("Warp engines are damaged.")
+    return
+  end
+  c = math.floor(c + 0.5)
+  if c < 1 or c > 9 then
+    ui.say("Course is 1 to 9.")
+    return
+  end
+  if w < 0.1 or w > 8 then
+    ui.say("Warp is 0.1 to 8.")
+    return
+  end
+  if not spend(w) then
+    ui.say("Not enough energy for that warp.")
+    return
+  end
+  setCourse(c)
+  whoosh()
+  local hops = math.floor(w * 8 + 0.5)
+  if hops < 1 then
+    hops = 1
+  end
+  local i = 1
+  local stopped = false
+  while i <= hops and not stopped and not over do
+    stopped = stepOnce()
+    checkEnd()
+    i = i + 1
+  end
+  if not over then
+    maybeDamage()
+    raiderTurn()
+    checkEnd()
+  end
+  if not over then
+    local msg = "Quadrant " .. quadX .. "," .. quadY .. "   sector " .. secX .. "," .. secY .. "."
+    if #qRaiders > 0 then
+      msg = msg .. " Raiders are here."
+    end
+    if qOutpost ~= nil and not docked then
+      msg = msg .. " An outpost is here."
+    end
+    ui.say(msg)
+  end
+end
+
+function fireBeams(amount)
+  if damage[4] > 0 then
+    ui.say("Beam control is damaged.")
+    return
+  end
+  if #qRaiders == 0 then
+    ui.say("No raiders in this quadrant.")
+    return
+  end
+  if amount == nil or amount <= 0 or amount > energy then
+    ui.say("That is not a useful amount of energy.")
+    return
+  end
+  energy = energy - amount
+  tone(880, 80)
+  tone(1320, 50)
+  local bolts = {}
+  local dist = 0
+  local k = 0
+  local t = 0
+  local bx = 0
+  local bz = 0
+  for r in qRaiders do
+    dist = math.sqrt((r.x - secX) * (r.x - secX) + (r.y - secY) * (r.y - secY))
+    if dist < 1 then
+      dist = 1
+    end
+    r.hit = math.floor(amount * (math.random() * 0.3 + 0.7) / (dist * #qRaiders))
+    k = 1
+    while k <= 4 do
+      t = k / 4
+      bx = (secX + (r.x - secX) * t) * STEP
+      bz = (secY + (r.y - secY) * t) * STEP
+      bolts[#bolts + 1] = 3d.emoji("⚡", bx, 1.35, bz, 0.72)
+      k = k + 1
+    end
+  end
+  local w = 1
+  while w <= 6 do
+    3d.wait()
+    w = w + 1
+  end
+  for id in bolts do
+    3d.drop(id)
+  end
+  local kept = {}
+  local killed = 0
+  for r in qRaiders do
+    r.energy = r.energy - r.hit
+    if r.energy > 0 then
+      kept[#kept + 1] = r
+    else
+      killed = killed + 1
+      if r.id ~= 0 then
+        3d.drop(r.id)
+        r.id = 0
+      end
+      explodeAt(r.x, r.y)
+    end
+  end
+  qRaiders = kept
+  rememberRaiders()
+  if killed > 0 then
+    tone(520, 100)
+  end
+  if #qRaiders == 0 then
+    paintSky()
+  end
+  raiderTurn()
+  checkEnd()
+  if not over and #qRaiders == 0 then
+    ui.say("This quadrant is clear.")
+  end
+end
+
+function scrapOutpost()
+  if qOutpost == nil then
+    return
+  end
+  if qOutpost.id ~= 0 then
+    3d.drop(qOutpost.id)
+  end
+  if qOutpost.pad ~= 0 then
+    3d.drop(qOutpost.pad)
+  end
+  qOutpost = nil
+  galaxy[quadY][quadX].outpost = false
+  if totalOutposts > 0 then
+    totalOutposts = totalOutposts - 1
+  end
+  tone(90, 140)
+end
+
+function fireMissile(c)
+  if damage[5] > 0 then
+    ui.say("Missile tubes are damaged.")
+    return
+  end
+  if missiles <= 0 then
+    ui.say("No missiles left.")
+    return
+  end
+  c = math.floor(c + 0.5)
+  if c == 9 then
+    c = 1
+  end
+  if c < 1 or c > 8 then
+    ui.say("Course is 1 to 9.")
+    return
+  end
+  missiles = missiles - 1
+  local dir = dirs[c]
+  local x = secX
+  local y = secY
+  local id = 3d.emoji("💫", x * STEP, 1.25, y * STEP, 0.85)
+  tone(280, 60)
+  tone(420, 40)
+  local msg = "The missile leaves the quadrant."
+  local i = 1
+  while i <= 10 do
+    x = x + dir.dx
+    y = y + dir.dy
+    if x < 1 or x > 8 or y < 1 or y > 8 then
+      msg = "The missile leaves the quadrant."
+      break
+    end
+    3d.move(id, x * STEP, 1.25, y * STEP)
+    3d.wait()
+    if starAt(x, y) then
+      msg = "A star swallows the missile."
+      break
+    end
+    local hit = findRaider(x, y)
+    if hit ~= nil then
+      if hit.id ~= 0 then
+        3d.drop(hit.id)
+        hit.id = 0
+      end
+      local kept = {}
+      for item in qRaiders do
+        if item ~= hit then
+          kept[#kept + 1] = item
+        end
+      end
+      qRaiders = kept
+      rememberRaiders()
+      explodeAt(x, y)
+      if #qRaiders == 0 then
+        paintSky()
+      end
+      msg = "The missile hits. The raider is gone."
+      break
+    end
+    if qOutpost ~= nil and qOutpost.x == x and qOutpost.y == y then
+      scrapOutpost()
+      msg = "The missile hits the outpost."
+      break
+    end
+    i = i + 1
+  end
+  3d.drop(id)
+  raiderTurn()
+  checkEnd()
+  if not over then
+    ui.say(msg)
+  end
+end
+
+function setShields(amt)
+  if damage[7] > 0 then
+    ui.say("Shield control is damaged.")
+    return
+  end
+  if amt == nil then
+    ui.say("Shields need a number.")
+    return
+  end
+  if amt < 0 then
+    amt = 0
+  end
+  if amt > energy + shields then
+    amt = energy + shields
+  end
+  energy = energy + shields - amt
+  shields = amt
+  tone(110, 150)
+  ui.say("Shields " .. math.floor(shields) .. ". Energy " .. math.floor(energy) .. ".")
+end
+
+function askNav()
+  if damage[1] > 0 then
+    ui.say("Warp engines are damaged.")
+    return
+  end
+  ui.window("Navigate")
+  ui.note("Course 1 to 9. 1 is east, 3 is north, 5 is west, 7 is south. Warp is 0.1 to 8.")
+  ui.field("course", "Course")
+  ui.field("warp", "Warp")
+  ui.button("Engage")
+  ui.button("Cancel")
+  local answer = ui.show()
+  if answer ~= "Engage" then
+    return
+  end
+  local c = tonumber(ui.value("course"))
+  local w = tonumber(ui.value("warp"))
+  if c == nil or w == nil then
+    ui.say("Course and warp both need to be numbers.")
+    return
+  end
+  navigate(c, w)
+end
+
+function askBeams()
+  ui.window("Beams")
+  ui.label("Energy " .. math.floor(energy))
+  ui.note("The shot is shared by every raider here. Distance weakens it.")
+  ui.field("amount", "Energy to fire")
+  ui.button("Fire")
+  ui.button("Cancel")
+  local answer = ui.show()
+  if answer ~= "Fire" then
+    return
+  end
+  fireBeams(tonumber(ui.value("amount")))
+end
+
+function askMissile()
+  ui.window("Missile")
+  ui.label("Missiles " .. missiles .. "    heading " .. course)
+  ui.note("Course 1 to 9. Leave it blank to fire along the heading.")
+  ui.field("course", "Course")
+  ui.button("Launch")
+  ui.button("Cancel")
+  local answer = ui.show()
+  if answer ~= "Launch" then
+    return
+  end
+  local raw = ui.value("course")
+  local c = course
+  if raw ~= "" then
+    c = tonumber(raw)
+  end
+  fireMissile(c)
+end
+
+function askShields()
+  ui.window("Shields")
+  ui.label("Energy " .. math.floor(energy) .. "    shields " .. math.floor(shields))
+  ui.note("Energy moved into the shields comes out of the tanks.")
+  ui.field("amount", "Shield energy")
+  ui.button("Set")
+  ui.button("Cancel")
+  local answer = ui.show()
+  if answer ~= "Set" then
+    return
+  end
+  setShields(tonumber(ui.value("amount")))
+end
+
+function showStatus()
+  local bay = "no"
+  if docked then
+    bay = "yes"
+  end
+  ui.window("Status")
+  ui.label("Stardate " .. tenths(date))
+  ui.label("Time left " .. timeLeft)
+  ui.label("Energy " .. math.floor(energy))
+  ui.label("Missiles " .. missiles)
+  ui.label("Shields " .. math.floor(shields))
+  ui.label("Quadrant " .. quadX .. "," .. quadY .. "   sector " .. secX .. "," .. secY)
+  ui.label("Course " .. course .. "   raiders " .. raidersLeft())
+  ui.label("Docked " .. bay)
+  ui.button("Ok")
+  ui.show()
+end
+
+function showDamage()
+  ui.window("Damage")
+  local i = 1
+  while i <= 8 do
+    local state = "ready"
+    if damage[i] > 0 then
+      state = "damaged"
+    end
+    ui.label(systems[i] .. "  " .. state)
+    i = i + 1
+  end
+  ui.note("Dock at an outpost to repair everything.")
+  ui.button("Ok")
+  ui.show()
+end
+
+function cellCode(q)
+  if not q.scanned then
+    return "···"
+  end
+  local mark = "·"
+  if q.outpost then
+    mark = "O"
+  end
+  return q.raiders .. mark .. q.stars
+end
+
+function recordLine(y)
+  local line = y .. "  "
+  local x = 1
+  while x <= 8 do
+    line = line .. cellCode(galaxy[y][x]) .. " "
+    x = x + 1
+  end
+  return line
+end
+
+function showRecord()
+  ui.window("Galactic record")
+  ui.label("    1   2   3   4   5   6   7   8")
+  local y = 1
+  while y <= 8 do
+    ui.label(recordLine(y))
+    y = y + 1
+  end
+  ui.note("Three marks: raiders, outpost, stars. O is an outpost. ··· is unknown.")
+  ui.button("Ok")
+  ui.show()
+end
+
+function bearing(x1, y1, x2, y2)
+  local dx = x2 - x1
+  local dy = y2 - y1
+  if dx == 0 and dy == 0 then
+    return { course = 0, dist = 0 }
+  end
+  return { course = courseFrom(dx, dy), dist = math.sqrt(dx * dx + dy * dy) }
+end
+
+function shipAbs()
+  return { x = (quadX - 1) * 8 + secX, y = (quadY - 1) * 8 + secY }
+end
+
+function missileData()
+  if #qRaiders == 0 then
+    ui.say("No raiders in this quadrant.")
+    return
+  end
+  ui.window("Missile data")
+  local b = nil
+  for r in qRaiders do
+    b = bearing(secX, secY, r.x, r.y)
+    ui.label("Sector " .. r.x .. "," .. r.y .. "   course " .. b.course .. "   dist " .. tenths(b.dist))
+  end
+  ui.button("Ok")
+  ui.show()
+end
+
+function nearestBase()
+  local best = nil
+  local bestD = 0
+  local y = 1
+  while y <= 8 do
+    local x = 1
+    while x <= 8 do
+      local q = galaxy[y][x]
+      if q.outpost and q.scanned then
+        local here = shipAbs()
+        local b = bearing(here.x, here.y, (x - 1) * 8 + 4, (y - 1) * 8 + 4)
+        if best == nil or b.dist < bestD then
+          bestD = b.dist
+          best = { qx = x, qy = y, course = b.course, dist = b.dist }
+        end
+      end
+      x = x + 1
+    end
+    y = y + 1
+  end
+  return best
+end
+
+function tellBase(best)
+  if best == nil then
+    ui.say("No scanned outpost is on record. Long-range scan remembers a neighborhood.")
+    return
+  end
+  if best.dist == 0 then
+    ui.say("An outpost is in this quadrant.")
+    return
+  end
+  ui.say("Outpost at quadrant " .. best.qx .. "," .. best.qy .. ". Course " .. best.course .. ". Distance " .. tenths(best.dist) .. ".")
+end
+
+function askQuadrant()
+  ui.window("Navigation")
+  ui.note("Column and row, 1 to 8. The course aims at the middle of that quadrant.")
+  ui.field("qx", "Column")
+  ui.field("qy", "Row")
+  ui.button("Compute")
+  ui.button("Cancel")
+  local answer = ui.show()
+  if answer ~= "Compute" then
+    return
+  end
+  local qx = tonumber(ui.value("qx"))
+  local qy = tonumber(ui.value("qy"))
+  if qx == nil or qy == nil or qx < 1 or qx > 8 or qy < 1 or qy > 8 then
+    ui.say("Columns and rows run from 1 to 8.")
+    return
+  end
+  local here = shipAbs()
+  local b = bearing(here.x, here.y, (qx - 1) * 8 + 4, (qy - 1) * 8 + 4)
+  if b.dist == 0 then
+    ui.say("You are already in that quadrant.")
+    return
+  end
+  ui.say("Course " .. b.course .. ". Distance " .. tenths(b.dist) .. " sectors.")
+end
+
+function computer()
+  if damage[8] > 0 then
+    ui.say("The library computer is damaged.")
+    return
+  end
+  local choice = ui.choose("Computer", "Galactic record", "Status", "Missile data", "Navigation", "Nearest outpost", "Galaxy map")
+  if choice == nil then
+    return
+  end
+  if choice == "Galactic record" then
+    showRecord()
+  else if choice == "Status" then
+    showStatus()
+  else if choice == "Missile data" then
+    missileData()
+  else if choice == "Navigation" then
+    askQuadrant()
+  else if choice == "Nearest outpost" then
+    tellBase(nearestBase())
+  else if choice == "Galaxy map" then
+    paintGalaxy()
+    holdChart()
+  end
+end
+
+function hudLine()
+  local state = "green"
+  if docked then
+    state = "docked"
+  else if #qRaiders > 0 then
+    state = "red alert"
+  end
+  return "E " .. math.floor(energy) .. "   S " .. math.floor(shields) .. "   M " .. missiles .. "   " .. state .. "   SD " .. tenths(date)
+end
+
+function chartBox(cells)
+  local w = 2d.width
+  local h = 2d.height
+  local side = h - 140
+  if side > w - 56 then
+    side = w - 56
+  end
+  if side < 120 then
+    side = 120
+  end
+  return { cell = side / cells, x0 = (w - side) / 2, y0 = 84, side = side }
+end
+
+function plate(box, col, row, fill)
+  local px = box.x0 + (col - 1) * box.cell
+  local py = box.y0 + (row - 1) * box.cell
+  2d.rect(px + 1, py + 1, box.cell - 2, box.cell - 2, fill)
+  return { x = px, y = py }
+end
+
+function paintShort()
+  mode = "chart"
+  2d.clear("#070b16")
+  2d.text("SHORT RANGE    Q " .. quadX .. "," .. quadY, 24, 16, 28, "gold")
+  2d.text(hudLine(), 24, 50, 16, "cream")
+  local box = chartBox(8)
+  local y = 1
+  while y <= 8 do
+    2d.text(y, box.x0 - 22, box.y0 + (y - 1) * box.cell + box.cell * 0.32, 14, "ash")
+    local x = 1
+    while x <= 8 do
+      if y == 1 then
+        2d.text(x, box.x0 + (x - 1) * box.cell + box.cell * 0.38, box.y0 - 18, 14, "ash")
+      end
+      local glyph = ""
+      local fill = "#101624"
+      if starAt(x, y) then
+        glyph = "⭐"
+        fill = "#241c12"
+      end
+      if qOutpost ~= nil and qOutpost.x == x and qOutpost.y == y then
+        glyph = "🏢"
+        fill = "#142033"
+      end
+      if findRaider(x, y) ~= nil then
+        glyph = "👾"
+        fill = "#2a1218"
+      end
+      if x == secX and y == secY then
+        glyph = "🚀"
+        if docked then
+          fill = "#143028"
+        else
+          fill = "#2a2410"
+        end
+      end
+      local p = plate(box, x, y, fill)
+      if glyph ~= "" then
+        local size = box.cell * 0.66
+        if size < 14 then
+          size = 14
+        end
+        2d.emoji(glyph, p.x + box.cell / 2, p.y + box.cell / 2, size)
+      end
+      x = x + 1
+    end
+    y = y + 1
+  end
+  2d.text("you  raider  star  outpost     Enter returns", 24, box.y0 + box.side + 14, 16, "ash")
+  tone(320, 60)
+end
+
+function paintLong()
+  mode = "chart"
+  2d.clear("#070b16")
+  2d.text("LONG RANGE", 24, 16, 28, "gold")
+  2d.text(hudLine(), 24, 50, 16, "cream")
+  local box = chartBox(3)
+  local row = 1
+  local dy = -1
+  while dy <= 1 do
+    local col = 1
+    local dx = -1
+    while dx <= 1 do
+      local x = quadX + dx
+      local y = quadY + dy
+      local hot = dx == 0 and dy == 0
+      if x < 1 or y < 1 or x > 8 or y > 8 then
+        plate(box, col, row, "#070b16")
+      else
+        galaxy[y][x].scanned = true
+        if hot then
+          local p = plate(box, col, row, "gold")
+          2d.rect(p.x + 4, p.y + 4, box.cell - 8, box.cell - 8, "#141a28")
+        else
+          plate(box, col, row, "#141a28")
+        end
+        local size = math.floor(box.cell * 0.26)
+        if size < 14 then
+          size = 14
+        end
+        2d.text(cellCode(galaxy[y][x]), box.x0 + (col - 1) * box.cell + box.cell * 0.22, box.y0 + (row - 1) * box.cell + box.cell * 0.38, size, "cream")
+      end
+      col = col + 1
+      dx = dx + 1
+    end
+    row = row + 1
+    dy = dy + 1
+  end
+  2d.text("raiders, outpost, stars.  O is an outpost.  Enter returns", 24, box.y0 + box.side + 14, 16, "ash")
+  tone(300, 60)
+end
+
+function paintGalaxy()
+  mode = "chart"
+  2d.clear("#070b16")
+  2d.text("GALAXY", 24, 16, 28, "gold")
+  2d.text(hudLine(), 24, 50, 16, "cream")
+  local box = chartBox(8)
+  local y = 1
+  while y <= 8 do
+    local x = 1
+    while x <= 8 do
+      local hot = x == quadX and y == quadY
+      if hot then
+        local p = plate(box, x, y, "gold")
+        2d.rect(p.x + 3, p.y + 3, box.cell - 6, box.cell - 6, "#141a28")
+      else if galaxy[y][x].scanned then
+        plate(box, x, y, "#141a28")
+      else
+        plate(box, x, y, "#0c1018")
+      end
+      local size = math.floor(box.cell * 0.28)
+      if size < 10 then
+        size = 10
+      end
+      2d.text(cellCode(galaxy[y][x]), box.x0 + (x - 1) * box.cell + 4, box.y0 + (y - 1) * box.cell + box.cell * 0.34, size, "cream")
+      x = x + 1
+    end
+    y = y + 1
+  end
+  2d.text("Gold frame is you.  ··· is unknown.  Enter returns", 24, box.y0 + box.side + 14, 16, "ash")
+end
+
+function paintHelp()
+  mode = "chart"
+  2d.clear("#070b16")
+  local w = 2d.width
+  2d.text("GALAXY HUNT", 28, 18, 32, "gold")
+  2d.text(hudLine(), 28, 56, 16, "cream")
+  2d.text("Left Right   turn the course", 28, 100, 20, "cream")
+  2d.text("Up W         one sector forward", 28, 128, 20, "cream")
+  2d.text("V            chase view or chart view", 28, 156, 20, "cream")
+  2d.text("Space        beams      M missile", 28, 184, 20, "cream")
+  2d.text("S            shields    Enter bridge", 28, 212, 20, "cream")
+  2d.text("1 short scan   2 long scan   H help", 28, 240, 20, "cream")
+  local cx = w * 0.72
+  local cy = 210
+  2d.text("3", cx, cy - 78, 26, "gold")
+  2d.text("4", cx - 52, cy - 40, 26, "gold")
+  2d.text("2", cx + 44, cy - 40, 26, "gold")
+  2d.text("5", cx - 86, cy, 26, "gold")
+  2d.emoji("🚀", cx + 8, cy + 16, 32)
+  2d.text("1", cx + 78, cy, 26, "gold")
+  2d.text("6", cx - 52, cy + 48, 26, "gold")
+  2d.text("8", cx + 44, cy + 48, 26, "gold")
+  2d.text("7", cx, cy + 86, 26, "gold")
+  2d.text("1 east   3 north   5 west   7 south", 28, 300, 18, "ash")
+  2d.text("Dock by flying onto the outpost. Enter returns.", 28, 328, 18, "ash")
+  tone(440, 50)
+end
+
+function holdChart()
+  swallow("2d")
+  while true do
+    2d.wait()
+    if edge("2d", "enter") or edge("2d", "space") then
+      break
+    end
+  end
+  backToHelm()
+end
+
+function backToHelm()
+  if over then
+    return
+  end
+  mode = "helm"
+  aimCamera()
+  3d.wait()
+  swallow("3d")
+end
+
+function shortScan()
+  if damage[2] > 0 then
+    ui.say("Short-range sensors are damaged.")
+    return
+  end
+  paintShort()
+  holdChart()
+end
+
+function longScan()
+  if damage[3] > 0 then
+    ui.say("Long-range sensors are damaged.")
+    return
+  end
+  paintLong()
+  holdChart()
+end
+
+function helpCard()
+  paintHelp()
+  holdChart()
+end
+
+function abandon()
+  if ui.confirm("Abandon the mission?") then
+    reason = "quit"
+    over = true
+  end
+end
+
+function bridge()
+  local choice = ui.choose(
+    "Bridge",
+    "Helm",
+    "Navigate",
+    "Short-range scan",
+    "Long-range scan",
+    "Beams",
+    "Missile",
+    "Shields",
+    "Damage",
+    "Computer",
+    "Status",
+    "Help",
+    "Abandon mission"
+  )
+  if choice == nil or choice == "Helm" then
+    backToHelm()
+    return
+  end
+  if choice == "Navigate" then
+    askNav()
+  else if choice == "Short-range scan" then
+    shortScan()
+  else if choice == "Long-range scan" then
+    longScan()
+  else if choice == "Beams" then
+    askBeams()
+  else if choice == "Missile" then
+    askMissile()
+  else if choice == "Shields" then
+    askShields()
+  else if choice == "Damage" then
+    showDamage()
+  else if choice == "Computer" then
+    computer()
+  else if choice == "Status" then
+    showStatus()
+  else if choice == "Help" then
+    helpCard()
+  else if choice == "Abandon mission" then
+    abandon()
+  end
+  if not over then
+    backToHelm()
+  end
+end
+
+function paintTitle()
+  2d.clear("#070b16")
+  titleStars = {}
+  local w = 2d.width
+  local h = 2d.height
+  local i = 1
+  while i <= 26 do
+    local x = math.random(10, math.floor(w) - 10)
+    local y = math.random(10, math.floor(h) - 10)
+    titleStars[i] = { id = 2d.emoji("✨", x, y, 14 + math.random(0, 12)), x = x, y = y, s = 0.4 + math.random() }
+    i = i + 1
+  end
+  local size = math.floor(w / 14)
+  if size < 30 then
+    size = 30
+  end
+  if size > 76 then
+    size = 76
+  end
+  local wide = size * 0.64 * 11
+  local x = (w - wide) / 2
+  if x < 12 then
+    x = 12
+  end
+  local y = h * 0.26
+  2d.rect(x - 22, y - 14, wide + 44, size + 78, "#12182c")
+  2d.text("GALAXY HUNT", x, y, size, "gold")
+  2d.text("3D", x, y + size + 6, math.floor(size * 0.42), "cream")
+  2d.circle(w * 0.5, h * 0.64, math.min(w, h) * 0.075, "#1a2744")
+  2d.emoji("🚀", w * 0.5, h * 0.64, math.min(w, h) * 0.11)
+  2d.line(w * 0.3, h * 0.8, w * 0.7, h * 0.8, "#3a4a68")
+  2d.text("Press Return", w * 0.5 - 84, h * 0.83, 26, "gold")
+end
+
+function driftTitle()
+  local h = 2d.height
+  for star in titleStars do
+    star.y = star.y + star.s
+    if star.y > h + 12 then
+      star.y = -12
+    end
+    2d.move(star.id, star.x, star.y)
+  end
+end
+
+function title()
+  mode = "title"
+  sang = false
+  local seen = -1
+  swallow("2d")
+  while true do
+    local w = 2d.width
+    if w >= 20 then
+      if w ~= seen then
+        seen = w
+        paintTitle()
+        if not sang then
+          sang = true
+          tune({ { f = 392, ms = 90 }, { f = 523, ms = 110 }, { f = 659, ms = 150 } })
+        end
+      end
+      driftTitle()
+      2d.wait()
+      if edge("2d", "enter") or edge("2d", "space") then
+        return
+      end
+    else
+      2d.wait()
+    end
+  end
+end
+
+function briefing()
+  ui.theme("borland")
+  ui.window("Mission")
+  ui.label("Destroy " .. totalRaiders .. " raiders")
+  ui.label("Before stardate " .. tenths(date + timeLeft))
+  ui.label("Outposts " .. totalOutposts)
+  ui.note("Arrows turn and thrust. V changes the view. Enter opens the bridge. H lists the keys.")
+  ui.button("Take the helm")
+  ui.show()
+end
+
+function endCopy()
+  if reason == "won" then
+    return { title = "THE GALAXY IS CLEAR", line = "Every raider is scrap.", ink = "green" }
+  end
+  if reason == "destroyed" then
+    return { title = "HUNTER DESTROYED", line = "The hull gives out. The fleet is still out there.", ink = "red" }
+  end
+  if reason == "time" then
+    return { title = "STARDATE EXPIRED", line = "The stardate runs out with raiders on the map.", ink = "red" }
+  end
+  return { title = "MISSION ABANDONED", line = "You turn the hunter for home.", ink = "gold" }
+end
+
+function paintEnd()
+  2d.clear("#070b16")
+  local w = 2d.width
+  local h = 2d.height
+  local card = endCopy()
+  2d.rect(w * 0.12, h * 0.22, w * 0.76, h * 0.5, "#12182c")
+  2d.text(card.title, w * 0.18, h * 0.3, 32, card.ink)
+  2d.text(card.line, w * 0.18, h * 0.42, 20, "cream")
+  2d.text("Raiders " .. raidersLeft() .. "    energy " .. math.floor(energy) .. "    stardate " .. tenths(date), w * 0.18, h * 0.52, 18, "ash")
+  2d.text("R flies again. Return shows the title.", w * 0.18, h * 0.62, 20, "gold")
+  if reason == "won" then
+    2d.emoji("🌟", w * 0.5, h * 0.78, 48)
+  else
+    2d.emoji("💥", w * 0.5, h * 0.78, 48)
+  end
+end
+
+function ending()
+  mode = "end"
+  paintEnd()
+  if reason == "won" then
+    tune({ { f = 523, ms = 100 }, { f = 659, ms = 110 }, { f = 784, ms = 120 }, { f = 1046, ms = 180 } })
+  else
+    tune({ { f = 196, ms = 160 }, { f = 130, ms = 180 }, { f = 82, ms = 240 } })
+  end
+  swallow("2d")
+  while true do
+    2d.wait()
+    if edge("2d", "r") then
+      return "skip"
+    end
+    if edge("2d", "enter") or edge("2d", "space") then
+      return "title"
+    end
+  end
+end
+
+function helm()
+  mode = "helm"
+  swallow("3d")
+  while not over do
+    bob()
+    aimCamera()
+    if edge("3d", "left") or edge("3d", "a") then
+      setCourse(course - 1)
+      tone(660, 30)
+    end
+    if edge("3d", "right") or edge("3d", "d") then
+      setCourse(course + 1)
+      tone(660, 30)
+    end
+    if edge("3d", "up") or edge("3d", "w") then
+      impulse()
+    end
+    if not over and edge("3d", "space") then
+      askBeams()
+    end
+    if not over and edge("3d", "m") then
+      askMissile()
+    end
+    if not over and edge("3d", "s") then
+      askShields()
+    end
+    if not over and (edge("3d", "enter") or edge("3d", "c")) then
+      bridge()
+    end
+    if not over and edge("3d", "1") then
+      shortScan()
+    end
+    if not over and edge("3d", "2") then
+      longScan()
+    end
+    if not over and edge("3d", "v") then
+      chase = not chase
+      tone(520, 30)
+    end
+    if not over and edge("3d", "h") then
+      helpCard()
+    end
+    if not over then
+      3d.wait()
+    end
+  end
+end
+
+function main()
+  proveHeading()
+  if headingBug > 0 then
+    ui.say("The compass does not agree with the helm.")
+  end
+  local skip = false
+  while true do
+    if not skip then
+      title()
+    end
+    skip = false
+    setup()
+    briefing()
+    showHelm()
+    if #qRaiders > 0 then
+      alert()
+    end
+    helm()
+    if ending() == "skip" then
+      skip = true
+    end
+  end
+end
+
+main()

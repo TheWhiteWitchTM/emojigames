@@ -62,6 +62,8 @@ The same day, the other games moved onto the emoji engine. A title waits for Ret
 
 [Magic]({{ '/games/magic/' | relative_url }}) is a small language. Lua, with the sharp corners filed off. [Basic Learn]({{ '/games/basic-learn/' | relative_url }}) is BASIC with the picture, colored words, and plain errors. Basic I stays the 40-column machine. [Notes]({{ '/releases/2026-10-18-magic-and-basic-learn/' | relative_url }}).
 
+[Galaxy Hunt 3D]({{ '/games/galaxy-hunt-3d/' | relative_url }}). The same eight-by-eight hunt, written in Magic. Charts on the flat engine, the quadrant on the solid one, orders on the bridge. [Notes]({{ '/releases/2026-10-18-galaxy-hunt-3d/' | relative_url }}).
+
 The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release notes]({{ '/releases/' | relative_url }}) are the log.
 
 ## Elsewhere
