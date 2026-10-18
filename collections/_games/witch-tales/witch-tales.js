@@ -1,27 +1,30 @@
 // A Witch's Tale — chaptered tile RPG on the site terminal.
-const COLS = 80;
-const ROWS = 24;
-const MAP_W = 54;
-const MAP_H = 17;
-const STAT_X = 54;
-const STAT_W = 26;
-const MSG_Y = 17;
-const MSG_H = 7;
+const COLS = 52;
+const ROWS = 22;
+const MAP_W = 34;
+const MAP_H = 14;
+const STAT_X = 34;
+const STAT_W = 18;
+const MSG_Y = 14;
+const MSG_H = 8;
 const SAVE_KEY = 'emojigames-witch-tales';
 
 const gameEl = document.getElementById('game');
 const BASE = (gameEl && gameEl.getAttribute('data-base')) || '/games/witch-tales/';
 
-const term = new Terminal({
+const term = new Glass({
   cols: COLS,
   rows: ROWS,
+  cellWidth: 18,
+  cellHeight: 22,
+  title: "🧙 A Witch's Tale",
+  border: "#c9a227",
   showCursor: false,
-  hideMouse: true,
-  fitWidth: true
+  bg: "#0c0612",
+  footer: "Arrows or WASD. T talk. L look. I items. F5 save."
 });
 gameEl.appendChild(term.wrap);
 term.focus();
-term.titleText.textContent = "🧙 A Witch's Tale";
 
 const PAL = {
   ink: { r: 12, g: 6, b: 18 },
@@ -44,18 +47,18 @@ const PAL = {
 };
 
 const TILES = {
-  '#': { walk: false, ch: '#', name: 'a wall', fg: PAL.wall, bg: PAL.ink },
-  '.': { walk: true, ch: '.', name: 'the floor', fg: PAL.dim, bg: PAL.floor },
-  ',': { walk: true, ch: ',', name: 'grass', fg: PAL.gold, bg: PAL.grass },
-  '=': { walk: true, ch: '=', name: 'the path', fg: PAL.gold, bg: PAL.path },
-  '+': { walk: true, ch: '+', name: 'a door', fg: PAL.gold, bg: PAL.wood },
-  '*': { walk: true, ch: '*', name: 'your bed', fg: PAL.cream, bg: PAL.floor },
-  t: { walk: false, ch: 'n', name: 'the table', fg: PAL.gold, bg: PAL.floor },
-  T: { walk: false, ch: 'T', name: 'a tree', fg: PAL.grass, bg: PAL.tree },
-  W: { walk: false, ch: 'O', name: 'the well', fg: PAL.cream, bg: PAL.water },
-  H: { walk: false, ch: 'H', name: 'the shed', fg: PAL.gold, bg: PAL.wood },
-  G: { walk: 'key', ch: 'H', name: 'the iron gate', fg: PAL.gold, bg: PAL.wood },
-  X: { walk: true, ch: '=', name: 'the lane', fg: PAL.gold, bg: PAL.path, exit: true }
+  '#': { walk: false, ch: '🧱', name: 'a wall', fg: PAL.wall, bg: PAL.ink },
+  '.': { walk: true, ch: '·', name: 'the floor', fg: PAL.dim, bg: PAL.floor },
+  ',': { walk: true, ch: '🌿', name: 'grass', fg: PAL.gold, bg: PAL.grass },
+  '=': { walk: true, ch: '🟫', name: 'the path', fg: PAL.gold, bg: PAL.path },
+  '+': { walk: true, ch: '🚪', name: 'a door', fg: PAL.gold, bg: PAL.wood },
+  '*': { walk: true, ch: '🛌', name: 'your bed', fg: PAL.cream, bg: PAL.floor },
+  t: { walk: false, ch: '🍵', name: 'the table', fg: PAL.gold, bg: PAL.floor },
+  T: { walk: false, ch: '🌲', name: 'a tree', fg: PAL.grass, bg: PAL.tree },
+  W: { walk: false, ch: '🪣', name: 'the well', fg: PAL.cream, bg: PAL.water },
+  H: { walk: false, ch: '🛖', name: 'the shed', fg: PAL.gold, bg: PAL.wood },
+  G: { walk: 'key', ch: '🔒', name: 'the iron gate', fg: PAL.gold, bg: PAL.wood },
+  X: { walk: true, ch: '🌙', name: 'the lane', fg: PAL.gold, bg: PAL.path, exit: true }
 };
 
 const DIRS = {
@@ -100,7 +103,7 @@ function rnd(a, b) {
 
 function paint(x, y, ch, fg, bg) {
   if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return;
-  term.set(x, y, {
+  term.core.set(x, y, {
     ch: ch == null ? ' ' : ch,
     fg: 7,
     bg: 0,
@@ -108,6 +111,10 @@ function paint(x, y, ch, fg, bg) {
     bgRgb: bg || PAL.ink,
     bright: false
   });
+}
+
+function glen(text) {
+  return Array.from(String(text)).length;
 }
 
 function textAt(x, y, str, fg, bg) {
@@ -184,7 +191,7 @@ function log(text) {
   let line = '';
   for (const word of words) {
     const next = line ? line + ' ' + word : word;
-    if (next.length > width) {
+    if (glen(next) > width) {
       if (line) messages.push(line);
       line = word;
     } else {
@@ -569,7 +576,7 @@ function drawMap() {
       }
       const info = tileInfo(ch);
       let glyph = info.ch;
-      if (ch === 'G' && (hasFlag('has_the_key') || hasItem('iron-key'))) glyph = '=';
+      if (ch === 'G' && (hasFlag('has_the_key') || hasItem('iron-key'))) glyph = '🔓';
       paint(x, y, glyph, info.fg, info.bg);
     }
   }
@@ -586,37 +593,35 @@ function drawMap() {
   }
   const p = screenPos(player.x, player.y, cam);
   if (p.x >= 0 && p.y >= 0 && p.x < MAP_W && p.y < MAP_H) {
-    paint(p.x, p.y, '@', PAL.witch, tileInfo(tileChar(player.map, player.x, player.y)).bg);
+    paint(p.x, p.y, '🧙', PAL.witch, tileInfo(tileChar(player.map, player.x, player.y)).bg);
   }
 }
 
 function bar(cur, max, width) {
   const n = Math.round((Math.max(0, cur) / max) * width);
   let s = '';
-  for (let i = 0; i < width; i++) s += i < n ? '#' : '-';
+  for (let i = 0; i < width; i++) s += i < n ? '●' : '·';
   return s;
+}
+
+function clipGlyphs(text, n) {
+  return Array.from(String(text)).slice(0, n).join('');
 }
 
 function drawStatus() {
   fillRect(STAT_X, 0, STAT_W, MAP_H, ' ', PAL.cream, PAL.panel);
   box(STAT_X, 0, STAT_W, MAP_H, PAL.gold, PAL.panel);
   const x = STAT_X + 2;
-  textAt(x, 1, "A WITCH'S TALE", PAL.gold, PAL.panel);
-  textAt(x, 2, 'Ch.' + String(chapter.number).padStart(2, '0') + ' ' + chapter.title, PAL.cream, PAL.panel);
-  textAt(x, 4, 'HP   ' + bar(player.hp, player.maxHp, 10), PAL.blood, PAL.panel);
-  textAt(x, 5, String(player.hp).padStart(2, ' ') + '/' + player.maxHp, PAL.cream, PAL.panel);
-  textAt(x, 7, 'Spark ' + bar(player.spark, player.maxSpark, 10), PAL.witch, PAL.panel);
-  textAt(x, 8, String(player.spark) + '/' + player.maxSpark, PAL.cream, PAL.panel);
-  textAt(x, 10, 'Carry', PAL.gold, PAL.panel);
-  if (!player.items.length) textAt(x, 11, '(empty)', PAL.dim, PAL.panel);
-  else {
-    player.items.slice(0, 3).forEach((it, i) => {
-      textAt(x, 11 + i, it.name, PAL.cream, PAL.panel);
-    });
-  }
-  textAt(x, 13, 'Arrows/WASD', PAL.dim, PAL.panel);
-  textAt(x, 14, 'T talk  L look', PAL.dim, PAL.panel);
-  textAt(x, 15, 'I items  F5 save', PAL.dim, PAL.panel);
+  textAt(x, 1, '🧙 Tale', PAL.gold, PAL.panel);
+  textAt(x, 2, 'Ch.' + String(chapter.number).padStart(2, '0'), PAL.cream, PAL.panel);
+  textAt(x, 3, clipGlyphs(chapter.title, 14), PAL.cream, PAL.panel);
+  textAt(x, 5, '💖 ' + bar(player.hp, player.maxHp, 8), PAL.blood, PAL.panel);
+  textAt(x, 6, player.hp + '/' + player.maxHp, PAL.cream, PAL.panel);
+  textAt(x, 8, '✨ ' + bar(player.spark, player.maxSpark, 8), PAL.witch, PAL.panel);
+  textAt(x, 9, player.spark + '/' + player.maxSpark, PAL.cream, PAL.panel);
+  textAt(x, 11, '🎒', PAL.gold, PAL.panel);
+  if (!player.items.length) textAt(x, 12, '(empty)', PAL.dim, PAL.panel);
+  else textAt(x, 12, clipGlyphs(player.items[0].name, 14), PAL.cream, PAL.panel);
 }
 
 function drawMessages() {
@@ -629,18 +634,18 @@ function drawMessages() {
 }
 
 function drawCombat() {
-  const w = 44;
+  const w = COLS - 4;
   const h = 11;
-  const x = 5;
-  const y = 3;
+  const x = 2;
+  const y = 1;
   fillRect(x, y, w, h, ' ', PAL.cream, PAL.ink);
   box(x, y, w, h, PAL.blood, PAL.ink);
-  textAt(x + 2, y + 1, combat.enemy.name, PAL.gold, PAL.ink);
-  textAt(x + 2, y + 2, 'HP ' + bar(combat.hp, combat.maxHp, 14) + ' ' + Math.max(0, combat.hp) + '/' + combat.maxHp, PAL.blood, PAL.ink);
-  textAt(x + 2, y + 4, '1  Strike', PAL.cream, PAL.ink);
-  const sparkLine = player.spark > 0 ? '2  Spark' : '2  Spark  (spent)';
+  textAt(x + 2, y + 1, combat.enemy.ch + ' ' + combat.enemy.name, PAL.gold, PAL.ink);
+  textAt(x + 2, y + 2, '💖 ' + bar(combat.hp, combat.maxHp, 14) + ' ' + Math.max(0, combat.hp) + '/' + combat.maxHp, PAL.blood, PAL.ink);
+  textAt(x + 2, y + 4, '1  ⚔ Strike', PAL.cream, PAL.ink);
+  const sparkLine = player.spark > 0 ? '2  ✨ Spark' : '2  ✨ Spark  (spent)';
   textAt(x + 2, y + 5, sparkLine, player.spark > 0 ? PAL.witch : PAL.dim, PAL.ink);
-  textAt(x + 2, y + 6, '3  Run', PAL.cream, PAL.ink);
+  textAt(x + 2, y + 6, '3  🏃 Run', PAL.cream, PAL.ink);
   textAt(x + 2, y + 8, 'It has no breath.', PAL.dim, PAL.ink);
 }
 
@@ -659,7 +664,7 @@ function drawTitle() {
   fillRect(0, 0, COLS, ROWS, ' ', PAL.cream, PAL.ink);
   const saved = hasSave();
   const lines = [
-    "A WITCH'S TALE",
+    "🧙 A WITCH'S TALE",
     '',
     'Chapter 01  The Beginning',
     '',
@@ -676,7 +681,7 @@ function drawTitle() {
   const top = 5;
   lines.forEach((line, i) => {
     const fg = i === 0 ? PAL.gold : (line.indexOf('[') === 0 ? PAL.witch : PAL.cream);
-    const x = Math.max(0, Math.floor((COLS - line.length) / 2));
+    const x = Math.max(0, Math.floor((COLS - glen(line)) / 2));
     textAt(x, top + i, line, fg, PAL.ink);
   });
   term.endFrame();

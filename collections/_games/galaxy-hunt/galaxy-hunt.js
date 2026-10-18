@@ -261,10 +261,28 @@ useEffect(() => {
       secX += dir.dx;
       secY += dir.dy;
       let crossed = false;
-      if (secX < 1) { secX += 8; quadX = Math.max(1, quadX - 1); crossed = true; }
-      if (secX > 8) { secX -= 8; quadX = Math.min(8, quadX + 1); crossed = true; }
-      if (secY < 1) { secY += 8; quadY = Math.max(1, quadY - 1); crossed = true; }
-      if (secY > 8) { secY -= 8; quadY = Math.min(8, quadY + 1); crossed = true; }
+      let rim = false;
+      if (secX < 1) {
+        if (quadX <= 1) { secX = 1; rim = true; }
+        else { secX += 8; quadX -= 1; crossed = true; }
+      }
+      if (secX > 8) {
+        if (quadX >= 8) { secX = 8; rim = true; }
+        else { secX -= 8; quadX += 1; crossed = true; }
+      }
+      if (secY < 1) {
+        if (quadY <= 1) { secY = 1; rim = true; }
+        else { secY += 8; quadY -= 1; crossed = true; }
+      }
+      if (secY > 8) {
+        if (quadY >= 8) { secY = 8; rim = true; }
+        else { secY -= 8; quadY += 1; crossed = true; }
+      }
+      if (rim) {
+        print('You reach the rim of the galaxy and stop.');
+        hitSomething = true;
+        beep(90, 0.08);
+      }
       if (crossed) enterQuadrant();
 
       if (current.stars.some(st => st.x === secX && st.y === secY)) {

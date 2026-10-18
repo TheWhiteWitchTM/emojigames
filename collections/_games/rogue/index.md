@@ -9,7 +9,7 @@ tags: [terminal, roguelike]
 
 <div id="game"></div>
 
-Rooms, corridors, and something on the stairs. The amulet is on the sixth floor. Q drinks a potion.
+Rooms, corridors, and something on the stairs. The amulet is on the sixth floor. Carry it back up. Q drinks a potion.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>

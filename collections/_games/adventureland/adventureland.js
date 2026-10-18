@@ -16,84 +16,84 @@ useEffect(() => {
     forest: {
       name: "Forest",
       desc: "You are in a dark forest. Paths lead in several directions. Tall trees surround you.",
-      art: ["   /\\   /\\   ", "  /  \\ /  \\  ", " /    Y    \\ ", "    forest     "],
+      art: ["🌲 🌲 🌲 🌲", "A dark wood."],
       exits: { e: "meadow", n: "forest", s: "forest", w: "forest" },
       objects: []
     },
     meadow: {
       name: "Sunny Meadow",
       desc: "You are in a sunny meadow. A large sleeping dragon lies here. It does not like the smell of mud.",
-      art: ["    ~~ dragon ~~  ", "   ( sleeping )   ", "      meadow      "],
+      art: ["🌼 🐉 🌼", "The dragon is asleep."],
       exits: { e: "shore", w: "forest" },
       objects: ["dragon"]
     },
     shore: {
       name: "Lake Shore",
       desc: "You are on the shore of a large lake. The water looks deep.",
-      art: ["  ~~~~~~~ lake ~~~~~~~ ", "     shore             ", "   [axe]               "],
+      art: ["🌊 🌊 🌊", "🪓 An axe lies on the shore."],
       exits: { w: "meadow", n: "bog", s: "swamp" },
       objects: ["axe"]
     },
     bog: {
       name: "Quicksand Bog",
       desc: "You are in a quicksand bog. It is dangerous here. Something large is half-submerged.",
-      art: ["   mmm quicksand mmm   ", "      [ox]             ", "   sinking...          "],
+      art: ["💨 🐂 💨", "Something large is sinking."],
       exits: { s: "shore" },
       objects: ["ox"]
     },
     swamp: {
       name: "Dismal Swamp",
       desc: "You are in a dismal swamp. Murky water and twisted trees.",
-      art: ["  ~~~ swamp ~~~  ", "   murky water   ", "                 "],
+      art: ["🐸 🌿", "Murky water."],
       exits: { n: "shore", w: "grove", e: "trees" },
       objects: []
     },
     grove: {
       name: "Hidden Grove",
       desc: "You are in a hidden grove. A good place for things to appear.",
-      art: ["   hidden grove   ", "                  ", "                  "],
+      art: ["🌳 ✨ 🌳", "A hidden grove."],
       exits: { e: "swamp" },
       objects: []
     },
     trees: {
       name: "Tall Trees",
       desc: "You are among tall trees. One large cypress looks climbable. There is a sign and some mud.",
-      art: ["    ||| trees |||  ", "   climbable tree  ", "     [mud]         "],
+      art: ["🌲 🌲 🌲", "One cypress looks climbable. Mud. 🍎 Fruit."],
       exits: { w: "swamp", u: "tree" },
       objects: ["mud", "fruit"]
     },
     tree: {
       name: "Top of Tree",
       desc: "You are at the top of a large cypress tree. There is a spider web with something shiny in it.",
-      art: ["     spider web     ", "       [keys]       ", "    high up         "],
+      art: ["🕸 🔑", "High in the branches."],
       exits: { d: "trees" },
       objects: ["keys"]
     },
     stump: {
       name: "Hollow Stump",
       desc: "You are inside a hollow stump. This is the traditional place to store treasures.",
-      art: ["   ( hollow stump )  ", "    treasure spot    ", "   [lamp] [bottle]   "],
+      art: ["🪵", "🪔 A lamp. 🍾 A bottle."],
       exits: { u: "trees", d: "root" },
       objects: ["lamp", "bottle"]
     },
     root: {
       name: "Root Chamber",
       desc: "You are in a root chamber under the stump. Roots twist around a pot.",
-      art: ["   root chamber   ", "     [rubies]     ", "                  "],
+      art: ["💎 Rubies in the roots."],
       exits: { u: "stump", d: "hole" },
       objects: ["rubies"]
     },
     hole: {
       name: "Bottomless Hole",
       desc: "You are at the edge of a bottomless hole. Flint and steel lie nearby.",
-      art: ["     O hole O     ", "    bottomless    ", "     [flint]      "],
+      art: ["🕳 A bottomless hole.", "🪨 Flint."],
       exits: { u: "root", d: "hallway" },
       objects: ["flint"]
     },
     hallway: {
       name: "Hallway",
       desc: "You are in a hallway. A locked door blocks the way down.",
-      art: ["   ==== door ====  ", "     hallway       ", "                   "],
+      art: ["🚪 A heavy door.", "The hall runs on."],
       exits: { u: "hole", d: "cavern" },
       objects: [],
       locked: true
@@ -101,63 +101,63 @@ useEffect(() => {
     cavern: {
       name: "Large Cavern",
       desc: "You are in a large cavern. Passages lead in several directions.",
-      art: ["   large cavern   ", "                  ", "                  "],
+      art: ["🪨 A large cavern."],
       exits: { u: "hallway", n: "bees", s: "anteroom", w: "maze" },
       objects: []
     },
     maze: {
       name: "Twisty Maze",
       desc: "You are in a twisty maze of passages. All alike.",
-      art: ["    maze walls    ", "   twisty paths   ", "   [rug] [net]    "],
+      art: ["🌀 Twisty paths.", "🧶 A rug. 🕸 A net."],
       exits: { n: "maze", s: "maze", e: "maze", w: "cavern" },
       objects: ["rug", "net"]
     },
     bees: {
       name: "Beehive",
       desc: "You are in a beehive. Bees buzz angrily. There is honey.",
-      art: ["   BZZ bees BZZ   ", "    [honey]       ", "                  "],
+      art: ["🐝 🐝 🐝", "🍯 Honey."],
       exits: { s: "cavern" },
       objects: ["honey", "bees"]
     },
     anteroom: {
       name: "Royal Anteroom",
       desc: "You are in a royal anteroom. An empty wine bladder lies here.",
-      art: ["  royal anteroom  ", "   [bladder]      ", "                  "],
+      art: ["👑 The anteroom.", "🎈 A bladder."],
       exits: { n: "cavern", u: "chamber" },
       objects: ["bladder"]
     },
     chamber: {
       name: "Royal Chamber",
       desc: "You are in the royal chamber. A bricked-up window is set in the wall.",
-      art: ["  royal chamber   ", "  [bricked window]", "                  "],
+      art: ["👑 The royal chamber.", "🧱 A bricked window."],
       exits: { d: "anteroom" },
       objects: []
     },
     ledge1: {
       name: "Narrow Ledge",
       desc: "You are on a narrow ledge above a deep chasm. The opposite ledge is visible.",
-      art: ["   narrow ledge   ", "     chasm below  ", "                  "],
+      art: ["🪨 A narrow ledge.", "The chasm is below."],
       exits: { w: "chamber", e: "ledge2" },
       objects: []
     },
     ledge2: {
       name: "Opposite Ledge",
       desc: "You are on the opposite ledge. A black bear blocks the way. A mirror glints.",
-      art: ["  opposite ledge  ", "    [bear]        ", "   [mirror]       "],
+      art: ["🐻 A bear.", "🪞 A mirror."],
       exits: { w: "ledge1", e: "throne" },
       objects: ["mirror", "bear"]
     },
     throne: {
       name: "Throne Room",
       desc: "You are in the throne room. A golden crown sits on the throne.",
-      art: ["   throne room    ", "    [crown]       ", "                  "],
+      art: ["👑 The throne.", "A crown."],
       exits: { w: "ledge2" },
       objects: ["crown"]
     },
     lava: {
       name: "Lava Stream",
       desc: "A stream of lava blocks the way. Firebricks lie nearby.",
-      art: ["  ~~~ lava ~~~   ", "   [bricks]       ", "                  "],
+      art: ["🌋 Lava.", "🧱 Bricks."],
       exits: { n: "cavern" },
       objects: ["bricks"]
     }

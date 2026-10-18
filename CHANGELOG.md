@@ -4,6 +4,16 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-17
 
+### Playable speeds, and emoji where the games speak
+
+Pong keeps its score on the table, 🙂 and 🤖, and the ball crosses in a few seconds instead of flashing past. Snake, Witch Hunt, the Oregon hunt, and the Columbia raft all wait a little longer between steps. Galaxy Hunt stops at the rim of the map.
+
+Hack is rock, stairs, and creatures, and the floors stay where you left them. Scrolls blink. Potions are a turn. The amulet is still on the sixth floor.
+
+Rogue remembers the dungeon. The walls stay dark, so the rooms read. The amulet has to come back up to the road home.
+
+A Witch's Tale is drawn in emoji: the cottage, the yard, the crow, the shade. The board fits the page, so those glyphs stay large enough to read. Adventureland and Pirate Adventure label their rooms the same way.
+
 ### Basic I
 
 A 40-column computer for learning BASIC. The prompt is READY. A program holds 512 lines. MODULES opens the built-in lessons. Getting Started and a tutorial sit on the page.

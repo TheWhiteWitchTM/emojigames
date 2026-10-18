@@ -11,6 +11,7 @@ tags: [terminal, rpg, adventure]
 
 You are a witch. The land has problems. Chapters arrive one at a time. Your save stays in this browser.
 
-<script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/glass.js' | relative_url }}"></script>
 <script src="{{ '/games/witch-tales/witch-tales.js' | relative_url }}"></script>
 <script src="{{ '/games/witch-tales/chapter-01.js' | relative_url }}"></script>
