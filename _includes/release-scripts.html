@@ -9,9 +9,12 @@ document.querySelectorAll('.release-item').forEach(item => {
 
   if (!title || !expandBtn) return;
 
+  const banners = item.querySelector('.release-card-banners');
+
   const collapse = () => {
     full.setAttribute('hidden', '');
     if (excerpt) excerpt.classList.remove('hidden');
+    if (banners) banners.hidden = false;
     expandBtn.textContent = '▼ Show more';
     if (emoji) emoji.textContent = '▼';
   };
@@ -33,6 +36,7 @@ document.querySelectorAll('.release-item').forEach(item => {
     }
     full.removeAttribute('hidden');
     if (excerpt) excerpt.classList.add('hidden');
+    if (banners) banners.hidden = true;
     expandBtn.textContent = '▲ Show less';
     if (emoji) emoji.textContent = '▲';
   };

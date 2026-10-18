@@ -1,5 +1,5 @@
 html, body {
-  height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
 }
 
@@ -13,19 +13,40 @@ body {
   line-height: 1.6;
   margin: 0;
   padding-top: 4.5rem;
-  padding-bottom: 5.5rem;
+}
+
+.site-banner-wrap {
+  position: relative;
+  background: #000;
+  border-bottom: 1px solid #1a1a1a;
 }
 
 .site-banner {
   width: 100%;
   max-width: 100%;
-  height: 90px;
+  height: 168px;
   object-fit: cover;
-  object-position: center;
+  object-position: center 46%;
   display: block;
   margin: 0;
   padding: 0;
   border: none;
+}
+
+.site-banner-wrap.is-hero .site-banner {
+  height: min(46vw, 340px);
+  object-position: center 48%;
+}
+
+.site-banner-wrap.is-hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 84px;
+  background: linear-gradient(to bottom, transparent, #0a0a0a);
+  pointer-events: none;
 }
 
 /* Game area — no height lock, no overflow clip */
@@ -174,7 +195,7 @@ body {
 }
 
 .game-front {
-  width: min(72ch, 100%);
+  width: min(760px, 100%);
   color: #e8e8e8;
 }
 
@@ -206,7 +227,8 @@ body {
 }
 
 .game-actions button:hover,
-.game-actions button:focus-visible {
+.game-actions button:focus-visible,
+.game-actions button[aria-expanded="true"] {
   border-color: #c9a6ff;
   color: #e8d5ff;
   outline: none;
@@ -214,7 +236,35 @@ body {
 
 .game-actions button.play {
   border-color: #c9a6ff;
-  color: #e8d5ff;
+  color: #f3e9ff;
+  background: linear-gradient(180deg, rgba(201, 166, 255, 0.18), rgba(201, 166, 255, 0.05));
+  box-shadow: 0 0 0 1px rgba(201, 166, 255, 0.18);
+}
+
+.game-banner {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0.35rem 0 1.15rem;
+  border-radius: 12px;
+  border: 1px solid #2a2433;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+  background: #000;
+}
+
+.doc-panel {
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  background: #111;
+  padding: 0.2rem 1rem 0.85rem;
+  margin: 0 0 1.15rem;
+  max-height: min(70vh, 680px);
+  overflow: auto;
+  scroll-margin-top: 5.5rem;
+}
+
+.doc-panel[hidden] {
+  display: none !important;
 }
 
 .game-hint {

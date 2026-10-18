@@ -6,9 +6,9 @@ You do not install anything. You do not make an account. You boot it, you type, 
 
 It is the same shape as a Commodore 64 or an Apple II. A line with a number is kept. A line without a number runs now. The glass is 40 columns wide and 24 rows tall, because those machines were about that size. It can hold 512 lines. That is the whole computer.
 
-## Play
+## Boot
 
-Click **Play**. The glass fills the screen and stays there. Two notes play, the memory counts up to 512, and then the prompt says:
+Click **Boot**. The glass fills the screen and stays there. Two notes play, the memory counts up to 512, and then the prompt says:
 
 ```
 READY.
@@ -16,7 +16,7 @@ READY.
 
 READY means it is waiting for you.
 
-Escape ends the session and brings this page back. Play again and the lines you stored are still there. A program that was running has stopped.
+Escape ends the session and brings this page back. Boot again and the lines you stored are still there. A program that was running has stopped.
 
 If the notes stay quiet, press any key. A browser holds its sound until you do that.
 

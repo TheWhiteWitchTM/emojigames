@@ -113,7 +113,9 @@ class Terminal {
 
     this.titleBar.appendChild(this.titleText);
     this.titleBar.appendChild(this.headerMiddle);
-    this.titleBar.appendChild(this.fsBtn);
+    // The desk is already fullscreen. Escape ends the session.
+    // The old F11 button only toggled the terminal's own fullscreen.
+    if (!window.GameDesk) this.titleBar.appendChild(this.fsBtn);
     this.stage.appendChild(this.titleBar);
 
     // ===== Canvas =====
@@ -154,6 +156,8 @@ class Terminal {
     if (typeof ResizeObserver !== 'undefined') {
       this._ro = new ResizeObserver(() => this._layout());
       this._ro.observe(this.wrap);
+      const desk = this.wrap.closest('.game-stage');
+      if (desk) this._ro.observe(desk);
     }
 
     this.wrap.addEventListener('keydown', (e) => {
@@ -288,12 +292,23 @@ class Terminal {
     const logicalW = this.cols * this.charW;
     const logicalH = this.rows * this.charH;
     const border = 4;
-    const full = document.fullscreenElement === this.wrap;
+    const desk = this.wrap.closest(".game-stage");
+    const deskOpen = !!(desk && (desk.classList.contains("game-open") || document.fullscreenElement === desk));
     const cs = getComputedStyle(this.wrap);
     const padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
     const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
-    const availW = this.wrap.clientWidth - padX;
-    const availH = full ? this.wrap.clientHeight - padY : Infinity;
+    let availW = this.wrap.clientWidth - padX;
+    let availH = Infinity;
+    if (document.fullscreenElement === this.wrap) {
+      availH = this.wrap.clientHeight - padY;
+    } else if (deskOpen) {
+      const deskStyle = getComputedStyle(desk);
+      const deskPadY = (parseFloat(deskStyle.paddingTop) || 0) + (parseFloat(deskStyle.paddingBottom) || 0);
+      const deskPadX = (parseFloat(deskStyle.paddingLeft) || 0) + (parseFloat(deskStyle.paddingRight) || 0);
+      availH = desk.clientHeight - deskPadY;
+      const deskW = desk.clientWidth - deskPadX;
+      if (deskW > 8) availW = Math.min(availW, deskW);
+    }
     if (availW < 8) return;
 
     let scale = 1;
@@ -311,7 +326,7 @@ class Terminal {
 
     apply(scale);
     if (availH < Infinity) {
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 8; i++) {
         const total = this.stage.offsetHeight;
         if (total <= availH || total < 1) break;
         scale *= (availH - 1) / total;
@@ -356,8 +371,12 @@ class Terminal {
   }
 
   toggleFullscreen() {
+    if (window.GameDesk && window.GameDesk.open && typeof window.GameDesk.close === "function") {
+      window.GameDesk.close();
+      return;
+    }
     const stage = document.getElementById("game-stage");
-    const root = (window.GameDesk && window.GameDesk.open && stage) ? stage : this.wrap;
+    const root = stage || this.wrap;
     if (!document.fullscreenElement) {
       root.requestFullscreen().then(() => this.wrap.focus()).catch(() => {});
     } else {

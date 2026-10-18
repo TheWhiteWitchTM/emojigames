@@ -3,7 +3,7 @@
     <ul>
       {% for item in site.data.nav.items %}
         {% if item.dropdown %}
-          <li class="dropdown">
+          <li class="dropdown{% if page.collection == 'games' or page.url == '/games/' %} is-current{% endif %}">
             <a href="#" class="dropdown-toggle">{{ item.title }}</a>
             <ul class="dropdown-menu">
               {% for sub in item.dropdown %}
@@ -16,11 +16,11 @@
             </ul>
           </li>
         {% else %}
-          <li>
+          <li class="{% if page.url == item.url %}is-current{% endif %}">
             {% if item.url contains '://' %}
               <a href="{{ item.url }}">{{ item.title }}</a>
             {% else %}
-              <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+              <a href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
             {% endif %}
           </li>
         {% endif %}

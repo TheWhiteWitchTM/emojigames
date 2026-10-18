@@ -1,0 +1,8 @@
+{% assign path = page.url | remove: "index.html" %}
+{% assign hero = false %}
+{% if path == "/" or path == "/about/" %}
+  {% assign hero = true %}
+{% endif %}
+<div class="site-banner-wrap{% if hero %} is-hero{% endif %}">
+  <img src="{{ '/assets/images/site.jpg' | relative_url }}" alt="Emoji Games" class="site-banner">
+</div>

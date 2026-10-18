@@ -7,6 +7,11 @@ permalink: /games/snake/
 tags: [terminal, action]
 ---
 
+<div id="game-manual" class="doc-panel" hidden>
+{% capture game_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+{{ game_doc | markdownify }}
+</div>
+
 Arrows or WASD. One hundred points wins. A crash ends it. R starts again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

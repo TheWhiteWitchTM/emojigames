@@ -2,7 +2,7 @@
 
 A slow walk. Type what you see. The lines are short because the glass is 40 columns wide.
 
-Boot first. Wait until it says READY. The bezel should say READY 0/512. No lines stored, and room for 512.
+Press Boot first. Wait until it says READY. The bezel should say READY 0/512. No lines stored, and room for 512.
 
 ## 1. A line that runs now
 

@@ -20,30 +20,32 @@
 <meta name="description" content="A chaptered tile RPG. You are a witch. The land has problems. Alpha.">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://localhost:4019/emojigames/games/witch-tales/">
+<meta property="og:url" content="https://thewhitewitchtm.github.io/emojigames/games/witch-tales/">
 <meta property="og:title" content="🧙 A Witch's Tale">
 <meta property="og:description" content="A chaptered tile RPG. You are a witch. The land has problems. Alpha.">
 <meta property="og:site_name" content="Emoji Games">
-<meta property="og:image" content="http://localhost:4019/emojigames/games/witch-tales/banner.jpg">
+<meta property="og:image" content="https://thewhitewitchtm.github.io/emojigames/games/witch-tales/banner.jpg">
 <meta property="og:image:alt" content="🧙 A Witch's Tale">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@TheWhiteWitchTM">
 <meta name="twitter:title" content="🧙 A Witch's Tale">
 <meta name="twitter:description" content="A chaptered tile RPG. You are a witch. The land has problems. Alpha.">
-<meta name="twitter:image" content="http://localhost:4019/emojigames/games/witch-tales/banner.jpg">
+<meta name="twitter:image" content="https://thewhitewitchtm.github.io/emojigames/games/witch-tales/banner.jpg">
 <meta name="twitter:image:alt" content="🧙 A Witch's Tale">
 
   <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+  
   <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
+  
 </head>
-<body>
+<body class="">
   <header class="site-header">
   <nav class="site-nav">
     <ul>
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/">🏠 Home</a>
             
@@ -51,7 +53,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/releases/">📢 Releases</a>
             
@@ -59,7 +61,7 @@
         
       
         
-          <li class="dropdown">
+          <li class="dropdown is-current">
             <a href="#" class="dropdown-toggle">🕹️ Games</a>
             <ul class="dropdown-menu">
               
@@ -88,7 +90,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/about/">🔮 About</a>
             
@@ -100,9 +102,8 @@
 </header>
 
 
-  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
-
   <main class="game-frame">
+    
     <div id="game-stage" class="game-stage" hidden>
       <div id="game" data-base="/emojigames/games/witch-tales/"></div>
     </div>
@@ -110,10 +111,50 @@
       <h1>🧙 A Witch's Tale</h1>
       <p class="game-lead">A chaptered tile RPG. You are a witch. The land has problems. Alpha.</p>
       <div class="game-actions">
+        
         <button type="button" class="play" id="game-play">▶️ Play</button>
+        
+        
+        <button type="button" class="doc-toggle" id="game-manual-btn" aria-expanded="false" aria-controls="game-manual">📜 Manual</button>
       </div>
+      
       <p class="game-hint">Play fills the screen. Escape brings you back here.</p>
+      
+      
+      <img class="game-banner" src="/emojigames/games/witch-tales/banner.jpg" alt="">
+      
       <div class="game-copy">
+        <div id="game-manual" class="doc-panel" hidden="">
+
+<h1 id="a-witchs-tale">A Witch’s Tale</h1>
+
+<p>A chaptered tile tale. You are a witch. The land has problems. Alpha. Chapter 01 is a cottage, a yard, and the trees south of it.</p>
+
+<h2 id="start">Start</h2>
+
+<p>Return, or N, begins a new tale. C continues, if this browser still has a save. R returns to the title.</p>
+
+<p>The save keeps your chapter, your place, your health, and the flags you set. F5 writes it. When a chapter ends, the game looks for the next numbered folder. Chapter 02 is not written yet. The save waits.</p>
+
+<h2 id="keys">Keys</h2>
+
+<p>Arrows or WASD move.</p>
+
+<ul>
+  <li>T, or Space, talks</li>
+  <li>L looks</li>
+  <li>I shows what you carry</li>
+  <li>H, or F1, or <code class="language-plaintext highlighter-rouge">?</code>, prints this list</li>
+</ul>
+
+<h2 id="a-fight">A fight</h2>
+
+<p>1, or Return, is a strike. 2 is a spark, if you have one left. 3, or Escape, is a step back. If you fall, you wake in the bed. The flags you set stay set.</p>
+
+<p>The iron key was on the nail. Something that should not be there took it into the woods. The far gate still wants that key.</p>
+
+</div>
+
 <p>You are a witch. The land has problems. Chapters arrive one at a time. Your save stays in this browser.</p>
 
 <script src="/emojigames/assets/js/emoji-engine-2d.js"></script>
@@ -123,14 +164,16 @@
 <script src="/emojigames/games/witch-tales/witch-tales.js"></script>
 
 <script src="/emojigames/games/witch-tales/chapter-01.js"></script>
+
+
       </div>
     </div>
-
+    
   </main>
 
   <footer class="site-footer">
   <div class="footer-links">
-    <a href="http://localhost:4019/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <a href="https://thewhitewitchtm.github.io/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
     <span>•</span>
     <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
     <span>•</span>
@@ -149,6 +192,30 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
 });
 </script>
 
+  
   <script src="/emojigames/assets/js/game-desk.js"></script>
+  <script>
+  (function () {
+    var buttons = document.querySelectorAll(".doc-toggle");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var panel = document.getElementById(btn.getAttribute("aria-controls"));
+        if (!panel) return;
+        var open = btn.getAttribute("aria-expanded") === "true";
+        buttons.forEach(function (other) {
+          var otherPanel = document.getElementById(other.getAttribute("aria-controls"));
+          other.setAttribute("aria-expanded", "false");
+          if (otherPanel) otherPanel.hidden = true;
+        });
+        if (!open) {
+          btn.setAttribute("aria-expanded", "true");
+          panel.hidden = false;
+          panel.scrollIntoView({ block: "nearest" });
+        }
+      });
+    });
+  })();
+  </script>
+  
 </body>
 </html>

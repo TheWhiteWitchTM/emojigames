@@ -20,18 +20,18 @@
 <meta name="description" content="Browse the shelf. Featured games sit first.">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://localhost:4019/emojigames/games/">
+<meta property="og:url" content="https://thewhitewitchtm.github.io/emojigames/games/">
 <meta property="og:title" content="Games">
 <meta property="og:description" content="Browse the shelf. Featured games sit first.">
 <meta property="og:site_name" content="Emoji Games">
-<meta property="og:image" content="http://localhost:4019/emojigames/assets/images/preview.jpg">
+<meta property="og:image" content="https://thewhitewitchtm.github.io/emojigames/assets/images/preview.jpg">
 <meta property="og:image:alt" content="Games">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@TheWhiteWitchTM">
 <meta name="twitter:title" content="Games">
 <meta name="twitter:description" content="Browse the shelf. Featured games sit first.">
-<meta name="twitter:image" content="http://localhost:4019/emojigames/assets/images/preview.jpg">
+<meta name="twitter:image" content="https://thewhitewitchtm.github.io/emojigames/assets/images/preview.jpg">
 <meta name="twitter:image:alt" content="Games">
 
   <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
@@ -42,7 +42,7 @@
     <ul>
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/">🏠 Home</a>
             
@@ -50,7 +50,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/releases/">📢 Releases</a>
             
@@ -58,7 +58,7 @@
         
       
         
-          <li class="dropdown">
+          <li class="dropdown is-current">
             <a href="#" class="dropdown-toggle">🕹️ Games</a>
             <ul class="dropdown-menu">
               
@@ -87,7 +87,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/about/">🔮 About</a>
             
@@ -98,8 +98,13 @@
   </nav>
 </header>
 
+  
 
-  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
+
+<div class="site-banner-wrap">
+  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games" class="site-banner">
+</div>
+
 
   <main class="page-frame">
     <div class="content-area markdown-body">
@@ -122,6 +127,17 @@ useEffect(() => {
       image: "/emojigames/games/adventureland/banner.jpg",
       tags: ["terminal","adventure"],
       description: "Thirteen treasures, and one hollow stump to keep them in.",
+      style: "terminal",
+      featured: null,
+      rank: 0
+    },
+    
+    {
+      title: "🖥️ Basic I",
+      url: "/emojigames/games/basic-1/",
+      image: "/emojigames/games/basic-1/banner.jpg",
+      tags: ["terminal","computer"],
+      description: "A small computer for learning BASIC. Forty columns, 512 lines, lessons built in.",
       style: "terminal",
       featured: null,
       rank: 0
@@ -401,11 +417,21 @@ useEffect(() => {
 .tab.active { border-color: #c9a6ff; color: #c9a6ff; }
 .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
 .shelf-label { grid-column: 1 / -1; margin: 0.2rem 0 0; color: #c9a6ff; font-size: 1rem; }
-.game-card-wrap.is-featured .game-card {
+.game-card-wrap .game-card {
   display: block;
-  border: 1px solid #c9a6ff;
+  border: 1px solid #2a2433;
   border-radius: 12px;
   padding: 0.55rem;
+  background: #101010;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.game-card-wrap .game-card:hover {
+  border-color: #c9a6ff;
+  transform: translateY(-2px);
+}
+.game-card-wrap.is-featured .game-card {
+  border-color: #c9a6ff;
   background: #14101a;
   box-shadow: 0 0 0 1px rgba(201, 166, 255, 0.25), 0 10px 28px rgba(0, 0, 0, 0.35);
 }
@@ -431,7 +457,7 @@ useEffect(() => {
 
   <footer class="site-footer">
   <div class="footer-links">
-    <a href="http://localhost:4019/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <a href="https://thewhitewitchtm.github.io/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
     <span>•</span>
     <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
     <span>•</span>

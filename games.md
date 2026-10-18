@@ -181,11 +181,21 @@ useEffect(() => {
 .tab.active { border-color: #c9a6ff; color: #c9a6ff; }
 .game-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
 .shelf-label { grid-column: 1 / -1; margin: 0.2rem 0 0; color: #c9a6ff; font-size: 1rem; }
-.game-card-wrap.is-featured .game-card {
+.game-card-wrap .game-card {
   display: block;
-  border: 1px solid #c9a6ff;
+  border: 1px solid #2a2433;
   border-radius: 12px;
   padding: 0.55rem;
+  background: #101010;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.game-card-wrap .game-card:hover {
+  border-color: #c9a6ff;
+  transform: translateY(-2px);
+}
+.game-card-wrap.is-featured .game-card {
+  border-color: #c9a6ff;
   background: #14101a;
   box-shadow: 0 0 0 1px rgba(201, 166, 255, 0.25), 0 10px 28px rgba(0, 0, 0, 0.35);
 }

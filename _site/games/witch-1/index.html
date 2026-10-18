@@ -20,29 +20,32 @@
 <meta name="description" content="A 40-column machine. It speaks WASIC.">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://localhost:4019/emojigames/games/witch-1/">
+<meta property="og:url" content="https://thewhitewitchtm.github.io/emojigames/games/witch-1/">
 <meta property="og:title" content="🖥️ Witch I">
 <meta property="og:description" content="A 40-column machine. It speaks WASIC.">
 <meta property="og:site_name" content="Emoji Games">
-<meta property="og:image" content="http://localhost:4019/emojigames/games/witch-1/banner.jpg">
+<meta property="og:image" content="https://thewhitewitchtm.github.io/emojigames/games/witch-1/banner.jpg">
 <meta property="og:image:alt" content="🖥️ Witch I">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@TheWhiteWitchTM">
 <meta name="twitter:title" content="🖥️ Witch I">
 <meta name="twitter:description" content="A 40-column machine. It speaks WASIC.">
-<meta name="twitter:image" content="http://localhost:4019/emojigames/games/witch-1/banner.jpg">
+<meta name="twitter:image" content="https://thewhitewitchtm.github.io/emojigames/games/witch-1/banner.jpg">
 <meta name="twitter:image:alt" content="🖥️ Witch I">
 
   <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+  
+  <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
+  
 </head>
-<body>
+<body class="machine-witch">
   <header class="site-header">
   <nav class="site-nav">
     <ul>
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/">🏠 Home</a>
             
@@ -50,7 +53,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/releases/">📢 Releases</a>
             
@@ -58,7 +61,7 @@
         
       
         
-          <li class="dropdown">
+          <li class="dropdown is-current">
             <a href="#" class="dropdown-toggle">🕹️ Games</a>
             <ul class="dropdown-menu">
               
@@ -87,7 +90,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/about/">🔮 About</a>
             
@@ -99,206 +102,57 @@
 </header>
 
 
-  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
-
   <main class="game-frame">
-    <style>
-  .witch-front {
-    width: min(72ch, 100%);
-    color: #e8e8e8;
-  }
-  .witch-front h1 {
-    margin: 0.2rem 0 0.6rem;
-  }
-  .witch-lead {
-    margin: 0.4rem 0 0;
-    color: #ccc;
-  }
-  .witch-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin: 1.1rem 0 0.7rem;
-  }
-  .witch-actions button {
-    font: inherit;
-    font-size: 1.05rem;
-    color: #e8e8e8;
-    background: transparent;
-    border: 1px solid #3a2a4a;
-    border-radius: 8px;
-    padding: 0.55rem 0.95rem;
-    cursor: pointer;
-  }
-  .witch-actions button:hover,
-  .witch-actions button:focus-visible,
-  .witch-actions button[aria-expanded="true"] {
-    border-color: #c9a6ff;
-    color: #e8d5ff;
-    outline: none;
-  }
-  .witch-actions button.boot {
-    border-color: #c9a6ff;
-    color: #e8d5ff;
-  }
-  .witch-hint {
-    margin: 0.2rem 0 0.8rem;
-    color: #9a9a9a;
-  }
-  .witch-panel {
-    border: 1px solid #2a2a2a;
-    border-radius: 8px;
-    background: #111;
-    padding: 0.3rem 1rem 0.8rem;
-    margin: 0.4rem 0 1rem;
-  }
-  .witch-panel[hidden] { display: none !important; }
-  .witch-panel.manual {
-    max-height: min(70vh, 680px);
-    overflow: auto;
-  }
-  body.witch-glass-on { overflow: hidden; }
-  .witch-stage[hidden] { display: none !important; }
-  .witch-stage.witch-open,
-  .witch-stage:fullscreen {
-    display: flex !important;
-    position: fixed;
-    inset: 0;
-    z-index: 400;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 12px;
-    box-sizing: border-box;
-    background: #050305;
-    align-items: center;
-    justify-content: center;
-  }
-  .witch-stage.witch-open #game,
-  .witch-stage:fullscreen #game {
-    width: min(100%, calc((100vh - 128px) * 720 / 576));
-    width: min(100%, calc((100dvh - 128px) * 720 / 576));
-    max-width: 100%;
-    margin: 0;
-  }
-  .ee-wrap {
-    width: 100% !important;
-    max-width: none;
-    background: #0b090a !important;
-    color: #cbbfa6 !important;
-    border-radius: 18px;
-    box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
-    font-family: ui-monospace, "Courier New", monospace !important;
-  }
-  .witch-stage:fullscreen .ee-wrap,
-  .witch-stage.witch-open .ee-wrap {
-    border-radius: 12px;
-  }
-  .ee-header { border-bottom: 1px solid #2a211c; }
-  .ee-title { letter-spacing: .22em; color: #d7c7a2; font-weight: 500; }
-  .ee-wrap, .ee-wrap * { cursor: none !important; }
-  .ee-wrap { user-select: none; }
-  .crt {
-    position: relative;
-    margin: 8px 10px;
-    background: #000;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow:
-      inset 0 0 0 1px #1a1012,
-      inset 0 0 80px rgba(36, 0, 12, .55);
-  }
-  .crt canvas {
-    display: block;
-    width: 100%;
-    height: auto;
-    background: #000;
-  }
-  .scan {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, .18),
-      rgba(0, 0, 0, .18) 1px,
-      transparent 2px,
-      transparent 3px
-    );
-    mix-blend-mode: multiply;
-  }
-  .ee-footer {
-    color: #8d7b68;
-    letter-spacing: .08em;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px 12px;
-  }
-  .witch-mood { white-space: nowrap; }
-  .witch-bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px;
-    margin-left: auto;
-  }
-  .witch-key {
-    font: inherit;
-    letter-spacing: .04em;
-    font-size: 11px;
-    color: #cbbfa6;
-    white-space: nowrap;
-  }
-  .witch-key kbd {
-    color: #8d7b68;
-    font: inherit;
-    letter-spacing: 0;
-  }
-  .witch-key.lit, .witch-key.lit kbd { color: #e2b657; }
-  .witch-key.quiet { opacity: .38; }
-  .led { color: #7a2e24; text-shadow: 0 0 8px rgba(122, 46, 36, .7); }
-</style>
-
-<div class="witch-front markdown-body">
-  <h1>🖥️ Witch I</h1>
-  <p class="witch-lead">Forty columns, twenty-four rows. She speaks WASIC.</p>
-
-  <div class="witch-actions">
-    <button type="button" class="boot" id="witch-boot">🖥️ Boot</button>
-    <button type="button" id="witch-started-btn" aria-expanded="false" aria-controls="witch-started">📖 Getting Started</button>
-    <button type="button" id="witch-manual-btn" aria-expanded="false" aria-controls="witch-manual">📜 Manual</button>
-  </div>
-  <p class="witch-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
-
-  <div id="witch-started" class="witch-panel" hidden="">
-    <h2>📖 Getting Started</h2>
-    <p>The prompt is <strong>SPEAK</strong>. A line with a number is stored. A line without one runs now.</p>
-    <ul>
-      <li>📚 <code>SHELF</code> opens the box. The arrows move. Enter takes a program down and does not run it.</li>
-      <li>🕯️ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
-      <li>🧹 <code>SCRUB</code> clears the glass. ✨ <code>MAGIC</code> numbers the next lines.</li>
-      <li>✋ Ctrl-C stops a program that will not stop.</li>
-    </ul>
-    <p>Try <code>SHELF</code>, point at <code>HELLO-WITCH</code>, press Enter, then <code>RUN</code>. <code>HELLO-DEMON</code> is the other hello. <code>ANSI-WITCH</code> paints her.</p>
-    <p>Under the glass, the keys are an emoji, a word, and a function key. Nothing there is a button.</p>
-    <ul>
-      <li>📜 LIST F1</li>
-      <li>🕯️ RUN F2</li>
-      <li>📚 SHELF F3</li>
-      <li>🧹 SCRUB F4</li>
-      <li>✨ MAGIC F5</li>
-      <li>🌑 EXORCISE F6</li>
-      <li>🔒 LATCH F7</li>
-      <li>⛶ FULL F11</li>
-      <li>⎋ BACK ESC</li>
-    </ul>
-    <p>She wakes latched. Up walks the lines that rolled off the glass. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>
-  </div>
-
-  <div id="witch-manual" class="witch-panel manual markdown-body" hidden="">
     
-    <h1 id="witch-i">Witch I</h1>
+    <div id="game-stage" class="game-stage game-stage-aspect" style="--stage-aspect: 1.25" hidden>
+      <div id="game" data-shelf="/emojigames/games/witch-1/shelf/" data-witch="/emojigames/assets/images/site.jpg"></div>
+    </div>
+    <div class="game-front markdown-body">
+      <h1>🖥️ Witch I</h1>
+      <p class="game-lead">A 40-column machine. It speaks WASIC.</p>
+      <div class="game-actions">
+        
+        <button type="button" class="play" id="game-play">🖥️ Boot</button>
+        
+        
+        <button type="button" class="doc-toggle" aria-expanded="false" aria-controls="game-started">📖 Getting Started</button>
+        
+        <button type="button" class="doc-toggle" id="game-manual-btn" aria-expanded="false" aria-controls="game-manual">📜 Manual</button>
+      </div>
+      
+      <p class="game-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
+      
+      
+      <img class="game-banner" src="/emojigames/games/witch-1/banner.jpg" alt="">
+      
+      <div class="game-copy">
+        <div id="game-started" class="doc-panel" hidden="">
+  <h2>📖 Getting Started</h2>
+  <p>The prompt is <strong>SPEAK</strong>. A line with a number is stored. A line without one runs now.</p>
+  <ul>
+    <li>📚 <code>SHELF</code> opens the box. The arrows move. Enter takes a program down and does not run it.</li>
+    <li>🕯️ <code>RUN</code> starts at the top. 📜 <code>LIST</code> shows the lines.</li>
+    <li>🧹 <code>SCRUB</code> clears the glass. ✨ <code>MAGIC</code> numbers the next lines.</li>
+    <li>✋ Ctrl-C stops a program that will not stop.</li>
+  </ul>
+  <p>Try <code>SHELF</code>, point at <code>HELLO-WITCH</code>, press Enter, then <code>RUN</code>. <code>HELLO-DEMON</code> is the other hello. <code>ANSI-WITCH</code> paints her.</p>
+  <p>Under the glass, the keys are an emoji, a word, and a function key. Nothing there is a button.</p>
+  <ul>
+    <li>📜 LIST F1</li>
+    <li>🕯️ RUN F2</li>
+    <li>📚 SHELF F3</li>
+    <li>🧹 SCRUB F4</li>
+    <li>✨ MAGIC F5</li>
+    <li>🌑 EXORCISE F6</li>
+    <li>🔒 LATCH F7</li>
+    <li>⎋ BACK ESC</li>
+  </ul>
+  <p>Boot opens her already full screen. Escape ends the session and brings you back here. The lines stay. She wakes latched. Up walks the lines that rolled off the glass. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>
+</div>
+
+<div id="game-manual" class="doc-panel" hidden="">
+
+<h1 id="witch-i">Witch I</h1>
 
 <p>The glass is 40 columns by 24 rows. The prompt is SPEAK. READY is a word from the machines next door, and she does not keep their hours. The language is WASIC. She has 666 lines of memory, and the dialect next door can sit down.</p>
 
@@ -329,7 +183,7 @@ SPEAK.
 
 <p>The frame is green. The name is white. WASIC · ONE is green. 40 COLUMN GLASS is faint. The count, and 666 LINES FREE, are the color of a low candle. The waking lines are ash. The line about BASIC is dark red. SPEAK is white. What you type after that is ash, until a program runs.</p>
 
-<p>The page is a desk. 🖥️ Boot fills the screen with the glass. Escape returns to the page. Boot opens the glass again. A program that was running has stopped. The lines you stored are still there.</p>
+<p>The page is a desk. 🖥️ Boot fills the screen with the glass, and she stays there. Escape ends the session and returns to the page. Boot opens the glass again. A program that was running has stopped. The lines you stored are still there.</p>
 
 <p>The two notes are low, a fifth apart. Then she fades, and the words roll to the top of the glass. Press a key if the notes stay silent. The browser holds the sound until a key arrives. The mouse is not a device here. The pointer is hidden over the glass, and a click does nothing.</p>
 
@@ -388,7 +242,7 @@ SPEAK.
   </tbody>
 </table>
 
-<p>Under that, the keys. Each one is an emoji, a word, and a function key. They are not buttons. F5 is hers, not the browser’s reload. F11 fills the screen with the glass.</p>
+<p>Under that, the keys. Each one is an emoji, a word, and a function key. They are not buttons. F5 is hers, not the browser’s reload. The glass is already full screen. Escape ends the session.</p>
 
 <table>
   <thead>
@@ -427,12 +281,8 @@ SPEAK.
       <td>Scroll lock. Scroll Lock does this too</td>
     </tr>
     <tr>
-      <td>⛶ FULL F11</td>
-      <td>The glass fills the screen. F11 again returns to the page</td>
-    </tr>
-    <tr>
       <td>⎋ BACK ESC</td>
-      <td>Returns to the page. A program that was running stops</td>
+      <td>Ends the session and returns to the page. A program that was running stops</td>
     </tr>
   </tbody>
 </table>
@@ -1616,12 +1466,9 @@ SPEAK.
   <li>Sprites are emoji. The touch radius is half the size. They share the glass with the letters, and they are drawn in front.</li>
 </ul>
 
-  </div>
 </div>
 
-<div id="witch-stage" class="witch-stage" hidden="">
-  <div id="game" data-shelf="/emojigames/games/witch-1/shelf/" data-witch="/emojigames/assets/images/site.jpg"></div>
-</div>
+<p>Forty columns, twenty-four rows. The prompt is SPEAK. A line with a number is stored. SHELF opens the box. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>
 
 <script src="/emojigames/assets/js/emoji-engine-2d.js"></script>
 
@@ -1629,86 +1476,15 @@ SPEAK.
 
 <script src="/emojigames/games/witch-1/witch-1.js"></script>
 
-<script>
-(function () {
-  var stage = document.getElementById("witch-stage");
-  var boot = document.getElementById("witch-boot");
-  var startedBtn = document.getElementById("witch-started-btn");
-  var manualBtn = document.getElementById("witch-manual-btn");
-  var started = document.getElementById("witch-started");
-  var manual = document.getElementById("witch-manual");
-  var open = false;
-  var inFull = false;
 
-  function togglePanel(btn, panel, otherBtn, other) {
-    var show = btn.getAttribute("aria-expanded") !== "true";
-    btn.setAttribute("aria-expanded", show ? "true" : "false");
-    panel.hidden = !show;
-    if (show) {
-      otherBtn.setAttribute("aria-expanded", "false");
-      other.hidden = true;
-      panel.scrollIntoView({ block: "nearest" });
-    }
-  }
-
-  function closeStage() {
-    if (!open) return;
-    open = false;
-    stage.classList.remove("witch-open");
-    stage.hidden = true;
-    document.body.classList.remove("witch-glass-on");
-    if (document.fullscreenElement) {
-      Promise.resolve(document.exitFullscreen()).catch(function () {});
-    }
-    if (window.WITCH && WITCH.leave) WITCH.leave();
-    boot.focus();
-  }
-
-  function openStage() {
-    open = true;
-    stage.hidden = false;
-    stage.classList.add("witch-open");
-    document.body.classList.add("witch-glass-on");
-    var root = stage;
-    var pending = root.requestFullscreen ? root.requestFullscreen() : Promise.reject();
-    Promise.resolve(pending).catch(function () {});
-    if (window.WITCH && WITCH.power) WITCH.power();
-  }
-
-  boot.addEventListener("click", openStage);
-  startedBtn.addEventListener("click", function () {
-    togglePanel(startedBtn, started, manualBtn, manual);
-  });
-  manualBtn.addEventListener("click", function () {
-    togglePanel(manualBtn, manual, startedBtn, started);
-  });
-
-  document.addEventListener("fullscreenchange", function () {
-    if (document.fullscreenElement) {
-      inFull = true;
-      return;
-    }
-    if (!inFull) return;
-    inFull = false;
-    if (!open) return;
-    closeStage();
-  });
-
-  window.addEventListener("keydown", function (event) {
-    if (event.key !== "Escape" || !open) return;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    closeStage();
-  }, true);
-})();
-</script>
-
-
+      </div>
+    </div>
+    
   </main>
 
   <footer class="site-footer">
   <div class="footer-links">
-    <a href="http://localhost:4019/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <a href="https://thewhitewitchtm.github.io/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
     <span>•</span>
     <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
     <span>•</span>
@@ -1727,5 +1503,30 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
 });
 </script>
 
+  
+  <script src="/emojigames/assets/js/game-desk.js"></script>
+  <script>
+  (function () {
+    var buttons = document.querySelectorAll(".doc-toggle");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var panel = document.getElementById(btn.getAttribute("aria-controls"));
+        if (!panel) return;
+        var open = btn.getAttribute("aria-expanded") === "true";
+        buttons.forEach(function (other) {
+          var otherPanel = document.getElementById(other.getAttribute("aria-controls"));
+          other.setAttribute("aria-expanded", "false");
+          if (otherPanel) otherPanel.hidden = true;
+        });
+        if (!open) {
+          btn.setAttribute("aria-expanded", "true");
+          panel.hidden = false;
+          panel.scrollIntoView({ block: "nearest" });
+        }
+      });
+    });
+  })();
+  </script>
+  
 </body>
 </html>

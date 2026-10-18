@@ -1,9 +1,13 @@
+const TRUMP_FACE_ROWS = 8;
+
 class TrumpSI {
   constructor(term) {
     this.term = term;
     this.history = [];
     this.mood = "neutral";
     this.inputBuffer = "";
+    this.greetingLine = "";
+    this.faceImage = null;
     this.faceMap = {
       happy: "1.jpg",
       smug: "2.jpg",
@@ -11,7 +15,23 @@ class TrumpSI {
       winning: "4.jpg",
       neutral: "5.jpg"
     };
+    this.images = {};
     this.audioCtx = null;
+    const self = this;
+    Object.entries(this.faceMap).forEach(function (pair) {
+      const img = new Image();
+      img.onload = function () {
+        if (self.faceImage === img && self.term.core) {
+          self.term.core.dirty = true;
+          self.term.core.flush();
+        }
+      };
+      img.src = pair[1];
+      self.images[pair[0]] = img;
+    });
+    if (term.core && term.core.canvas) {
+      term.core.canvas.add({ draw: function (ctx) { self.drawFace(ctx); } }, "face");
+    }
   }
 
   pick(arr) {
@@ -73,15 +93,105 @@ class TrumpSI {
   }
 
   showFace(mood) {
-    let img = document.getElementById("trump-face");
-    if (!img) {
-      img = document.createElement("img");
-      img.id = "trump-face";
-      img.alt = "";
-      img.style.cssText = "height:64px;width:64px;object-fit:cover;border-radius:10px;border:2px solid #ff8c00;box-shadow:0 0 10px #ff8c00;";
-      if (this.term.headerMiddle) this.term.headerMiddle.appendChild(img);
+    const img = this.images[mood] || this.images.neutral;
+    this.faceImage = img || null;
+    const core = this.term.core;
+    if (!core) return;
+    core.dirty = true;
+    core.flush();
+  }
+
+  drawFace(ctx) {
+    const image = this.faceImage;
+    if (!image || !image.complete || !image.naturalWidth) return;
+    const core = this.term.core;
+    const cw = core.cellWidth;
+    const ch = core.cellHeight;
+    const top = (core.rows - 1 - TRUMP_FACE_ROWS) * ch;
+    const band = TRUMP_FACE_ROWS * ch;
+    const size = Math.floor(band * 0.9);
+    const x = Math.round((core.cols * cw - size) / 2);
+    const y = top + Math.round((band - size) / 2);
+    const radius = 12;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + size, y, x + size, y + size, radius);
+    ctx.arcTo(x + size, y + size, x, y + size, radius);
+    ctx.arcTo(x, y + size, x, y, radius);
+    ctx.arcTo(x, y, x + size, y, radius);
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(image, x, y, size, size);
+    ctx.restore();
+    ctx.save();
+    ctx.strokeStyle = "#ff8c00";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + size, y, x + size, y + size, radius);
+    ctx.arcTo(x + size, y + size, x, y + size, radius);
+    ctx.arcTo(x, y + size, x, y, radius);
+    ctx.arcTo(x, y, x + size, y, radius);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  textRows() {
+    return this.term.rows - TRUMP_FACE_ROWS - 1;
+  }
+
+  wrapText(text) {
+    const chars = Array.from(String(text));
+    const width = this.term.cols;
+    if (!chars.length) return [""];
+    const lines = [];
+    for (let i = 0; i < chars.length; i += width) lines.push(chars.slice(i, i + width).join(""));
+    return lines;
+  }
+
+  pushLine(lines, text, fg, bright) {
+    this.wrapText(text).forEach((line, index) => {
+      lines.push({ text: line, fg: fg, bright: bright && index === 0 });
+    });
+  }
+
+  transcript() {
+    const lines = [];
+    if (!this.history.length) {
+      this.pushLine(lines, "TRUMP SI: " + (this.greetingLine || ""), 3, true);
+      return lines;
     }
-    img.src = this.faceMap[mood] || this.faceMap.neutral;
+    this.history.forEach((turn, index) => {
+      if (index) lines.push({ text: "", fg: 7, bright: false });
+      this.pushLine(lines, "YOU: " + turn.you, 15, false);
+      lines.push({ text: "", fg: 7, bright: false });
+      this.pushLine(lines, "TRUMP SI: " + turn.trump, 3, true);
+    });
+    while (lines.length && lines[lines.length - 1].text === "") lines.pop();
+    return lines;
+  }
+
+  paint() {
+    const lines = this.transcript();
+    const room = this.textRows();
+    const visible = lines.slice(-room);
+    const top = room - visible.length;
+    this.term.clear();
+    visible.forEach((line, index) => {
+      if (!line.text) return;
+      this.term.moveTo(0, top + index);
+      this.term.setFg(line.fg);
+      this.term.setBright(!!line.bright);
+      this.term.write(line.text);
+    });
+    this.term.resetAttr();
+    this.term.moveTo(0, this.term.rows - 1);
+    this.term.setFg(15);
+    this.term.showCursor();
+    this.term.write("> " + this.inputBuffer);
+    this.term.resetAttr();
   }
 
   reply(input) {
@@ -119,50 +229,17 @@ class TrumpSI {
     if (this.history.length > 10) this.history.shift();
 
     this.playBrainSound(mad);
-    this.redraw(line);
-  }
-
-  redraw(latest) {
-    this.showFace(this.mood);
-    this.term.clear();
-    this.term.moveTo(0, 1);
-    this.term.setFg(15);
-    this.term.write("YOU: ");
-    this.term.resetAttr();
-    this.term.writeln(this.history.at(-1)?.you || "");
-    this.term.writeln("");
-    this.term.setFg(3);
-    this.term.setBright(true);
-    this.term.write("TRUMP SI: ");
-    this.term.resetAttr();
-    this.term.setFg(3);
-    this.term.writeln(latest);
-    this.term.resetAttr();
-    this.term.writeln("");
-    this.term.setFg(15);
-    this.term.showCursor();
-    this.term.write("> ");
-    this.term.resetAttr();
     this.inputBuffer = "";
+    this.showFace(this.mood);
+    this.paint();
   }
 
   start() {
     this.mood = "happy";
+    this.greetingLine = this.pick(window.responses.greeting);
+    this.inputBuffer = "";
     this.showFace(this.mood);
-    this.term.clear();
-    this.term.moveTo(0, 1);
-    this.term.setFg(3);
-    this.term.setBright(true);
-    this.term.write("TRUMP SI: ");
-    this.term.resetAttr();
-    this.term.setFg(3);
-    this.term.writeln(this.pick(window.responses.greeting));
-    this.term.resetAttr();
-    this.term.writeln("");
-    this.term.setFg(15);
-    this.term.showCursor();
-    this.term.write("> ");
-    this.term.resetAttr();
+    this.paint();
   }
 }
 window.TrumpSI = TrumpSI;
@@ -189,16 +266,16 @@ useEffect(() => {
       if (bot.inputBuffer.trim()) bot.reply(bot.inputBuffer.trim());
     } else if (e.key === "Backspace") {
       e.preventDefault();
-      if (bot.inputBuffer.length) {
-        bot.inputBuffer = bot.inputBuffer.slice(0, -1);
-        term.write("\b");
-      }
+      const chars = Array.from(bot.inputBuffer);
+      if (!chars.length) return;
+      chars.pop();
+      bot.inputBuffer = chars.join("");
+      bot.paint();
     } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
       e.preventDefault();
+      if (Array.from(bot.inputBuffer).length >= term.cols - 3) return;
       bot.inputBuffer += e.key;
-      term.setFg(15);
-      term.write(e.key);
-      term.resetAttr();
+      bot.paint();
     }
   }
 

@@ -1,9 +1,18 @@
 <article class="release-item" data-url="{{ include.post.url | relative_url }}">
+  {% if include.post.addon %}
+  <p class="release-kicker">Add-on</p>
+  {% endif %}
   <h2 class="release-title">
     <span class="release-emoji">▼</span>
     <span class="title-text">{{ include.post.title }}</span>
   </h2>
   <time class="release-date" datetime="{{ include.post.date | date: '%Y-%m-%d' }}">{{ include.post.date | date: "%-d %B %Y" }}</time>
+
+  {% if include.post.games %}
+  <div class="release-card-banners">
+    {% include release-banners.html games=include.post.games %}
+  </div>
+  {% endif %}
 
   <div class="release-excerpt">
     {% if include.post.description %}
@@ -14,10 +23,6 @@
   </div>
 
   <div class="release-full" hidden></div>
-
-  {% if include.post.image %}
-    <img src="{{ include.post.image | relative_url }}" alt="" class="release-image" loading="lazy">
-  {% endif %}
 
   <div class="release-actions">
     <button class="release-expand" type="button">▼ Show more</button>

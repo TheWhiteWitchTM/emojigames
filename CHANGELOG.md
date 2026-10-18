@@ -12,6 +12,14 @@ Witch I and Basic I open the same way. Play fills the screen, and they stay ther
 
 Adventureland, Pirate Adventure, Galaxy Hunt, The Oregon Trail, and Trump Super Intelligence keep a blinking block caret at the prompt.
 
+### The page
+
+Every game has 📜 Manual beside Play. Witch I and Basic I say 🖥️ Boot. The banner sits under the buttons, and the words sit under the banner. Home and About open on the site banner. A release carries the banners of the games it names.
+
+Witch I shipped once, on the 16th. The 17th is an add-on, not a second debut. Basic I has its own note.
+
+The emoji engine on this site is the current one. The desk hides that engine's fullscreen button. Escape already ends the session.
+
 ## 2026-10-17
 
 ### Playable speeds, and emoji where the games speak

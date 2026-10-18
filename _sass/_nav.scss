@@ -33,7 +33,8 @@
   transition: color 0.2s ease;
 }
 
-.site-nav a:hover {
+.site-nav a:hover,
+.site-nav .is-current > a {
   color: #c9a6ff;
 }
 

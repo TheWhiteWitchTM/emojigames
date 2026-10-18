@@ -9,6 +9,11 @@ featured: true
 feature_rank: 3
 ---
 
+<div id="game-manual" class="doc-panel" hidden>
+{% capture game_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+{{ game_doc | markdownify }}
+</div>
+
 Descend. Fight. The Amulet of Yendor is waiting on the sixth floor. Return begins. R starts again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

@@ -8,7 +8,7 @@ It is the same shape as a Commodore 64 or an Apple II. A line with a number is k
 
 ## Boot
 
-Click **Boot**. The glass fills the screen. Two notes play, the memory counts up to 512, and then the prompt says:
+Click **Boot**. The glass fills the screen and stays there. Two notes play, the memory counts up to 512, and then the prompt says:
 
 ```
 READY.
@@ -16,7 +16,7 @@ READY.
 
 READY means it is waiting for you.
 
-Escape brings this page back. Boot again and the lines you stored are still there. A program that was running has stopped.
+Escape ends the session and brings this page back. Boot again and the lines you stored are still there. A program that was running has stopped.
 
 If the notes stay quiet, press any key. A browser holds its sound until you do that.
 
@@ -135,8 +135,7 @@ Each one is a picture, a word, and a function key. They are not buttons. F5 belo
 | AUTO F5 | Number the next lines for you. Press it again to stop |
 | RENUM F6 | Renumber the program from 10 |
 | LATCH F7 | Hold the glass so you can read what rolled off |
-| FULL F11 | Fill the screen. F11 again returns to this page |
-| BACK ESC | Return to this page. A running program stops |
+| BACK ESC | End the session and return to this page. A running program stops |
 
 The bezel on the left tells you the mood, then how many lines are stored, out of 512. READY 0/512 means the program is empty.
 

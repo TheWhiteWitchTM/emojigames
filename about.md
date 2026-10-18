@@ -36,7 +36,7 @@ Trump Super Intelligence is a conversation, not a match. There is no title card 
 
 The Oregon Trail opens on a title. Return goes to the menu. R from that title, or from a finished trail, starts the next party without showing the title again. On the road, Return stops the wagon. Hunt and the Columbia raft use the arrows.
 
-Witch I is a computer. Play fills the screen, and she stays there until Escape ends the session. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF opens the box, and the arrows take a program down. LIST shows the lines. PEEK and POKE make her complain. Ctrl-C stops one that will not stop. Basic I is the same glass, and the prompt is READY.
+Witch I is a computer. Boot fills the screen, and she stays there until Escape ends the session. The prompt is SPEAK. A line number stores a line. RUN starts the program. SHELF opens the box, and the arrows take a program down. LIST shows the lines. PEEK and POKE make her complain. Ctrl-C stops one that will not stop. Basic I is the same glass, and the prompt is READY. Boot works the same way.
 
 ## What shipped
 
@@ -50,9 +50,13 @@ Witch I is a computer. Play fills the screen, and she stays there until Escape e
 
 **16 October.** [Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}). Not a port. You type, it answers, the picture of the face swaps. [Notes]({{ '/releases/2026-10-16-trump-super-intelligence/' | relative_url }}). [The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}). A wagon, five names, and the road to the Willamette. [Notes]({{ '/releases/2026-10-16-oregon-trail/' | relative_url }}). [Witch I]({{ '/games/witch-1/' | relative_url }}). A 40-column machine that speaks WASIC. [Notes]({{ '/releases/2026-10-16-witch-1/' | relative_url }}).
 
-**17 October.** [Basic I]({{ '/games/basic-1/' | relative_url }}). The same glass as Witch I, and the prompt is READY. [Witch I]({{ '/games/witch-1/' | relative_url }}), again. The shelf points. Enter takes a program down and leaves the lines where a number can change them. LIST shows those lines. ANSI-WITCH paints with the colors the glass already speaks. [Notes]({{ '/releases/2026-10-17-witch-1-picker/' | relative_url }}). Later the same day she draws that picture when she wakes, the bezel grows six keys, and EXORCISE drives BASIC out of a listing. [Notes]({{ '/releases/2026-10-17-witch-1-exorcism/' | relative_url }}).
+**17 October.** [Basic I]({{ '/games/basic-1/' | relative_url }}). The same glass as Witch I, and the prompt is READY. [Notes]({{ '/releases/2026-10-17-basic-1/' | relative_url }}).
+
+[Witch I]({{ '/games/witch-1/' | relative_url }}), the add-on. She did not ship twice. The shelf points, Enter takes a program down, LIST shows the lines, she draws herself when she wakes, and EXORCISE drives BASIC out of a listing. [Notes]({{ '/releases/2026-10-17-witch-1-addon/' | relative_url }}).
 
 The same day, the other games moved onto the emoji engine. A title waits for Return. Win or death waits for R, and that R skips the title. [Galaxy Hunt]({{ '/games/galaxy-hunt/' | relative_url }}), [The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }}), and [Hack]({{ '/games/hack/' | relative_url }}) lead the menu and the catalog. [Trump Super Intelligence]({{ '/games/trump-si/' | relative_url }}) stays a conversation. [Notes]({{ '/releases/2026-10-17-the-glass/' | relative_url }}).
+
+**18 October.** The desk. Play or Boot, a manual beside it, the banner under the buttons, and the words under the banner. [Notes]({{ '/releases/2026-10-18-the-desk/' | relative_url }}).
 
 The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release notes]({{ '/releases/' | relative_url }}) are the log.
 

@@ -1,32 +1,148 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="http://localhost:4019/emojigames/feed/releases.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4019/emojigames/" rel="alternate" type="text/html" /><updated>2026-10-17T06:00:34+02:00</updated><id>http://localhost:4019/emojigames/feed/releases.xml</id><title type="html">Emoji Games | Releases</title><subtitle>A White Witch spinoff. Emoji games, no accounts.</subtitle><entry><title type="html">🖥️ Witch I, on the shelf</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/" rel="alternate" type="text/html" title="🖥️ Witch I, on the shelf" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-shelf</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-shelf/"><![CDATA[<h1 id="️-witch-i-on-the-shelf">🖥️ Witch I, on the shelf</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://thewhitewitchtm.github.io/emojigames/feed/releases.xml" rel="self" type="application/atom+xml" /><link href="https://thewhitewitchtm.github.io/emojigames/" rel="alternate" type="text/html" /><updated>2026-10-18T04:11:54+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/feed/releases.xml</id><title type="html">Emoji Games | Releases</title><subtitle>A White Witch spinoff. Emoji games, no accounts.</subtitle><entry><title type="html">▶️ The desk</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-18-the-desk/" rel="alternate" type="text/html" title="▶️ The desk" /><published>2026-10-18T00:00:00+02:00</published><updated>2026-10-18T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/the-desk</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-18-the-desk/"><![CDATA[<h1 id="️-the-desk">▶️ The desk</h1>
 
-<p>17 October 2026. The box has a door.</p>
+<div class="banner-row">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/galaxy-hunt/">
+      <img src="/emojigames/games/galaxy-hunt/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🚀 Galaxy Hunt</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/oregon-trail/">
+      <img src="/emojigames/games/oregon-trail/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🐂 The Oregon Trail</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/hack/">
+      <img src="/emojigames/games/hack/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🗡️ Hack</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/witch-1/">
+      <img src="/emojigames/games/witch-1/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🖥️ Witch I</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/basic-1/">
+      <img src="/emojigames/games/basic-1/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🖥️ Basic I</span>
+    </a>
+    
+  
+</div>
 
-<p>The programs are files now, under <code class="language-plaintext highlighter-rouge">shelf/</code>, and the extension is <code class="language-plaintext highlighter-rouge">.wasic</code>. <code class="language-plaintext highlighter-rouge">SHELF</code> reads the catalog. <code class="language-plaintext highlighter-rouge">UNSEAL "shelf:HELLO-WITCH"</code> takes one down. <code class="language-plaintext highlighter-rouge">HELLO-DEMON</code> is the other hello. CAROL hums. FAMILIAR paces.</p>
+<p>18 October 2026. The page caught up with the glass.</p>
 
-<p>When she wakes, the white witch from the banner stands in the glass while the count climbs. Then the words roll up and the glass says SPEAK.</p>
+<p>Every game opens from a button. ▶️ Play fills the screen. Escape brings the site back. <a href="/emojigames/games/witch-1/">Witch I</a> and <a href="/emojigames/games/basic-1/">Basic I</a> say 🖥️ Boot, because they are computers, and the lines stay when you leave.</p>
 
-<p>A refusal is red, with a mark, and two notes going down. The walls she keeps are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The programs left the script and moved into the box. She rings when she refuses.]]></summary></entry><entry><title type="html">🖥️ Witch I points</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-picker/" rel="alternate" type="text/html" title="🖥️ Witch I points" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-picker</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-picker/"><![CDATA[<h1 id="️-witch-i-points">🖥️ Witch I points</h1>
+<p>📜 Manual sits beside that button. Getting Started, and the tutorial on Basic I, sit there too. The banner for the game is under the buttons. The words are under the banner.</p>
 
-<p>17 October 2026. The box learned to point.</p>
+<p>Home and About open on the site banner. The releases carry the banners of the games they name.</p>
 
-<p><code class="language-plaintext highlighter-rouge">SHELF</code> opens the programs on the glass. Up and down move the mark. Enter takes that one down and does not run it. She tells you that a number changes a line. Escape leaves the shelf where it is.</p>
+<p>The glass is the current emoji engine. A desk page hides that engine’s own fullscreen button, because Escape already ends the session.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Play or Boot, a manual beside it, and the banner under the buttons.]]></summary></entry><entry><title type="html">🕹️ The glass</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-17-the-glass/" rel="alternate" type="text/html" title="🕹️ The glass" /><published>2026-10-17T21:00:00+02:00</published><updated>2026-10-17T21:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/the-glass</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-17-the-glass/"><![CDATA[<h1 id="️-the-glass">🕹️ The glass</h1>
 
-<p><code class="language-plaintext highlighter-rouge">LIST</code> prints the program. The line numbers are yellow. Retype one, and that line is the new line. <code class="language-plaintext highlighter-rouge">REVEAL</code> still prints them with no color and no lecture.</p>
-
-<p><code class="language-plaintext highlighter-rouge">ANSI-WITCH</code> is a picture. <code class="language-plaintext highlighter-rouge">VEIL</code> sends the glass its own color codes: the sixteen, the 256, and a color mixed on the spot. The lines are in <code class="language-plaintext highlighter-rouge">shelf/ansi-witch.wasic</code>. Change a number, run it again.</p>
-
-<p><a href="/emojigames/games/witch-1/">Witch I</a>. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The shelf takes the arrows. LIST shows the lines. A witch paints in ANSI.]]></summary></entry><entry><title type="html">🖥️ Witch I, the exorcism</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-exorcism/" rel="alternate" type="text/html" title="🖥️ Witch I, the exorcism" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1-exorcism</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-witch-1-exorcism/"><![CDATA[<h1 id="️-witch-i-the-exorcism">🖥️ Witch I, the exorcism</h1>
-
-<p>17 October 2026. She draws herself before she speaks.</p>
-
-<p>When the glass wakes, the ANSI witch from <code class="language-plaintext highlighter-rouge">ANSI-WITCH</code> paints in, hat first. The sixteen, the 256, and a color mixed on the spot. Two low notes, and the drawing steps aside for the portrait and the count.</p>
-
-<p>Under the glass, six keys sit beside the lines in use. LIST, RUN, SHELF, SCRUB, MAGIC, EXORCISE. The chords are Alt+Shift and a letter. A browser does not spend those on tabs, reload, or the address line. MAGIC numbers the next lines. AUTO is the same word.</p>
-
-<p>EXORCISE rewrites a BASIC listing into WASIC. PRINT becomes CHANT, GOTO becomes FLYTO, FOR becomes CURSE, and the rest of the old names follow. INT, SIN, RND, and the other sums stay. PEEK answers 0. A line she still cannot say is buried as a whisper, and RUN steps over it. An empty circle opens the desk for a <code class="language-plaintext highlighter-rouge">.BAS</code> file. She leaves the lines sitting there. You run them.</p>
-
-<p><a href="/emojigames/games/witch-1/">Witch I</a>. The walls are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[She draws herself in ink. The bezel grows six keys. EXORCISE drives BASIC out.]]></summary></entry><entry><title type="html">🕹️ The glass</title><link href="http://localhost:4019/emojigames/releases/2026-10-17-the-glass/" rel="alternate" type="text/html" title="🕹️ The glass" /><published>2026-10-17T00:00:00+02:00</published><updated>2026-10-17T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/the-glass</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-17-the-glass/"><![CDATA[<h1 id="️-the-glass">🕹️ The glass</h1>
+<div class="banner-row">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/galaxy-hunt/">
+      <img src="/emojigames/games/galaxy-hunt/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🚀 Galaxy Hunt</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/oregon-trail/">
+      <img src="/emojigames/games/oregon-trail/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🐂 The Oregon Trail</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/hack/">
+      <img src="/emojigames/games/hack/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🗡️ Hack</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/pong/">
+      <img src="/emojigames/games/pong/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🏓 Pong</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/snake/">
+      <img src="/emojigames/games/snake/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🐍 Snake</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/rogue/">
+      <img src="/emojigames/games/rogue/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🗡️ Rogue</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/adventureland/">
+      <img src="/emojigames/games/adventureland/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🌲 Adventureland</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/pirate/">
+      <img src="/emojigames/games/pirate/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🏴‍☠️ Pirate Adventure</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/trump-si/">
+      <img src="/emojigames/games/trump-si/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🤖 Trump Super Intelligence</span>
+    </a>
+    
+  
+</div>
 
 <p>17 October 2026. Return to begin. R to go again.</p>
 
@@ -52,7 +168,72 @@
 
 <p><a href="/emojigames/games/adventureland/">Adventureland</a> wants the thirteen treasures in the stump. The bees, the dragon, the bear, and the hole will end it if you insist.</p>
 
-<p><a href="/emojigames/games/pirate/">Pirate Adventure</a> wants the three treasures back in the London flat. The skeleton does not share, unless the parrot has heard the words.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The games move onto the emoji engine. Three of them lead the shelf.]]></summary></entry><entry><title type="html">🧙 A Witch’s Tale</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/" rel="alternate" type="text/html" title="🧙 A Witch’s Tale" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-tales</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-witch-tales/"><![CDATA[<h1 id="-a-witchs-tale">🧙 A Witch’s Tale</h1>
+<p><a href="/emojigames/games/pirate/">Pirate Adventure</a> wants the three treasures back in the London flat. The skeleton does not share, unless the parrot has heard the words.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The games move onto the emoji engine. Three of them lead the shelf.]]></summary></entry><entry><title type="html">🖥️ Witch I, the add-on</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-17-witch-1-addon/" rel="alternate" type="text/html" title="🖥️ Witch I, the add-on" /><published>2026-10-17T16:00:00+02:00</published><updated>2026-10-17T16:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/witch-1-addon</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-17-witch-1-addon/"><![CDATA[<h1 id="️-witch-i-the-add-on">🖥️ Witch I, the add-on</h1>
+
+<div class="banner-row is-single">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/witch-1/">
+      <img src="/emojigames/games/witch-1/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🖥️ Witch I</span>
+    </a>
+    
+  
+</div>
+
+<p>17 October 2026. The same computer. The box learned a few more tricks.</p>
+
+<p>She shipped on the 16th. This is not another Witch I. The programs left the script and moved into <code class="language-plaintext highlighter-rouge">shelf/</code>, and the extension is <code class="language-plaintext highlighter-rouge">.wasic</code>. <code class="language-plaintext highlighter-rouge">SHELF</code> reads the catalog and opens it on the glass. Up and down move the mark. Enter takes that program down and does not run it. She tells you that a number changes a line. Escape leaves the shelf where it is.</p>
+
+<p><code class="language-plaintext highlighter-rouge">HELLO-WITCH</code> and <code class="language-plaintext highlighter-rouge">HELLO-DEMON</code> are the two hellos. CAROL hums. FAMILIAR paces. <code class="language-plaintext highlighter-rouge">ANSI-WITCH</code> is a picture. <code class="language-plaintext highlighter-rouge">VEIL</code> sends the glass its own color codes: the sixteen, the 256, and a color mixed on the spot. <code class="language-plaintext highlighter-rouge">LIST</code> prints the program. The line numbers are yellow. Retype one, and that line is the new line.</p>
+
+<p>When the glass wakes, she draws herself in those colors, hat first. Two low notes, and the drawing steps aside for the portrait and the count. Then the words roll up and the glass says SPEAK.</p>
+
+<p>Under the glass, the keys are an emoji, a word, and a function key. LIST, RUN, SHELF, SCRUB, MAGIC, EXORCISE, LATCH. Nothing there is a button. She wakes latched. Up walks the lines that rolled off the glass. <code class="language-plaintext highlighter-rouge">LATCH OFF</code> opens it. F7 and Scroll Lock do what <code class="language-plaintext highlighter-rouge">LATCH</code> does.</p>
+
+<p>EXORCISE rewrites a BASIC listing into WASIC. PRINT becomes CHANT, GOTO becomes FLYTO, FOR becomes CURSE, and the rest of the old names follow. INT, SIN, RND, and the other sums stay. PEEK answers 0. A line she still cannot say is buried as a whisper, and RUN steps over it. An empty circle opens the desk for a <code class="language-plaintext highlighter-rouge">.BAS</code> file. She leaves the lines sitting there. You run them.</p>
+
+<p>A refusal is red, with a mark, and two notes going down. The walls she keeps are in <a href="/emojigames/SYSTEM.md">SYSTEM.md</a>.</p>
+
+<p><a href="/emojigames/games/witch-1/">Witch I</a>.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The shelf points, she draws herself, and EXORCISE drives BASIC out. One machine, not a second debut.]]></summary></entry><entry><title type="html">🖥️ Basic I</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-17-basic-1/" rel="alternate" type="text/html" title="🖥️ Basic I" /><published>2026-10-17T10:00:00+02:00</published><updated>2026-10-17T10:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/basic-1</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-17-basic-1/"><![CDATA[<h1 id="️-basic-i">🖥️ Basic I</h1>
+
+<div class="banner-row is-single">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/basic-1/">
+      <img src="/emojigames/games/basic-1/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🖥️ Basic I</span>
+    </a>
+    
+  
+</div>
+
+<p>17 October 2026. A computer for learning.</p>
+
+<p><a href="/emojigames/games/basic-1/">Basic I</a> is the other 40-column machine. Forty columns, twenty-four rows, and room for 512 lines. The prompt is READY. A line with a number is stored. A line without one runs now.</p>
+
+<p>MODULES opens the lessons that shipped in the box. Getting Started is the first hour. The tutorial walks the rest. The manual is every word this computer knows.</p>
+
+<p>Boot fills the screen. Escape ends the session and brings the page back. Boot again and the lines you stored are still there. A program that was running has stopped.</p>
+
+<p>She is not this machine. Witch I speaks WASIC and keeps 666 lines. Basic I says READY, and the lessons are the point.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[The same glass as Witch I. The prompt is READY. The lessons are built in.]]></summary></entry><entry><title type="html">🧙 A Witch’s Tale</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-witch-tales/" rel="alternate" type="text/html" title="🧙 A Witch’s Tale" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/witch-tales</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-witch-tales/"><![CDATA[<h1 id="-a-witchs-tale">🧙 A Witch’s Tale</h1>
+
+<div class="banner-row is-single">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/witch-tales/">
+      <img src="/emojigames/games/witch-tales/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🧙 A Witch's Tale</span>
+    </a>
+    
+  
+</div>
 
 <p>16 October 2026. A chapter, and a save.</p>
 
@@ -64,7 +245,20 @@
 
 <p>The game stores your chapter, your place, your health, and those flags in this browser. When a chapter ends it looks for the next numbered folder. Chapter 02 is not written yet. The save waits.</p>
 
-<p>That is ten games on the shelf.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Chapter 01 of a tile RPG. A cold kettle, a crow, and a key that walked off.]]></summary></entry><entry><title type="html">🖥️ Witch I</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-witch-1/" rel="alternate" type="text/html" title="🖥️ Witch I" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/witch-1</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-witch-1/"><![CDATA[<h1 id="️-witch-i">🖥️ Witch I</h1>
+<p>That is ten games on the shelf.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Chapter 01 of a tile RPG. A cold kettle, a crow, and a key that walked off.]]></summary></entry><entry><title type="html">🖥️ Witch I</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-witch-1/" rel="alternate" type="text/html" title="🖥️ Witch I" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/witch-1</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-witch-1/"><![CDATA[<h1 id="️-witch-i">🖥️ Witch I</h1>
+
+<div class="banner-row is-single">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/witch-1/">
+      <img src="/emojigames/games/witch-1/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🖥️ Witch I</span>
+    </a>
+    
+  
+</div>
 
 <p>16 October 2026. She woke up.</p>
 
@@ -74,7 +268,20 @@
 
 <p><code class="language-plaintext highlighter-rouge">SHELF</code> lists what shipped in the box: HELLO, GUESS, DICE, OMEN, CIRCLES, MINIONS, KEYS. <code class="language-plaintext highlighter-rouge">UNSEAL "shelf:GUESS"</code> loads one. <code class="language-plaintext highlighter-rouge">RUN</code> starts it. Escape stops it.</p>
 
-<p><code class="language-plaintext highlighter-rouge">SEAL</code> keeps a program in this browser. <code class="language-plaintext highlighter-rouge">GRIMOIRE</code> prints the words.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A 40-column machine. It speaks WASIC.]]></summary></entry><entry><title type="html">🤖 Trump Super Intelligence</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-trump-super-intelligence/" rel="alternate" type="text/html" title="🤖 Trump Super Intelligence" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/trump-super-intelligence</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-trump-super-intelligence/"><![CDATA[<h1 id="-trump-super-intelligence">🤖 Trump Super Intelligence</h1>
+<p><code class="language-plaintext highlighter-rouge">SEAL</code> keeps a program in this browser. <code class="language-plaintext highlighter-rouge">GRIMOIRE</code> prints the words.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A 40-column machine. It speaks WASIC.]]></summary></entry><entry><title type="html">🤖 Trump Super Intelligence</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-trump-super-intelligence/" rel="alternate" type="text/html" title="🤖 Trump Super Intelligence" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/trump-super-intelligence</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-trump-super-intelligence/"><![CDATA[<h1 id="-trump-super-intelligence">🤖 Trump Super Intelligence</h1>
+
+<div class="banner-row is-single">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/trump-si/">
+      <img src="/emojigames/games/trump-si/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🤖 Trump Super Intelligence</span>
+    </a>
+    
+  
+</div>
 
 <p>16 October 2026. The rest of the shelf.</p>
 
@@ -84,7 +291,20 @@
 
 <p>There is no score and no win. There is a cursor. Many people are saying that is the whole game.</p>
 
-<p>That is the shelf as of today. <a href="/emojigames/games/pong/">Pong</a> through <a href="/emojigames/games/hack/">Hack</a> are the four days before this one. The <a href="/emojigames/games/">catalog</a> has all eight.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A terminal chatbot with five faces, a square wave, and a lot of opinions.]]></summary></entry><entry><title type="html">🐂 The Oregon Trail</title><link href="http://localhost:4019/emojigames/releases/2026-10-16-oregon-trail/" rel="alternate" type="text/html" title="🐂 The Oregon Trail" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/oregon-trail</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-16-oregon-trail/"><![CDATA[<h1 id="-the-oregon-trail">🐂 The Oregon Trail</h1>
+<p>That is the shelf as of today. <a href="/emojigames/games/pong/">Pong</a> through <a href="/emojigames/games/hack/">Hack</a> are the four days before this one. The <a href="/emojigames/games/">catalog</a> has all eight.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A terminal chatbot with five faces, a square wave, and a lot of opinions.]]></summary></entry><entry><title type="html">🐂 The Oregon Trail</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-oregon-trail/" rel="alternate" type="text/html" title="🐂 The Oregon Trail" /><published>2026-10-16T00:00:00+02:00</published><updated>2026-10-16T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/oregon-trail</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-16-oregon-trail/"><![CDATA[<h1 id="-the-oregon-trail">🐂 The Oregon Trail</h1>
+
+<div class="banner-row is-single">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/oregon-trail/">
+      <img src="/emojigames/games/oregon-trail/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🐂 The Oregon Trail</span>
+    </a>
+    
+  
+</div>
 
 <p>16 October 2026. A wagon, and the long way west.</p>
 
@@ -138,7 +358,29 @@
 
 <p>A score counts the living, their health, the wagon, the oxen, the spare parts, the clothing, the bullets, the food, and the cash left, then multiplies by the profession. The Oregon Top Ten stays in this browser. The list starts with names from the emigration. R starts another run.</p>
 
-<p>That is nine games on the shelf.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A terminal homage to the 1985 Apple II trail, from Independence to the Willamette.]]></summary></entry><entry><title type="html">🗡️ Rogue and Hack</title><link href="http://localhost:4019/emojigames/releases/2026-10-14-rogue-and-hack/" rel="alternate" type="text/html" title="🗡️ Rogue and Hack" /><published>2026-10-14T00:00:00+02:00</published><updated>2026-10-14T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/rogue-and-hack</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-14-rogue-and-hack/"><![CDATA[<h1 id="️-rogue-and-hack">🗡️ Rogue and Hack</h1>
+<p>That is nine games on the shelf.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A terminal homage to the 1985 Apple II trail, from Independence to the Willamette.]]></summary></entry><entry><title type="html">🗡️ Rogue and Hack</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-14-rogue-and-hack/" rel="alternate" type="text/html" title="🗡️ Rogue and Hack" /><published>2026-10-14T00:00:00+02:00</published><updated>2026-10-14T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/rogue-and-hack</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-14-rogue-and-hack/"><![CDATA[<h1 id="️-rogue-and-hack">🗡️ Rogue and Hack</h1>
+
+<div class="banner-row">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/rogue/">
+      <img src="/emojigames/games/rogue/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🗡️ Rogue</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/hack/">
+      <img src="/emojigames/games/hack/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🗡️ Hack</span>
+    </a>
+    
+  
+</div>
 
 <p>14 October 2026. Two dungeons, shipped the same day, on purpose. One of them ends. The other keeps the stairs going.</p>
 
@@ -162,7 +404,38 @@
 
 <p>Move with the arrows, with WASD, or with the vi keys, diagonals included: y u b n, and q e z c. <code class="language-plaintext highlighter-rouge">?</code> prints the reminder. R, or Enter on the death screen, starts again.</p>
 
-<p>The win screen is written for the Amulet of Yendor. The dungeon you can walk today does not place one. The stairs keep going, and the question the game actually asks is whether you are still alive when you decide to stop.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Two dungeons. Rogue ends at an amulet on floor six. Hack keeps going down.]]></summary></entry><entry><title type="html">🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure</title><link href="http://localhost:4019/emojigames/releases/2026-10-13-galaxy-hunt-adventureland-pirate/" rel="alternate" type="text/html" title="🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure" /><published>2026-10-13T00:00:00+02:00</published><updated>2026-10-13T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/galaxy-hunt-adventureland-pirate</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-13-galaxy-hunt-adventureland-pirate/"><![CDATA[<h1 id="-galaxy-hunt--adventureland-️-pirate-adventure">🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure</h1>
+<p>The win screen is written for the Amulet of Yendor. The dungeon you can walk today does not place one. The stairs keep going, and the question the game actually asks is whether you are still alive when you decide to stop.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[Two dungeons. Rogue ends at an amulet on floor six. Hack keeps going down.]]></summary></entry><entry><title type="html">🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-13-galaxy-hunt-adventureland-pirate/" rel="alternate" type="text/html" title="🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure" /><published>2026-10-13T00:00:00+02:00</published><updated>2026-10-13T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/galaxy-hunt-adventureland-pirate</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-13-galaxy-hunt-adventureland-pirate/"><![CDATA[<h1 id="-galaxy-hunt--adventureland-‍️-pirate-adventure">🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure</h1>
+
+<div class="banner-row">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/galaxy-hunt/">
+      <img src="/emojigames/games/galaxy-hunt/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🚀 Galaxy Hunt</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/adventureland/">
+      <img src="/emojigames/games/adventureland/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🌲 Adventureland</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/pirate/">
+      <img src="/emojigames/games/pirate/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🏴‍☠️ Pirate Adventure</span>
+    </a>
+    
+  
+</div>
 
 <p>13 October 2026. Three games that want you to type.</p>
 
@@ -195,7 +468,7 @@
 
 <p>Move with <code class="language-plaintext highlighter-rouge">N</code> <code class="language-plaintext highlighter-rouge">S</code> <code class="language-plaintext highlighter-rouge">E</code> <code class="language-plaintext highlighter-rouge">W</code> <code class="language-plaintext highlighter-rouge">U</code> <code class="language-plaintext highlighter-rouge">D</code>, or <code class="language-plaintext highlighter-rouge">GO</code> and a direction. <code class="language-plaintext highlighter-rouge">LOOK</code>, <code class="language-plaintext highlighter-rouge">INVENTORY</code>, <code class="language-plaintext highlighter-rouge">GET</code>, <code class="language-plaintext highlighter-rouge">DROP</code>. The puzzles that are not directions are on the help list, and they are exact: <code class="language-plaintext highlighter-rouge">SAY BUNYON</code>, <code class="language-plaintext highlighter-rouge">SAY AWAY</code>, <code class="language-plaintext highlighter-rouge">RUB LAMP</code>, <code class="language-plaintext highlighter-rouge">LIGHT LAMP</code>, <code class="language-plaintext highlighter-rouge">UNLOCK DOOR</code>, <code class="language-plaintext highlighter-rouge">YELL</code>, <code class="language-plaintext highlighter-rouge">JUMP</code>, <code class="language-plaintext highlighter-rouge">FILL</code>, <code class="language-plaintext highlighter-rouge">CATCH</code>, <code class="language-plaintext highlighter-rouge">DAM</code>, <code class="language-plaintext highlighter-rouge">POUR</code>. If a line comes back as “I don’t understand,” <code class="language-plaintext highlighter-rouge">HELP</code> is that list again.</p>
 
-<h2 id="️-pirate-adventure"><a href="/emojigames/games/pirate/">🏴‍☠️ Pirate Adventure</a></h2>
+<h2 id="‍️-pirate-adventure"><a href="/emojigames/games/pirate/">🏴‍☠️ Pirate Adventure</a></h2>
 
 <p>You wake up in a London flat. A bookcase, a window, a book about pirates. East is the street, then the dock, a ship, a parrot, and a hold. South of the dock is the island: jungle, a clearing, a cave, a beach, a boat.</p>
 
@@ -203,7 +476,29 @@
 
 <p>Same shape as Adventureland. Directions, <code class="language-plaintext highlighter-rouge">GET</code>, <code class="language-plaintext highlighter-rouge">DROP</code>, and a few extra verbs: <code class="language-plaintext highlighter-rouge">READ</code>, <code class="language-plaintext highlighter-rouge">OPEN</code>, <code class="language-plaintext highlighter-rouge">SAY</code>, <code class="language-plaintext highlighter-rouge">CLIMB</code>, <code class="language-plaintext highlighter-rouge">BOARD</code>, <code class="language-plaintext highlighter-rouge">FILL</code>. <code class="language-plaintext highlighter-rouge">SCORE</code> tells you how many treasures you have secured. <code class="language-plaintext highlighter-rouge">HELP</code> if you would rather not guess.</p>
 
-<p>Pieces of eight.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A starship, then two treasure hunts. Type HELP when a sentence bounces.]]></summary></entry><entry><title type="html">🏓 Pong and 🐍 Snake</title><link href="http://localhost:4019/emojigames/releases/2026-10-12-pong-and-snake/" rel="alternate" type="text/html" title="🏓 Pong and 🐍 Snake" /><published>2026-10-12T00:00:00+02:00</published><updated>2026-10-12T00:00:00+02:00</updated><id>http://localhost:4019/emojigames/releases/pong-and-snake</id><content type="html" xml:base="http://localhost:4019/emojigames/releases/2026-10-12-pong-and-snake/"><![CDATA[<h1 id="-pong-and--snake">🏓 Pong and 🐍 Snake</h1>
+<p>Pieces of eight.</p>]]></content><author><name></name></author><summary type="html"><![CDATA[A starship, then two treasure hunts. Type HELP when a sentence bounces.]]></summary></entry><entry><title type="html">🏓 Pong and 🐍 Snake</title><link href="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-12-pong-and-snake/" rel="alternate" type="text/html" title="🏓 Pong and 🐍 Snake" /><published>2026-10-12T00:00:00+02:00</published><updated>2026-10-12T00:00:00+02:00</updated><id>https://thewhitewitchtm.github.io/emojigames/releases/pong-and-snake</id><content type="html" xml:base="https://thewhitewitchtm.github.io/emojigames/releases/2026-10-12-pong-and-snake/"><![CDATA[<h1 id="-pong-and--snake">🏓 Pong and 🐍 Snake</h1>
+
+<div class="banner-row">
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/pong/">
+      <img src="/emojigames/games/pong/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🏓 Pong</span>
+    </a>
+    
+  
+    
+    
+    
+    <a class="banner-card" href="/emojigames/games/snake/">
+      <img src="/emojigames/games/snake/banner.jpg" alt="" width="480" height="270" loading="lazy" />
+      <span>🐍 Snake</span>
+    </a>
+    
+  
+</div>
 
 <p>12 October 2026. The corner opened with the two games that fit in one sentence.</p>
 

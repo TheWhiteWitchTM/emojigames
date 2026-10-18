@@ -8,6 +8,11 @@ tags: [terminal, rpg, adventure]
 game_base: /games/witch-tales/
 ---
 
+<div id="game-manual" class="doc-panel" hidden>
+{% capture game_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+{{ game_doc | markdownify }}
+</div>
+
 You are a witch. The land has problems. Chapters arrive one at a time. Your save stays in this browser.
 
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>

@@ -2,9 +2,14 @@
 title: 🏓 Pong and 🐍 Snake
 date: 2026-10-12
 description: Opening day. Pong, first to 5, and Snake on a field full of hazards.
+games:
+  - pong
+  - snake
 ---
 
 # 🏓 Pong and 🐍 Snake
+
+{% include release-banners.html %}
 
 12 October 2026. The corner opened with the two games that fit in one sentence.
 

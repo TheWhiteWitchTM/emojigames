@@ -7,6 +7,11 @@ permalink: /games/adventureland/
 tags: [terminal, adventure]
 ---
 
+<div id="game-manual" class="doc-panel" hidden>
+{% capture game_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+{{ game_doc | markdownify }}
+</div>
+
 Thirteen starred treasures belong in the hollow stump. HELP lists the words. Return leaves the title. R, when it is over, starts again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

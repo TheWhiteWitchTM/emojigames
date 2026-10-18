@@ -7,6 +7,11 @@ permalink: /games/pong/
 tags: [terminal, action]
 ---
 
+<div id="game-manual" class="doc-panel" hidden>
+{% capture game_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+{{ game_doc | markdownify }}
+</div>
+
 First to 5. Return starts the match. R starts it again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

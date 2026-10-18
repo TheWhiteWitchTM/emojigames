@@ -2,9 +2,13 @@
 title: 🐂 The Oregon Trail
 date: 2026-10-16
 description: A terminal homage to the 1985 Apple II trail, from Independence to the Willamette.
+games:
+  - oregon-trail
 ---
 
 # 🐂 The Oregon Trail
+
+{% include release-banners.html %}
 
 16 October 2026. A wagon, and the long way west.
 

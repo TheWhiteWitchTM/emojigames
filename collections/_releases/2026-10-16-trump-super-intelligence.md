@@ -2,9 +2,13 @@
 title: 🤖 Trump Super Intelligence
 date: 2026-10-16
 description: A terminal chatbot with five faces, a square wave, and a lot of opinions.
+games:
+  - trump-si
 ---
 
 # 🤖 Trump Super Intelligence
+
+{% include release-banners.html %}
 
 16 October 2026. The rest of the shelf.
 

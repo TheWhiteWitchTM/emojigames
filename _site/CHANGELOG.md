@@ -2,7 +2,39 @@
 
 The glass keeps this record. Newest first.
 
+## 2026-10-18
+
+### Play, then Escape
+
+Every game page is a desk now. ▶️ Play fills the screen. Escape returns to the page. It does not shrink the glass back into the article.
+
+Witch I and Basic I open the same way. Play fills the screen, and they stay there until Escape ends the session. Their lines stay. Witch Hunt fits the whole maze on that screen. Trump Super Intelligence keeps the caret on the bottom row, and the face sits in the glass above the prompt.
+
+Adventureland, Pirate Adventure, Galaxy Hunt, The Oregon Trail, and Trump Super Intelligence keep a blinking block caret at the prompt.
+
+### The page
+
+Every game has 📜 Manual beside Play. Witch I and Basic I say 🖥️ Boot. The banner sits under the buttons, and the words sit under the banner. Home and About open on the site banner. A release carries the banners of the games it names.
+
+Witch I shipped once, on the 16th. The 17th is an add-on, not a second debut. Basic I has its own note.
+
+The emoji engine on this site is the current one. The desk hides that engine's fullscreen button. Escape already ends the session.
+
 ## 2026-10-17
+
+### Playable speeds, and emoji where the games speak
+
+Pong keeps its score on the table, 🙂 and 🤖, and the ball crosses in a few seconds instead of flashing past. Snake, Witch Hunt, the Oregon hunt, and the Columbia raft all wait a little longer between steps. Galaxy Hunt stops at the rim of the map.
+
+Hack is rock, stairs, and creatures, and the floors stay where you left them. Scrolls blink. Potions are a turn. The amulet is still on the sixth floor.
+
+Rogue remembers the dungeon. The walls stay dark, so the rooms read. The amulet has to come back up to the road home.
+
+A Witch's Tale is drawn in emoji: the cottage, the yard, the crow, the shade. The board fits the page, so those glyphs stay large enough to read. Adventureland and Pirate Adventure label their rooms the same way.
+
+### Basic I
+
+A 40-column computer for learning BASIC. The prompt is READY. A program holds 512 lines. MODULES opens the built-in lessons. Getting Started and a tutorial sit on the page.
 
 ### The glass, and three on the marquee
 

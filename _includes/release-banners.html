@@ -1,0 +1,20 @@
+{% assign ids = include.games | default: page.games %}
+{% if ids and ids.size > 0 %}
+<div class="banner-row{% if ids.size == 1 %} is-single{% endif %}">
+  {% for id in ids %}
+    {% assign found = nil %}
+    {% for game in site.games %}
+      {% assign bits = game.path | split: "/" %}
+      {% if bits[1] == id %}
+        {% assign found = game %}
+      {% endif %}
+    {% endfor %}
+    {% if found %}
+    <a class="banner-card" href="{{ found.url | relative_url }}">
+      <img src="{{ found.image | relative_url }}" alt="" width="480" height="270" loading="lazy">
+      <span>{{ found.title }}</span>
+    </a>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endif %}

@@ -2,9 +2,14 @@
 title: 🗡️ Rogue and Hack
 date: 2026-10-14
 description: Two dungeons. Rogue ends at an amulet on floor six. Hack keeps going down.
+games:
+  - rogue
+  - hack
 ---
 
 # 🗡️ Rogue and Hack
+
+{% include release-banners.html %}
 
 14 October 2026. Two dungeons, shipped the same day, on purpose. One of them ends. The other keeps the stairs going.
 

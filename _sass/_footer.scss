@@ -1,15 +1,10 @@
 .site-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
+  margin-top: auto;
   background: #0a0a0a;
   border-top: 1px solid #1f1f1f;
-  padding: 0.9rem 1.5rem;
+  padding: 1.1rem 1.5rem 1.3rem;
   text-align: center;
   font-size: 0.9rem;
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .footer-links {

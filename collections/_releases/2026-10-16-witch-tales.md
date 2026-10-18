@@ -2,9 +2,13 @@
 title: 🧙 A Witch's Tale
 date: 2026-10-16
 description: Chapter 01 of a tile RPG. A cold kettle, a crow, and a key that walked off.
+games:
+  - witch-tales
 ---
 
 # 🧙 A Witch's Tale
+
+{% include release-banners.html %}
 
 16 October 2026. A chapter, and a save.
 

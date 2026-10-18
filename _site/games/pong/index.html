@@ -20,30 +20,32 @@
 <meta name="description" content="First to 5. You on the left, the machine on the right.">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://localhost:4019/emojigames/games/pong/">
+<meta property="og:url" content="https://thewhitewitchtm.github.io/emojigames/games/pong/">
 <meta property="og:title" content="🏓 Pong">
 <meta property="og:description" content="First to 5. You on the left, the machine on the right.">
 <meta property="og:site_name" content="Emoji Games">
-<meta property="og:image" content="http://localhost:4019/emojigames/games/pong/banner.jpg">
+<meta property="og:image" content="https://thewhitewitchtm.github.io/emojigames/games/pong/banner.jpg">
 <meta property="og:image:alt" content="🏓 Pong">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@TheWhiteWitchTM">
 <meta name="twitter:title" content="🏓 Pong">
 <meta name="twitter:description" content="First to 5. You on the left, the machine on the right.">
-<meta name="twitter:image" content="http://localhost:4019/emojigames/games/pong/banner.jpg">
+<meta name="twitter:image" content="https://thewhitewitchtm.github.io/emojigames/games/pong/banner.jpg">
 <meta name="twitter:image:alt" content="🏓 Pong">
 
   <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+  
   <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
+  
 </head>
-<body>
+<body class="">
   <header class="site-header">
   <nav class="site-nav">
     <ul>
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/">🏠 Home</a>
             
@@ -51,7 +53,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/releases/">📢 Releases</a>
             
@@ -59,7 +61,7 @@
         
       
         
-          <li class="dropdown">
+          <li class="dropdown is-current">
             <a href="#" class="dropdown-toggle">🕹️ Games</a>
             <ul class="dropdown-menu">
               
@@ -88,7 +90,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/about/">🔮 About</a>
             
@@ -100,9 +102,8 @@
 </header>
 
 
-  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
-
   <main class="game-frame">
+    
     <div id="game-stage" class="game-stage" hidden>
       <div id="game"></div>
     </div>
@@ -110,10 +111,37 @@
       <h1>🏓 Pong</h1>
       <p class="game-lead">First to 5. You on the left, the machine on the right.</p>
       <div class="game-actions">
+        
         <button type="button" class="play" id="game-play">▶️ Play</button>
+        
+        
+        <button type="button" class="doc-toggle" id="game-manual-btn" aria-expanded="false" aria-controls="game-manual">📜 Manual</button>
       </div>
+      
       <p class="game-hint">Play fills the screen. Escape brings you back here.</p>
+      
+      
+      <img class="game-banner" src="/emojigames/games/pong/banner.jpg" alt="">
+      
       <div class="game-copy">
+        <div id="game-manual" class="doc-panel" hidden="">
+
+<h1 id="pong">Pong</h1>
+
+<p>First to 5. You are the left paddle. The machine is the right one, a little late and a little short, which is the whole game.</p>
+
+<h2 id="start">Start</h2>
+
+<p>Return leaves the title. R starts the match again and skips the title.</p>
+
+<h2 id="the-paddle">The paddle</h2>
+
+<p>W and S, or the up and down arrows, move your paddle. Each clean hit speeds the ball up. Miss, and the other side scores.</p>
+
+<p>The score sits on the table, 🙂 and 🤖. A small beep marks a hit.</p>
+
+</div>
+
 <p>First to 5. Return starts the match. R starts it again.</p>
 
 <script src="/emojigames/assets/js/components.js"></script>
@@ -123,14 +151,16 @@
 <script src="/emojigames/assets/js/glass.js"></script>
 
 <script src="/emojigames/games/pong/pong.js"></script>
+
+
       </div>
     </div>
-
+    
   </main>
 
   <footer class="site-footer">
   <div class="footer-links">
-    <a href="http://localhost:4019/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <a href="https://thewhitewitchtm.github.io/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
     <span>•</span>
     <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
     <span>•</span>
@@ -149,6 +179,30 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
 });
 </script>
 
+  
   <script src="/emojigames/assets/js/game-desk.js"></script>
+  <script>
+  (function () {
+    var buttons = document.querySelectorAll(".doc-toggle");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var panel = document.getElementById(btn.getAttribute("aria-controls"));
+        if (!panel) return;
+        var open = btn.getAttribute("aria-expanded") === "true";
+        buttons.forEach(function (other) {
+          var otherPanel = document.getElementById(other.getAttribute("aria-controls"));
+          other.setAttribute("aria-expanded", "false");
+          if (otherPanel) otherPanel.hidden = true;
+        });
+        if (!open) {
+          btn.setAttribute("aria-expanded", "true");
+          panel.hidden = false;
+          panel.scrollIntoView({ block: "nearest" });
+        }
+      });
+    });
+  })();
+  </script>
+  
 </body>
 </html>

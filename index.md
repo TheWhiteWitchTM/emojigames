@@ -32,13 +32,19 @@ The menu carries these three. The [catalog]({{ '/games/' | relative_url }}) stil
 
 ### [🚀 Galaxy Hunt]({{ '/games/galaxy-hunt/' | relative_url }})
 
+<img class="home-banner" src="{{ '/games/galaxy-hunt/banner.jpg' | relative_url }}" alt="">
+
 Super Star Trek, drawn with emoji. The galaxy is eight by eight. You are the Alliance hunter. Raiders sit in the quadrants, stars block a shot, and an outpost will repair you if you dock on its sector. Energy, missiles, shields, and a stardate. `HELP` prints the rose and the commands. Clear the fleet before the date runs out.
 
 ### [🐂 The Oregon Trail]({{ '/games/oregon-trail/' | relative_url }})
 
+<img class="home-banner" src="{{ '/games/oregon-trail/banner.jpg' | relative_url }}" alt="">
+
 A wagon, five names, and the road from Independence to the Willamette. Banker, carpenter, or farmer. Matt sells the oxen. The rivers want a choice, the hunt wants the arrows, and the Columbia wants a raft that can find the channel. A score is written only if someone arrives. Return leaves the title. The trail after that is the one you already know: a number, then Return.
 
 ### [🗡️ Hack]({{ '/games/hack/' | relative_url }})
+
+<img class="home-banner" src="{{ '/games/hack/banner.jpg' | relative_url }}" alt="">
 
 Rooms, corridors, and things that walk toward you. Weapons get wielded when they are better than the one in your hand. Armor takes the edge off a hit. `P` drinks a potion. The Amulet of Yendor is on the sixth floor. Pick it up and the delve is over.
 

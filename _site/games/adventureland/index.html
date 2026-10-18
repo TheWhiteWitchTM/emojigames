@@ -20,30 +20,32 @@
 <meta name="description" content="Thirteen treasures, and one hollow stump to keep them in.">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="http://localhost:4019/emojigames/games/adventureland/">
+<meta property="og:url" content="https://thewhitewitchtm.github.io/emojigames/games/adventureland/">
 <meta property="og:title" content="🌲 Adventureland">
 <meta property="og:description" content="Thirteen treasures, and one hollow stump to keep them in.">
 <meta property="og:site_name" content="Emoji Games">
-<meta property="og:image" content="http://localhost:4019/emojigames/games/adventureland/banner.jpg">
+<meta property="og:image" content="https://thewhitewitchtm.github.io/emojigames/games/adventureland/banner.jpg">
 <meta property="og:image:alt" content="🌲 Adventureland">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@TheWhiteWitchTM">
 <meta name="twitter:title" content="🌲 Adventureland">
 <meta name="twitter:description" content="Thirteen treasures, and one hollow stump to keep them in.">
-<meta name="twitter:image" content="http://localhost:4019/emojigames/games/adventureland/banner.jpg">
+<meta name="twitter:image" content="https://thewhitewitchtm.github.io/emojigames/games/adventureland/banner.jpg">
 <meta name="twitter:image:alt" content="🌲 Adventureland">
 
   <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+  
   <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
+  
 </head>
-<body>
+<body class="">
   <header class="site-header">
   <nav class="site-nav">
     <ul>
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/">🏠 Home</a>
             
@@ -51,7 +53,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/releases/">📢 Releases</a>
             
@@ -59,7 +61,7 @@
         
       
         
-          <li class="dropdown">
+          <li class="dropdown is-current">
             <a href="#" class="dropdown-toggle">🕹️ Games</a>
             <ul class="dropdown-menu">
               
@@ -88,7 +90,7 @@
         
       
         
-          <li>
+          <li class="">
             
               <a href="/emojigames/about/">🔮 About</a>
             
@@ -100,9 +102,8 @@
 </header>
 
 
-  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
-
   <main class="game-frame">
+    
     <div id="game-stage" class="game-stage" hidden>
       <div id="game"></div>
     </div>
@@ -110,10 +111,43 @@
       <h1>🌲 Adventureland</h1>
       <p class="game-lead">Thirteen treasures, and one hollow stump to keep them in.</p>
       <div class="game-actions">
+        
         <button type="button" class="play" id="game-play">▶️ Play</button>
+        
+        
+        <button type="button" class="doc-toggle" id="game-manual-btn" aria-expanded="false" aria-controls="game-manual">📜 Manual</button>
       </div>
+      
       <p class="game-hint">Play fills the screen. Escape brings you back here.</p>
+      
+      
+      <img class="game-banner" src="/emojigames/games/adventureland/banner.jpg" alt="">
+      
       <div class="game-copy">
+        <div id="game-manual" class="doc-panel" hidden="">
+
+<h1 id="adventureland">Adventureland</h1>
+
+<p>You start in a dark forest. Thirteen starred treasures belong in the hollow stump. <code class="language-plaintext highlighter-rouge">SCORE</code> counts them out of 13.</p>
+
+<h2 id="start">Start</h2>
+
+<p>Return leaves the title. R, when it is over, starts again and skips the title. <code class="language-plaintext highlighter-rouge">HELP</code> prints the words this game understands. <code class="language-plaintext highlighter-rouge">RESTART</code> begins again from inside the game.</p>
+
+<h2 id="words">Words</h2>
+
+<p>Move with <code class="language-plaintext highlighter-rouge">N</code> <code class="language-plaintext highlighter-rouge">S</code> <code class="language-plaintext highlighter-rouge">E</code> <code class="language-plaintext highlighter-rouge">W</code> <code class="language-plaintext highlighter-rouge">U</code> <code class="language-plaintext highlighter-rouge">D</code>, or <code class="language-plaintext highlighter-rouge">GO</code> and a direction. <code class="language-plaintext highlighter-rouge">LOOK</code>, <code class="language-plaintext highlighter-rouge">INVENTORY</code>, <code class="language-plaintext highlighter-rouge">GET</code>, <code class="language-plaintext highlighter-rouge">DROP</code>.</p>
+
+<p>The lines that are not directions are exact:</p>
+
+<p><code class="language-plaintext highlighter-rouge">SAY BUNYON</code>, <code class="language-plaintext highlighter-rouge">SAY AWAY</code>, <code class="language-plaintext highlighter-rouge">RUB LAMP</code>, <code class="language-plaintext highlighter-rouge">LIGHT LAMP</code>, <code class="language-plaintext highlighter-rouge">UNLOCK DOOR</code>, <code class="language-plaintext highlighter-rouge">YELL</code>, <code class="language-plaintext highlighter-rouge">JUMP</code>, <code class="language-plaintext highlighter-rouge">FILL</code>, <code class="language-plaintext highlighter-rouge">CATCH</code>, <code class="language-plaintext highlighter-rouge">DAM</code>, <code class="language-plaintext highlighter-rouge">POUR</code>.</p>
+
+<p>If a line comes back as “I don’t understand,” <code class="language-plaintext highlighter-rouge">HELP</code> is that list again.</p>
+
+<p>A sleeping dragon occupies the meadow and does not like mud. The bees, the dragon, the bear, and the hole will end it if you insist.</p>
+
+</div>
+
 <p>Thirteen starred treasures belong in the hollow stump. HELP lists the words. Return leaves the title. R, when it is over, starts again.</p>
 
 <script src="/emojigames/assets/js/components.js"></script>
@@ -123,14 +157,16 @@
 <script src="/emojigames/assets/js/glass.js"></script>
 
 <script src="/emojigames/games/adventureland/adventureland.js"></script>
+
+
       </div>
     </div>
-
+    
   </main>
 
   <footer class="site-footer">
   <div class="footer-links">
-    <a href="http://localhost:4019/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <a href="https://thewhitewitchtm.github.io/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
     <span>•</span>
     <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
     <span>•</span>
@@ -149,6 +185,30 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
 });
 </script>
 
+  
   <script src="/emojigames/assets/js/game-desk.js"></script>
+  <script>
+  (function () {
+    var buttons = document.querySelectorAll(".doc-toggle");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var panel = document.getElementById(btn.getAttribute("aria-controls"));
+        if (!panel) return;
+        var open = btn.getAttribute("aria-expanded") === "true";
+        buttons.forEach(function (other) {
+          var otherPanel = document.getElementById(other.getAttribute("aria-controls"));
+          other.setAttribute("aria-expanded", "false");
+          if (otherPanel) otherPanel.hidden = true;
+        });
+        if (!open) {
+          btn.setAttribute("aria-expanded", "true");
+          panel.hidden = false;
+          panel.scrollIntoView({ block: "nearest" });
+        }
+      });
+    });
+  })();
+  </script>
+  
 </body>
 </html>

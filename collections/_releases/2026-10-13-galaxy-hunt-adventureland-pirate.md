@@ -2,9 +2,15 @@
 title: 🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure
 date: 2026-10-13
 description: A starship, then two treasure hunts. Type HELP when a sentence bounces.
+games:
+  - galaxy-hunt
+  - adventureland
+  - pirate
 ---
 
 # 🚀 Galaxy Hunt, 🌲 Adventureland, 🏴‍☠️ Pirate Adventure
+
+{% include release-banners.html %}
 
 13 October 2026. Three games that want you to type.
 

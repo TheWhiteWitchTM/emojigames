@@ -7,6 +7,11 @@ permalink: /games/trump-si/
 tags: [terminal, joke]
 ---
 
+<div id="game-manual" class="doc-panel" hidden>
+{% capture game_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+{{ game_doc | markdownify }}
+</div>
+
 A conversation, not a match. Type a line and press Return. The face follows the mood.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

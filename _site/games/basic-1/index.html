@@ -1,0 +1,1775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13S6Z9KCX9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13S6Z9KCX9');
+</script>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧙‍♀️</text></svg>">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>🖥️ Basic I</title>
+<meta name="description" content="A small computer for learning BASIC. Forty columns, 512 lines, lessons built in.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thewhitewitchtm.github.io/emojigames/games/basic-1/">
+<meta property="og:title" content="🖥️ Basic I">
+<meta property="og:description" content="A small computer for learning BASIC. Forty columns, 512 lines, lessons built in.">
+<meta property="og:site_name" content="Emoji Games">
+<meta property="og:image" content="https://thewhitewitchtm.github.io/emojigames/games/basic-1/banner.jpg">
+<meta property="og:image:alt" content="🖥️ Basic I">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@TheWhiteWitchTM">
+<meta name="twitter:title" content="🖥️ Basic I">
+<meta name="twitter:description" content="A small computer for learning BASIC. Forty columns, 512 lines, lessons built in.">
+<meta name="twitter:image" content="https://thewhitewitchtm.github.io/emojigames/games/basic-1/banner.jpg">
+<meta name="twitter:image:alt" content="🖥️ Basic I">
+
+  <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+  
+  <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
+  
+</head>
+<body class="machine-basic">
+  <header class="site-header">
+  <nav class="site-nav">
+    <ul>
+      
+        
+          <li class="">
+            
+              <a href="/emojigames/">🏠 Home</a>
+            
+          </li>
+        
+      
+        
+          <li class="">
+            
+              <a href="/emojigames/releases/">📢 Releases</a>
+            
+          </li>
+        
+      
+        
+          <li class="dropdown is-current">
+            <a href="#" class="dropdown-toggle">🕹️ Games</a>
+            <ul class="dropdown-menu">
+              
+                
+                  <li><a href="/emojigames/games/">📂 All Games</a></li>
+                
+              
+                
+                  <li class="dropdown-separator"></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/galaxy-hunt/">🚀 Galaxy Hunt</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/oregon-trail/">🐂 The Oregon Trail</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/hack/">🗡️ Hack</a></li>
+                
+              
+            </ul>
+          </li>
+        
+      
+        
+          <li class="">
+            
+              <a href="/emojigames/about/">🔮 About</a>
+            
+          </li>
+        
+      
+    </ul>
+  </nav>
+</header>
+
+
+  <main class="game-frame">
+    
+    <div id="game-stage" class="game-stage game-stage-aspect" style="--stage-aspect: 1.25" hidden>
+      <div id="game" data-modules="/emojigames/games/basic-1/modules/"></div>
+    </div>
+    <div class="game-front markdown-body">
+      <h1>🖥️ Basic I</h1>
+      <p class="game-lead">A small computer for learning BASIC. Forty columns, 512 lines, lessons built in.</p>
+      <div class="game-actions">
+        
+        <button type="button" class="play" id="game-play">🖥️ Boot</button>
+        
+        
+        <button type="button" class="doc-toggle" aria-expanded="false" aria-controls="game-started">📖 Getting Started</button>
+        
+        <button type="button" class="doc-toggle" aria-expanded="false" aria-controls="game-tutorial">✏️ Tutorial</button>
+        
+        <button type="button" class="doc-toggle" id="game-manual-btn" aria-expanded="false" aria-controls="game-manual">📜 Manual</button>
+      </div>
+      
+      <p class="game-hint">Boot fills the screen. Escape brings you back here. The lines stay.</p>
+      
+      
+      <img class="game-banner" src="/emojigames/games/basic-1/banner.jpg" alt="">
+      
+      <div class="game-copy">
+        <div id="game-started" class="doc-panel" hidden="">
+
+<h1 id="getting-started">Getting Started</h1>
+
+<p>Basic I is a small computer that lives in this page. It is for kids, for people who miss the old machines, and for anyone who wants to see how a program is made.</p>
+
+<p>You do not install anything. You do not make an account. You boot it, you type, and it answers.</p>
+
+<p>It is the same shape as a Commodore 64 or an Apple II. A line with a number is kept. A line without a number runs now. The glass is 40 columns wide and 24 rows tall, because those machines were about that size. It can hold 512 lines. That is the whole computer.</p>
+
+<h2 id="boot">Boot</h2>
+
+<p>Click <strong>Boot</strong>. The glass fills the screen and stays there. Two notes play, the memory counts up to 512, and then the prompt says:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>READY.
+</code></pre></div></div>
+
+<p>READY means it is waiting for you.</p>
+
+<p>Escape ends the session and brings this page back. Boot again and the lines you stored are still there. A program that was running has stopped.</p>
+
+<p>If the notes stay quiet, press any key. A browser holds its sound until you do that.</p>
+
+<p>The mouse is not part of this computer. The pointer hides over the glass, and a click does nothing. You drive it from the keyboard, the way the old ones worked.</p>
+
+<h2 id="two-kinds-of-line">Two kinds of line</h2>
+
+<p>Type this and press Enter:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PRINT "HI"
+</code></pre></div></div>
+
+<p>There is no number, so it runs now. The glass says HI, then READY.</p>
+
+<p>Now give the same idea a number:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 PRINT "HI"
+</code></pre></div></div>
+
+<p>Press Enter. Nothing says HI yet. Line 10 is stored. The number is the line’s name.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN
+</code></pre></div></div>
+
+<p>RUN starts at the smallest number. Now it says HI.</p>
+
+<p>That is the trick. You can stack lines, change one, and run the stack again.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 PRINT "HI"
+20 PRINT "I AM LEARNING"
+LIST
+RUN
+</code></pre></div></div>
+
+<p>LIST shows what is stored. The numbers are yellow. The words stay the color of ash.</p>
+
+<h2 id="change-a-line">Change a line</h2>
+
+<p>Type the same number again with new words. The old line is replaced.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>20 PRINT "I LIKE THIS"
+RUN
+</code></pre></div></div>
+
+<p>Line 10 is still there. Only line 20 changed.</p>
+
+<p>A number with nothing after it deletes that line.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10
+LIST
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">NEW</code> wipes the whole program. The glass stays. It says GONE.</p>
+
+<h2 id="the-built-in-modules">The built-in modules</h2>
+
+<p>You do not have to start from a blank glass. Eleven lessons shipped with the computer. They are modules. You pick one.</p>
+
+<p>Press F3, or type:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MODULES
+</code></pre></div></div>
+
+<p>A list opens on the glass.</p>
+
+<ul>
+  <li>The up and down arrows move the mark.</li>
+  <li>Enter loads the lesson under the mark. It does not run it. That is on purpose, so you can read it first.</li>
+  <li>Escape leaves the list. The glass says the modules can wait.</li>
+</ul>
+
+<p>Then:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LIST
+RUN
+</code></pre></div></div>
+
+<p>LIST shows the lines. A line that starts with <code class="language-plaintext highlighter-rouge">REM</code> is a note to you. The computer skips notes. The note tells you what the lesson is for.</p>
+
+<p><code class="language-plaintext highlighter-rouge">LOAD "module:HELLO"</code> loads the same lesson if you would rather type the name.</p>
+
+<p>The lessons, in order:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>What it teaches</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HELLO</td>
+      <td>Print, color, and a question</td>
+    </tr>
+    <tr>
+      <td>COUNT</td>
+      <td><code class="language-plaintext highlighter-rouge">FOR</code> and <code class="language-plaintext highlighter-rouge">NEXT</code></td>
+    </tr>
+    <tr>
+      <td>GUESS</td>
+      <td><code class="language-plaintext highlighter-rouge">IF</code>, and a secret number</td>
+    </tr>
+    <tr>
+      <td>DICE</td>
+      <td>A fair roll, <code class="language-plaintext highlighter-rouge">INT</code> and <code class="language-plaintext highlighter-rouge">RND</code></td>
+    </tr>
+    <tr>
+      <td>QUIZ</td>
+      <td><code class="language-plaintext highlighter-rouge">DATA</code> and <code class="language-plaintext highlighter-rouge">READ</code></td>
+    </tr>
+    <tr>
+      <td>CIRCLES</td>
+      <td>Rings and lines</td>
+    </tr>
+    <tr>
+      <td>BOUNCE</td>
+      <td>Two pictures that move</td>
+    </tr>
+    <tr>
+      <td>KEYS</td>
+      <td>The key you just pressed</td>
+    </tr>
+    <tr>
+      <td>SCALE</td>
+      <td>Eight notes</td>
+    </tr>
+    <tr>
+      <td>CAT</td>
+      <td>A picture that walks</td>
+    </tr>
+    <tr>
+      <td>COLORS</td>
+      <td>The pens, and mixed ink</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Your own programs can sit in the same list. <code class="language-plaintext highlighter-rouge">SAVE "MINE"</code> keeps one in this browser. The next time you open MODULES, it is under YOUR SAVED PROGRAMS. <code class="language-plaintext highlighter-rouge">LOAD "MINE"</code> brings it back. <code class="language-plaintext highlighter-rouge">DOWNLOAD "MINE"</code> saves <code class="language-plaintext highlighter-rouge">mine.bas</code> on your computer. <code class="language-plaintext highlighter-rouge">UPLOAD</code> reads a text file back in.</p>
+
+<h2 id="keys-under-the-glass">Keys under the glass</h2>
+
+<p>Each one is a picture, a word, and a function key. They are not buttons. F5 belongs to this computer, not to the browser’s reload.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LIST F1</td>
+      <td>Show the program</td>
+    </tr>
+    <tr>
+      <td>RUN F2</td>
+      <td>Start at the top</td>
+    </tr>
+    <tr>
+      <td>MODULES F3</td>
+      <td>Open the lessons</td>
+    </tr>
+    <tr>
+      <td>CLS F4</td>
+      <td>Clear the glass. Sprites stay</td>
+    </tr>
+    <tr>
+      <td>AUTO F5</td>
+      <td>Number the next lines for you. Press it again to stop</td>
+    </tr>
+    <tr>
+      <td>RENUM F6</td>
+      <td>Renumber the program from 10</td>
+    </tr>
+    <tr>
+      <td>LATCH F7</td>
+      <td>Hold the glass so you can read what rolled off</td>
+    </tr>
+    <tr>
+      <td>BACK ESC</td>
+      <td>End the session and return to this page. A running program stops</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The bezel on the left tells you the mood, then how many lines are stored, out of 512. READY 0/512 means the program is empty.</p>
+
+<h2 id="if-it-will-not-stop">If it will not stop</h2>
+
+<p>Ctrl-C stops a program. The glass says:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✋ ENOUGH.
+</code></pre></div></div>
+
+<p>Escape stops it too, and brings this page back.</p>
+
+<p>GUESS, BOUNCE, KEYS, and CAT wait on you, or walk until you stop them. That is normal. Ctrl-C is the door.</p>
+
+<h2 id="reading-what-rolled-away">Reading what rolled away</h2>
+
+<p>The glass is only 24 rows tall. Lines that roll off the top are kept. 512 of them. Clearing the glass forgets those, too.</p>
+
+<p>It wakes with the hold on. That word is <code class="language-plaintext highlighter-rouge">LATCH</code>.</p>
+
+<ul>
+  <li>Up and Down walk the lines that rolled away.</li>
+  <li>Page Up and Page Down move a screen, and leave one row so you can see where you were.</li>
+  <li>Home is the oldest line still kept.</li>
+  <li>End sits where you type.</li>
+</ul>
+
+<p>The bezel says GAZE and how far above the pen you are. A key that writes also sits you back on the pen, so the line you were typing is still there.</p>
+
+<p><code class="language-plaintext highlighter-rouge">LATCH OFF</code> opens the hold. Then Up and Down recall the last 32 lines you sent, the way a shell does. <code class="language-plaintext highlighter-rouge">LATCH</code> turns the hold back on. Scroll Lock does the same thing as F7.</p>
+
+<p>While a program runs, the arrows belong to the program. When it stops, the hold is how you walk back up and read.</p>
+
+<h2 id="what-the-colors-mean">What the colors mean</h2>
+
+<p>A red line is the computer asking for another look. It is not a scolding. The mark in front of the words is a hint. Two notes go down.</p>
+
+<p><code class="language-plaintext highlighter-rouge">ENOUGH</code> is the color of a candle, and those two notes are softer.</p>
+
+<p>A line that will not take another character only clicks. A line holds 255 characters. One emoji counts as one.</p>
+
+<h2 id="what-to-open-next">What to open next</h2>
+
+<p>The tutorial walks the first hour, one small program at a time. Start there if the prompt is new.</p>
+
+<p>The manual is every word this computer knows. You do not need it on the first day. It is there when a lesson makes you curious.</p>
+
+</div>
+
+<div id="game-tutorial" class="doc-panel" hidden="">
+
+<h1 id="tutorial">Tutorial</h1>
+
+<p>A slow walk. Type what you see. The lines are short because the glass is 40 columns wide.</p>
+
+<p>Press Boot first. Wait until it says READY. The bezel should say READY 0/512. No lines stored, and room for 512.</p>
+
+<h2 id="1-a-line-that-runs-now">1. A line that runs now</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PRINT "HELLO"
+</code></pre></div></div>
+
+<p>Press Enter. There is no number, so it runs immediately. The glass says HELLO, then READY again.</p>
+
+<p>Try a sum the same way:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PRINT 2 + 2
+</code></pre></div></div>
+
+<p>It prints 4, with a space in front. Positive numbers do that, so a column of them lines up.</p>
+
+<h2 id="2-store-the-lines">2. Store the lines</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 PRINT "HELLO"
+20 PRINT "I AM LEARNING"
+</code></pre></div></div>
+
+<p>A stored line does not print READY. The caret just waits. That means it kept the line.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LIST
+RUN
+</code></pre></div></div>
+
+<p>LIST shows both lines. The numbers are yellow. RUN prints both sentences.</p>
+
+<p><code class="language-plaintext highlighter-rouge">REM</code> is a note. Add one:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>5 REM MY FIRST PROGRAM.
+LIST
+RUN
+</code></pre></div></div>
+
+<p>The note shows up in LIST. RUN skips it. A period in a note is fine. The computer eats the rest of that line.</p>
+
+<h2 id="3-change-one-line">3. Change one line</h2>
+
+<p>Retype line 20:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>20 PRINT "I AM GETTING BETTER"
+LIST
+RUN
+</code></pre></div></div>
+
+<p>Line 10 is untouched. Only 20 changed. On these machines you edit by typing the number again. There is no other editor, and that is the lesson.</p>
+
+<p>Delete line 10. Type the number and nothing else:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10
+LIST
+RUN
+</code></pre></div></div>
+
+<p>Only the second sentence remains.</p>
+
+<h2 id="4-ask-a-question">4. Ask a question</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NEW
+10 PRINT "HI."
+20 INPUT "YOUR NAME"; N$
+30 PRINT "NICE TO MEET YOU, "; N$
+RUN
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">NEW</code> clears the old lines. It says GONE.</p>
+
+<p>Type your name at the question and press Enter. <code class="language-plaintext highlighter-rouge">INPUT</code> waits. The question mark is added for you. <code class="language-plaintext highlighter-rouge">N$</code> is text, because of the dollar sign. A name without <code class="language-plaintext highlighter-rouge">$</code> is a number.</p>
+
+<p>Run it again and press Enter without a name. It still says hello, with a blank in the middle. You can teach it to notice:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>25 IF N$ = "" THEN PRINT "NO NAME YET." : END
+RUN
+</code></pre></div></div>
+
+<p>A true <code class="language-plaintext highlighter-rouge">IF</code> runs the rest of that line. A false one skips the rest. <code class="language-plaintext highlighter-rouge">END</code> stops the program before line 30.</p>
+
+<h2 id="5-count">5. Count</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NEW
+10 FOR I = 1 TO 5
+20 PRINT I
+30 NEXT I
+RUN
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">FOR</code> counts. <code class="language-plaintext highlighter-rouge">NEXT</code> sends it back until <code class="language-plaintext highlighter-rouge">I</code> passes 5. The body runs, then the count steps.</p>
+
+<p>Change the 5 to 12 and run it again. Then make line 20 louder:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>20 PRINT "NUMBER "; I
+</code></pre></div></div>
+
+<p>The semicolon stays on the same line, so the word and the number sit together.</p>
+
+<h2 id="6-pick-up-a-lesson">6. Pick up a lesson</h2>
+
+<p>You have the idea. The modules are the same kind of program, written so you can read them.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MODULES
+</code></pre></div></div>
+
+<p>The arrows move. Home and End jump. Put the mark on HELLO and press Enter.</p>
+
+<p>The glass loads it and does not run it. It says to list it.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LIST
+</code></pre></div></div>
+
+<p>Read the notes. Then:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RUN
+</code></pre></div></div>
+
+<p>Tell it your name. When it finishes, change a word. Line 50 is the greeting. Retype it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>50 PRINT "HEY. I AM BASIC I."
+RUN
+</code></pre></div></div>
+
+<p>Your sentence, its program. That is the point of loading without running.</p>
+
+<p><code class="language-plaintext highlighter-rouge">LOAD "module:HELLO"</code> is the same load if the list is in the way.</p>
+
+<h2 id="7-walk-the-rest-when-you-want">7. Walk the rest when you want</h2>
+
+<p>Each module is one idea. Stay with a module until you can say what it did.</p>
+
+<p><strong>COUNT.</strong> <code class="language-plaintext highlighter-rouge">FOR</code> and <code class="language-plaintext highlighter-rouge">NEXT</code>, and a note on each number. Change the 10.</p>
+
+<p><strong>GUESS.</strong> The computer picks a number from 1 to 100 with <code class="language-plaintext highlighter-rouge">RND</code>. You guess. <code class="language-plaintext highlighter-rouge">IF</code> says higher or lower. It will not stop until you get it, or until Ctrl-C.</p>
+
+<p><strong>DICE.</strong> Ask it for a few rolls, from 1 to 12. <code class="language-plaintext highlighter-rouge">INT</code> and <code class="language-plaintext highlighter-rouge">RND</code> make a face from 1 to 6. Each face really is one in six. The pictures are the faces.</p>
+
+<p><strong>QUIZ.</strong> Three questions live in <code class="language-plaintext highlighter-rouge">DATA</code>. <code class="language-plaintext highlighter-rouge">READ</code> takes them out in order. Answer with a number. A wrong answer shows the one from the data. Change a question and its answer, then run it again.</p>
+
+<p><strong>CIRCLES.</strong> A loop draws rings. <code class="language-plaintext highlighter-rouge">STEP 2</code> skips every other size. Two <code class="language-plaintext highlighter-rouge">LINE</code>s cross in the middle.</p>
+
+<p><strong>BOUNCE.</strong> A star and a ball move on their own. When one hits an edge, it turns around. When they meet, they turn around and beep. Escape or Ctrl-C sends them home.</p>
+
+<p><strong>KEYS.</strong> Press keys. The glass names the one you pressed. Q quits.</p>
+
+<p><strong>SCALE.</strong> Eight notes, C to C. <code class="language-plaintext highlighter-rouge">DATA</code> holds the pitch and the letter. <code class="language-plaintext highlighter-rouge">SOUND</code> plays the pitch and waits, so the tune stays in order. The number is hertz.</p>
+
+<p><strong>CAT.</strong> One sprite. <code class="language-plaintext highlighter-rouge">SPRITE</code> puts the cat on the glass. <code class="language-plaintext highlighter-rouge">SEND</code> gives it a speed. At the edge it turns around and chirps. Escape stops it.</p>
+
+<p><strong>COLORS.</strong> The pens are 0 through 15. <code class="language-plaintext highlighter-rouge">COLOR</code> picks one. <code class="language-plaintext highlighter-rouge">INK</code> can also ask for a bold white, a green, one of 256 colors, or a color mixed from red, green, and blue. Change a number. Run it again.</p>
+
+<h2 id="8-keep-something-of-your-own">8. Keep something of your own</h2>
+
+<p>When a program is yours:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SAVE "MINE"
+</code></pre></div></div>
+
+<p>It stays in this browser. Open MODULES and it is listed under YOUR SAVED PROGRAMS.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LOAD "MINE"
+DOWNLOAD "MINE"
+</code></pre></div></div>
+
+<p>DOWNLOAD writes <code class="language-plaintext highlighter-rouge">mine.bas</code> to your computer. UPLOAD reads a text file of numbered lines back onto the glass.</p>
+
+<p>A name is a letter, then letters, digits, or hyphens. Fifteen after the first letter is the wall. HELLO is a fine name. So is MY-CAT.</p>
+
+<h2 id="9-when-you-are-stuck">9. When you are stuck</h2>
+
+<ul>
+  <li>Ctrl-C if it is still running.</li>
+  <li>LIST if you forgot what you typed.</li>
+  <li>NEW if you want a clean page. SAVE first if you liked it.</li>
+  <li>A red line names the problem. <code class="language-plaintext highlighter-rouge">IN 40</code> means line 40. Retype that line.</li>
+  <li><code class="language-plaintext highlighter-rouge">HELP</code> prints the short list of words.</li>
+</ul>
+
+<p>The manual is the long version. It has every word, the sixteen colors, the sprites, and what each red line means.</p>
+
+<p>Change the lessons. Break one on purpose. Run it. That is how a line starts to make sense.</p>
+
+</div>
+
+<div id="game-manual" class="doc-panel" hidden="">
+
+<h1 id="basic-i">Basic I</h1>
+
+<p>The glass is 40 columns by 24 rows. The prompt is READY. The language is BASIC. A program can hold 512 lines. This is a learning machine: the same shape as the old 40-column computers, with lessons built in.</p>
+
+<p>A line with a number is stored. A line without one runs now. The words are the same either way. The lessons, the first hour, and every key are in Getting Started and the Tutorial, on the same page.</p>
+
+<h2 id="when-it-wakes">When it wakes</h2>
+
+<p>The glass stays black. A pale bar blinks at the top left. Two notes, a fourth apart. Then the sign:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>         ┌────────────────────┐
+         │ **** BASIC I ****  │
+         │  LEARN BY TYPING   │
+         └────────────────────┘
+
+            40 COLUMN GLASS
+               MEMORY 512
+
+           HI. LET US LEARN.
+        A NUMBER STORES A LINE.
+         A BARE LINE RUNS NOW.
+      THE LESSONS ARE IN MODULES.
+
+            512 LINES FREE.
+READY.
+</code></pre></div></div>
+
+<p>The frame is cyan. The name is white. LEARN BY TYPING is cyan. 40 COLUMN GLASS is faint. The count, and 512 LINES FREE, are the color of a low candle. The waking lines are ash. READY is white. What you type after that is ash, until a program runs.</p>
+
+<p>The page is a desk. 🖥️ Boot fills the screen with the glass, and it stays there. Escape ends the session and returns to the page. Boot opens the glass again. A program that was running has stopped. The lines you stored are still there.</p>
+
+<p>Press a key if the notes stay silent. The browser holds the sound until a key arrives. The mouse is not a device here. The pointer is hidden over the glass, and a click does nothing.</p>
+
+<p>A refusal is red, with a mark in front of the words, and two notes going down. ENOUGH is candle-colored, and those two notes are softer. A line that will not take another character only clicks.</p>
+
+<p>The bezel under the glass names the mood, then the lines in use.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Bezel</th>
+      <th>Mood</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>WAKING</td>
+      <td>Still counting</td>
+    </tr>
+    <tr>
+      <td>READING</td>
+      <td>Opening a built-in module</td>
+    </tr>
+    <tr>
+      <td>PICKING</td>
+      <td>The module list is open. The arrows are its</td>
+    </tr>
+    <tr>
+      <td>READY n/512</td>
+      <td>Waiting for you</td>
+    </tr>
+    <tr>
+      <td>LINE n</td>
+      <td>Running that line</td>
+    </tr>
+    <tr>
+      <td>RUNNING</td>
+      <td>Running, between lines</td>
+    </tr>
+    <tr>
+      <td>WAITING</td>
+      <td>INPUT wants an answer</td>
+    </tr>
+    <tr>
+      <td>AUTO n</td>
+      <td>Numbering for you</td>
+    </tr>
+    <tr>
+      <td>FROZEN</td>
+      <td>SLEEP is holding still</td>
+    </tr>
+    <tr>
+      <td>GAZE n</td>
+      <td>The glass is latched, n lines above the pen</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Under that, the keys. Each one is an emoji, a word, and a function key. They are not buttons. F5 is its, not the browser’s reload. The glass is already full screen. Escape ends the session.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>📜 LIST F1</td>
+      <td>LIST</td>
+    </tr>
+    <tr>
+      <td>▶ RUN F2</td>
+      <td>RUN</td>
+    </tr>
+    <tr>
+      <td>📘 MODULES F3</td>
+      <td>MODULES</td>
+    </tr>
+    <tr>
+      <td>🧹 CLS F4</td>
+      <td>CLS. The letters go, and so do the lines that had rolled off. The sprites stay</td>
+    </tr>
+    <tr>
+      <td>✨ AUTO F5</td>
+      <td>AUTO. Again, and the numbering stops</td>
+    </tr>
+    <tr>
+      <td>🔢 RENUM F6</td>
+      <td>RENUM</td>
+    </tr>
+    <tr>
+      <td>🔒 LATCH F7</td>
+      <td>Scroll lock. Scroll Lock does this too</td>
+    </tr>
+    <tr>
+      <td>⎋ BACK ESC</td>
+      <td>Ends the session and returns to the page. A program that was running stops</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The bar is quiet while it runs, and while the module list is open. LATCH stays lit while it is latched at READY, at AUTO, and while INPUT waits. While AUTO is numbering, the bar still lists, clears, renumbers, and latches. Typing those words on the numbered line stores them, the way RUN would. The function key does the thing.</p>
+
+<h2 id="typing">Typing</h2>
+
+<p>The pale bar is the caret, and it blinks. It is already blinking while the glass is still black. Backspace, Delete, Left, and Right edit the line. A line holds 255 characters, and one emoji is one. Past that it clicks once and takes no more.</p>
+
+<p>It wakes latched. That is the scroll lock, and the word is LATCH. Lines that roll off the top are kept, 512 of them. Up and Down walk those lines. Page Up and Page Down move a glassful, leaving one row so you can see where you were. Home is the oldest line still kept. End sits on the pen. A key that writes also sits on the pen, so the line you were typing is still there. The bezel says GAZE and how far above the pen you are. Ctrl-Up and Ctrl-Down still recall the last 32 lines you sent.</p>
+
+<p><code class="language-plaintext highlighter-rouge">LATCH</code> turns the hold on. <code class="language-plaintext highlighter-rouge">LATCH ON</code> does that too. <code class="language-plaintext highlighter-rouge">LATCH OFF</code>, or <code class="language-plaintext highlighter-rouge">LATCH</code> again, opens the glass. Then Up and Down recall, the way a shell does, and Page Up only clicks. Home and End edit the line. F7 and the Scroll Lock key do what the bare word does, without printing a line. The same hold is on while INPUT waits, so you can walk up and read the question. AUTO keeps it. A program does not. While it runs, the arrows belong to the program, and the glass is text.</p>
+
+<p>While the module list is open, Up and Down move the mark. Home and End jump. Page Up and Page Down move a glassful. Enter loads the name under the mark. Escape returns to the page. If the list was open it closes, and it says <code class="language-plaintext highlighter-rouge">OK. THE MODULES CAN WAIT.</code> The caret stays dark until the list closes.</p>
+
+<p>Enter stores a numbered line, or runs a bare one. A stored line does not print READY. The caret just waits for the next one. An empty Enter at READY prints READY. again.</p>
+
+<p>Escape returns to the page. Ctrl-C stops a program, or a question that is waiting. It says:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>✋ ENOUGH.
+</code></pre></div></div>
+
+<p>From inside a program the line number comes along: <code class="language-plaintext highlighter-rouge">✋ ENOUGH. IN 40</code></p>
+
+<p>Paste a block and it takes it one line at a time. Paste into an INPUT and it takes the first line.</p>
+
+<h2 id="lines">Lines</h2>
+
+<p>A line number is an integer from 0 to 63999. The number, then the words. It stores the line. It does not run it. That is the old way, C64 and Apple II, and it kept it. A label, junk, a word it will not run: all of it sits down. It reads it when you say RUN.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 PRINT "WHO?"
+20 LABEL MARCO
+30 POKE 53280, 0
+</code></pre></div></div>
+
+<p>A number with nothing after it deletes that line. Above 63999:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔢 NO. LINES STOP AT 63999.
+</code></pre></div></div>
+
+<p>512 stored lines is the wall.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🛑 FULL. 512 LINES. STOP.
+</code></pre></div></div>
+
+<p>It will store a line it cannot parse. POKE can sit in the program. <code class="language-plaintext highlighter-rouge">10 MARCO</code> can sit in the program. It fails when the run reaches it.</p>
+
+<h2 id="at-ready">At READY</h2>
+
+<p>These words work from the prompt. Inside a program they are <code class="language-plaintext highlighter-rouge">🚪 NO. NOT FROM IN HERE.</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Words</th>
+      <th>What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>LIST</td>
+      <td>Print the program. The line numbers are yellow</td>
+    </tr>
+    <tr>
+      <td>LIST n</td>
+      <td>That line</td>
+    </tr>
+    <tr>
+      <td>LIST n-m</td>
+      <td>That range</td>
+    </tr>
+    <tr>
+      <td>LIST n-</td>
+      <td>From n through the end</td>
+    </tr>
+    <tr>
+      <td>LIST -m</td>
+      <td>From 0 through m</td>
+    </tr>
+    <tr>
+      <td>RUN</td>
+      <td>Start at the first line</td>
+    </tr>
+    <tr>
+      <td>RUN n</td>
+      <td>Start at the first line numbered n or higher</td>
+    </tr>
+    <tr>
+      <td>NEW</td>
+      <td>Wipe the program and the sprites. The glass stays. It says GONE.</td>
+    </tr>
+    <tr>
+      <td>AUTO</td>
+      <td>From 10 if the program is empty, otherwise ten past the last line, step 10</td>
+    </tr>
+    <tr>
+      <td>AUTO start</td>
+      <td>From that number, step 10</td>
+    </tr>
+    <tr>
+      <td>AUTO start, step</td>
+      <td>Both. The step has to be at least 1</td>
+    </tr>
+    <tr>
+      <td>AUTO OFF</td>
+      <td>Stop numbering</td>
+    </tr>
+    <tr>
+      <td>RENUM</td>
+      <td>Renumber from 10, step 10. RENUMBER is the same word</td>
+    </tr>
+    <tr>
+      <td>LOAD “NAME”</td>
+      <td>Load a program kept in this browser. It says LOADED. It does not run it</td>
+    </tr>
+    <tr>
+      <td>SAVE “NAME”</td>
+      <td>Keep the program here. It says SAVED.</td>
+    </tr>
+    <tr>
+      <td>LOAD “module:NAME”</td>
+      <td>Load a built-in lesson. It does not run it</td>
+    </tr>
+    <tr>
+      <td>MODULES</td>
+      <td>Open the lessons. Arrows move. Enter loads. Escape returns to the page</td>
+    </tr>
+    <tr>
+      <td>UPLOAD</td>
+      <td>Read a text file. Cancel returns to READY with no speech</td>
+    </tr>
+    <tr>
+      <td>DOWNLOAD “NAME”</td>
+      <td>Save NAME.bas. It says TAKE IT.</td>
+    </tr>
+    <tr>
+      <td>CLS</td>
+      <td>Clear the glass. The sprites stay</td>
+    </tr>
+    <tr>
+      <td>HELP</td>
+      <td>The short list of words</td>
+    </tr>
+    <tr>
+      <td>LATCH</td>
+      <td>Toggle the scroll lock</td>
+    </tr>
+    <tr>
+      <td>LATCH ON</td>
+      <td>Up walks the lines that rolled off</td>
+    </tr>
+    <tr>
+      <td>LATCH OFF</td>
+      <td>Up and Down recall the last 32 lines you sent</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>LIST says <code class="language-plaintext highlighter-rouge">RETYPE THE NUMBER. THAT IS THE EDIT.</code> The number is yellow. The words of the line stay ash. An empty program is <code class="language-plaintext highlighter-rouge">NO LINES.</code> When there are lines, it ends with <code class="language-plaintext highlighter-rouge">RUN, OR RETYPE A NUMBER.</code></p>
+
+<p>RENUM rewrites line numbers in GOTO, GOSUB, RESTORE, a THEN that is only a number, and ON. Labels stay labels. A number that points at no line stays as written. It says RENUMBERED. A renumber that would push a line past 255 characters says 📏 TOO LONG. and leaves the numbers alone.</p>
+
+<p>AUTO prints the next number and waits. What you type is stored under that number, so RUN and AUTO OFF typed there become lines, not commands. An empty line says AUTO OFF. A line it refuses to store keeps the same number.</p>
+
+<p>A file name is a letter, then up to 15 letters, digits, or hyphens. It folds the case. No name:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔖 NAME IT.
+</code></pre></div></div>
+
+<p>Nothing there:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🌑 NO. IT IS NOT THERE.
+</code></pre></div></div>
+
+<p>The lessons are only for reading. A browser that will not open them:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📦 IT WOULD NOT OPEN.
+</code></pre></div></div>
+
+<p>DOWNLOAD of an empty program says 📭 NOTHING TO RUN. SAVE of an empty program saves an empty program.</p>
+
+<h2 id="running">Running</h2>
+
+<p>RUN clears the variables, the loops, the calls, the data pointer, the watch, and the sprites. The pen turns green on black for the working. The letters already on the glass stay until CLS, or until they scroll off. What scrolls off is kept until the 512 are full, or until the glass is cleared. While it runs, that memory is not a window. The glass is text, and the arrows belong to the program. When it stops, the pen returns to ash, and the latch is how you walk back up.</p>
+
+<p>A bare GOTO or GOSUB at READY walks into the program and leaves the variables where they sit.</p>
+
+<p>END stops a run and says nothing. STOP does too. An error returns to READY. The variables survive both. The next RUN does not spare them. NEW does not either.</p>
+
+<p>No lines:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📭 NOTHING TO RUN.
+</code></pre></div></div>
+
+<p>No such line:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🚫 NO LINE.
+</code></pre></div></div>
+
+<p>It runs in short slices, so Ctrl-C still lands and the sprites still move. Escape returns to the page, and a program that was running stops. A complaint from inside a program gains the line: <code class="language-plaintext highlighter-rouge">🚫 NO LINE. IN 40</code></p>
+
+<h2 id="the-words">The words</h2>
+
+<p>Case does not matter. A colon puts another statement on the line. A name is a letter, then up to 15 letters or digits. A string name ends in <code class="language-plaintext highlighter-rouge">$</code>. It keeps the whole word.</p>
+
+<p>A name that is already a word of its is refused:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔒 NO. THAT WORD IS TAKEN.
+</code></pre></div></div>
+
+<p>A line it cannot parse:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❓ NO. SAY IT AGAIN.
+</code></pre></div></div>
+
+<h3 id="rem">REM</h3>
+
+<p>The rest of that line is a comment. <code class="language-plaintext highlighter-rouge">'</code> does the same. It eats the rest, periods and colons included. A note is for the person reading LIST. RUN skips it.</p>
+
+<h3 id="print">PRINT</h3>
+
+<p>PRINT writes. <code class="language-plaintext highlighter-rouge">?</code> is PRINT. A comma jumps to the next column that is a multiple of 10. A semicolon stays. A trailing comma or semicolon holds the line open. PRINT alone writes a blank line.</p>
+
+<p>A positive number grows a leading space. A whole number under a billion prints as a whole number. Anything else prints to eight digits, and the very large and the very small go scientific.</p>
+
+<p>TAB(n) and SPC(n) belong only inside PRINT. Column 0 is the left edge. TAB past the right edge starts a new line at column 0.</p>
+
+<h3 id="ink">INK</h3>
+
+<p>INK writes one line through the glass’s own color codes. A <code class="language-plaintext highlighter-rouge">{31}</code> in the string is ink. <code class="language-plaintext highlighter-rouge">31</code> is dark red. <code class="language-plaintext highlighter-rouge">1;97</code> is bold white. <code class="language-plaintext highlighter-rouge">38;5;141</code> is one of the 256. <code class="language-plaintext highlighter-rouge">38;2;232;206;168</code> is a color mixed on the spot. <code class="language-plaintext highlighter-rouge">2</code> is faint. A background is <code class="language-plaintext highlighter-rouge">45</code>, purple. A doubled <code class="language-plaintext highlighter-rouge">{</code> is one brace. INK with nothing after it writes a blank line. A number where a string belongs is the wrong kind of thing.</p>
+
+<p><code class="language-plaintext highlighter-rouge">COLORS</code> in the modules is that sample. A line number changes one.</p>
+
+<h3 id="input">INPUT</h3>
+
+<p>INPUT N$ waits for a line. INPUT “NAME”; N$ writes <code class="language-plaintext highlighter-rouge">NAME? </code> and waits. A comma after the prompt skips the question mark: INPUT “NAME”, N$</p>
+
+<p>One variable keeps the whole answer, commas included. Several variables split on commas. The wrong count:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔁 AGAIN.
+</code></pre></div></div>
+
+<p>A number variable that did not get a number:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔢 AGAIN. A NUMBER.
+</code></pre></div></div>
+
+<p>It asks again until the answer fits, or until Ctrl-C. Escape returns to the page and leaves the question waiting.</p>
+
+<h3 id="let">LET</h3>
+
+<p>LET A = 1 stores a number. A = 1 stores the same number. Strings and numbers do not change clothes.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🎭 NO. WRONG KIND OF THING.
+</code></pre></div></div>
+
+<p>A new number name starts at 0. A new string name starts empty.</p>
+
+<h3 id="goto-gosub-return-label">GOTO, GOSUB, RETURN, LABEL</h3>
+
+<p>GOTO 100 jumps to that line. GOTO START jumps to LABEL START. GO TO is the same jump. The spot has to exist.</p>
+
+<p>GOSUB START calls it. GO SUB is the same call. RETURN comes back. RETURN with nobody waiting:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📭 RETURN, AND NOBODY CALLED.
+</code></pre></div></div>
+
+<p>Two LABELs with one name:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔖 NO. THAT NAME IS TAKEN.
+</code></pre></div></div>
+
+<p>Calls and loops each stop at 32 deep.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📚 TOO DEEP.
+</code></pre></div></div>
+
+<h3 id="if">IF</h3>
+
+<p>IF N$ = “” THEN PRINT “LEAVE.” : END runs the rest of the line when the test is true. A false test skips the rest of the line. There is no second branch.</p>
+
+<p>IF N = 1 THEN 200 jumps when the test is true, and only when that number is the whole statement. Whatever follows it on the line still belongs to the IF, so a true jump leaves it behind and a false test skips it.</p>
+
+<h3 id="for-and-next">FOR and NEXT</h3>
+
+<p>FOR I = 1 TO 13 counts. NEXT ends the lap. NEXT I names the loop. The body runs once even when the start is already past the end. That is the old way, and it kept it.</p>
+
+<p>STEP may be negative. STEP 0:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🚫 STEP OF NOTHING. NO.
+</code></pre></div></div>
+
+<p>NEXT I closes the loop named I, and any loop inside it. A new FOR of the same name throws out the old one. NEXT with no FOR:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➰ NEXT, AND NOTHING TO NEXT.
+</code></pre></div></div>
+
+<p>A string cannot count.</p>
+
+<h3 id="end-and-sleep">END and SLEEP</h3>
+
+<p>END ends the program. STOP does too. It does not announce either one.</p>
+
+<p>SLEEP waits for a key. SLEEP 500 waits 500 milliseconds. The longest wait is 60000. A key or Escape ends a bare SLEEP. Escape also cuts a timed one, and returns to the page.</p>
+
+<h3 id="data-read-restore">DATA, READ, RESTORE</h3>
+
+<p>DATA stores items for READ. An item is a number, a quoted string, or one bare word. A minus may sit in front of a number.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 DATA 3, "CUP", BONE, -1
+20 READ N, A$, W$, M
+</code></pre></div></div>
+
+<p>The kind has to match the variable. RESTORE starts the pointer over. RESTORE 100, or RESTORE of a label, starts at the first item on or after that line. When the data is spent:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📜 OUT OF DATA.
+</code></pre></div></div>
+
+<h3 id="on">ON</h3>
+
+<p>ON N GOTO 10, 20, 30 jumps to the Nth target. The count starts at 1. ON N GOSUB START, LATER calls instead. Outside the list, it walks on to the next statement.</p>
+
+<h3 id="dim">DIM</h3>
+
+<p>DIM A(10) makes slots 0 through 10. DIM B$(3, 4) makes two axes. One or two axes, no more. The biggest index is 2000. One array holds at most 20000 cells.</p>
+
+<p>Ask for the same array twice, or ask for one that was never made:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📦 NO. IT HAS NO ROOM.
+</code></pre></div></div>
+
+<p>An index outside the array:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>📐 NO. OUTSIDE THE ROOM.
+</code></pre></div></div>
+
+<h2 id="older-names">Older names</h2>
+
+<p>You do not need this table to learn. The lessons use the BASIC names.</p>
+
+<p>Witch I speaks WASIC. A listing from that machine still runs here. The words on the right are the old ones.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>BASIC</th>
+      <th>The other name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PRINT, and ?</td>
+      <td>CHANT</td>
+    </tr>
+    <tr>
+      <td>GOTO, and GO TO</td>
+      <td>FLYTO</td>
+    </tr>
+    <tr>
+      <td>GOSUB, and GO SUB</td>
+      <td>SUMMON</td>
+    </tr>
+    <tr>
+      <td>RETURN</td>
+      <td>BANISH</td>
+    </tr>
+    <tr>
+      <td>FOR</td>
+      <td>CURSE</td>
+    </tr>
+    <tr>
+      <td>NEXT</td>
+      <td>BREAK</td>
+    </tr>
+    <tr>
+      <td>LET</td>
+      <td>CONJURE</td>
+    </tr>
+    <tr>
+      <td>INPUT</td>
+      <td>DEMAND</td>
+    </tr>
+    <tr>
+      <td>REM, and ‘</td>
+      <td>WHISPER</td>
+    </tr>
+    <tr>
+      <td>DATA</td>
+      <td>OFFERING</td>
+    </tr>
+    <tr>
+      <td>READ</td>
+      <td>TAKE</td>
+    </tr>
+    <tr>
+      <td>RESTORE</td>
+      <td>REWIND</td>
+    </tr>
+    <tr>
+      <td>END, and STOP</td>
+      <td>DISPEL</td>
+    </tr>
+    <tr>
+      <td>CLS</td>
+      <td>SCRUB</td>
+    </tr>
+    <tr>
+      <td>LOCATE row, col</td>
+      <td>AT col, row</td>
+    </tr>
+    <tr>
+      <td>SLEEP</td>
+      <td>FREEZE</td>
+    </tr>
+    <tr>
+      <td>SOUND</td>
+      <td>TONE</td>
+    </tr>
+    <tr>
+      <td>INK</td>
+      <td>VEIL</td>
+    </tr>
+    <tr>
+      <td>LABEL</td>
+      <td>MARK</td>
+    </tr>
+    <tr>
+      <td>SPRITE</td>
+      <td>MINION</td>
+    </tr>
+    <tr>
+      <td>ON n GOTO</td>
+      <td>WHEN n FLYTO</td>
+    </tr>
+    <tr>
+      <td>ON n GOSUB</td>
+      <td>WHEN n SUMMON</td>
+    </tr>
+    <tr>
+      <td>INKEY$</td>
+      <td>LISTEN$</td>
+    </tr>
+    <tr>
+      <td>LIST</td>
+      <td>REVEAL, with no color</td>
+    </tr>
+    <tr>
+      <td>NEW</td>
+      <td>VANISH, which also clears the glass</td>
+    </tr>
+    <tr>
+      <td>LOAD</td>
+      <td>UNSEAL</td>
+    </tr>
+    <tr>
+      <td>SAVE</td>
+      <td>SEAL</td>
+    </tr>
+    <tr>
+      <td>AUTO</td>
+      <td>MAGIC</td>
+    </tr>
+    <tr>
+      <td>RENUM</td>
+      <td>RENUMBER</td>
+    </tr>
+    <tr>
+      <td>HELP</td>
+      <td>GRIMOIRE</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="the-sums">The sums</h2>
+
+<p>The marks are <code class="language-plaintext highlighter-rouge">+ - * / ^</code>. Power binds tighter than the rest, and it binds to the right, so <code class="language-plaintext highlighter-rouge">2^3^2</code> is 512. A leading minus sits looser than power, so <code class="language-plaintext highlighter-rouge">-2^2</code> is -4.</p>
+
+<p>Comparisons are <code class="language-plaintext highlighter-rouge">= &lt;&gt; &lt; &gt; &lt;= &gt;=</code>. <code class="language-plaintext highlighter-rouge">&gt;&lt;</code> means <code class="language-plaintext highlighter-rouge">&lt;&gt;</code>. AND is tighter than OR. NOT flips the truth. A comparison, AND, OR, and NOT all answer 1 or 0. Any number but 0 counts as true. AND and OR leave the unused side alone.</p>
+
+<p>A string plus a string joins them. A string holds 255 characters, counted the same way as a line, and one emoji is one. Past that:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🧵 TOO LONG A STRING.
+</code></pre></div></div>
+
+<p>A string mixed with a number is the wrong kind of thing. Dividing by zero, or MOD by zero:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➗ CUTE. DIVIDE BY NOTHING.
+</code></pre></div></div>
+
+<p>A result that will not fit:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>💥 TOO BIG.
+</code></pre></div></div>
+
+<p>Quotes wrap a string. Two quotes inside a string are one quote.</p>
+
+<h2 id="functions">Functions</h2>
+
+<p>Parentheses, then the arguments. INKEY$, LISTEN$, TICK, COLS, and ROWS may skip the parentheses.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Function</th>
+      <th>Answer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>INT(n)</td>
+      <td>Toward the more negative side. INT(-1.2) is -2</td>
+    </tr>
+    <tr>
+      <td>ABS(n)</td>
+      <td>Distance from zero</td>
+    </tr>
+    <tr>
+      <td>SQR(n)</td>
+      <td>Square root. A negative is the wrong kind of thing</td>
+    </tr>
+    <tr>
+      <td>SIN COS TAN ATN</td>
+      <td>Radians</td>
+    </tr>
+    <tr>
+      <td>LOG(n)</td>
+      <td>Natural log. Zero and below are the wrong kind</td>
+    </tr>
+    <tr>
+      <td>EXP(n)</td>
+      <td>e to that power</td>
+    </tr>
+    <tr>
+      <td>SGN(n)</td>
+      <td>-1, 0, or 1</td>
+    </tr>
+    <tr>
+      <td>RND(n)</td>
+      <td>See below</td>
+    </tr>
+    <tr>
+      <td>LEN(s$)</td>
+      <td>Characters. One emoji is one</td>
+    </tr>
+    <tr>
+      <td>VAL(s$)</td>
+      <td>A number read from the front, or 0</td>
+    </tr>
+    <tr>
+      <td>ASC(s$)</td>
+      <td>The first code. An empty string is the wrong kind</td>
+    </tr>
+    <tr>
+      <td>STR$(n)</td>
+      <td>The number as PRINT would write it, leading space included</td>
+    </tr>
+    <tr>
+      <td>CHR$(n)</td>
+      <td>The character, codes 0 through 255</td>
+    </tr>
+    <tr>
+      <td>LEFT$(s$, n)</td>
+      <td>The first n characters. Count starts at 1</td>
+    </tr>
+    <tr>
+      <td>RIGHT$(s$, n)</td>
+      <td>The last n</td>
+    </tr>
+    <tr>
+      <td>MID$(s$, start)</td>
+      <td>From that character to the end. Start counts from 1</td>
+    </tr>
+    <tr>
+      <td>MID$(s$, start, n)</td>
+      <td>n characters from there</td>
+    </tr>
+    <tr>
+      <td>MOD(a, b)</td>
+      <td>The remainder, a - b * INT(a / b)</td>
+    </tr>
+    <tr>
+      <td>COL(id) ROW(id)</td>
+      <td>Where that sprite is, in cells</td>
+    </tr>
+    <tr>
+      <td>VX(id) VY(id)</td>
+      <td>Its speed, in cells per second</td>
+    </tr>
+    <tr>
+      <td>HELD(s$)</td>
+      <td>1 while that key is down. “ArrowLeft”, “a”, “A”</td>
+    </tr>
+    <tr>
+      <td>INKEY$, LISTEN$</td>
+      <td>The next key seen while running, or “”</td>
+    </tr>
+    <tr>
+      <td>TICK</td>
+      <td>Milliseconds since it woke</td>
+    </tr>
+    <tr>
+      <td>FRE(n)</td>
+      <td>512 minus the lines stored. n is required, numeric, and ignored</td>
+    </tr>
+    <tr>
+      <td>COLS ROWS</td>
+      <td>40 and 24</td>
+    </tr>
+    <tr>
+      <td>SPRITE(picture$, x, y)</td>
+      <td>Make one. Size defaults to 28. The number comes back, and IT is set</td>
+    </tr>
+    <tr>
+      <td>SPRITE(picture$, x, y, size)</td>
+      <td>Same, with a size</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>RND(1), or any positive number, draws the next value from 0 up to but not including 1. RND(0) repeats the last draw. RND of a negative number plants a new seed from its absolute whole part. The seed starts at 1. The roll is the usual cheap one: multiply by 1664525, add 1013904223, keep the low 32 bits, divide by 2^32.</p>
+
+<p>A letter in HELD matches either case. INKEY$ keeps the case of the key, and it only collects keys while a program is running. The queue holds 32.</p>
+
+<p>GET A$ stores that same key.</p>
+
+<h2 id="the-glass">The glass</h2>
+
+<p>Places are cells. The left top is 0, 0. The right bottom is 39, 23. A mark that falls off the glass is ignored.</p>
+
+<p>COLOR fg, bg sets the pen. Leave the bg off and the old background stays. The numbers:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>n</th>
+      <th>Color</th>
+      <th>n</th>
+      <th>Color</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>black</td>
+      <td>8</td>
+      <td>dark gray</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>dark red</td>
+      <td>9</td>
+      <td>red</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>dark green</td>
+      <td>10</td>
+      <td>green</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>brown</td>
+      <td>11</td>
+      <td>yellow</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>dark blue</td>
+      <td>12</td>
+      <td>blue</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>purple</td>
+      <td>13</td>
+      <td>pink</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>teal</td>
+      <td>14</td>
+      <td>cyan</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>gray</td>
+      <td>15</td>
+      <td>white</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>It wakes in COLOR 7, 0. Ash on black. READY is written in white. RUN sets the pen to COLOR 10, 0 for the working. When it stops, the ash returns.</p>
+
+<p>CLS clears the letters and sends the caret home. Sprites stay.</p>
+
+<p>LOCATE row, col puts the caret there, row first, clamped onto the glass. AT col, row is column first. LOCATE 23, 0 and AT 0, 23 are the same cell.</p>
+
+<p>CIRCLE x, y, r draws a circle of ●. LINE x1, y1, x2, y2 draws a line of ●. FILL x, y floods connected empty cells with ●, up, down, left, and right. FILL does nothing when the cell is off the glass or already marked.</p>
+
+<p>SOUND freq, ms plays a square note and waits, so a tune stays in order. Frequency runs from 20 to 8000. The wait runs from 0 to 8000 milliseconds. Escape cuts it and returns to the page.</p>
+
+<h2 id="sprites">Sprites</h2>
+
+<p>A sprite is an emoji on the same glass, drawn in front of the letters. The cell you name is where it parks, on the center of that cell.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SPRITE "👻", 3, 6, 30
+</code></pre></div></div>
+
+<p>The size is in pixels, from 1 to 180. Skip it and the size is 28. An empty picture becomes ●. The number starts at 1 and is never reused. IT holds the latest one.</p>
+
+<p>SEND id, vx, vy sets the speed in cells per second. DESTROY id removes one. DESTROY with no number removes every one of them.</p>
+
+<p>Thirty-two living sprites is the house limit.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>👻 NO. TOO MANY SPRITES.
+</code></pre></div></div>
+
+<p>A number that is not alive:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>👻 NO. THAT SPRITE IS GONE.
+</code></pre></div></div>
+
+<p>They touch when the circles overlap. The radius is half the size. WATCH HIT names a LABEL. The moment two sprites start to overlap, it sets HIT and OTHER to their numbers and GOSUBs that label. RETURN comes back to the statement it interrupted. It does not call again until they separate and meet once more. The handler has to RETURN. Forget, and the calls pile up until 📚 TOO DEEP.</p>
+
+<h2 id="what-it-refuses">What it refuses</h2>
+
+<p>PLOT, DRAW, PSET, and PRESET are stored, and they fail when the run reaches them.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🙊 NO. NOT ON THIS MACHINE.
+</code></pre></div></div>
+
+<p>These are recognized. It stores them. When it reaches them it complains, because you peeked, poked, or sysed it, and it is not a kernel.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Word</th>
+      <th>What it says</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PEEK</td>
+      <td>👀 STOP PEEKING.</td>
+    </tr>
+    <tr>
+      <td>POKE</td>
+      <td>👉 DON’T POKE ME.</td>
+    </tr>
+    <tr>
+      <td>SYS</td>
+      <td>🛑 NO SYS. I WOKE ON MY OWN.</td>
+    </tr>
+    <tr>
+      <td>WAIT</td>
+      <td>⏳ I DO NOT WAIT ON THAT WIRE.</td>
+    </tr>
+    <tr>
+      <td>USR</td>
+      <td>🪝 USR. I AM NOT A HOOK.</td>
+    </tr>
+    <tr>
+      <td>CALL</td>
+      <td>📞 DO NOT CALL ME THAT WAY.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="language-plaintext highlighter-rouge">A = PEEK(1)</code> is a peek. <code class="language-plaintext highlighter-rouge">POKE 1, 2</code> is a poke. <code class="language-plaintext highlighter-rouge">SYS 64738</code> is a sys. Direct or stored, same speech. The leftover wire, if you find one:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🔌 NO. THAT WIRE IS DEAD.
+</code></pre></div></div>
+
+<h2 id="the-modules">The modules</h2>
+
+<p>The lessons are files in <code class="language-plaintext highlighter-rouge">modules/</code>. The extension is <code class="language-plaintext highlighter-rouge">.bas</code>. <code class="language-plaintext highlighter-rouge">catalog.txt</code> is the order. A <code class="language-plaintext highlighter-rouge">#</code> line in that file is a note. MODULES opens the list on the glass. The mark starts on the first name. Up and down move it. Enter loads that name and does not run it. It says <code class="language-plaintext highlighter-rouge">LIST IT. A NUMBER CHANGES A LINE.</code> Escape says <code class="language-plaintext highlighter-rouge">OK. THE MODULES CAN WAIT.</code> Anything saved in this browser sits under <code class="language-plaintext highlighter-rouge">YOUR SAVED PROGRAMS</code>. <code class="language-plaintext highlighter-rouge">LOAD "module:HELLO"</code> still loads one if you would rather type. Then RUN. It lowercases the name and adds <code class="language-plaintext highlighter-rouge">.bas</code> itself.</p>
+
+<p>HELLO asks your name. COUNT counts to 10. GUESS wants 1 to 100. DICE rolls from one to twelve. QUIZ reads three questions. CIRCLES draws. BOUNCE puts a star and a ball on the glass. KEYS prints the key you press. SCALE plays eight notes. CAT walks the glass and turns at the edges. COLORS paints with the sixteen pens, and with ink mixed on the spot.</p>
+
+<h2 id="three-that-have-to-run">Three that have to run</h2>
+
+<p>A question:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 REM Start
+20 PRINT "WHO?"
+30 INPUT "NAME"; N$
+40 IF N$ = "" THEN PRINT "LEAVE." : END
+50 PRINT "ENTER "; N$
+60 END
+</code></pre></div></div>
+
+<p>A count:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 FOR I = 1 TO 13
+20 PRINT I
+30 NEXT I
+</code></pre></div></div>
+
+<p>A label:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10 LABEL START
+20 PRINT "AGAIN"
+30 GOTO START
+</code></pre></div></div>
+
+<p>The third one does not stop. Ctrl-C is the door. Escape returns to the page.</p>
+
+<h2 id="what-it-says">What it says</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>When</th>
+      <th>Text</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>It cannot parse it</td>
+      <td>❓ NO. SAY IT AGAIN.</td>
+    </tr>
+    <tr>
+      <td>PLOT or DRAW</td>
+      <td>🙊 NO. NOT ON THIS MACHINE.</td>
+    </tr>
+    <tr>
+      <td>PEEK</td>
+      <td>👀 STOP PEEKING.</td>
+    </tr>
+    <tr>
+      <td>POKE</td>
+      <td>👉 DON’T POKE ME.</td>
+    </tr>
+    <tr>
+      <td>SYS</td>
+      <td>🛑 NO SYS. I WOKE ON MY OWN.</td>
+    </tr>
+    <tr>
+      <td>WAIT</td>
+      <td>⏳ I DO NOT WAIT ON THAT WIRE.</td>
+    </tr>
+    <tr>
+      <td>USR</td>
+      <td>🪝 USR. I AM NOT A HOOK.</td>
+    </tr>
+    <tr>
+      <td>CALL</td>
+      <td>📞 DO NOT CALL ME THAT WAY.</td>
+    </tr>
+    <tr>
+      <td>No such line</td>
+      <td>🚫 NO LINE.</td>
+    </tr>
+    <tr>
+      <td>Wrong kind of value</td>
+      <td>🎭 NO. WRONG KIND OF THING.</td>
+    </tr>
+    <tr>
+      <td>Line 513</td>
+      <td>🛑 FULL. 512 LINES. STOP.</td>
+    </tr>
+    <tr>
+      <td>Divide by zero</td>
+      <td>➗ CUTE. DIVIDE BY NOTHING.</td>
+    </tr>
+    <tr>
+      <td>Dead sprite</td>
+      <td>👻 NO. THAT SPRITE IS GONE.</td>
+    </tr>
+    <tr>
+      <td>Line longer than 255</td>
+      <td>📏 TOO LONG.</td>
+    </tr>
+    <tr>
+      <td>String longer than 255</td>
+      <td>🧵 TOO LONG A STRING.</td>
+    </tr>
+    <tr>
+      <td>NEXT with no FOR</td>
+      <td>➰ NEXT, AND NOTHING TO NEXT.</td>
+    </tr>
+    <tr>
+      <td>RETURN with no GOSUB</td>
+      <td>📭 RETURN, AND NOBODY CALLED.</td>
+    </tr>
+    <tr>
+      <td>READ past the end</td>
+      <td>📜 OUT OF DATA.</td>
+    </tr>
+    <tr>
+      <td>Wrong number of answers</td>
+      <td>🔁 AGAIN.</td>
+    </tr>
+    <tr>
+      <td>Answer was not a number</td>
+      <td>🔢 AGAIN. A NUMBER.</td>
+    </tr>
+    <tr>
+      <td>The math overflowed</td>
+      <td>💥 TOO BIG.</td>
+    </tr>
+    <tr>
+      <td>More than 32 calls or loops</td>
+      <td>📚 TOO DEEP.</td>
+    </tr>
+    <tr>
+      <td>Editor words inside a program</td>
+      <td>🚪 NO. NOT FROM IN HERE.</td>
+    </tr>
+    <tr>
+      <td>RUN with no program</td>
+      <td>📭 NOTHING TO RUN.</td>
+    </tr>
+    <tr>
+      <td>STEP 0</td>
+      <td>🚫 STEP OF NOTHING. NO.</td>
+    </tr>
+    <tr>
+      <td>DIM refused, or no such array</td>
+      <td>📦 NO. IT HAS NO ROOM.</td>
+    </tr>
+    <tr>
+      <td>Index outside the array</td>
+      <td>📐 NO. OUTSIDE THE ROOM.</td>
+    </tr>
+    <tr>
+      <td>A 33rd sprite</td>
+      <td>👻 NO. TOO MANY SPRITES.</td>
+    </tr>
+    <tr>
+      <td>A name that is already a word</td>
+      <td>🔒 NO. THAT WORD IS TAKEN.</td>
+    </tr>
+    <tr>
+      <td>A label used twice</td>
+      <td>🔖 NO. THAT NAME IS TAKEN.</td>
+    </tr>
+    <tr>
+      <td>Line number past 63999</td>
+      <td>🔢 NO. LINES STOP AT 63999.</td>
+    </tr>
+    <tr>
+      <td>Escape or Ctrl-C</td>
+      <td>✋ ENOUGH.</td>
+    </tr>
+    <tr>
+      <td>SAVE with no name</td>
+      <td>🔖 NAME IT.</td>
+    </tr>
+    <tr>
+      <td>SAVE worked</td>
+      <td>SAVED.</td>
+    </tr>
+    <tr>
+      <td>LOAD worked</td>
+      <td>LOADED.</td>
+    </tr>
+    <tr>
+      <td>No such program</td>
+      <td>🌑 NO. IT IS NOT THERE.</td>
+    </tr>
+    <tr>
+      <td>The browser would not open</td>
+      <td>📦 IT WOULD NOT OPEN.</td>
+    </tr>
+    <tr>
+      <td>RENUM worked</td>
+      <td>RENUMBERED.</td>
+    </tr>
+    <tr>
+      <td>NEW</td>
+      <td>GONE.</td>
+    </tr>
+    <tr>
+      <td>DOWNLOAD</td>
+      <td>TAKE IT.</td>
+    </tr>
+    <tr>
+      <td>Left AUTO</td>
+      <td>AUTO OFF.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>READY.</p>
+
+<h2 id="limits-in-one-place">Limits, in one place</h2>
+
+<p>Witch I is a different machine. Its walls are in <code class="language-plaintext highlighter-rouge">SYSTEM.md</code>. These are the walls on this one.</p>
+
+<ul>
+  <li>512 lines in a program. FRE(0) is how many are left.</li>
+  <li>512 lines kept after they roll off the top. CLS forgets them.</li>
+  <li>255 characters on a typed line, and 255 in a string. One emoji is one.</li>
+  <li>Line numbers 0 through 63999.</li>
+  <li>Names are the whole word, up to 16 letters and digits, then <code class="language-plaintext highlighter-rouge">$</code> if it is a string.</li>
+  <li>File names add hyphens, and stop at 16 characters.</li>
+  <li>32 loops, 32 calls, 32 living sprites, 32 remembered lines, 32 keys waiting, 8 meetings waiting.</li>
+  <li>One or two axes. Each array holds at most 20000 cells. Indexes run 0 through 2000.</li>
+  <li>The lessons are a folder of <code class="language-plaintext highlighter-rouge">.bas</code> files, and that folder is only for reading. MODULES opens them. SAVE and LOAD without <code class="language-plaintext highlighter-rouge">module:</code> use this browser. UPLOAD and DOWNLOAD use the computer you are sitting at.</li>
+  <li>Sprites are emoji. The touch radius is half the size. They share the glass with the letters, and they are drawn in front.</li>
+</ul>
+
+</div>
+
+<p>The prompt is READY. A program holds 512 lines. MODULES opens the lessons. Getting Started is the first hour. The tutorial walks the rest.</p>
+
+<script src="/emojigames/assets/js/emoji-engine-2d.js"></script>
+
+<script src="/emojigames/games/basic-1/interpreter.js"></script>
+
+<script src="/emojigames/games/basic-1/basic-1.js"></script>
+
+
+      </div>
+    </div>
+    
+  </main>
+
+  <footer class="site-footer">
+  <div class="footer-links">
+    <a href="https://thewhitewitchtm.github.io/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <span>•</span>
+    <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
+    <span>•</span>
+    <a href="#" title="Contribute (PayPal coming soon)">💸 Contribute</a>
+    <span>•</span>
+    <a href="https://thewhitewitchtm.github.io/whitewitch/" title="The White Witch™">🧙‍♀️ The White Witch</a>
+  </div>
+</footer>
+
+  <script>
+document.querySelectorAll('.dropdown-toggle').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    btn.nextElementSibling.classList.toggle('open');
+  });
+});
+</script>
+
+  
+  <script src="/emojigames/assets/js/game-desk.js"></script>
+  <script>
+  (function () {
+    var buttons = document.querySelectorAll(".doc-toggle");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var panel = document.getElementById(btn.getAttribute("aria-controls"));
+        if (!panel) return;
+        var open = btn.getAttribute("aria-expanded") === "true";
+        buttons.forEach(function (other) {
+          var otherPanel = document.getElementById(other.getAttribute("aria-controls"));
+          other.setAttribute("aria-expanded", "false");
+          if (otherPanel) otherPanel.hidden = true;
+        });
+        if (!open) {
+          btn.setAttribute("aria-expanded", "true");
+          panel.hidden = false;
+          panel.scrollIntoView({ block: "nearest" });
+        }
+      });
+    });
+  })();
+  </script>
+  
+</body>
+</html>

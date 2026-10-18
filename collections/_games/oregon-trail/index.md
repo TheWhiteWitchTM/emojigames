@@ -9,6 +9,11 @@ featured: true
 feature_rank: 2
 ---
 
+<div id="game-manual" class="doc-panel" hidden>
+{% capture game_doc %}{% include_relative MANUAL.md %}{% endcapture %}
+{{ game_doc | markdownify }}
+</div>
+
 A wagon, five names, and the road from Independence to the Willamette. Return leaves the title. R starts the next party and skips that title.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

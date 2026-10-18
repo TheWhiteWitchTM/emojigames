@@ -28,7 +28,7 @@ READY.
 
 The frame is cyan. The name is white. LEARN BY TYPING is cyan. 40 COLUMN GLASS is faint. The count, and 512 LINES FREE, are the color of a low candle. The waking lines are ash. READY is white. What you type after that is ash, until a program runs.
 
-The page is a desk. ▶️ Play fills the screen with the glass, and it stays there. Escape ends the session and returns to the page. Play opens the glass again. A program that was running has stopped. The lines you stored are still there.
+The page is a desk. 🖥️ Boot fills the screen with the glass, and it stays there. Escape ends the session and returns to the page. Boot opens the glass again. A program that was running has stopped. The lines you stored are still there.
 
 Press a key if the notes stay silent. The browser holds the sound until a key arrives. The mouse is not a device here. The pointer is hidden over the glass, and a click does nothing.
 

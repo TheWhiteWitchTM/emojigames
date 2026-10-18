@@ -1,0 +1,127 @@
+// Witch I and Basic I. The glass chrome, once the machine is open.
+body.machine-witch .ee-wrap,
+body.machine-basic .ee-wrap {
+  width: 100% !important;
+  max-width: none;
+  background: #0b090a !important;
+  color: #cbbfa6 !important;
+  border-radius: 12px;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, .6);
+  font-family: ui-monospace, "Courier New", monospace !important;
+  user-select: none;
+}
+
+body.machine-witch .ee-wrap,
+body.machine-basic .ee-wrap,
+body.machine-witch .ee-wrap *,
+body.machine-basic .ee-wrap * {
+  cursor: none !important;
+}
+
+body.machine-witch .ee-header,
+body.machine-basic .ee-header {
+  border-bottom: 1px solid #2a211c;
+}
+
+body.machine-witch .ee-title,
+body.machine-basic .ee-title {
+  letter-spacing: .22em;
+  color: #d7c7a2;
+  font-weight: 500;
+}
+
+body.machine-witch .crt,
+body.machine-basic .crt {
+  position: relative;
+  margin: 8px 10px;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1px #1a1012,
+    inset 0 0 80px rgba(36, 0, 12, .55);
+}
+
+body.machine-basic .crt {
+  box-shadow:
+    inset 0 0 0 1px #1a1012,
+    inset 0 0 80px rgba(0, 40, 28, .45);
+}
+
+body.machine-witch .crt canvas,
+body.machine-basic .crt canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #000;
+}
+
+body.machine-witch .scan,
+body.machine-basic .scan {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, .18),
+    rgba(0, 0, 0, .18) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+body.machine-witch .ee-footer,
+body.machine-basic .ee-footer {
+  color: #8d7b68;
+  letter-spacing: .08em;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.witch-mood {
+  white-space: nowrap;
+}
+
+.witch-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.witch-key {
+  font: inherit;
+  letter-spacing: .04em;
+  font-size: 11px;
+  color: #cbbfa6;
+  white-space: nowrap;
+}
+
+.witch-key kbd {
+  color: #8d7b68;
+  font: inherit;
+  letter-spacing: 0;
+}
+
+.witch-key.lit,
+.witch-key.lit kbd {
+  color: #e2b657;
+}
+
+.witch-key.quiet {
+  opacity: .38;
+}
+
+.led {
+  color: #7a2e24;
+  text-shadow: 0 0 8px rgba(122, 46, 36, .7);
+}
+
+// The desk already owns the screen. Escape ends it.
+body.game-desk .ee-fullscreen {
+  display: none !important;
+}
