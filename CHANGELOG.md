@@ -10,13 +10,13 @@ A Cobra Mk III at Lave. Eight galaxies, the old market, and the slot. The ships 
 
 ### Trump Super Intelligence
 
-The reply above the picture is bold and bright orange, and it breaks on words. The frame around the face goes green when you praise him, gold if you keep it up, red when you anger him, purple for fake news, blue when he is thinking, and orange the rest of the time. The border of the glass follows the frame. A short tune matches the mood, and the browser says the line in a low voice. Call him great and he likes you. Call him a fake and he explains how low the intelligence is. Two plus two he will actually answer. Up walks the lines you sent. The winning picture has its tie back.
+The face sits at the top of the glass. The reply is the bold orange type under the face, and it breaks on words. The line you type is under the reply. Seven pictures, numbered. One is the smile, two the smirk, three the shout, four the grin, five thinking, six a fake-news sneer, seven Sad. The frame goes green when you praise him, gold if you keep it up, red when you anger him, purple for fake news, blue when he is thinking, pale when he is sad, and orange the rest of the time. The border of the glass follows the frame. A short tune matches the mood, then the browser says the line in short pieces, in a man's voice when it has one, quicker when he is angry and lower when he is sad. Call him great and he likes you. Call him a fake and he explains how low the intelligence is. Ask him something odd and he answers about the thing you named. Two plus two he will actually answer. Up walks the lines you sent.
 
 ### Play, then Escape
 
 Every game page is a desk now. ▶️ Play fills the screen. Escape returns to the page. It does not shrink the glass back into the article.
 
-Witch I and Basic I open the same way. Play fills the screen, and they stay there until Escape ends the session. Their lines stay. Witch Hunt fits the whole maze on that screen. Trump Super Intelligence keeps the caret on the bottom row, and the face sits in the glass above the prompt.
+Witch I and Basic I open the same way. Play fills the screen, and they stay there until Escape ends the session. Their lines stay. Witch Hunt fits the whole maze on that screen. Trump Super Intelligence keeps the caret on the bottom row. The face is at the top, the reply is under it, and the prompt is under the reply.
 
 Adventureland, Pirate Adventure, Galaxy Hunt, The Oregon Trail, and Trump Super Intelligence keep a blinking block caret at the prompt.
 

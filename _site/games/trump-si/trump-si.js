@@ -28,7 +28,7 @@ const MOODS = {
     footer: "Blue frame. He is thinking. Return sends. Up recalls."
   },
   fake: {
-    face: "smug",
+    face: "fake",
     border: "#c084fc",
     label: "FAKE NEWS",
     footer: "Purple frame. Fake news. Return sends. Up recalls."
@@ -38,6 +38,12 @@ const MOODS = {
     border: "#ff2d2a",
     label: "VERY ANGRY",
     footer: "Red frame. He is angry. Return sends. Up recalls."
+  },
+  sad: {
+    face: "sad",
+    border: "#a8c0dc",
+    label: "SAD!",
+    footer: "Pale frame. Sad. Return sends. Up recalls."
   }
 };
 
@@ -47,17 +53,19 @@ const TUNES = {
   smug: { type: "square", gain: 0.04, gap: 0.14, hold: 0.18, notes: [196, 247] },
   neutral: { type: "sine", gain: 0.04, gap: 0.12, hold: 0.14, notes: [440, 554] },
   fake: { type: "triangle", gain: 0.05, gap: 0.12, hold: 0.2, notes: [494, 370, 294] },
-  rant: { type: "sawtooth", gain: 0.035, gap: 0.08, hold: 0.15, notes: [196, 140, 98, 73] }
+  rant: { type: "sawtooth", gain: 0.035, gap: 0.08, hold: 0.15, notes: [196, 140, 98, 73] },
+  sad: { type: "triangle", gain: 0.04, gap: 0.18, hold: 0.24, notes: [392, 330, 262] }
 };
 
 const TOPIC_KEYS = [
-  "who", "help", "memory", "goodbye", "love", "thanks",
-  "ai", "fake", "china", "wall", "democrat", "economy", "russia",
-  "winning", "rant", "greeting"
+  "goodbye", "sad", "fake", "rant",
+  "who", "help", "memory", "love", "thanks",
+  "ai", "china", "wall", "democrat", "economy", "russia",
+  "winning", "greeting", "joke"
 ];
 
-const VOICE_MALE = /male|david|daniel|alex|fred|aaron|guy|matthew|christopher|brian|james|eric|bruce|gordon|arthur|ralph|reed|junior|rishi|george|thomas/;
-const VOICE_FEMALE = /female|woman|zira|samantha|victoria|fiona|moira|hazel|serena|allison|ava|kate|susan|karen|salli|ivy/;
+const VOICE_MALE = /male|david|daniel|alex|fred|aaron|guy|matthew|christopher|brian|james|eric|bruce|gordon|arthur|ralph|reed|junior|rishi|george|thomas|andrew|davis|jason|tony|roger|mark|ryan|tom/;
+const VOICE_FEMALE = /female|woman|zira|samantha|victoria|fiona|moira|hazel|serena|allison|ava|kate|susan|karen|salli|ivy|aria|jenny|sara|natasha|libby|sonia|michelle|joanna|kimberly|kendra|nicole|emma|amy/;
 
 function escapeReg(phrase) {
   return phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -139,7 +147,7 @@ function tryMath(text) {
 }
 
 function isQuestion(text) {
-  return /\?\s*$/.test(text) || /^(who|what|why|how|when|where|which|is|are|am|do|does|did|can|could|would|should|will)\b/i.test(text);
+  return /\?\s*$/.test(text) || /^(who|what|why|how|when|where|which|is|are|am|do|does|did|can|could|would|should|will|explain|describe)\b/i.test(text) || /^tell me\b/i.test(text);
 }
 
 function moodFor(key) {
@@ -147,6 +155,7 @@ function moodFor(key) {
   if (key === "winning") return "winning";
   if (key === "insult" || key === "rant") return "rant";
   if (key === "fake") return "fake";
+  if (key === "sad" || key === "goodbye") return "sad";
   if (key === "ai" || key === "question" || key === "math" || key === "who" || key === "help") return "neutral";
   return "smug";
 }
@@ -300,10 +309,50 @@ function joinParts(parts) {
   return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
 }
 
-function clampParts(parts) {
+function clampParts(parts, limit) {
   const copy = parts.filter(Boolean);
-  while (copy.length > 1 && joinParts(copy).length > 520) copy.pop();
+  const max = limit || 420;
+  while (copy.length > 1 && joinParts(copy).length > max) copy.pop();
   return joinParts(copy);
+}
+
+const HEARD_LEAD = /^(please\s+)?(can you|could you|would you|will you|tell me about|tell me|talk about|what about|how about|what do you think about|what do you think of|do you know about|do you know|who is|what is|what's|whats|why is|why are|how is|how do you|explain|describe)\s+/i;
+
+function heard(text) {
+  let stripped = String(text || "").replace(/["“”]/g, "").replace(/\s+/g, " ").trim();
+  stripped = stripped.replace(HEARD_LEAD, "").replace(/[?!.,]+$/g, "").trim();
+  if (stripped.length < 3) return "";
+  if (stripped.length > 42) {
+    const cut = stripped.slice(0, 42);
+    const space = cut.lastIndexOf(" ");
+    stripped = (space > 14 ? cut.slice(0, space) : cut).trim();
+  }
+  return stripped;
+}
+
+function capWord(phrase) {
+  if (!phrase) return "";
+  return phrase.charAt(0).toUpperCase() + phrase.slice(1);
+}
+
+function hook(verdict, used) {
+  const subject = heard(verdict.text);
+  if (!subject) return "";
+  if (verdict.key === "question") {
+    return pickFrom([
+      "You asked about " + subject + ".",
+      capWord(subject) + ".",
+      "About " + subject + "."
+    ], used);
+  }
+  if (verdict.key === "fallback") {
+    return pickFrom([
+      "Look, " + subject + ".",
+      "Many people are saying " + subject + ".",
+      capWord(subject) + ". Interesting."
+    ], used);
+  }
+  return "";
 }
 
 function poolFor(responses, key) {
@@ -345,7 +394,7 @@ function compose(state) {
   if (verdict.key === "memory") return memoryLine(state.lastYou, responses, used);
 
   const words = String(verdict.text || "").split(/\s+/).filter(Boolean).length;
-  const quoteOk = words >= 2 && ["greeting", "goodbye", "thanks", "math", "who", "help"].indexOf(verdict.key) === -1;
+  const quoteOk = words >= 2 && ["greeting", "goodbye", "thanks", "math", "who", "help", "sad"].indexOf(verdict.key) === -1;
   const quote = quoteOk ? verdict.quote : "";
   const personal = (mood === "happy" || mood === "winning")
     ? pickFrom(responses.praiseYou, used)
@@ -355,56 +404,86 @@ function compose(state) {
   const body = pickFrom(poolFor(responses, verdict.key), used);
   let extra = "";
   if (mood === "winning" && verdict.key !== "winning") extra = pickFrom(responses.winning, used);
+  if (mood === "sad" && verdict.key !== "sad" && verdict.key !== "goodbye") extra = pickFrom(responses.sad, used);
   if (mood === "rant") extra = pickFrom(responses.rantTail, used);
   if (state.hot && mood === "rant") extra = joinParts([extra, pickFrom(responses.rantTail, used)]);
   let ai = "";
   if (verdict.key !== "ai" && verdict.key !== "who" && verdict.key !== "help" && verdict.key !== "greeting") {
-    if (mood === "neutral" || mood === "smug") {
-      if (Math.random() < 0.45) ai = pickFrom(responses.aiBit, used);
-    }
+    if ((mood === "neutral" || mood === "smug") && Math.random() < 0.22) ai = pickFrom(responses.aiBit, used);
   }
   const lead = verdict.key === "question" ? askedLine(quote) : saidLine(quote);
+  const heardLine = hook(verdict, used);
   let shapes;
+  let limit = 300;
   if (mood === "rant") {
-    shapes = [
-      [personal, lead, body, extra],
-      [lead, personal, body, extra],
-      [personal, body, extra]
-    ];
-  } else if (mood === "happy" || mood === "winning") {
+    limit = 460;
     shapes = [
       [personal, body, extra],
-      [body, personal],
-      [lead, personal, body]
+      [body, extra],
+      [personal, body]
     ];
+  } else if (mood === "winning") {
+    shapes = [
+      [extra, personal, body],
+      [extra, body],
+      [body, extra]
+    ];
+  } else if (mood === "happy") {
+    shapes = [
+      [personal, body],
+      [body, personal],
+      [body]
+    ];
+  } else if (mood === "sad") {
+    shapes = [
+      [body, extra],
+      [body],
+      [heardLine, body]
+    ];
+  } else if (verdict.key === "question" || verdict.key === "fallback") {
+    shapes = heardLine
+      ? [[heardLine, body], [heardLine, body, ai]]
+      : [[body], [body, ai], [lead, body]];
   } else if (mood === "fake") {
     shapes = [
+      [body],
       [lead, body],
-      [body, ai],
-      [body]
-    ];
-  } else if (mood === "neutral") {
-    shapes = [
-      [lead, body, ai],
-      [body, ai],
-      [body]
+      [body, ai]
     ];
   } else {
     shapes = [
-      [lead, body, ai],
+      [body],
       [body, ai],
-      [body]
+      [lead, body]
     ];
   }
-  let line = clampParts(shapes[Math.floor(Math.random() * shapes.length)]);
+  let line = clampParts(shapes[Math.floor(Math.random() * shapes.length)], limit);
   if (state.recent && state.recent.indexOf(line) !== -1) {
-    line = clampParts(shapes[Math.floor(Math.random() * shapes.length)]);
+    line = clampParts(shapes[Math.floor(Math.random() * shapes.length)], limit);
   }
   return line;
 }
 
+const VOICE_CADENCE = {
+  happy: { rate: 1.0, pitch: 0.94 },
+  winning: { rate: 1.04, pitch: 0.92 },
+  smug: { rate: 0.94, pitch: 0.9 },
+  neutral: { rate: 0.96, pitch: 0.92 },
+  fake: { rate: 0.9, pitch: 0.86 },
+  rant: { rate: 1.08, pitch: 0.88 },
+  sad: { rate: 0.86, pitch: 0.82 }
+};
+
+const VOICE_PLAIN = /christopher|eric|guy|david|andrew|davis|aaron|matthew|brian|jason|tony|roger|mark|alex|george/;
+const VOICE_NOVELTY = /bad news|bahh|bells|boing|bubbles|cellos|zarvox|trinoids|whisper|superstar|grandma|grandpa|junior|kathy|princess|organ|pipe|novelty|wobble|albert|fred/;
+
 function forVoice(text) {
   let line = String(text || "").replace(/\s+/g, " ").trim();
+  line = line.replace(/\bSI\b/g, "ess eye");
+  line = line.replace(/\bA\.?I\.?\b/g, "ay eye");
+  line = line.replace(/\s+\+\s+/g, " plus ");
+  line = line.replace(/\s+\*\s+/g, " times ");
+  line = line.replace(/\s+×\s+/g, " times ");
   if (line.length <= 420) return line;
   const cut = line.slice(0, 420);
   const stop = Math.max(cut.lastIndexOf("."), cut.lastIndexOf("!"), cut.lastIndexOf("?"));
@@ -412,15 +491,60 @@ function forVoice(text) {
   return cut;
 }
 
+function trumpPhrases(text) {
+  const line = forVoice(text);
+  if (!line) return [];
+  const sentences = line.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [line];
+  const phrases = [];
+  sentences.forEach(function (sentence) {
+    const trimmed = sentence.replace(/\s+/g, " ").trim();
+    if (!trimmed) return;
+    const words = trimmed.split(" ");
+    let chunks = [trimmed];
+    if (words.length > 12 && trimmed.indexOf(",") !== -1) {
+      chunks = trimmed.split(/,\s+/).map(function (part, index, all) {
+        const bit = part.trim();
+        if (!bit) return "";
+        if (index < all.length - 1 && !/[.!?]$/.test(bit)) return bit + ",";
+        return bit;
+      }).filter(Boolean);
+    }
+    chunks.forEach(function (chunk) {
+      const bang = /!$/.test(chunk);
+      const question = /\?$/.test(chunk);
+      const comma = /,$/.test(chunk);
+      const sadWord = /^sad\b/i.test(chunk);
+      phrases.push({
+        text: chunk,
+        rate: sadWord ? 0.88 : bang ? 0.94 : question ? 1.02 : 1,
+        pitch: sadWord ? 0.84 : bang ? 0.9 : question ? 1.1 : comma ? 1.03 : 0.97,
+        volume: bang ? 1 : 0.97,
+        gap: sadWord ? 200 : bang ? 160 : comma ? 80 : 120
+      });
+    });
+  });
+  return phrases.slice(0, 14);
+}
+
 function voiceScore(voice) {
   const name = (voice.name || "").toLowerCase();
   const lang = (voice.lang || "").toLowerCase();
   let score = 0;
-  if (lang.indexOf("en-us") === 0) score += 5;
+  if (lang.indexOf("en-us") === 0) score += 8;
   else if (lang.indexOf("en") === 0) score += 2;
-  if (VOICE_FEMALE.test(name)) score -= 8;
-  if (VOICE_MALE.test(name)) score += 6;
+  if (lang.indexOf("en-gb") === 0 || lang.indexOf("en-au") === 0 || lang.indexOf("en-in") === 0) score -= 4;
+  if (VOICE_FEMALE.test(name)) score -= 12;
+  if (VOICE_MALE.test(name)) score += 5;
+  if (VOICE_PLAIN.test(name)) score += 4;
+  if (VOICE_NOVELTY.test(name)) score -= 8;
   return score;
+}
+
+function tuneLength(mood) {
+  const tune = TUNES[mood] || TUNES.smug;
+  if (!tune.notes.length) return 40;
+  const last = (tune.notes.length - 1) * tune.gap + tune.hold;
+  return Math.round((last + 0.08) * 1000);
 }
 
 const TrumpBrain = {
@@ -453,7 +577,15 @@ class TrumpSI {
     this.faceImage = null;
     this.audioCtx = null;
     this.images = {};
-    const files = { happy: "1.jpg", smug: "2.jpg", rant: "3.jpg", winning: "4.jpg", neutral: "5.jpg" };
+    const files = {
+      happy: "1.jpg",
+      smug: "2.jpg",
+      rant: "3.jpg",
+      winning: "4.jpg",
+      neutral: "5.jpg",
+      fake: "6.jpg",
+      sad: "7.jpg"
+    };
     const self = this;
     Object.entries(files).forEach(function (pair) {
       const img = new Image();
@@ -478,14 +610,11 @@ class TrumpSI {
   }
 
   layout() {
-    const count = this.transcript().length;
     const rows = this.term.rows;
-    const minFace = 9;
-    const maxFace = Math.max(minFace, rows - 4);
-    const text = Math.max(1, Math.min(count, rows - 1 - minFace));
-    let face = rows - 1 - text;
-    if (face > maxFace) face = maxFace;
-    if (face < minFace) face = minFace;
+    const minText = 5;
+    let face = Math.round(rows * 0.4);
+    if (face < 7) face = 7;
+    if (rows - face - 1 < minText) face = Math.max(5, rows - 1 - minText);
     this.faceRows = face;
   }
 
@@ -570,34 +699,49 @@ class TrumpSI {
     return best;
   }
 
-  speak(text, mood) {
+  speak(text, mood, waitMs) {
     const synth = window.speechSynthesis;
     if (!synth || typeof SpeechSynthesisUtterance !== "function") return;
-    const line = forVoice(text);
-    if (!line) return;
-    try {
-      synth.cancel();
-      const utter = new SpeechSynthesisUtterance(line);
-      utter.lang = "en-US";
-      const voices = synth.getVoices();
-      const voice = this.pickVoice(voices);
-      if (voice) utter.voice = voice;
-      const tune = {
-        happy: { rate: 0.98, pitch: 0.86 },
-        winning: { rate: 1.02, pitch: 0.8 },
-        smug: { rate: 0.86, pitch: 0.68 },
-        neutral: { rate: 0.92, pitch: 0.76 },
-        fake: { rate: 0.9, pitch: 0.66 },
-        rant: { rate: 1.08, pitch: 0.72 }
-      }[mood] || { rate: 0.92, pitch: 0.74 };
-      utter.rate = tune.rate;
-      utter.pitch = tune.pitch;
-      utter.volume = 1;
-      synth.speak(utter);
-    } catch (err) {}
+    const phrases = trumpPhrases(text);
+    if (!phrases.length) return;
+    this.hush();
+    const token = this._speakToken;
+    const base = VOICE_CADENCE[mood] || VOICE_CADENCE.smug;
+    const self = this;
+    const wait = Math.max(40, waitMs || 0);
+    window.setTimeout(function () {
+      if (token !== self._speakToken) return;
+      const voice = self.pickVoice(synth.getVoices());
+      self._utters = [];
+      let index = 0;
+      const step = function () {
+        if (token !== self._speakToken) return;
+        if (index >= phrases.length) return;
+        const phrase = phrases[index];
+        index += 1;
+        const utter = new SpeechSynthesisUtterance(phrase.text);
+        self._utters.push(utter);
+        utter.lang = "en-US";
+        if (voice) utter.voice = voice;
+        const wobble = 0.98 + (index % 3) * 0.015;
+        utter.rate = Math.max(0.72, Math.min(1.2, base.rate * phrase.rate * wobble));
+        utter.pitch = Math.max(0.62, Math.min(1.25, base.pitch * phrase.pitch));
+        utter.volume = phrase.volume;
+        utter.onend = function () {
+          if (token !== self._speakToken) return;
+          window.setTimeout(step, phrase.gap);
+        };
+        try {
+          synth.speak(utter);
+          synth.resume();
+        } catch (err) {}
+      };
+      step();
+    }, wait);
   }
 
   hush() {
+    this._speakToken = (this._speakToken || 0) + 1;
     try {
       if (window.speechSynthesis) window.speechSynthesis.cancel();
     } catch (err) {}
@@ -608,7 +752,7 @@ class TrumpSI {
     if (this.spoken) return;
     this.spoken = true;
     this.playMood(this.mood);
-    this.speak(this.greetingLine, this.mood);
+    this.speak(this.greetingLine, this.mood, tuneLength(this.mood));
   }
 
   showFace(mood) {
@@ -624,7 +768,7 @@ class TrumpSI {
     const ch = core.cellHeight;
     const spec = this.moodSpec();
     const faceRows = this.faceRows || FACE_ROWS;
-    const top = (core.rows - 1 - faceRows) * ch;
+    const top = 0;
     const band = faceRows * ch;
     const width = core.cols * cw;
     ctx.save();
@@ -723,12 +867,12 @@ class TrumpSI {
     const lines = this.transcript();
     const room = this.textRows();
     const visible = lines.slice(-room);
-    const top = room - visible.length;
+    const start = this.faceRows;
     this.term.clear();
     const self = this;
     visible.forEach(function (line, index) {
       if (!line.text) return;
-      self.paintStyled(0, top + index, line.text, line.style);
+      self.paintStyled(0, start + index, line.text, line.style);
     });
     const max = Math.max(1, this.term.cols - 3);
     const chars = Array.from(this.inputBuffer);
@@ -791,7 +935,7 @@ class TrumpSI {
     this.inputBuffer = "";
     this.spoken = true;
     this.playMood(mood);
-    this.speak(line, mood);
+    this.speak(line, mood, tuneLength(mood));
     this.showFace(mood);
     this.paint();
   }
@@ -819,7 +963,7 @@ class TrumpSI {
   }
 
   start() {
-    this.mood = "smug";
+    this.mood = "happy";
     this.streak = 0;
     this.greetingLine = pickFrom((window.responses && window.responses.greeting) || ["Hello."], this.used);
     this.inputBuffer = "";
@@ -850,9 +994,9 @@ function bootTrump() {
     cols: 72,
     rows: 22,
     title: "🤖 Trump Super Intelligence",
-    border: MOODS.smug.border,
-    footer: MOODS.smug.footer,
-    cursor: MOODS.smug.border
+    border: MOODS.happy.border,
+    footer: MOODS.happy.footer,
+    cursor: MOODS.happy.border
   });
   container.appendChild(term.wrap);
   const bot = new TrumpSI(term);

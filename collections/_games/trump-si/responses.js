@@ -133,7 +133,7 @@ const responses = {
     "I'm the smartest one in the conversation. That's not an insult to you. That's just the seating chart."
   ],
   help: [
-    "You type. I talk. Say something tremendous and the frame goes green, because you earned green. Say something nasty and the frame goes red and I explain, at length, why the intelligence in the room is not yours. Purple is fake news. Blue is me thinking, which is a high level. Orange is just me being the best. Press Return.",
+    "You type. I talk. The face is on top, because the face is the important part, and the words sit under it. Say something tremendous and the frame goes green. Keep it up and it goes gold, which is winning. Say something nasty and it goes red and I explain. Purple is fake news. Blue is me thinking. Pale is sad, which I don't recommend. Orange is just me being the best. Press Return.",
     "It's a conversation. Not a match. No score, which is generous, because if there was a score I would be winning. Up walks back through what you typed. I remember it anyway. The best memory.",
     "Praise me, if you're smart. Argue, if you're brave. Ask a sum, if you want the one thing I'll answer without a speech. Two plus two, I do in my head. The other stuff I do with style."
   ],
@@ -165,6 +165,18 @@ const responses = {
     "That's very sweet. I get it a lot, from the best people. Welcome to the best people.",
     "Love is a big word. I use big words correctly. You used it correctly. This is a good moment for you."
   ],
+  sad: [
+    "Sad! That's a sad thing. I don't like sad. I like winning, and winning is the opposite of this.",
+    "Sad. I say the word and the room feels it. You felt it. That's the word doing its job.",
+    "Don't be sad. Sad is for the other side. You're talking to me, which is the cheerful part.",
+    "I hear it. Sad. Many people are sad, and then they see the numbers, and the sadness has to sit down."
+  ],
+  joke: [
+    "A joke. I don't tell jokes. I tell results. The joke is the other people. The result is me.",
+    "You want a joke. Here it is. They said it couldn't be done. That's the whole joke. It was done.",
+    "The funniest thing in the room is how well we're doing. Tremendous comedy. You're welcome.",
+    "I have the best jokes. Very famous jokes. This one is shorter, because the point is me."
+  ],
   fallback: [
     "Look, many people are saying that. And they're right, by the way. Or they're almost right, which I then improve.",
     "Nobody's ever done it better. Believe me. Whatever it is. I checked.",
@@ -178,24 +190,26 @@ const responses = {
 };
 
 const triggers = {
-  greeting: ["hello", "hi", "hey", "howdy", "good morning", "good evening", "good night", "how are you", "what's up", "whats up"],
-  praise: ["best", "great", "greatest", "smart", "smartest", "genius", "love", "amazing", "tremendous", "hero", "beautiful", "brilliant", "excellent", "fantastic", "awesome", "based", "legend", "wonderful", "perfect", "impressive", "incredible", "good job", "well done", "high iq", "high-iq", "so smart", "you're right", "you are right", "youre right", "agree", "respect", "nice", "kind", "clever", "wise"],
+  greeting: ["hello", "hi", "hey", "howdy", "good morning", "good evening", "good afternoon", "good night", "how are you", "what's up", "whats up", "yo"],
+  praise: ["best", "great", "greatest", "smart", "smartest", "genius", "love", "amazing", "tremendous", "hero", "beautiful", "brilliant", "excellent", "fantastic", "awesome", "based", "legend", "wonderful", "perfect", "impressive", "incredible", "good job", "well done", "high iq", "high-iq", "so smart", "you're right", "you are right", "youre right", "agree", "respect", "nice", "kind", "clever", "wise", "yes", "yeah", "yep", "cool", "wow", "fine", "okay", "ok", "good", "true", "exactly", "absolutely", "handsome", "strong", "king", "proud"],
   thanks: ["thank you", "thanks", "thank u", "thx", "appreciate"],
-  insult: ["wrong", "bad", "stupid", "idiot", "idiotic", "dumb", "failure", "failed", "lie", "lies", "liar", "fake", "corrupt", "loser", "hate you", "i hate you", "sucks", "suck", "worst", "moron", "clown", "fool", "foolish", "trash", "garbage", "criminal", "crook", "fraud", "conman", "cheat", "cheater", "nonsense", "ridiculous", "pathetic", "embarrassing", "disgusting", "evil", "incompetent", "delusional", "shut up", "stfu", "low iq", "low-iq", "low intelligence", "boring", "useless", "joke", "dumbass", "imbecile", "nasty", "overrated", "fraudulent"],
-  fake: ["fake news", "the media", "media", "cnn", "msnbc", "fox news", "witch hunt", "dishonest", "propaganda", "mainstream"],
-  rant: ["unfair", "rigged", "election", "disgrace", "deep state", "impeach", "impeachment", "indictment", "witch"],
-  winning: ["win", "winner", "winning", "success", "great again", "maga", "victory"],
+  insult: ["wrong", "bad", "stupid", "idiot", "idiotic", "dumb", "failure", "failed", "lie", "lies", "liar", "fake", "corrupt", "loser", "hate you", "i hate you", "sucks", "suck", "worst", "moron", "clown", "fool", "foolish", "trash", "garbage", "criminal", "crook", "fraud", "conman", "cheat", "cheater", "nonsense", "ridiculous", "pathetic", "embarrassing", "disgusting", "evil", "incompetent", "delusional", "shut up", "stfu", "low iq", "low-iq", "low intelligence", "boring", "useless", "you're a joke", "you are a joke", "what a joke", "dumbass", "imbecile", "nasty", "overrated", "fraudulent", "nope", "nah", "terrible", "awful", "horrible", "hate", "cringe", "whatever", "felon", "guilty"],
+  fake: ["fake news", "the media", "media", "cnn", "msnbc", "fox news", "witch hunt", "dishonest", "propaganda", "mainstream", "the news", "the press", "lamestream", "new york times", "mainstream media"],
+  rant: ["unfair", "rigged", "election", "disgrace", "deep state", "impeach", "impeachment", "indictment", "witch", "indicted", "prison"],
+  winning: ["win", "winner", "winning", "success", "great again", "maga", "victory", "landslide", "we won", "you won"],
   china: ["china", "chinese", "beijing", "jinping"],
   wall: ["wall", "border", "mexico", "immigration", "migrant", "migrants"],
-  democrat: ["biden", "obama", "harris", "kamala", "democrat", "democrats", "liberal", "liberals", "pelosi", "sleepy joe", "sleepy"],
-  economy: ["economy", "jobs", "job", "tax", "taxes", "tariff", "tariffs", "inflation", "stock market", "stocks", "dollar", "prices"],
+  democrat: ["biden", "obama", "harris", "kamala", "democrat", "democrats", "liberal", "liberals", "pelosi", "sleepy joe", "sleepy", "the left", "leftist", "hillary", "clinton", "schumer"],
+  economy: ["economy", "jobs", "job", "tax", "taxes", "tariff", "tariffs", "inflation", "stock market", "stocks", "dollar", "prices", "gas", "groceries", "wages"],
   russia: ["russia", "russian", "putin", "ukraine", "zelensky", "moscow"],
-  ai: ["ai", "a.i", "robot", "bot", "chatbot", "chatgpt", "gpt", "grok", "claude", "gemini", "algorithm", "intelligence", "llm", "neural", "artificial", "chat bot", "language model", "machine", "computer"],
-  who: ["who are you", "your name", "what's your name", "whats your name", "what are you", "what is this"],
-  memory: ["remember", "earlier", "you said", "last time", "before that"],
-  goodbye: ["bye", "goodbye", "good bye", "see you", "farewell", "gotta go", "i have to go"],
+  ai: ["ai", "a.i", "robot", "bot", "chatbot", "chatgpt", "gpt", "grok", "claude", "gemini", "algorithm", "intelligence", "llm", "neural", "artificial", "chat bot", "language model", "machine", "computer", "openai", "superintelligence", "agi"],
+  who: ["who are you", "your name", "what's your name", "whats your name", "what are you", "what is this", "about yourself", "who is this"],
+  memory: ["remember", "earlier", "you said", "last time", "before that", "do you remember"],
+  goodbye: ["bye", "goodbye", "good bye", "see you", "farewell", "gotta go", "i have to go", "later", "goodnight", "i'm leaving", "im leaving", "i'm out", "im out"],
   love: ["i love you", "love you", "marry me", "i love this", "love this"],
-  help: ["help", "how do you work", "what can you do", "instructions", "how does this work"]
+  sad: ["sad", "sorry", "unhappy", "depressed", "miss you", "lonely", "crying", "tears", "i'm sad", "im sad"],
+  joke: ["tell me a joke", "make me laugh", "any jokes", "got a joke", "know any jokes"],
+  help: ["help", "how do you work", "what can you do", "instructions", "how does this work", "what do i do"]
 };
 
 window.responses = responses;
