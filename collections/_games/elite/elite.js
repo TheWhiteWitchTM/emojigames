@@ -679,7 +679,7 @@
 
   function fit() {
     const w = Math.max(320, host.clientWidth || 960);
-    const h = Math.max(200, Math.round(w * 9 / 16));
+    const h = Math.max(200, host.clientHeight || Math.round(w * 9 / 16));
     engine.canvas.resize(w, h);
     hud.width = engine.canvas.element.width;
     hud.height = engine.canvas.element.height;

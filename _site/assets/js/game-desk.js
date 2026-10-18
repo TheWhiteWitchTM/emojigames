@@ -55,6 +55,9 @@
   document.addEventListener("fullscreenchange", function () {
     if (document.fullscreenElement) {
       desk.inFull = true;
+      requestAnimationFrame(function () {
+        window.dispatchEvent(new Event("resize"));
+      });
       return;
     }
     if (!desk.inFull) return;

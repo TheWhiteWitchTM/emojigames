@@ -274,7 +274,8 @@ class Terminal {
 
   /**
    * Match the window to the cell grid. fitWidth grows it to the container.
-   * A narrower parent, or fullscreen, shrinks it so the window stays on screen.
+   * A narrower parent shrinks it so the window stays on screen.
+   * On the desk the glass fills the display, edge to edge, with no frame.
    * @private
    */
   _layout() {
@@ -287,6 +288,47 @@ class Terminal {
     }
   }
 
+  /**
+   * The open desk is the whole display. The glass uses whatever is left
+   * under the title and above the footer, with no border and no side gap.
+   * @private
+   */
+  _fillDesk() {
+    const desk = this.wrap.closest(".game-stage");
+    if (!desk || desk.clientWidth < 8 || desk.clientHeight < 8) return;
+    this.wrap.style.alignItems = "stretch";
+    this.wrap.style.width = "100%";
+    this.wrap.style.height = "100%";
+    this.stage.style.width = "100%";
+    this.stage.style.height = "100%";
+    this.stage.style.maxWidth = "none";
+    this.stage.style.flex = "1 1 auto";
+    this.stage.style.minHeight = "0";
+    this.titleBar.style.flexShrink = "0";
+    this.canvas.style.border = "0";
+    this.canvas.style.boxShadow = "none";
+    this.canvas.style.margin = "0";
+    this.canvas.style.boxSizing = "border-box";
+    const width = this.stage.clientWidth;
+    const chrome = this.titleBar.offsetHeight + this.footer.offsetHeight;
+    const height = this.stage.clientHeight - chrome;
+    if (width < 8 || height < 8) return;
+    this.canvas.style.width = width + "px";
+    this.canvas.style.height = height + "px";
+  }
+
+  /** @private */
+  _restoreFrame() {
+    this.wrap.style.alignItems = "center";
+    this.wrap.style.height = "";
+    this.stage.style.height = "";
+    this.stage.style.flex = "";
+    this.stage.style.minHeight = "";
+    this.canvas.style.boxSizing = "content-box";
+    this.canvas.style.border = "2px solid " + this.border;
+    this.canvas.style.boxShadow = "0 0 12px " + this.border + "40";
+  }
+
   /** @private */
   _layoutNow() {
     const logicalW = this.cols * this.charW;
@@ -294,6 +336,11 @@ class Terminal {
     const border = 4;
     const desk = this.wrap.closest(".game-stage");
     const deskOpen = !!(desk && (desk.classList.contains("game-open") || document.fullscreenElement === desk));
+    if (deskOpen) {
+      this._fillDesk();
+      return;
+    }
+    this._restoreFrame();
     const cs = getComputedStyle(this.wrap);
     const padX = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
     const padY = (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0);
@@ -301,13 +348,6 @@ class Terminal {
     let availH = Infinity;
     if (document.fullscreenElement === this.wrap) {
       availH = this.wrap.clientHeight - padY;
-    } else if (deskOpen) {
-      const deskStyle = getComputedStyle(desk);
-      const deskPadY = (parseFloat(deskStyle.paddingTop) || 0) + (parseFloat(deskStyle.paddingBottom) || 0);
-      const deskPadX = (parseFloat(deskStyle.paddingLeft) || 0) + (parseFloat(deskStyle.paddingRight) || 0);
-      availH = desk.clientHeight - deskPadY;
-      const deskW = desk.clientWidth - deskPadX;
-      if (deskW > 8) availW = Math.min(availW, deskW);
     }
     if (availW < 8) return;
 
