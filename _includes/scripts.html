@@ -1,8 +1,32 @@
 <script>
-document.querySelectorAll('.dropdown-toggle').forEach(btn => {
-  btn.addEventListener('click', e => {
+document.querySelectorAll('.dropdown-toggle').forEach(function (btn) {
+  btn.addEventListener('click', function (e) {
     e.preventDefault();
-    btn.nextElementSibling.classList.toggle('open');
+    var menu = btn.nextElementSibling;
+    if (!menu) return;
+    var open = menu.classList.contains('open');
+    document.querySelectorAll('.dropdown-menu.open').forEach(function (m) {
+      m.classList.remove('open');
+    });
+    if (!open) menu.classList.add('open');
   });
 });
+
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.dropdown')) {
+    document.querySelectorAll('.dropdown-menu.open').forEach(function (m) {
+      m.classList.remove('open');
+    });
+  }
+});
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  var scope = '{{ "/" | relative_url }}';
+  if (scope.slice(-1) !== '/') scope += '/';
+  navigator.serviceWorker.register('{{ "/sw.js" | relative_url }}', {
+    scope: scope,
+    updateViaCache: 'none'
+  }).catch(function () {});
+}
 </script>

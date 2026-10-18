@@ -1,0 +1,16 @@
+<script>
+  // Capture early. Chrome can fire this before the rest of the page scripts run.
+  (function () {
+    window.__egInstallPrompt = null;
+    try {
+      if (localStorage.getItem('eg-install-dismissed') === '1') {
+        document.documentElement.classList.add('eg-install-off');
+      }
+    } catch (err) {}
+    window.addEventListener('beforeinstallprompt', function (event) {
+      event.preventDefault();
+      window.__egInstallPrompt = event;
+      window.dispatchEvent(new Event('eg-installable'));
+    });
+  })();
+</script>

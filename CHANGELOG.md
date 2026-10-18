@@ -20,6 +20,12 @@ Witch I shipped once, on the 16th. The 17th is an add-on, not a second debut. Ba
 
 The emoji engine on this site is the current one. The desk hides that engine's fullscreen button. Escape already ends the session.
 
+### The app
+
+Emoji Games installs. Open as app sits on the page, and on a game. The site banner is the same strip on home, on the shelf, on a game, and on the release list, and it stays at the top.
+
+The 3D engine sits beside the 2D one, at `assets/js/emoji-engine-3d.js`. A page that wants it loads that script. The global is `EmojiEngine3D`.
+
 ## 2026-10-17
 
 ### Playable speeds, and emoji where the games speak

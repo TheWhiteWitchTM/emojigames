@@ -1,4 +1,5 @@
 ---
+layout: default
 title: 📢 Releases
 permalink: /releases/
 description: What shipped, and on which day. Newest first.

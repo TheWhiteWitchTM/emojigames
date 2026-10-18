@@ -1,3 +1,20 @@
+:root {
+  --bg: #0a0a0a;
+  --text: #e8e8e8;
+  --muted: #9a9a9a;
+  --accent: #c9a6ff;
+  --accent-ink: #140c1c;
+  --line: #2a2433;
+  --nav-h: 3.25rem;
+  --banner-h: clamp(108px, 19.9vw, 240px);
+  --chrome-h: calc(var(--nav-h) + var(--banner-h) + env(safe-area-inset-top));
+  color-scheme: dark;
+}
+
+html {
+  scroll-padding-top: calc(var(--chrome-h) + 0.75rem);
+}
+
 html, body {
   min-height: 100%;
   overflow-x: hidden;
@@ -7,46 +24,49 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #0a0a0a;
-  color: #e8e8e8;
+  background-color: var(--bg);
+  color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   line-height: 1.6;
   margin: 0;
-  padding-top: 4.5rem;
+  padding-top: var(--chrome-h);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .site-banner-wrap {
-  position: relative;
+  position: fixed;
+  top: calc(var(--nav-h) + env(safe-area-inset-top));
+  left: 0;
+  right: 0;
+  z-index: 80;
+  height: var(--banner-h);
   background: #000;
-  border-bottom: 1px solid #1a1a1a;
+  border-bottom: 1px solid #161616;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
 }
 
 .site-banner {
   width: 100%;
-  max-width: 100%;
-  height: 168px;
+  height: 100%;
   object-fit: cover;
-  object-position: center 46%;
+  object-position: center 49.55%;
   display: block;
   margin: 0;
   padding: 0;
   border: none;
-}
-
-.site-banner-wrap.is-hero .site-banner {
-  height: min(46vw, 340px);
-  object-position: center 48%;
-}
-
-.site-banner-wrap.is-hero::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 84px;
-  background: linear-gradient(to bottom, transparent, #0a0a0a);
-  pointer-events: none;
 }
 
 /* Game area — no height lock, no overflow clip */
@@ -260,7 +280,7 @@ body {
   margin: 0 0 1.15rem;
   max-height: min(70vh, 680px);
   overflow: auto;
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: calc(var(--chrome-h) + 0.75rem);
 }
 
 .doc-panel[hidden] {

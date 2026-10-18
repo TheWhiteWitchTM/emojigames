@@ -1,0 +1,96 @@
+<div id="install-app" class="install-app" role="region" aria-label="Open as app">
+  <img src="{{ '/assets/icons/icon-192.png' | relative_url }}" alt="" width="44" height="44">
+  <div class="install-app-copy">
+    <strong>Open as app</strong>
+    <span id="install-app-note">Emoji Games, in its own window.</span>
+  </div>
+  <button type="button" class="btn btn-primary" id="install-app-open">Open as app</button>
+  <button type="button" class="install-app-dismiss" id="install-app-dismiss" aria-label="Not now">×</button>
+</div>
+<script>
+  (function () {
+    var root = document.getElementById('install-app');
+    if (!root) return;
+
+    var openBtn = document.getElementById('install-app-open');
+    var dismissBtn = document.getElementById('install-app-dismiss');
+    var note = document.getElementById('install-app-note');
+
+    function installed() {
+      return window.matchMedia('(display-mode: standalone)').matches
+        || window.matchMedia('(display-mode: fullscreen)').matches
+        || window.matchMedia('(display-mode: minimal-ui)').matches
+        || window.navigator.standalone === true;
+    }
+
+    function dismissed() {
+      try { return localStorage.getItem('eg-install-dismissed') === '1'; }
+      catch (err) { return false; }
+    }
+
+    if (installed() || dismissed()) return;
+
+    function show() { root.hidden = false; }
+    function hide() { root.hidden = true; }
+
+    function arm() {
+      if (window.__egInstallPrompt) show();
+    }
+
+    window.addEventListener('eg-installable', arm);
+    arm();
+
+    var ua = window.navigator.userAgent || '';
+    var ios = /iphone|ipad|ipod/i.test(ua)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var firefox = /firefox/i.test(ua) && !/seamonkey/i.test(ua);
+
+    if (openBtn) {
+      openBtn.addEventListener('click', function () {
+        var promptEvent = window.__egInstallPrompt;
+        if (!promptEvent) {
+          if (note) {
+            note.textContent = ios
+              ? 'Tap Share, then Add to Home Screen.'
+              : firefox
+                ? 'Firefox: use the install icon in the address bar.'
+                : 'Still getting ready. Press it once more.';
+          }
+          return;
+        }
+        window.__egInstallPrompt = null;
+        var choice = promptEvent.userChoice;
+        try { promptEvent.prompt(); }
+        catch (err) { hide(); return; }
+        Promise.resolve(choice).then(hide, hide);
+      });
+    }
+
+    window.addEventListener('appinstalled', function () {
+      window.__egInstallPrompt = null;
+      hide();
+    });
+
+    function dismiss() {
+      hide();
+      document.documentElement.classList.add('eg-install-off');
+      try { localStorage.setItem('eg-install-dismissed', '1'); }
+      catch (err) {}
+    }
+
+    if (dismissBtn) dismissBtn.addEventListener('click', dismiss);
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape' || root.hidden) return;
+      if (document.querySelector('.game-stage.game-open, .game-stage:fullscreen')) return;
+      dismiss();
+    });
+
+    if (ios) {
+      if (note) note.textContent = 'Tap Share, then Add to Home Screen.';
+      show();
+    } else {
+      show();
+    }
+  })();
+</script>
