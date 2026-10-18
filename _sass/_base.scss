@@ -368,7 +368,9 @@ html:has(body.game-glass-on) {
 .game-stage.game-open .terminal-outer,
 .game-stage:fullscreen .terminal-outer,
 .game-stage.game-open .elite,
-.game-stage:fullscreen .elite {
+.game-stage:fullscreen .elite,
+.game-stage.game-open .pale,
+.game-stage:fullscreen .pale {
   width: 100% !important;
   height: 100% !important;
   max-width: none !important;
@@ -417,6 +419,19 @@ html:has(body.game-glass-on) {
   flex: 0 0 auto;
   width: 100%;
   box-sizing: border-box;
+}
+
+.game-stage.game-open .pale .ee-wrap,
+.game-stage:fullscreen .pale .ee-wrap {
+  position: relative;
+}
+
+.game-stage.game-open .pale .ee-wrap canvas,
+.game-stage:fullscreen .pale .ee-wrap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .game-stage.game-open .ee-wrap canvas,

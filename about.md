@@ -58,6 +58,8 @@ The same day, the other games moved onto the emoji engine. A title waits for Ret
 
 **18 October.** The desk. Play or Boot, a manual beside it, the banner under the buttons, and the words under the banner. [Notes]({{ '/releases/2026-10-18-the-desk/' | relative_url }}).
 
+[Pale March]({{ '/games/pale-march/' | relative_url }}). You are the White Witch. Four seals, then a gate that is writing your name. The map is flat. The field stands up. [Notes]({{ '/releases/2026-10-18-pale-march/' | relative_url }}).
+
 The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release notes]({{ '/releases/' | relative_url }}) are the log.
 
 ## Elsewhere

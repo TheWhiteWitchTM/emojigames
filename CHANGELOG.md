@@ -4,6 +4,10 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-18
 
+### Pale March
+
+The White Witch leaves Pale Hold. Four seals, then the Unlit Gate, where King Hollow is writing her true name. The map is the flat engine. The field is the solid one: you turn, you walk, and the host comes in ranks. What you do with each seal is still true at the gate. The march is saved on this machine.
+
 ### Elite
 
 A Cobra Mk III at Lave. Eight galaxies, the old market, and the slot. The ships are solid. Speed stays on the nose. Dock, jump, fight, scoop, and the ratings run through to Elite. The commander is saved on this machine.
