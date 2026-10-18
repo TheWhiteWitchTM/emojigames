@@ -35,6 +35,7 @@
 <meta name="twitter:image:alt" content="🧙‍♀️ Witch Hunt">
 
   <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+  <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
 </head>
 <body>
   <header class="site-header">
@@ -102,14 +103,24 @@
   <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
 
   <main class="game-frame">
-    <div id="game"></div>
-
+    <div id="game-stage" class="game-stage" hidden>
+      <div id="game"></div>
+    </div>
+    <div class="game-front markdown-body">
+      <h1>🧙‍♀️ Witch Hunt</h1>
+      <p class="game-lead">Survive 10 levels. Religious symbols chase the White Witch. Cast spells, grab power-ups, clear the pellets. Alpha.</p>
+      <div class="game-actions">
+        <button type="button" class="play" id="game-play">▶️ Play</button>
+      </div>
+      <p class="game-hint">Play fills the screen. Escape brings you back here.</p>
+      <div class="game-copy">
 <p>Religious symbols chase you. Collect pellets, cast spells, survive 10 levels. Alpha.</p>
 
 <script src="/emojigames/assets/js/terminal.js"></script>
 
 <script src="/emojigames/games/witch-hunt/witch-hunt.js"></script>
-
+      </div>
+    </div>
 
   </main>
 
@@ -134,5 +145,6 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
 });
 </script>
 
+  <script src="/emojigames/assets/js/game-desk.js"></script>
 </body>
 </html>

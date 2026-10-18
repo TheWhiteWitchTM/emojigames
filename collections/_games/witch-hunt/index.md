@@ -7,8 +7,6 @@ image: /games/witch-hunt/banner.jpg
 tags: [terminal, action, arcade]
 ---
 
-<div id="game"></div>
-
 Religious symbols chase you. Collect pellets, cast spells, survive 10 levels. Alpha.
 
 <script src="{{ '/assets/js/terminal.js' | relative_url }}"></script>

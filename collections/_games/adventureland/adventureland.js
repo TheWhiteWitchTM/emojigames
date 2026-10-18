@@ -256,6 +256,7 @@ useEffect(() => {
     windowBlown = false;
     lavaDammed = false;
     look();
+    term.showCursor();
     term.write("> ");
     term.tone(330, 0.05);
   }
@@ -531,7 +532,10 @@ useEffect(() => {
       term.writeln("");
       handle(inputBuffer);
       inputBuffer = "";
-      if (mode === "play") term.write("> ");
+      if (mode === "play") {
+        term.showCursor();
+        term.write("> ");
+      }
     } else if (e.key === "Backspace") {
       e.preventDefault();
       if (inputBuffer.length) {

@@ -5,6 +5,7 @@ description: A small computer for learning BASIC. Forty columns, 512 lines, less
 image: /games/basic-1/banner.jpg
 permalink: /games/basic-1/
 tags: [terminal, computer]
+desk: false
 ---
 
 <style>

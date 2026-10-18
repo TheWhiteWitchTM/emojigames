@@ -152,6 +152,7 @@ useEffect(() => {
   }
 
   function tick() {
+    if (typeof isGameLive === "function" && !isGameLive()) return;
     if (mode !== "play") return;
     dir = queued;
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };

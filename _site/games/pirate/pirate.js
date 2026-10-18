@@ -16,70 +16,70 @@ useEffect(() => {
     flat: {
       name: "London Flat",
       desc: "You are in a London flat. A window looks out over the street. A bookcase stands against one wall.",
-      art: ["  London flat   ", "   [bookcase]   ", "   [window]     "],
+      art: ["🏠 London.", "📚 A bookcase. 🪟 A window."],
       exits: { e: "street" },
       objects: ["book"]
     },
     street: {
       name: "Street",
       desc: "You are on a London street. A taxi waits nearby.",
-      art: ["   street       ", "   [taxi]       ", "                "],
+      art: ["🚕 A taxi waits."],
       exits: { w: "flat", e: "dock" },
       objects: []
     },
     dock: {
       name: "Dock",
       desc: "You are at the docks. A ship is moored here. A parrot sits on a crate.",
-      art: ["    docks       ", "  [ship] [parrot]", "                "],
+      art: ["⚓ Docks.", "🚢 A ship. 🦜 A parrot."],
       exits: { w: "street", e: "ship", s: "island" },
       objects: ["parrot"]
     },
     ship: {
       name: "Pirate Ship",
       desc: "You are on the deck of a pirate ship. The hold is below. A rusty anchor lies here.",
-      art: ["  pirate ship   ", "   [anchor]     ", "                "],
+      art: ["☠ The deck.", "⚓ A rusty anchor."],
       exits: { w: "dock", d: "hold" },
       objects: ["anchor"]
     },
     hold: {
       name: "Ship's Hold",
       desc: "You are in the ship's hold. It is dark and smells of rum. A chest sits in the corner.",
-      art: ["   ship's hold  ", "    [chest]     ", "                "],
+      art: ["📦 The hold.", "🧰 A chest."],
       exits: { u: "ship" },
       objects: ["chest"]
     },
     island: {
       name: "Tropical Island",
       desc: "You are on a tropical island. Palm trees sway. A path leads inland. A bottle lies in the sand.",
-      art: ["  tropical isle ", "   [bottle]     ", "   palm trees   "],
+      art: ["🌴 🌴 🌴", "🍾 A bottle in the sand."],
       exits: { n: "dock", e: "jungle", s: "beach" },
       objects: ["bottle"]
     },
     jungle: {
       name: "Dense Jungle",
       desc: "You are in dense jungle. Vines hang everywhere. Something glints in the undergrowth.",
-      art: ["  dense jungle  ", "   [machete]    ", "                "],
+      art: ["🌴 Dense jungle.", "🔪 A machete."],
       exits: { w: "island", e: "clearing" },
       objects: ["machete"]
     },
     clearing: {
       name: "Clearing",
       desc: "You are in a clearing. A large rock has strange markings. A cave mouth yawns nearby.",
-      art: ["   clearing     ", "  [rock] [cave] ", "                "],
+      art: ["🌿 A clearing.", "🪨 A rock. 🕳 A cave."],
       exits: { w: "jungle", e: "cave" },
       objects: ["map"]
     },
     cave: {
       name: "Pirate Cave",
       desc: "You are in a pirate cave. Treasure glints in the torchlight. A skeleton guards a chest.",
-      art: ["  pirate cave   ", "  [treasure]    ", "  [skeleton]    "],
+      art: ["🕳 The cave.", "💰 Treasure. 💀 A skeleton."],
       exits: { w: "clearing" },
       objects: ["treasure", "skeleton"]
     },
     beach: {
       name: "Sandy Beach",
       desc: "You are on a sandy beach. Waves crash. A small boat is pulled up on the sand.",
-      art: ["  sandy beach   ", "   [boat]       ", "                "],
+      art: ["🏖 Sand.", "🚣 A boat."],
       exits: { n: "island" },
       objects: ["boat"]
     }
@@ -166,6 +166,7 @@ useEffect(() => {
     chestOpen = false;
     parrotFriendly = false;
     look();
+    term.showCursor();
     term.write("> ");
     term.tone(330, 0.05);
   }
@@ -364,7 +365,10 @@ useEffect(() => {
       term.writeln("");
       handle(inputBuffer);
       inputBuffer = "";
-      if (mode === "play") term.write("> ");
+      if (mode === "play") {
+        term.showCursor();
+        term.write("> ");
+      }
     } else if (e.key === "Backspace") {
       e.preventDefault();
       if (inputBuffer.length) {

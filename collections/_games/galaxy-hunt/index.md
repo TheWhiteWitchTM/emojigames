@@ -9,8 +9,6 @@ featured: true
 feature_rank: 1
 ---
 
-<div id="game"></div>
-
 An eight-by-eight galaxy, a hunter, and a stardate. Dock to repair. HELP lists the commands. Return leaves the title. R, after the mission ends, starts another and skips the title.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

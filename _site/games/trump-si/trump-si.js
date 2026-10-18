@@ -140,6 +140,7 @@ class TrumpSI {
     this.term.resetAttr();
     this.term.writeln("");
     this.term.setFg(15);
+    this.term.showCursor();
     this.term.write("> ");
     this.term.resetAttr();
     this.inputBuffer = "";
@@ -159,6 +160,7 @@ class TrumpSI {
     this.term.resetAttr();
     this.term.writeln("");
     this.term.setFg(15);
+    this.term.showCursor();
     this.term.write("> ");
     this.term.resetAttr();
   }

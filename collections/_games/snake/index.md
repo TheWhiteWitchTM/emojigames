@@ -7,8 +7,6 @@ permalink: /games/snake/
 tags: [terminal, action]
 ---
 
-<div id="game"></div>
-
 Arrows or WASD. One hundred points wins. A crash ends it. R starts again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

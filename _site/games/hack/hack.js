@@ -6,56 +6,72 @@ useEffect(() => {
   if (!gameEl) return;
 
   const term = new Glass({
-    cols: 60,
-    rows: 20,
-    title: '🗡️ Hack',
+    cols: 40,
+    rows: 18,
+    cellWidth: 22,
+    cellHeight: 26,
+    title: '🗡 Hack',
     border: '#39ff14',
     autoRender: false,
     showCursor: false,
-    footer: 'Arrows, WASD, or hjkl. P drinks a potion. R starts again.'
+    footer: 'Arrows, WASD, or hjkl. P potion. Z scroll. R again.'
   });
   gameEl.appendChild(term.wrap);
   term.focus();
 
-  let level, player, depth = 1, messages = [], gameOver = false, won = false;
+  const GLYPH = { '#': '🪨', '.': '·', '<': '🔼', '>': '🔽' };
+  const OX = 1;
+  const OY = 1;
+
+  let tower = [];
+  let level, player, depth = 1, messages = [], gameOver = false;
   let state = 'intro';
 
   function beep(freq = 440, duration = 0.06) {
     term.tone(freq, duration);
   }
 
+  function clip(text, n) {
+    return Array.from(String(text)).slice(0, n).join('');
+  }
+
   function msg(text) {
     messages.push(text);
-    if (messages.length > 3) messages.shift();
+    if (messages.length > 2) messages.shift();
+  }
+
+  function cell(x, y, ch, fg) {
+    term.core.set(x, y, { ch: ch, fg: fg == null ? 7 : fg, bg: 0, bright: false });
   }
 
   function showIntro() {
     term.clear();
-    term.setFg(10);
-    term.writeAt(10, 2, '╦ ╦╔═╗╔═╗╦╔═');
-    term.writeAt(10, 3, '╠═╣╠═╣║  ╠╩╗');
-    term.writeAt(10, 4, '╩ ╩╩ ╩╚═╝╩ ╩');
-    term.setFg(2);
-    term.writeAt(8, 7, 'A terminal homage to the original');
-    term.writeAt(12, 8, 'Descend. Fight. Survive.');
-    term.setFg(11);
-    term.writeAt(14, 12, 'Press ENTER to begin');
-    term.setFg(8);
-    term.writeAt(12, 16, 'Arrows, WASD, or hjkl');
+    const lines = [
+      [14, 3, '🗡 HACK', 11],
+      [6, 6, 'Rooms, corridors, and worse.', 7],
+      [4, 8, 'The Amulet of Yendor waits on', 2],
+      [12, 9, 'the sixth floor.', 2],
+      [8, 12, 'Press Return to descend', 10],
+      [7, 15, 'Arrows, WASD, or hjkl', 8]
+    ];
+    lines.forEach((row) => {
+      term.setFg(row[3]);
+      term.writeAt(row[0], row[1], row[2]);
+    });
     term.render();
     beep(440, 0.15);
   }
 
   function showDead() {
     term.clear();
-    term.setFg(1);
-    term.writeAt(12, 3, '╔══════════════╗');
-    term.writeAt(12, 4, '║  YOU DIED    ║');
-    term.writeAt(12, 5, '╚══════════════╝');
+    term.setFg(9);
+    term.writeAt(12, 4, '💀  YOU DIED');
+    term.setFg(7);
+    term.writeAt(6, 7, 'The dungeon claims another.');
     term.setFg(8);
-    term.writeAt(10, 8, 'The dungeon claims another.');
+    term.writeAt(8, 9, 'Floor ' + depth + '    💰 ' + (player ? player.gold : 0));
     term.setFg(10);
-    term.writeAt(12, 12, 'Press R to restart');
+    term.writeAt(11, 13, 'Press R to try again');
     term.render();
     beep(80, 0.4);
   }
@@ -63,27 +79,34 @@ useEffect(() => {
   function showWin() {
     term.clear();
     term.setFg(11);
-    term.writeAt(10, 3, '╔════════════════╗');
-    term.writeAt(10, 4, '║   YOU WIN!     ║');
-    term.writeAt(10, 5, '╚════════════════╝');
+    term.writeAt(8, 4, '💎  THE AMULET');
     term.setFg(10);
-    term.writeAt(8, 8, 'You have the Amulet of Yendor!');
-    term.setFg(2);
-    term.writeAt(12, 12, 'Press R to play again');
+    term.writeAt(6, 7, 'Yendor is in your hand.');
+    term.setFg(7);
+    term.writeAt(8, 9, 'The dungeon can wait.');
+    term.setFg(10);
+    term.writeAt(11, 13, 'Press R to play again');
     term.render();
     beep(600, 0.3);
+  }
+
+  function stand(spot) {
+    if (!spot) return;
+    player.x = spot.x;
+    player.y = spot.y;
+    level.monsters = level.monsters.filter((mon) => mon.x !== player.x || mon.y !== player.y);
   }
 
   function newGame() {
     depth = 1;
     gameOver = false;
-    won = false;
     state = 'play';
+    tower = [];
     level = new Level(depth);
-    const r = level.rooms[0];
-    const start = r ? { x: r.x + 2, y: r.y + 2 } : (level.randomFloor() || { x: 2, y: 2 });
+    tower[depth] = level;
+    const start = level.stairsUp || level.randomFloor() || { x: 2, y: 2 };
     player = new Player(start.x, start.y);
-    messages = ['Use WASD to move. Type ? for help.'];
+    messages = ['🧙 Down you go.'];
     beep(520, 0.1);
     draw();
     term.focus();
@@ -94,41 +117,67 @@ useEffect(() => {
     term.clear();
     for (let y = 0; y < level.height; y++) {
       for (let x = 0; x < level.width; x++) {
-        term.moveTo(x, y);
         const t = level.tiles[y][x];
-        if (t === '#') {
-          term.setFg(8);
-          term.write('█');
-        } else {
-          term.setFg(2);
-          term.write(t || '·');
-        }
+        cell(OX + x, OY + y, GLYPH[t] || '·', t === '#' ? 8 : 2);
       }
     }
-    level.items.forEach(item => {
-      term.moveTo(item.x, item.y);
-      term.resetAttr();
-      term.write(item.ch || '?');
+    level.items.forEach((item) => cell(OX + item.x, OY + item.y, item.ch || '❓', 11));
+    level.monsters.forEach((mon) => {
+      if (mon.hp > 0) cell(OX + mon.x, OY + mon.y, mon.emoji || '👾', 15);
     });
-    level.monsters.forEach(mon => {
-      if (mon.hp > 0) {
-        term.moveTo(mon.x, mon.y);
-        term.resetAttr();
-        term.write(mon.emoji || mon.ch);
-      }
-    });
-    term.moveTo(player.x, player.y);
-    term.resetAttr();
-    term.write('🧙');
+    cell(OX + player.x, OY + player.y, '🧙', 13);
 
-    term.moveTo(0, level.height);
-    term.setFg(10);
-    const gear = player.weapon ? player.weapon.name : 'fists';
-    term.write(`Dlvl:${depth}  HP:${player.hp}/${player.maxHp}  Gold:${player.gold}  ${gear}`.slice(0, term.cols));
-    term.moveTo(0, level.height + 1);
-    term.setFg(7);
-    term.write((messages.join(' | ') || '').slice(0, term.cols));
+    const gear = player.weapon ? player.weapon.ch + ' ' + player.weapon.name : '👊 fists';
+    const armor = player.armor ? ' ' + player.armor.ch : '';
+    const pots = player.inventory.filter((item) => item.type === 'potion').length;
+    const scrolls = player.inventory.filter((item) => item.type === 'scroll').length;
+    paintRow(16, '🏰 ' + depth + '  💖 ' + player.hp + '/' + player.maxHp + '  💰 ' + player.gold + '  ' + gear + armor, 10);
+    paintRow(17, '🧪 ' + pots + '  📜 ' + scrolls + '  ' + (messages[messages.length - 1] || ''), 7);
     term.render();
+  }
+
+  function paintRow(row, text, fg) {
+    const chars = Array.from(clip(text, term.cols));
+    for (let x = 0; x < term.cols; x++) cell(x, row, chars[x] || ' ', fg);
+  }
+
+  function monstersTurn() {
+    level.monsters.forEach((m) => {
+      const res = m.act(level, player);
+      if (res) msg(res);
+    });
+  }
+
+  function checkDead() {
+    if (player.hp > 0) return false;
+    gameOver = true;
+    state = 'dead';
+    showDead();
+    return true;
+  }
+
+  function goDown() {
+    tower[depth] = level;
+    depth += 1;
+    if (!tower[depth]) tower[depth] = new Level(depth);
+    level = tower[depth];
+    stand(level.stairsUp || level.randomFloor());
+    msg(depth === 6 ? '🔽 Floor 6. The Amulet of Yendor is here.' : '🔽 You descend to floor ' + depth + '.');
+    beep(180, 0.12);
+  }
+
+  function goUp() {
+    if (depth <= 1) {
+      msg('🔼 The stairs end. The amulet is below.');
+      beep(80, 0.04);
+      return;
+    }
+    tower[depth] = level;
+    depth -= 1;
+    level = tower[depth];
+    stand(level.stairsDown || level.randomFloor());
+    msg('🔼 You climb to floor ' + depth + '.');
+    beep(220, 0.12);
   }
 
   function playerMove(dx, dy) {
@@ -136,14 +185,15 @@ useEffect(() => {
     const nx = player.x + dx;
     const ny = player.y + dy;
     const mon = level.getMonsterAt(nx, ny);
+    let shifted = false;
     if (mon) {
       const dmg = player.attack(mon);
-      msg(`You hit the ${mon.emoji || ''} ${mon.name} for ${dmg}.`);
+      msg('⚔ You hit the ' + mon.name + ' for ' + dmg + '. ' + Math.max(0, mon.hp) + ' left.');
       beep(200, 0.05);
       if (mon.hp <= 0) {
-        msg(`You kill the ${mon.name}!`);
+        msg('💀 The ' + mon.name + ' drops.');
         beep(300, 0.08);
-        level.monsters = level.monsters.filter(m => m !== mon);
+        level.monsters = level.monsters.filter((m) => m !== mon);
       }
     } else if (level.isWalkable(nx, ny)) {
       player.x = nx;
@@ -152,51 +202,74 @@ useEffect(() => {
       const item = level.getItemAt(nx, ny);
       if (item) {
         msg(player.pickup(item));
-        level.items = level.items.filter(i => i !== item);
+        level.items = level.items.filter((i) => i !== item);
         beep(600, 0.07);
         if (item.type === 'amulet') {
-          won = true;
           state = 'win';
           showWin();
           return;
         }
       }
-      if (level.tiles[ny][nx] === '⬇️') {
-        depth++;
-        level = new Level(depth);
-        const r = level.rooms[0];
-        const s = r ? { x: r.x + 2, y: r.y + 2 } : level.randomFloor();
-        player.x = s.x; player.y = s.y;
-        msg(depth === 6 ? 'You descend to level 6. The Amulet of Yendor is here.' : `You descend to level ${depth}.`);
-        beep(180, 0.12);
-      } else if (level.tiles[ny][nx] === '⬆️' && depth > 1) {
-        depth--;
-        level = new Level(depth);
-        const r = level.rooms[level.rooms.length - 1];
-        const s = r ? { x: r.x + 2, y: r.y + 2 } : level.randomFloor();
-        player.x = s.x; player.y = s.y;
-        msg(`You ascend to level ${depth}.`);
-        beep(220, 0.12);
+      const tile = level.tiles[ny][nx];
+      if (tile === '>') {
+        goDown();
+        shifted = true;
+      } else if (tile === '<') {
+        goUp();
+        shifted = true;
       }
     } else {
       beep(80, 0.04);
-      msg('You cannot go that way.');
+      msg('🪨 Rock.');
     }
-    level.monsters.forEach(m => {
-      const res = m.act(level, player);
-      if (res) msg(res);
-    });
-    if (player.hp <= 0) {
-      gameOver = true;
-      state = 'dead';
-      showDead();
-      return;
-    }
+    if (state !== 'play') return;
+    if (!shifted) monstersTurn();
+    if (checkDead()) return;
     draw();
   }
 
+  function drink() {
+    const pot = player.inventory.find((item) => item.type === 'potion');
+    if (!pot) msg('🧪 You have nothing to drink.');
+    else {
+      player.inventory = player.inventory.filter((item) => item !== pot);
+      player.hp = Math.min(player.maxHp, player.hp + 8);
+      msg('🧪 The potion knits you. 💖 ' + player.hp + '/' + player.maxHp + '.');
+      beep(620, 0.08);
+      monstersTurn();
+    }
+    if (!checkDead()) draw();
+  }
+
+  function blink() {
+    const scroll = player.inventory.find((item) => item.type === 'scroll');
+    if (!scroll) {
+      msg('📜 No scroll.');
+      draw();
+      return;
+    }
+    player.inventory = player.inventory.filter((item) => item !== scroll);
+    let spot = null;
+    for (let tries = 0; tries < 40; tries++) {
+      const next = level.randomFloor();
+      if (!next || level.getMonsterAt(next.x, next.y)) continue;
+      if (next.x === player.x && next.y === player.y) continue;
+      spot = next;
+      break;
+    }
+    if (spot) {
+      stand(spot);
+      msg('📜 The corridor folds. You are elsewhere.');
+    } else {
+      msg('📜 The scroll fizzes and is gone.');
+    }
+    beep(480, 0.08);
+    monstersTurn();
+    if (!checkDead()) draw();
+  }
+
   function showHelp() {
-    messages = ['Move: arrows/WASD/hjkl.  i inventory.  p potion.  ? help.  r restart'];
+    messages = ['Move hjkl or arrows. P potion. Z scroll. I pack. R again.'];
     draw();
   }
 
@@ -204,7 +277,7 @@ useEffect(() => {
     const k = key.length === 1 ? key.toLowerCase() : key;
     const map = {
       a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1],
-      q: [-1, -1], e: [1, -1], z: [-1, 1], c: [1, 1],
+      q: [-1, -1], e: [1, -1], c: [1, 1],
       h: [-1, 0], l: [1, 0], k: [0, -1], j: [0, 1],
       y: [-1, -1], u: [1, -1], b: [-1, 1], n: [1, 1],
       ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]
@@ -216,7 +289,6 @@ useEffect(() => {
     if (e.altKey || e.ctrlKey || e.metaKey) return;
     e.preventDefault();
 
-    const move = moveFor(e.key);
     if (state === 'intro') {
       if (isReturn(e.key) || isRestart(e.key)) newGame();
       return;
@@ -225,20 +297,16 @@ useEffect(() => {
       if (isRestart(e.key)) newGame();
       return;
     }
+    const move = moveFor(e.key);
     if (move) {
-      playerMove(...move);
+      playerMove(move[0], move[1]);
     } else if (e.key === 'p' || e.key === 'P') {
-      const pot = player.inventory.find(item => item.type === 'potion');
-      if (!pot) msg('You have nothing to drink.');
-      else {
-        player.inventory = player.inventory.filter(item => item !== pot);
-        player.hp = Math.min(player.maxHp, player.hp + 8);
-        msg('You drink the ' + pot.name + '.');
-        beep(620, 0.08);
-      }
-      draw();
+      drink();
+    } else if (e.key === 'z' || e.key === 'Z') {
+      blink();
     } else if (e.key === 'i' || e.key === 'I') {
-      msg('Inventory: ' + (player.inventory.map(i => i.name).join(', ') || 'empty'));
+      const names = player.inventory.map((item) => item.ch + ' ' + item.name);
+      msg(names.length ? '🎒 ' + names.join(', ') : '🎒 Empty pockets.');
       draw();
     } else if (e.key === '?') {
       showHelp();

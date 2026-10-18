@@ -172,3 +172,108 @@ body {
 .play-card[hidden] {
   display: none;
 }
+
+.game-front {
+  width: min(72ch, 100%);
+  color: #e8e8e8;
+}
+
+.game-front h1 {
+  margin: 0.2rem 0 0.6rem;
+}
+
+.game-lead {
+  margin: 0.4rem 0 0;
+  color: #ccc;
+}
+
+.game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1.1rem 0 0.7rem;
+}
+
+.game-actions button {
+  font: inherit;
+  font-size: 1.05rem;
+  color: #e8e8e8;
+  background: transparent;
+  border: 1px solid #3a2a4a;
+  border-radius: 8px;
+  padding: 0.55rem 0.95rem;
+  cursor: pointer;
+}
+
+.game-actions button:hover,
+.game-actions button:focus-visible {
+  border-color: #c9a6ff;
+  color: #e8d5ff;
+  outline: none;
+}
+
+.game-actions button.play {
+  border-color: #c9a6ff;
+  color: #e8d5ff;
+}
+
+.game-hint {
+  margin: 0.2rem 0 0.8rem;
+  color: #9a9a9a;
+}
+
+.game-copy {
+  color: #ccc;
+}
+
+.game-copy > p:first-child {
+  margin-top: 0;
+}
+
+body.game-glass-on {
+  overflow: hidden;
+}
+
+.game-stage[hidden] {
+  display: none !important;
+}
+
+.game-stage.game-open,
+.game-stage:fullscreen {
+  display: flex !important;
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 12px;
+  box-sizing: border-box;
+  background: #050305;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-stage.game-open #game,
+.game-stage:fullscreen #game {
+  width: min(100%, 1100px, calc((100dvh - 96px) * 1.55));
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+}
+
+.game-stage.game-open .ee-wrap,
+.game-stage:fullscreen .ee-wrap,
+.game-stage.game-open .terminal-outer,
+.game-stage:fullscreen .terminal-outer {
+  width: 100% !important;
+  max-width: none;
+  max-height: 100%;
+}
+
+.game-stage.game-open canvas,
+.game-stage:fullscreen canvas {
+  width: 100% !important;
+  height: auto !important;
+  max-height: calc(100dvh - 7rem);
+}

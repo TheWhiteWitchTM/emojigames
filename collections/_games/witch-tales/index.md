@@ -5,9 +5,8 @@ description: A chaptered tile RPG. You are a witch. The land has problems. Alpha
 permalink: /games/witch-tales/
 image: /games/witch-tales/banner.jpg
 tags: [terminal, rpg, adventure]
+game_base: /games/witch-tales/
 ---
-
-<div id="game" data-base="{{ '/games/witch-tales/' | relative_url }}"></div>
 
 You are a witch. The land has problems. Chapters arrive one at a time. Your save stays in this browser.
 

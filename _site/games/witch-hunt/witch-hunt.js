@@ -11,7 +11,7 @@ const term = new Terminal({
 });
 document.getElementById('game').appendChild(term.wrap);
 term.focus();
-term.titleText.textContent = '🧙‍♀️ Witch Hunt';
+term.titleText.textContent = '🧙 Witch Hunt';
 
 let audioCtx = null;
 function beep(freq, dur, type, vol) {
@@ -37,9 +37,9 @@ function beep(freq, dur, type, vol) {
 const COLS = 40;
 const ROWS = 22;
 const TUNNEL_Y = 13;
-// Milliseconds per cell. Level 1 is slow enough to steer. Each later level
-// trims a little. The witch stays quicker than a hunter in a straight hall,
-// and that lead shrinks as the levels rise.
+// Milliseconds per cell. Level 1 gives you time to turn a corner. Each later
+// level trims a little. The witch stays quicker than a hunter in a straight
+// hall, and that lead shrinks as the levels rise.
 const INTRO_MS = 1100;
 const DYING_MS = 900;
 const CLEAR_MS = 800;
@@ -155,14 +155,14 @@ function scatterMs(lv) {
 }
 
 function playerMs() {
-  return Math.max(112, 220 - (level - 1) * 12);
+  return Math.max(156, 280 - (level - 1) * 14);
 }
 
 function enemyMs(c) {
-  if (c.mode === 'eyes') return 80;
+  if (c.mode === 'eyes') return 110;
   if (c.mode === 'exit') return playerMs();
-  const gap = Math.max(28, 120 - (level - 1) * 10);
-  if (c.mode === 'roam' && witch && witch.immunity > 0) return playerMs() + gap + 70;
+  const gap = Math.max(48, 150 - (level - 1) * 10);
+  if (c.mode === 'roam' && witch && witch.immunity > 0) return playerMs() + gap + 80;
   return playerMs() + gap;
 }
 
@@ -755,13 +755,13 @@ function banner(y, text) {
 }
 
 function drawMenu() {
-  center(3, 'WITCH HUNT', GOLD);
+  center(3, '🧙 WITCH HUNT', GOLD);
   center(5, 'Religious symbols hunt you.', CREAM);
   center(6, 'They do not all hunt the same way.', CREAM);
   center(8, 'Eat every pellet. Ten levels.', CREAM);
   center(9, 'Arrows or WASD move. Space casts.', CREAM);
   center(10, 'A spell spends energy.', CREAM);
-  center(11, 'A cyan diamond turns the hunt.', CREAM);
+  center(11, 'A crystal turns the hunt.', CREAM);
   center(13, 'Three lives. P pauses.', CREAM);
   if (best > 0) center(14, 'Best ' + best, GOLD);
   center(17, 'Press Enter', GOLD);
@@ -807,7 +807,7 @@ function drawWorld() {
       else if (t === 'D') paint(x, y, '─', DOOR_C, PEN_C);
       else if (powerUps.has(key)) {
         if (powerUps.get(key) === 'energy') paint(x, y, '⚡', { r: 255, g: 220, b: 70 });
-        else paint(x, y, '◆', { r: 110, g: 235, b: 255 });
+        else paint(x, y, '🔮', { r: 110, g: 235, b: 255 });
       } else if (t === '<' || t === '>') paint(x, y, t === '<' ? '◀' : '▶', { r: 180, g: 140, b: 230 });
       else if (pellets.has(key)) paint(x, y, '•', PELLET_C);
     }
@@ -893,7 +893,7 @@ function updateHUD() {
   else if (witch.immunity > 0) hint = 'SHIELD ' + Math.ceil(witch.immunity / 1000) + 's';
   else if (spellCd > 0) hint = 'Spell cooling';
   else if (witch.energy <= 0) hint = 'No energy';
-  term.footerEl.textContent = 'Energy ' + witch.energy + '/' + witch.maxEnergy + '   Lives ' + lives + '   Score ' + witch.score + '   ' + hint;
+  term.footerEl.textContent = '⚡ ' + witch.energy + '/' + witch.maxEnergy + '   💖 ' + lives + '   ⭐ ' + witch.score + '   ' + hint;
 }
 
 function frameText() {
@@ -919,8 +919,10 @@ let last = performance.now();
 function loop(now) {
   const dt = Math.min(50, Math.max(0, now - last));
   last = now;
-  update(dt);
-  draw();
+  if (!(window.GameDesk && window.GameDesk.live && !window.GameDesk.live())) {
+    update(dt);
+    draw();
+  }
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);

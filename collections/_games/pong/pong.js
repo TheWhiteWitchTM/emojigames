@@ -172,6 +172,10 @@ useEffect(() => {
 
   function frame(now) {
     raf = requestAnimationFrame(frame);
+    if (typeof isGameLive === "function" && !isGameLive()) {
+      last = now;
+      return;
+    }
     if (!last) {
       last = now;
       canvas.draw();

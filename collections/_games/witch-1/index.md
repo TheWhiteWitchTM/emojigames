@@ -5,6 +5,7 @@ description: A 40-column machine. It speaks WASIC.
 image: /games/witch-1/banner.jpg
 permalink: /games/witch-1/
 tags: [terminal, computer]
+desk: false
 ---
 
 <style>

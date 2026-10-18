@@ -3,6 +3,9 @@
 <head>
   {% include head-custom.html %}
   <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+  {% unless page.desk == false %}
+  <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
+  {% endunless %}
 </head>
 <body>
   {% include nav.html %}
@@ -10,10 +13,31 @@
   <img src="{{ '/assets/images/site.jpg' | relative_url }}" alt="Emoji Games banner" class="site-banner">
 
   <main class="game-frame">
+    {% if page.desk == false %}
     {{ content }}
+    {% else %}
+    <div id="game-stage" class="game-stage" hidden>
+      <div id="game"{% if page.game_base %} data-base="{{ page.game_base | relative_url }}"{% endif %}></div>
+    </div>
+    <div class="game-front markdown-body">
+      <h1>{{ page.title }}</h1>
+      <p class="game-lead">{{ page.description }}</p>
+      <div class="game-actions">
+        <button type="button" class="play" id="game-play">▶️ Play</button>
+      </div>
+      <p class="game-hint">Play fills the screen. Escape brings you back here.</p>
+      <div class="game-copy">
+        {{ content }}
+      </div>
+    </div>
+    {% endif %}
   </main>
 
   {% include footer.html %}
   {% include scripts.html %}
+  {% unless page.desk == false %}
+  <script src="{{ '/assets/js/game-desk.js' | relative_url }}"></script>
+  {% endunless %}
 </body>
 </html>
+

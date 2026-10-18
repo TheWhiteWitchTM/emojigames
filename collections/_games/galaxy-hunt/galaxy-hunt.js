@@ -28,6 +28,7 @@ useEffect(() => {
     term.clear();
   }
   function prompt() {
+    term.showCursor();
     term.resetAttr();
     term.setFg(10);          // bright green
     term.write('> ');

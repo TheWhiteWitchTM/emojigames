@@ -18,8 +18,14 @@
     return !!el.isContentEditable;
   }
 
+  function isGameLive() {
+    if (window.GameDesk && typeof window.GameDesk.live === "function") return !!window.GameDesk.live();
+    return true;
+  }
+
   function armGameKeys(handler) {
     function onKey(event) {
+      if (!isGameLive()) return;
       if (isForeignTyping(event.target)) return;
       const key = event.key;
       if (key === "ArrowUp" || key === "ArrowDown" || key === "ArrowLeft" || key === "ArrowRight" || key === " " || key === "Tab") {
@@ -48,16 +54,22 @@
       this.charH = cellHeight;
       this.autoRender = options.autoRender !== false;
       this.cursorEnabled = options.showCursor !== false;
+      this.cursorStyle = options.cursorStyle || "block";
       this.core = new E.Terminal({
         cols: cols,
         rows: rows,
         cellWidth: cellWidth,
-        cellHeight: cellHeight
+        cellHeight: cellHeight,
+        showCursor: this.cursorEnabled,
+        cursorStyle: this.cursorStyle,
+        cursorColor: options.cursor || "#d6ff9a",
+        cursorSpeed: this.cursorEnabled ? 530 : 0
       });
       this.engine = new E.Engine({ canvas: this.core.canvas });
       this.core.color(2, 0);
       this.core.cursorLit = this.cursorEnabled;
       this.core.cursorColor = options.cursor || "#d6ff9a";
+      this.core.setCursorStyle(this.cursorStyle);
       const showFooter = options.footer !== false;
       this.ui = E.Utilities.wrap(this.core, {
         title: options.title || document.title || "Emoji Games",
@@ -90,11 +102,6 @@
         }
       });
       if (!this.autoRender) this.core.beginFrame();
-      this._blink = setInterval(() => {
-        if (this._destroyed || !this.cursorEnabled || this.core.batch > 0) return;
-        this.core.cursorLit = this.core.cursorLit === false;
-        this.core.flush();
-      }, 530);
       this.core.flush();
     }
 
@@ -103,6 +110,17 @@
     }
 
     toggleFullscreen() {
+      if (window.GameDesk && window.GameDesk.open && typeof window.GameDesk.close === "function") {
+        if (document.fullscreenElement) {
+          window.GameDesk.close();
+          return;
+        }
+        const stage = document.getElementById("game-stage");
+        if (stage && stage.requestFullscreen) {
+          Promise.resolve(stage.requestFullscreen()).catch(function () {});
+          return;
+        }
+      }
       const request = document.fullscreenElement ? document.exitFullscreen() : this.wrap.requestFullscreen();
       if (request && request.catch) request.catch(function () {});
     }
@@ -114,7 +132,6 @@
     destroy() {
       if (this._destroyed) return;
       this._destroyed = true;
-      clearInterval(this._blink);
       document.removeEventListener("keydown", this._onDocKeyDown, true);
       if (this.wrap && this.wrap.parentNode) this.wrap.parentNode.removeChild(this.wrap);
     }
@@ -242,6 +259,7 @@
     hideCursor() {
       this.cursorEnabled = false;
       this.core.cursorLit = false;
+      this.core.cursorSpeed(0);
       this.core.dirty = true;
       if (this.core.batch === 0) this.core.flush();
     }
@@ -249,6 +267,8 @@
     showCursor() {
       this.cursorEnabled = true;
       this.core.cursorLit = true;
+      this.core.setCursorStyle(this.cursorStyle);
+      this.core.cursorSpeed(530);
       this.core.dirty = true;
       if (this.core.batch === 0) this.core.flush();
     }
@@ -305,6 +325,7 @@
       this.beginFrame();
       this.cursorEnabled = false;
       this.core.cursorLit = false;
+      this.core.cursorSpeed(0);
       this.clear();
       const start = Math.max(1, Math.floor((this.rows - rows.length) / 2));
       rows.forEach((row, index) => {
@@ -322,6 +343,7 @@
 
     _forwardKey(event) {
       if (this._destroyed || event.__fromGlass) return;
+      if (!isGameLive()) return;
       if (event.target && this.wrap.contains(event.target)) return;
       if (isForeignTyping(event.target)) return;
       const forwarded = new KeyboardEvent("keydown", {
@@ -345,4 +367,5 @@
   globalThis.isReturn = isReturn;
   globalThis.isRestart = isRestart;
   globalThis.armGameKeys = armGameKeys;
+  globalThis.isGameLive = isGameLive;
 })();

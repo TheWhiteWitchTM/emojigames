@@ -7,8 +7,6 @@ permalink: /games/pirate/
 tags: [terminal, adventure]
 ---
 
-<div id="game"></div>
-
 Leave the London flat. The parrot knows the words, and the gold belongs back home. Return leaves the title. R, when it is over, starts again.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>

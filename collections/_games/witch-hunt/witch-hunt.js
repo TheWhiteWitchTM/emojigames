@@ -919,8 +919,10 @@ let last = performance.now();
 function loop(now) {
   const dt = Math.min(50, Math.max(0, now - last));
   last = now;
-  update(dt);
-  draw();
+  if (!(window.GameDesk && window.GameDesk.live && !window.GameDesk.live())) {
+    update(dt);
+    draw();
+  }
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);

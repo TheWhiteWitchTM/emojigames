@@ -2,6 +2,16 @@
 
 The glass keeps this record. Newest first.
 
+## 2026-10-18
+
+### Play, then Escape
+
+Every game page is a desk now. ▶️ Play fills the screen. Escape returns to the page. It does not shrink the glass back into the article.
+
+Witch I and Basic I still boot. Their lines stay.
+
+Adventureland, Pirate Adventure, Galaxy Hunt, The Oregon Trail, and Trump Super Intelligence keep a blinking block caret at the prompt.
+
 ## 2026-10-17
 
 ### Playable speeds, and emoji where the games speak

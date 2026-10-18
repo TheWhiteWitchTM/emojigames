@@ -39,7 +39,7 @@ useEffect(() => {
   let food = null;
   let obstacles = [];
   let score = 0;
-  let speed = 170;
+  let speed = 210;
   let timer = 0;
   let segs = [];
   let foodSprite = null;
@@ -152,6 +152,7 @@ useEffect(() => {
   }
 
   function tick() {
+    if (typeof isGameLive === "function" && !isGameLive()) return;
     if (mode !== "play") return;
     dir = queued;
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
@@ -176,8 +177,8 @@ useEffect(() => {
       if (score % 40 === 0) placeRocks();
       placeFood();
       if (mode !== "play") return;
-      if (speed > 70) {
-        speed -= 12;
+      if (speed > 120) {
+        speed -= 8;
         clearInterval(timer);
         timer = setInterval(tick, speed);
       }
@@ -197,7 +198,7 @@ useEffect(() => {
     dir = { x: 1, y: 0 };
     queued = dir;
     score = 0;
-    speed = 170;
+    speed = 210;
     obstacles = [];
     placeFood();
     placeRocks();

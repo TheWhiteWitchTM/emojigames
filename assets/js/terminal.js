@@ -139,8 +139,8 @@ class Terminal {
     this.stage.appendChild(this.footer);
 
     this._onFullscreen = () => {
-      if (document.fullscreenElement === this.wrap) {
-        this.fsBtn.innerHTML = '<b>Esc</b> Shrink ⤡';
+      if (document.fullscreenElement) {
+        this.fsBtn.innerHTML = '<b>Esc</b> Exit ⎋';
         setTimeout(() => this.focus(), 50);
       } else {
         this.fsBtn.innerHTML = '<b>F11</b> Fullscreen ⛶';
@@ -356,8 +356,10 @@ class Terminal {
   }
 
   toggleFullscreen() {
+    const stage = document.getElementById("game-stage");
+    const root = (window.GameDesk && window.GameDesk.open && stage) ? stage : this.wrap;
     if (!document.fullscreenElement) {
-      this.wrap.requestFullscreen().then(() => this.wrap.focus()).catch(() => {});
+      root.requestFullscreen().then(() => this.wrap.focus()).catch(() => {});
     } else {
       document.exitFullscreen();
     }
@@ -473,6 +475,7 @@ class Terminal {
   /** @private */
   _forwardKey(e) {
     if (this._destroyed || e.__fromTerminal) return;
+    if (window.GameDesk && typeof window.GameDesk.live === "function" && !window.GameDesk.live()) return;
     if (e.target && this.wrap.contains(e.target)) return;
     if (this._isForeignTyping(e.target)) return;
     const fwd = new KeyboardEvent('keydown', {

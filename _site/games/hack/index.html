@@ -35,6 +35,7 @@
 <meta name="twitter:image:alt" content="🗡️ Hack">
 
   <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+  <script>window.GameDesk = { open: false, live: function () { return !!this.open; } };</script>
 </head>
 <body>
   <header class="site-header">
@@ -102,8 +103,17 @@
   <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games banner" class="site-banner">
 
   <main class="game-frame">
-    <div id="game"></div>
-
+    <div id="game-stage" class="game-stage" hidden>
+      <div id="game"></div>
+    </div>
+    <div class="game-front markdown-body">
+      <h1>🗡️ Hack</h1>
+      <p class="game-lead">Rooms, corridors, and an amulet on the sixth floor.</p>
+      <div class="game-actions">
+        <button type="button" class="play" id="game-play">▶️ Play</button>
+      </div>
+      <p class="game-hint">Play fills the screen. Escape brings you back here.</p>
+      <div class="game-copy">
 <p>Descend. Fight. The Amulet of Yendor is waiting on the sixth floor. Return begins. R starts again.</p>
 
 <script src="/emojigames/assets/js/components.js"></script>
@@ -121,7 +131,8 @@
 <script src="/emojigames/games/hack/player.js"></script>
 
 <script src="/emojigames/games/hack/hack.js"></script>
-
+      </div>
+    </div>
 
   </main>
 
@@ -146,5 +157,6 @@ document.querySelectorAll('.dropdown-toggle').forEach(btn => {
 });
 </script>
 
+  <script src="/emojigames/assets/js/game-desk.js"></script>
 </body>
 </html>

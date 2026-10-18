@@ -2211,7 +2211,7 @@ class OregonGame {
     for (let i = 0; i < 18; i++) {
       const x = 2 + Math.floor(this.rand() * 76);
       const y = 4 + Math.floor(this.rand() * 17);
-      rocks[x + ',' + y] = this.terrain() === 'forest' && this.rand() < 0.5 ? 'T' : '#';
+      rocks[x + ',' + y] = this.terrain() === 'forest' && this.rand() < 0.5 ? '🌲' : '🪨';
     }
     this.hunt = {
       x: 8,
@@ -2223,13 +2223,13 @@ class OregonGame {
       rocks: rocks,
       meat: 0,
       ticks: 0,
-      maxTicks: 220,
+      maxTicks: 150,
       msg: 'Arrows or WASD move. SPACE shoots. Q returns.',
       done: false
     };
     this.phase = 'hunt';
     this.drawHunt();
-    this.timer = setInterval(() => this.huntTick(), 90);
+    this.timer = setInterval(() => this.huntTick(), 150);
   }
 
   huntBlocked(x, y) {
@@ -2283,20 +2283,20 @@ class OregonGame {
   spawnAnimal() {
     const terrain = this.terrain();
     const bag = [
-      { ch: 'r', fg: OT.bwhite, meat: 2 + Math.floor(this.rand() * 4), every: 1, name: 'rabbit' },
-      { ch: 'r', fg: OT.bwhite, meat: 2 + Math.floor(this.rand() * 4), every: 1, name: 'rabbit' },
-      { ch: 's', fg: OT.bmagenta, meat: 1 + Math.floor(this.rand() * 3), every: 2, name: 'skunk' }
+      { ch: '🐇', fg: OT.bwhite, meat: 2 + Math.floor(this.rand() * 4), every: 1, name: 'rabbit' },
+      { ch: '🐇', fg: OT.bwhite, meat: 2 + Math.floor(this.rand() * 4), every: 1, name: 'rabbit' },
+      { ch: '🦨', fg: OT.bmagenta, meat: 1 + Math.floor(this.rand() * 3), every: 2, name: 'skunk' }
     ];
     if (terrain === 'prairie' || terrain === 'plains' || terrain === 'foothills') {
-      bag.push({ ch: 'D', fg: OT.byellow, meat: 40 + Math.floor(this.rand() * 35), every: 2, name: 'deer' });
-      bag.push({ ch: 'B', fg: OT.yellow, meat: 80 + Math.floor(this.rand() * 40), every: 3, name: 'buffalo' });
+      bag.push({ ch: '🦌', fg: OT.byellow, meat: 40 + Math.floor(this.rand() * 35), every: 2, name: 'deer' });
+      bag.push({ ch: '🦬', fg: OT.yellow, meat: 80 + Math.floor(this.rand() * 40), every: 3, name: 'buffalo' });
     }
     if (terrain === 'mountain' || terrain === 'forest' || terrain === 'foothills') {
-      bag.push({ ch: 'D', fg: OT.byellow, meat: 40 + Math.floor(this.rand() * 30), every: 2, name: 'deer' });
-      bag.push({ ch: 'M', fg: OT.bred, meat: 70 + Math.floor(this.rand() * 40), every: 3, name: 'bear' });
+      bag.push({ ch: '🦌', fg: OT.byellow, meat: 40 + Math.floor(this.rand() * 30), every: 2, name: 'deer' });
+      bag.push({ ch: '🐻', fg: OT.bred, meat: 70 + Math.floor(this.rand() * 40), every: 3, name: 'bear' });
     }
     if (terrain === 'desert') {
-      bag.push({ ch: 'D', fg: OT.byellow, meat: 30 + Math.floor(this.rand() * 25), every: 2, name: 'deer' });
+      bag.push({ ch: '🦌', fg: OT.byellow, meat: 30 + Math.floor(this.rand() * 25), every: 2, name: 'deer' });
     }
     const spec = bag[Math.floor(this.rand() * bag.length)];
     const fromLeft = this.rand() < 0.5;
@@ -2350,7 +2350,7 @@ class OregonGame {
     });
     hunt.animals = hunt.animals.filter(animal => !deadAnimals.has(animal));
     hunt.shots = hunt.shots.filter(shot => !deadShots.has(shot));
-    if (hunt.ticks % 9 === 0 && hunt.animals.length < 5) this.spawnAnimal();
+    if (hunt.ticks % 6 === 0 && hunt.animals.length < 5) this.spawnAnimal();
     this.drawHunt();
     if (hunt.ticks >= hunt.maxTicks) this.endHunt();
   }
@@ -2369,12 +2369,11 @@ class OregonGame {
     Object.keys(hunt.rocks).forEach(key => {
       const parts = key.split(',');
       const ch = hunt.rocks[key];
-      this.at(parseInt(parts[0], 10), parseInt(parts[1], 10), ch, ch === 'T' ? OT.green : OT.yellow);
+      this.at(parseInt(parts[0], 10), parseInt(parts[1], 10), ch, ch === '🌲' ? OT.green : OT.yellow);
     });
     hunt.animals.forEach(animal => this.at(animal.x, animal.y, animal.ch, animal.fg));
-    hunt.shots.forEach(shot => this.at(shot.x, shot.y, '*', OT.byellow));
-    const facing = hunt.dx === 1 ? '>' : hunt.dx === -1 ? '<' : (hunt.dy === -1 ? '^' : 'v');
-    this.at(hunt.x, hunt.y, facing, OT.bwhite);
+    hunt.shots.forEach(shot => this.at(shot.x, shot.y, '💥', OT.byellow));
+    this.at(hunt.x, hunt.y, '🤠', OT.bwhite);
     this.phase = 'hunt';
     this.term.hideCursor();
     this.term.endFrame();
@@ -2422,7 +2421,7 @@ class OregonGame {
     };
     this.phase = 'raft';
     this.drawRaft();
-    this.timer = setInterval(() => this.raftTick(), 80);
+    this.timer = setInterval(() => this.raftTick(), 140);
   }
 
   raftKey(event) {
@@ -2441,13 +2440,13 @@ class OregonGame {
     if (!raft || raft.done) return;
     raft.ticks += 1;
     raft.rocks.forEach(rock => { rock.y += 1; });
-    if (raft.ticks > 150) raft.channel = true;
+    if (raft.ticks > 100) raft.channel = true;
     if (raft.ticks % 2 === 0) {
       const x = 2 + Math.floor(this.rand() * 68);
       if (!(raft.channel && x > 64)) raft.rocks.push({ x: x, y: 4 });
     }
     raft.rocks = raft.rocks.filter(rock => rock.y < 23);
-    const body = [raft.x, raft.x + 1, raft.x + 2];
+    const body = [raft.x];
     raft.rocks = raft.rocks.filter(rock => {
       const hit = rock.y === raft.y && body.indexOf(rock.x) !== -1;
       if (!hit) return true;
@@ -2463,7 +2462,7 @@ class OregonGame {
       this.endRaft(false);
       return;
     }
-    if (raft.ticks > 280) {
+    if (raft.ticks > 190) {
       this.endRaft(true);
       return;
     }
@@ -2483,8 +2482,8 @@ class OregonGame {
       this.at(68, 4, 'CHANNEL', OT.byellow, OT.cyan);
       this.at(68, 5, '>>>>>>', OT.bwhite, OT.cyan);
     }
-    raft.rocks.forEach(rock => this.at(rock.x, rock.y, '^', OT.bwhite, OT.blue));
-    this.at(raft.x, raft.y, '<=>', OT.byellow, OT.blue);
+    raft.rocks.forEach(rock => this.at(rock.x, rock.y, '🪨', OT.bwhite, OT.blue));
+    this.at(raft.x, raft.y, '🚣', OT.byellow, OT.blue);
     this.at(2, 23, 'Left and right, up and down. Reach the channel.', OT.gray, OT.black);
     this.phase = 'raft';
     this.term.hideCursor();
