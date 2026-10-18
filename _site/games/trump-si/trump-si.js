@@ -64,9 +64,6 @@ const TOPIC_KEYS = [
   "winning", "greeting", "joke"
 ];
 
-const VOICE_MALE = /male|david|daniel|alex|fred|aaron|guy|matthew|christopher|brian|james|eric|bruce|gordon|arthur|ralph|reed|junior|rishi|george|thomas|andrew|davis|jason|tony|roger|mark|ryan|tom/;
-const VOICE_FEMALE = /female|woman|zira|samantha|victoria|fiona|moira|hazel|serena|allison|ava|kate|susan|karen|salli|ivy|aria|jenny|sara|natasha|libby|sonia|michelle|joanna|kimberly|kendra|nicole|emma|amy/;
-
 function escapeReg(phrase) {
   return phrase.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -94,18 +91,6 @@ function clipQuote(text) {
   const cut = clean.slice(0, 46);
   const space = cut.lastIndexOf(" ");
   return (space > 18 ? cut.slice(0, space) : cut).trim() + "...";
-}
-
-function saidLine(quote) {
-  if (!quote) return "";
-  const tidy = /[.!?]$/.test(quote) ? quote : quote + ".";
-  return 'You said "' + tidy + '"';
-}
-
-function askedLine(quote) {
-  if (!quote) return "";
-  const tidy = /[.!?]$/.test(quote) ? quote : quote + "?";
-  return 'You asked, "' + tidy + '"';
 }
 
 function formatNum(n) {
@@ -156,7 +141,8 @@ function moodFor(key) {
   if (key === "insult" || key === "rant") return "rant";
   if (key === "fake") return "fake";
   if (key === "sad" || key === "goodbye") return "sad";
-  if (key === "ai" || key === "question" || key === "math" || key === "who" || key === "help") return "neutral";
+  if (key === "ai" || key === "math" || key === "who" || key === "help") return "neutral";
+  if (key === "question") return "smug";
   return "smug";
 }
 
@@ -229,7 +215,7 @@ function judge(input, table) {
     mood = "neutral";
   } else if (isQuestion(text)) {
     key = "question";
-    mood = "neutral";
+    mood = /\b(why|explain|how come|prove|justify)\b/i.test(text) ? "rant" : "smug";
   }
 
   return {
@@ -336,23 +322,27 @@ function capWord(phrase) {
 }
 
 function hook(verdict, used) {
+  const skip = {
+    greeting: 1,
+    goodbye: 1,
+    thanks: 1,
+    who: 1,
+    help: 1,
+    math: 1,
+    love: 1,
+    joke: 1
+  };
+  if (skip[verdict.key]) return "";
   const subject = heard(verdict.text);
   if (!subject) return "";
-  if (verdict.key === "question") {
-    return pickFrom([
-      "You asked about " + subject + ".",
-      capWord(subject) + ".",
-      "About " + subject + "."
-    ], used);
-  }
-  if (verdict.key === "fallback") {
-    return pickFrom([
-      "Look, " + subject + ".",
-      "Many people are saying " + subject + ".",
-      capWord(subject) + ". Interesting."
-    ], used);
-  }
-  return "";
+  const name = capWord(subject);
+  return pickFrom([
+    name + "? Please.",
+    "Let me tell you about " + subject + ".",
+    name + ". A lot of people bring up " + subject + ". Mostly the wrong people.",
+    "I know " + subject + ". I know it better than the people who invented it.",
+    "You said " + subject + ". Out loud. Wow. OK. My turn."
+  ], used);
 }
 
 function poolFor(responses, key) {
@@ -393,10 +383,7 @@ function compose(state) {
   if (verdict.key === "math") return mathLine(verdict.math, used);
   if (verdict.key === "memory") return memoryLine(state.lastYou, responses, used);
 
-  const words = String(verdict.text || "").split(/\s+/).filter(Boolean).length;
-  const quoteOk = words >= 2 && ["greeting", "goodbye", "thanks", "math", "who", "help", "sad"].indexOf(verdict.key) === -1;
-  const quote = quoteOk ? verdict.quote : "";
-  const personal = (mood === "happy" || mood === "winning")
+  const personal = ((mood === "happy" || mood === "winning") && verdict.key !== "greeting")
     ? pickFrom(responses.praiseYou, used)
     : (mood === "rant" && verdict.key !== "rant" && (verdict.insult || 0) > (verdict.praise || 0))
       ? pickFrom(responses.insultYou, used)
@@ -409,52 +396,55 @@ function compose(state) {
   if (state.hot && mood === "rant") extra = joinParts([extra, pickFrom(responses.rantTail, used)]);
   let ai = "";
   if (verdict.key !== "ai" && verdict.key !== "who" && verdict.key !== "help" && verdict.key !== "greeting") {
-    if ((mood === "neutral" || mood === "smug") && Math.random() < 0.22) ai = pickFrom(responses.aiBit, used);
+    if ((mood === "neutral" || mood === "smug") && Math.random() < 0.35) ai = pickFrom(responses.aiBit, used);
   }
-  const lead = verdict.key === "question" ? askedLine(quote) : saidLine(quote);
+  const spice = (verdict.key !== "math" && responses.bluster && responses.bluster.length && (mood === "rant" || Math.random() < 0.72))
+    ? pickFrom(responses.bluster, used)
+    : "";
   const heardLine = hook(verdict, used);
   let shapes;
-  let limit = 300;
+  let limit = 420;
   if (mood === "rant") {
-    limit = 460;
+    limit = state.hot ? 760 : 620;
     shapes = [
-      [personal, body, extra],
-      [body, extra],
-      [personal, body]
+      [heardLine, personal, body, extra, spice],
+      [personal, body, extra, spice],
+      [body, extra, spice],
+      [heardLine, body, extra]
     ];
   } else if (mood === "winning") {
     shapes = [
-      [extra, personal, body],
-      [extra, body],
-      [body, extra]
+      [extra, personal, body, spice],
+      [extra, body, spice],
+      [body, extra, spice]
     ];
   } else if (mood === "happy") {
     shapes = [
-      [personal, body],
-      [body, personal],
-      [body]
+      [personal, body, spice],
+      [body, personal, spice],
+      [body, spice]
     ];
   } else if (mood === "sad") {
     shapes = [
-      [body, extra],
-      [body],
-      [heardLine, body]
+      [body, extra, spice],
+      [heardLine, body, spice],
+      [body, spice]
     ];
   } else if (verdict.key === "question" || verdict.key === "fallback") {
     shapes = heardLine
-      ? [[heardLine, body], [heardLine, body, ai]]
-      : [[body], [body, ai], [lead, body]];
+      ? [[heardLine, body, spice], [heardLine, body, ai, spice], [body, spice]]
+      : [[body, spice], [body, ai, spice], [body, spice]];
   } else if (mood === "fake") {
     shapes = [
-      [body],
-      [lead, body],
-      [body, ai]
+      [body, spice],
+      [heardLine, body, spice],
+      [body, ai, spice]
     ];
   } else {
     shapes = [
-      [body],
-      [body, ai],
-      [lead, body]
+      [heardLine, body, spice],
+      [body, ai, spice],
+      [body, spice]
     ];
   }
   let line = clampParts(shapes[Math.floor(Math.random() * shapes.length)], limit);
@@ -465,17 +455,18 @@ function compose(state) {
 }
 
 const VOICE_CADENCE = {
-  happy: { rate: 1.0, pitch: 0.94 },
-  winning: { rate: 1.04, pitch: 0.92 },
-  smug: { rate: 0.94, pitch: 0.9 },
-  neutral: { rate: 0.96, pitch: 0.92 },
-  fake: { rate: 0.9, pitch: 0.86 },
-  rant: { rate: 1.08, pitch: 0.88 },
-  sad: { rate: 0.86, pitch: 0.82 }
+  happy: { rate: 0.98, pitch: 0.9 },
+  winning: { rate: 1.04, pitch: 0.88 },
+  smug: { rate: 0.92, pitch: 0.84 },
+  neutral: { rate: 0.94, pitch: 0.86 },
+  fake: { rate: 0.88, pitch: 0.8 },
+  rant: { rate: 1.14, pitch: 0.82 },
+  sad: { rate: 0.8, pitch: 0.74 }
 };
 
-const VOICE_PLAIN = /christopher|eric|guy|david|andrew|davis|aaron|matthew|brian|jason|tony|roger|mark|alex|george/;
-const VOICE_NOVELTY = /bad news|bahh|bells|boing|bubbles|cellos|zarvox|trinoids|whisper|superstar|grandma|grandpa|junior|kathy|princess|organ|pipe|novelty|wobble|albert|fred/;
+const VOICE_MALE_NAME = /\b(david|daniel|alex|fred|aaron|guy|matthew|christopher|brian|james|eric|bruce|gordon|arthur|ralph|reed|rishi|george|thomas|andrew|davis|jason|tony|roger|mark|ryan|tom|adam|paul|mike|robert|john|edward|boris|hugo|nathan|steffan|evan)\b/;
+const VOICE_FEMALE_NAME = /\b(female\d*|woman|zira|samantha|victoria|fiona|moira|hazel|serena|allison|ava|kate|susan|karen|salli|ivy|aria|jenny|sara|natasha|libby|sonia|michelle|joanna|kimberly|kendra|nicole|emma|amy|linda|shelby|grandma|aunty|auntie|tessa|veena|ana|heather|catherine|andrea|alicia|annie|belinda|anika|steph\d*)\b/;
+const VOICE_NOVELTY = /bad news|bahh|bells|boing|bubbles|cellos|zarvox|trinoids|whisper|superstar|grandma|grandpa|kathy|princess|organ|pipe|novelty|wobble|albert|demonic|klatt|robot|announcer/;
 
 function forVoice(text) {
   let line = String(text || "").replace(/\s+/g, " ").trim();
@@ -484,11 +475,30 @@ function forVoice(text) {
   line = line.replace(/\s+\+\s+/g, " plus ");
   line = line.replace(/\s+\*\s+/g, " times ");
   line = line.replace(/\s+×\s+/g, " times ");
-  if (line.length <= 420) return line;
-  const cut = line.slice(0, 420);
+  if (line.length <= 680) return line;
+  const cut = line.slice(0, 680);
   const stop = Math.max(cut.lastIndexOf("."), cut.lastIndexOf("!"), cut.lastIndexOf("?"));
-  if (stop > 140) return cut.slice(0, stop + 1);
+  if (stop > 180) return cut.slice(0, stop + 1);
   return cut;
+}
+
+function burstChunks(sentence) {
+  const trimmed = sentence.replace(/\s+/g, " ").trim();
+  if (!trimmed) return [];
+  const words = trimmed.split(" ");
+  if (words.length <= 8) return [trimmed];
+  const pieces = [];
+  trimmed.split(/,\s+|\s+(?=(?:and|but|because)\s+)/i).forEach(function (part) {
+    const bit = part.trim();
+    if (!bit) return;
+    const bitWords = bit.split(/\s+/);
+    if (bitWords.length <= 10) {
+      pieces.push(bit);
+      return;
+    }
+    for (let i = 0; i < bitWords.length; i += 7) pieces.push(bitWords.slice(i, i + 7).join(" "));
+  });
+  return pieces.length ? pieces : [trimmed];
 }
 
 function trumpPhrases(text) {
@@ -497,47 +507,48 @@ function trumpPhrases(text) {
   const sentences = line.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [line];
   const phrases = [];
   sentences.forEach(function (sentence) {
-    const trimmed = sentence.replace(/\s+/g, " ").trim();
-    if (!trimmed) return;
-    const words = trimmed.split(" ");
-    let chunks = [trimmed];
-    if (words.length > 12 && trimmed.indexOf(",") !== -1) {
-      chunks = trimmed.split(/,\s+/).map(function (part, index, all) {
-        const bit = part.trim();
-        if (!bit) return "";
-        if (index < all.length - 1 && !/[.!?]$/.test(bit)) return bit + ",";
-        return bit;
-      }).filter(Boolean);
-    }
-    chunks.forEach(function (chunk) {
+    burstChunks(sentence).forEach(function (chunk) {
       const bang = /!$/.test(chunk);
       const question = /\?$/.test(chunk);
       const comma = /,$/.test(chunk);
       const sadWord = /^sad\b/i.test(chunk);
       phrases.push({
         text: chunk,
-        rate: sadWord ? 0.88 : bang ? 0.94 : question ? 1.02 : 1,
-        pitch: sadWord ? 0.84 : bang ? 0.9 : question ? 1.1 : comma ? 1.03 : 0.97,
-        volume: bang ? 1 : 0.97,
-        gap: sadWord ? 200 : bang ? 160 : comma ? 80 : 120
+        rate: sadWord ? 0.84 : bang ? 1.08 : question ? 1.02 : 1,
+        pitch: sadWord ? 0.9 : bang ? 0.94 : 1,
+        volume: bang ? 1 : 0.96,
+        gap: sadWord ? 240 : bang ? 200 : comma ? 110 : 150
       });
     });
   });
-  return phrases.slice(0, 14);
+  return phrases.slice(0, 16);
+}
+
+function voiceFacts(voice) {
+  const name = (((voice && voice.name) || "") + " " + ((voice && voice.voiceURI) || "")).toLowerCase();
+  const lang = ((voice && voice.lang) || "").toLowerCase();
+  const saysMale = /\bmale\d*\b/.test(name) || VOICE_MALE_NAME.test(name);
+  let female = VOICE_FEMALE_NAME.test(name) || (/\bfemale/.test(name) && !saysMale);
+  if (/google us english/.test(name) && !saysMale) female = true;
+  if (/google uk english/.test(name) && !/\bmale\b/.test(name)) female = true;
+  const male = !female && saysMale;
+  let score = 0;
+  if (lang.indexOf("en") === 0) score += 3;
+  if (lang.indexOf("en-us") === 0 || /\bamerica\b/.test(name)) score += 8;
+  if (/new york|\bnyc\b/.test(name) || lang.indexOf("en-us-nyc") === 0) score += 16;
+  if (female) score -= 60;
+  if (male) score += 36;
+  if (/\bmale[134]\b/.test(name)) score += 10;
+  if (/\bmale1\b/.test(name)) score += 4;
+  if (/\bdavid\b|\bpaul\b|\bmike\b|\bdaniel\b/.test(name)) score += 4;
+  if (VOICE_NOVELTY.test(name)) score -= 20;
+  if (!male && (lang.indexOf("en-gb") === 0 || lang.indexOf("en-au") === 0 || lang.indexOf("en-in") === 0)) score -= 6;
+  if (male && /google uk english male/.test(name)) score += 6;
+  return { score: score, male: male, female: female };
 }
 
 function voiceScore(voice) {
-  const name = (voice.name || "").toLowerCase();
-  const lang = (voice.lang || "").toLowerCase();
-  let score = 0;
-  if (lang.indexOf("en-us") === 0) score += 8;
-  else if (lang.indexOf("en") === 0) score += 2;
-  if (lang.indexOf("en-gb") === 0 || lang.indexOf("en-au") === 0 || lang.indexOf("en-in") === 0) score -= 4;
-  if (VOICE_FEMALE.test(name)) score -= 12;
-  if (VOICE_MALE.test(name)) score += 5;
-  if (VOICE_PLAIN.test(name)) score += 4;
-  if (VOICE_NOVELTY.test(name)) score -= 8;
-  return score;
+  return voiceFacts(voice).score;
 }
 
 function tuneLength(mood) {
@@ -687,16 +698,42 @@ class TrumpSI {
   pickVoice(voices) {
     if (!voices || !voices.length) return null;
     let best = voices[0];
-    let bestScore = -999;
-    for (let i = 0; i < voices.length; i += 1) {
-      const score = voiceScore(voices[i]);
-      if (score > bestScore) {
-        bestScore = score;
+    let bestFacts = voiceFacts(voices[0]);
+    for (let i = 1; i < voices.length; i += 1) {
+      const facts = voiceFacts(voices[i]);
+      if (facts.score > bestFacts.score) {
+        bestFacts = facts;
         best = voices[i];
       }
     }
     this.voice = best;
+    this.voiceMale = !!bestFacts.male;
+    this.voiceFemale = !!bestFacts.female;
     return best;
+  }
+
+  withVoices(synth, cb) {
+    const ready = synth.getVoices();
+    if (ready && ready.length) {
+      cb(ready);
+      return;
+    }
+    let done = false;
+    const finish = function () {
+      if (done) return;
+      const list = synth.getVoices();
+      if (!list || !list.length) return;
+      done = true;
+      synth.removeEventListener("voiceschanged", finish);
+      cb(list);
+    };
+    synth.addEventListener("voiceschanged", finish);
+    window.setTimeout(function () {
+      if (done) return;
+      done = true;
+      try { synth.removeEventListener("voiceschanged", finish); } catch (err) {}
+      cb(synth.getVoices() || []);
+    }, 600);
   }
 
   speak(text, mood, waitMs) {
@@ -711,32 +748,41 @@ class TrumpSI {
     const wait = Math.max(40, waitMs || 0);
     window.setTimeout(function () {
       if (token !== self._speakToken) return;
-      const voice = self.pickVoice(synth.getVoices());
-      self._utters = [];
-      let index = 0;
-      const step = function () {
+      self.withVoices(synth, function (voices) {
         if (token !== self._speakToken) return;
-        if (index >= phrases.length) return;
-        const phrase = phrases[index];
-        index += 1;
-        const utter = new SpeechSynthesisUtterance(phrase.text);
-        self._utters.push(utter);
-        utter.lang = "en-US";
-        if (voice) utter.voice = voice;
-        const wobble = 0.98 + (index % 3) * 0.015;
-        utter.rate = Math.max(0.72, Math.min(1.2, base.rate * phrase.rate * wobble));
-        utter.pitch = Math.max(0.62, Math.min(1.25, base.pitch * phrase.pitch));
-        utter.volume = phrase.volume;
-        utter.onend = function () {
+        const voice = self.pickVoice(voices);
+        const female = !!self.voiceFemale;
+        const pitchScale = female ? 0.58 : 1;
+        const rateScale = female ? 0.94 : 1;
+        const pitchLo = female ? 0.4 : 0.7;
+        const pitchHi = female ? 0.64 : 0.98;
+        const rateHi = female ? 1.05 : 1.28;
+        self._utters = [];
+        let index = 0;
+        const step = function () {
           if (token !== self._speakToken) return;
-          window.setTimeout(step, phrase.gap);
+          if (index >= phrases.length) return;
+          const phrase = phrases[index];
+          index += 1;
+          const utter = new SpeechSynthesisUtterance(phrase.text);
+          self._utters.push(utter);
+          utter.lang = (voice && voice.lang) || "en-US";
+          if (voice) utter.voice = voice;
+          const wobble = 0.98 + (index % 3) * 0.012;
+          utter.rate = Math.max(0.7, Math.min(rateHi, base.rate * phrase.rate * wobble * rateScale));
+          utter.pitch = Math.max(pitchLo, Math.min(pitchHi, base.pitch * phrase.pitch * pitchScale));
+          utter.volume = phrase.volume;
+          utter.onend = function () {
+            if (token !== self._speakToken) return;
+            window.setTimeout(step, phrase.gap);
+          };
+          try {
+            synth.speak(utter);
+            synth.resume();
+          } catch (err) {}
         };
-        try {
-          synth.speak(utter);
-          synth.resume();
-        } catch (err) {}
-      };
-      step();
+        step();
+      });
     }, wait);
   }
 
