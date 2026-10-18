@@ -4,6 +4,10 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-18
 
+### Trump Super Intelligence
+
+The reply above the picture is bold and bright orange, and it breaks on words. The frame around the face goes green when you praise him, gold if you keep it up, red when you anger him, purple for fake news, blue when he is thinking, and orange the rest of the time. The border of the glass follows the frame. A short tune matches the mood, and the browser says the line in a low voice. Call him great and he likes you. Call him a fake and he explains how low the intelligence is. Two plus two he will actually answer. Up walks the lines you sent. The winning picture has its tie back.
+
 ### Play, then Escape
 
 Every game page is a desk now. ▶️ Play fills the screen. Escape returns to the page. It does not shrink the glass back into the article.

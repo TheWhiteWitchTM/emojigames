@@ -2,7 +2,7 @@
 layout: null
 permalink: /sw.js
 ---
-const CACHE = 'emojigames-2026-10-18';
+const CACHE = 'emojigames-2026-10-18-2';
 const SCOPE = {{ '/' | relative_url | jsonify }};
 
 const PRECACHE = [

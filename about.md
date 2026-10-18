@@ -32,7 +32,7 @@ Adventureland, Pirate Adventure, and Galaxy Hunt want words. Type a command and 
 
 Rogue and Hack are dungeons. You move a step at a time. In Rogue, Q drinks a potion. In Hack, P drinks one, and the Amulet of Yendor is on the sixth floor.
 
-Trump Super Intelligence is a conversation, not a match. There is no title card and no game over. Type a line and press Return. The face changes with the mood.
+Trump Super Intelligence is a conversation, not a match. There is no title card and no game over. Type a line and press Return. The face and the frame change with the mood, and he says the line out loud.
 
 The Oregon Trail opens on a title. Return goes to the menu. R from that title, or from a finished trail, starts the next party without showing the title again. On the road, Return stops the wagon. Hunt and the Columbia raft use the arrows.
 

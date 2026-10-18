@@ -1,4 +1,4 @@
-const CACHE = 'emojigames-2026-10-18';
+const CACHE = 'emojigames-2026-10-18-2';
 const SCOPE = "/emojigames/";
 
 const PRECACHE = [

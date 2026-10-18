@@ -6,8 +6,8 @@
   --accent-ink: #140c1c;
   --line: #2a2433;
   --nav-h: 3.25rem;
-  --banner-h: clamp(108px, 19.9vw, 240px);
-  --chrome-h: calc(var(--nav-h) + var(--banner-h) + env(safe-area-inset-top));
+  --banner-h: clamp(76px, 7.5vw, 104px);
+  --chrome-h: calc(var(--nav-h) + env(safe-area-inset-top));
   color-scheme: dark;
 }
 
@@ -47,22 +47,22 @@ input:focus-visible {
 }
 
 .site-banner-wrap {
-  position: fixed;
-  top: calc(var(--nav-h) + env(safe-area-inset-top));
-  left: 0;
-  right: 0;
-  z-index: 80;
+  position: relative;
+  display: flex;
+  justify-content: center;
   height: var(--banner-h);
+  overflow: hidden;
   background: #000;
   border-bottom: 1px solid #161616;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
 }
 
 .site-banner {
-  width: 100%;
+  width: min(100%, calc(var(--banner-h) * 6.35));
   height: 100%;
+  max-width: none;
+  flex: none;
   object-fit: cover;
-  object-position: center 49.55%;
+  object-position: center 48%;
   display: block;
   margin: 0;
   padding: 0;

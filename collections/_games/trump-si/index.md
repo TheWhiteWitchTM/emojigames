@@ -12,7 +12,7 @@ tags: [terminal, joke]
 {{ game_doc | markdownify }}
 </div>
 
-A conversation, not a match. Type a line and press Return. The face follows the mood.
+A conversation, not a match. Type a line and press Return. The face, the frame, and the voice follow the mood.
 
 <script src="{{ '/assets/js/components.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/emoji-engine-2d.js' | relative_url }}"></script>

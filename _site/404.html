@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13S6Z9KCX9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13S6Z9KCX9');
+</script>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Emoji Games">
+<link rel="icon" href="/emojigames/assets/icons/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/emojigames/assets/icons/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/emojigames/assets/icons/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/emojigames/manifest.webmanifest">
+<script>
+  // Capture early. Chrome can fire this before the rest of the page scripts run.
+  (function () {
+    window.__egInstallPrompt = null;
+    try {
+      if (localStorage.getItem('eg-install-dismissed') === '1') {
+        document.documentElement.classList.add('eg-install-off');
+      }
+    } catch (err) {}
+    window.addEventListener('beforeinstallprompt', function (event) {
+      event.preventDefault();
+      window.__egInstallPrompt = event;
+      window.dispatchEvent(new Event('eg-installable'));
+    });
+  })();
+</script>
+
+
+
+<meta name="robots" content="noindex">
+
+<title>Not found</title>
+<meta name="description" content="That page is not on the shelf.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thewhitewitchtm.github.io/emojigames/404.html">
+<meta property="og:title" content="Not found">
+<meta property="og:description" content="That page is not on the shelf.">
+<meta property="og:site_name" content="Emoji Games">
+<meta property="og:image" content="https://thewhitewitchtm.github.io/emojigames/assets/images/preview.jpg">
+<meta property="og:image:alt" content="Not found">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@TheWhiteWitchTM">
+<meta name="twitter:title" content="Not found">
+<meta name="twitter:description" content="That page is not on the shelf.">
+<meta name="twitter:image" content="https://thewhitewitchtm.github.io/emojigames/assets/images/preview.jpg">
+<meta name="twitter:image:alt" content="Not found">
+
+  <link rel="stylesheet" href="/emojigames/assets/css/style.css?v=">
+</head>
+<body>
+  <header class="site-header">
+  <nav class="site-nav">
+    <ul>
+      
+        
+          <li class="">
+            
+              <a href="/emojigames/">🏠 Home</a>
+            
+          </li>
+        
+      
+        
+          <li class="">
+            
+              <a href="/emojigames/releases/">📢 Releases</a>
+            
+          </li>
+        
+      
+        
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle">🕹️ Games</a>
+            <ul class="dropdown-menu">
+              
+                
+                  <li><a href="/emojigames/games/">📂 All Games</a></li>
+                
+              
+                
+                  <li class="dropdown-separator"></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/galaxy-hunt/">🚀 Galaxy Hunt</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/oregon-trail/">🐂 The Oregon Trail</a></li>
+                
+              
+                
+                  <li><a href="/emojigames/games/hack/">🗡️ Hack</a></li>
+                
+              
+            </ul>
+          </li>
+        
+      
+        
+          <li class="">
+            
+              <a href="/emojigames/about/">🔮 About</a>
+            
+          </li>
+        
+      
+    </ul>
+  </nav>
+</header>
+
+  <div class="site-banner-wrap">
+  <img src="/emojigames/assets/images/site.jpg" alt="Emoji Games. A White Witch spinoff." class="site-banner" width="1168" height="784" fetchpriority="high" decoding="async">
+</div>
+
+
+  <main class="page-frame">
+    <div class="content-area markdown-body">
+      <h1 id="-not-found">🧭 Not found</h1>
+
+<p>That address is not a game, a note, or anything else on this shelf.</p>
+
+<p>The <a href="/emojigames/games/">catalog</a> still has the whole shelf. The <a href="/emojigames/releases/">release notes</a> are the log. <a href="/emojigames/">Home</a> is the front.</p>
+
+    </div>
+  </main>
+
+  <div id="install-app" class="install-app" role="region" aria-label="Open as app">
+  <img src="/emojigames/assets/icons/icon-192.png" alt="" width="44" height="44">
+  <div class="install-app-copy">
+    <strong>Open as app</strong>
+    <span id="install-app-note">Emoji Games, in its own window.</span>
+  </div>
+  <button type="button" class="btn btn-primary" id="install-app-open">Open as app</button>
+  <button type="button" class="install-app-dismiss" id="install-app-dismiss" aria-label="Not now">×</button>
+</div>
+<script>
+  (function () {
+    var root = document.getElementById('install-app');
+    if (!root) return;
+
+    var openBtn = document.getElementById('install-app-open');
+    var dismissBtn = document.getElementById('install-app-dismiss');
+    var note = document.getElementById('install-app-note');
+
+    function installed() {
+      return window.matchMedia('(display-mode: standalone)').matches
+        || window.matchMedia('(display-mode: fullscreen)').matches
+        || window.matchMedia('(display-mode: minimal-ui)').matches
+        || window.navigator.standalone === true;
+    }
+
+    function dismissed() {
+      try { return localStorage.getItem('eg-install-dismissed') === '1'; }
+      catch (err) { return false; }
+    }
+
+    if (installed() || dismissed()) return;
+
+    function show() { root.hidden = false; }
+    function hide() { root.hidden = true; }
+
+    function arm() {
+      if (window.__egInstallPrompt) show();
+    }
+
+    window.addEventListener('eg-installable', arm);
+    arm();
+
+    var ua = window.navigator.userAgent || '';
+    var ios = /iphone|ipad|ipod/i.test(ua)
+      || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var firefox = /firefox/i.test(ua) && !/seamonkey/i.test(ua);
+
+    if (openBtn) {
+      openBtn.addEventListener('click', function () {
+        var promptEvent = window.__egInstallPrompt;
+        if (!promptEvent) {
+          if (note) {
+            note.textContent = ios
+              ? 'Tap Share, then Add to Home Screen.'
+              : firefox
+                ? 'Firefox: use the install icon in the address bar.'
+                : 'Still getting ready. Press it once more.';
+          }
+          return;
+        }
+        window.__egInstallPrompt = null;
+        var choice = promptEvent.userChoice;
+        try { promptEvent.prompt(); }
+        catch (err) { hide(); return; }
+        Promise.resolve(choice).then(hide, hide);
+      });
+    }
+
+    window.addEventListener('appinstalled', function () {
+      window.__egInstallPrompt = null;
+      hide();
+    });
+
+    function dismiss() {
+      hide();
+      document.documentElement.classList.add('eg-install-off');
+      try { localStorage.setItem('eg-install-dismissed', '1'); }
+      catch (err) {}
+    }
+
+    if (dismissBtn) dismissBtn.addEventListener('click', dismiss);
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape' || root.hidden) return;
+      if (document.querySelector('.game-stage.game-open, .game-stage:fullscreen')) return;
+      dismiss();
+    });
+
+    if (ios) {
+      if (note) note.textContent = 'Tap Share, then Add to Home Screen.';
+      show();
+    } else {
+      show();
+    }
+  })();
+</script>
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="https://thewhitewitchtm.github.io/emojigames/feed.xml" title="RSS / Atom feed">📡 RSS</a>
+    <span>•</span>
+    <a href="mailto:thewhitewitchtm@google.com">✉️ E-Mail</a>
+    <span>•</span>
+    <a href="#" title="Contribute (PayPal coming soon)">💸 Contribute</a>
+    <span>•</span>
+    <a href="https://thewhitewitchtm.github.io/whitewitch/" title="The White Witch™">🧙‍♀️ The White Witch</a>
+  </div>
+</footer>
+
+  <script>
+document.querySelectorAll('.dropdown-toggle').forEach(function (btn) {
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    var menu = btn.nextElementSibling;
+    if (!menu) return;
+    var open = menu.classList.contains('open');
+    document.querySelectorAll('.dropdown-menu.open').forEach(function (m) {
+      m.classList.remove('open');
+    });
+    if (!open) menu.classList.add('open');
+  });
+});
+
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.dropdown')) {
+    document.querySelectorAll('.dropdown-menu.open').forEach(function (m) {
+      m.classList.remove('open');
+    });
+  }
+});
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  var scope = '/emojigames/';
+  if (scope.slice(-1) !== '/') scope += '/';
+  navigator.serviceWorker.register('/emojigames/sw.js', {
+    scope: scope,
+    updateViaCache: 'none'
+  }).catch(function () {});
+}
+</script>
+
+</body>
+</html>

@@ -14,6 +14,9 @@
 <link rel="manifest" href="{{ '/manifest.webmanifest' | relative_url }}">
 {% include install-capture.html %}
 
+{% if page.noindex %}
+<meta name="robots" content="noindex">
+{% endif %}
 <title>{{ page.title | default: site.title }}</title>
 <meta name="description" content="{{ page.description | default: site.description }}">
 
