@@ -60,6 +60,8 @@ Rooms, corridors, and things that walk toward you. Weapons get wielded when they
 - [🧙 A Witch's Tale]({{ '/games/witch-tales/' | relative_url }}) — a chaptered tile tale. You are a witch.
 - [🖥️ Witch I]({{ '/games/witch-1/' | relative_url }}) — a 40-column machine. It speaks WASIC.
 - [🖥️ Basic I]({{ '/games/basic-1/' | relative_url }}) — a 40-column computer for learning BASIC. Getting Started, a tutorial, and eleven built-in lessons.
+- [✨ Magic]({{ '/games/magic/' | relative_url }}) — a small language, Lua with the sharp corners filed off. 2d, 3d, and ui are already in the room.
+- [🖥️ Basic Learn]({{ '/games/basic-learn/' | relative_url }}) — BASIC with the picture, colored words, and plain errors. Basic I is the 40-column machine.
 - [🛸 Elite]({{ '/games/elite/' | relative_url }}) — a Cobra at Lave. Trade, fight, and dock. Eight galaxies.
 - [🌙 Pale March]({{ '/games/pale-march/' | relative_url }}) — you are the White Witch. Four seals, then the gate.
 

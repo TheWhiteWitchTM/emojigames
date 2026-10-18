@@ -60,6 +60,8 @@ The same day, the other games moved onto the emoji engine. A title waits for Ret
 
 [Pale March]({{ '/games/pale-march/' | relative_url }}). You are the White Witch. Four seals, then a gate that is writing your name. The map is flat. The field stands up. [Notes]({{ '/releases/2026-10-18-pale-march/' | relative_url }}).
 
+[Magic]({{ '/games/magic/' | relative_url }}) is a small language. Lua, with the sharp corners filed off. [Basic Learn]({{ '/games/basic-learn/' | relative_url }}) is BASIC with the picture, colored words, and plain errors. Basic I stays the 40-column machine. [Notes]({{ '/releases/2026-10-18-magic-and-basic-learn/' | relative_url }}).
+
 The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release notes]({{ '/releases/' | relative_url }}) are the log.
 
 ## Elsewhere

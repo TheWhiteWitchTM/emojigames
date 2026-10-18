@@ -4,6 +4,14 @@ The glass keeps this record. Newest first.
 
 ## 2026-10-18
 
+### Magic and Basic Learn
+
+Magic is a small language. It is Lua, with the sharp corners filed off. Run compiles it to JavaScript. The words are colored while you type. A mistake names the line.
+
+Basic Learn is BASIC on the same picture. Colored words, plain errors, and the lesson menu. Basic I stays the 40-column machine. The prompt there is still READY.
+
+2d, 3d, and ui are the same three calls in both machines. Boot fills the screen. Escape brings the page back. Stop halts the program. The program stays in this browser.
+
 ### Pale March
 
 The White Witch leaves Pale Hold. Four seals, then the Unlit Gate, where King Hollow is writing her true name. The map is the flat engine. The field is the solid one: you turn, you walk, and the host comes in ranks. What you do with each seal is still true at the gate. The march is saved on this machine.

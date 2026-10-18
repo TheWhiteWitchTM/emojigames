@@ -2,7 +2,7 @@
 layout: null
 permalink: /sw.js
 ---
-const CACHE = 'emojigames-2026-10-18-5';
+const CACHE = 'emojigames-2026-10-18-6';
 const SCOPE = {{ '/' | relative_url | jsonify }};
 
 const PRECACHE = [
@@ -18,7 +18,12 @@ const PRECACHE = [
   {{ '/assets/icons/favicon-32.png' | relative_url | jsonify }},
   {{ '/assets/js/emoji-engine-2d.js' | relative_url | jsonify }},
   {{ '/assets/js/emoji-engine-3d.js' | relative_url | jsonify }},
-  {{ '/assets/js/emoji-engine-3d.min.js' | relative_url | jsonify }}
+  {{ '/assets/js/emoji-engine-3d.min.js' | relative_url | jsonify }},
+  {{ '/assets/js/emoji-engine-ui.js' | relative_url | jsonify }},
+  {{ '/assets/js/emoji-bridge.js' | relative_url | jsonify }},
+  {{ '/assets/js/emoji-magic.js' | relative_url | jsonify }},
+  {{ '/assets/js/emoji-basic.js' | relative_url | jsonify }},
+  {{ '/assets/js/emoji-studio.js' | relative_url | jsonify }}
 ];
 
 self.addEventListener('install', (event) => {

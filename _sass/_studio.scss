@@ -1,0 +1,277 @@
+// Learning machine for Magic and Basic Learn.
+.studio {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+  background: #141820;
+  color: #f3ead2;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing: border-box;
+}
+
+.game-stage.game-open #game .studio,
+.game-stage:fullscreen #game .studio {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.studio-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.45rem 0.5rem;
+  background: #1c2430;
+  flex: 0 0 auto;
+}
+
+.studio-bar button,
+.studio-ask button {
+  font: 14px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: #243044;
+  color: #f3ead2;
+  border: 1px solid #3d4d66;
+  border-radius: 4px;
+  padding: 0.28rem 0.65rem;
+  cursor: pointer;
+}
+
+.studio-run {
+  background: #1d3a30;
+  border-color: #3d6b56;
+}
+
+.studio-bar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.studio-lesson {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 14px;
+  color: #cbbfa6;
+}
+
+.studio-lesson select,
+.studio-ask input {
+  font: 14px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  background: #10141c;
+  color: #f3ead2;
+  border: 1px solid #3d4d66;
+  border-radius: 4px;
+  padding: 0.25rem 0.4rem;
+}
+
+.studio-main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+}
+
+.studio-edit {
+  flex: 1 1 52%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  background: #10141c;
+}
+
+.studio-gutter {
+  flex: 0 0 3.2em;
+  margin: 0;
+  padding: 8px 0.4rem 8px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-align: right;
+  color: #667488;
+  font: 15px/22px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre;
+  user-select: none;
+}
+
+.studio-sheet {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+.studio-paint,
+.studio-code {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  border: 0;
+  padding: 8px 10px;
+  box-sizing: border-box;
+  font: 15px/22px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  tab-size: 2;
+  white-space: pre;
+  overflow: auto;
+  letter-spacing: 0;
+  word-spacing: 0;
+}
+
+.studio-paint {
+  color: #f3ead2;
+  pointer-events: none;
+  scrollbar-width: none;
+}
+
+.studio-paint::-webkit-scrollbar {
+  display: none;
+}
+
+.studio-code {
+  color: transparent;
+  caret-color: #f3ead2;
+  background: transparent;
+  resize: none;
+  z-index: 1;
+}
+
+.studio-code:focus {
+  outline: none;
+}
+
+.st-keyword { color: #8eb6ff; }
+.st-engine { color: #e6c36a; }
+.st-ident { color: #f3ead2; }
+.st-number { color: #f2d24b; }
+.st-string { color: #7dcea0; }
+.st-comment { color: #8a93a3; }
+.st-op { color: #e7a0c4; }
+.st-bad { color: #ff8d8d; }
+.st-line { color: #c8a2ff; }
+
+.studio-side {
+  flex: 1 1 48%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #2a3344;
+  background: #10141c;
+}
+
+.studio-error:not([hidden]) {
+  display: block;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.45rem 0.6rem;
+  background: #3a1d22;
+  color: #ffc1c1;
+  cursor: pointer;
+  white-space: pre-wrap;
+}
+
+.studio-jsview:not([hidden]) {
+  display: block;
+  flex: 0 1 28%;
+  margin: 0;
+  padding: 8px 10px;
+  overflow: auto;
+  background: #0c1016;
+  color: #cbbfa6;
+  font: 12px/18px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: pre;
+}
+
+.studio-out {
+  flex: 0 1 32%;
+  min-height: 4.5rem;
+  overflow: auto;
+  padding: 8px 10px;
+  background: #0c1016;
+  font: 15px/22px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.studio-out div {
+  min-height: 22px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.studio-ask:not([hidden]) {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.4rem;
+  align-items: center;
+  padding: 0.4rem 0.5rem;
+  background: #1c2430;
+}
+
+.studio-prompt {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 0.4rem;
+  align-items: center;
+  min-width: 0;
+  color: #f3ead2;
+}
+
+.studio-prompt span {
+  flex: 0 1 auto;
+}
+
+.studio-ask input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.studio-stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 160px;
+  overflow: hidden;
+  background: #1c2430;
+}
+
+.studio-pane {
+  position: absolute;
+  inset: 0;
+}
+
+.studio-pane canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.studio-hint:not([hidden]) {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  color: #cbbfa6;
+}
+
+@media (max-width: 800px) {
+  .studio-main {
+    flex-direction: column;
+  }
+
+  .studio-edit {
+    flex: 1 1 46%;
+    min-height: 180px;
+  }
+
+  .studio-side {
+    flex: 1 1 54%;
+    border-left: 0;
+    border-top: 1px solid #2a3344;
+  }
+}
