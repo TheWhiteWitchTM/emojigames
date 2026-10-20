@@ -18,6 +18,36 @@
   line-height: 1.2;
 }
 
+.coffee-spot {
+  margin: 0.2rem 0 1.15rem;
+}
+
+.coffee-spot .coffee {
+  display: inline-flex;
+  align-items: center;
+  color: #140c1c;
+  background: #c9a6ff;
+  text-decoration: none;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.08rem;
+  line-height: 1.2;
+  padding: 0.62em 1.15em;
+  box-shadow: 0 8px 22px rgba(201, 166, 255, 0.32);
+}
+
+.markdown-body .coffee-spot .coffee,
+.markdown-body .coffee-spot .coffee:hover {
+  color: #140c1c;
+  text-decoration: none;
+  border-bottom: 0;
+}
+
+.coffee-spot .coffee:hover {
+  background: #e8d5ff;
+}
+
 .content-area p,
 .content-area ul,
 .content-area ol {

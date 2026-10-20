@@ -9,6 +9,10 @@ image: /assets/images/preview.jpg
 
 **A White Witch spinoff.**
 
+<div class="coffee-spot">
+  <a class="coffee" href="https://www.paypal.com/ncp/payment/4P85EQRES3RGU" target="_blank" rel="noopener noreferrer">☕ Buy me a coffee</a>
+</div>
+
 From [The White Witch™](https://thewhitewitchtm.github.io/whitewitch/)  
 ([@TheWhiteWitchTM](https://x.com/TheWhiteWitchTM))
 
