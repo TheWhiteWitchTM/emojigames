@@ -2,6 +2,12 @@
 
 The glass keeps this record. Newest first.
 
+## 2026-10-21
+
+### Boulders
+
+Three caves. Dig the dirt. A rock falls when the cell under it is empty, and it rolls off another rock when the side is clear. Diamonds open the door. The boxed stone has a rock over a diamond and a way around. The loose roof falls if you dig the cell under a rock. Three lives. Arrows or WASD. Play fills the screen. Escape brings the page back.
+
 ## 2026-10-18
 
 ### Galaxy Hunt 3D

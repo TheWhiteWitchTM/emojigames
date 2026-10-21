@@ -54,6 +54,7 @@ Rooms, corridors, and things that walk toward you. Weapons get wielded when they
 
 - [🏓 Pong]({{ '/games/pong/' | relative_url }}) — first to 5. You are the left paddle.
 - [🐍 Snake]({{ '/games/snake/' | relative_url }}) — eat, grow, and don’t hit the furniture. One hundred points clears the board.
+- [🪨 Boulders]({{ '/games/boulders/' | relative_url }}) — dig the dirt. The rocks fall. The diamonds open the door.
 - [🌲 Adventureland]({{ '/games/adventureland/' | relative_url }}) — thirteen treasures, one hollow stump.
 - [🏴‍☠️ Pirate Adventure]({{ '/games/pirate/' | relative_url }}) — leave the flat, find the island, bring the gold home.
 - [🗡️ Rogue]({{ '/games/rogue/' | relative_url }}) — six floors, then the amulet.
@@ -70,6 +71,7 @@ Rooms, corridors, and things that walk toward you. Weapons get wielded when they
 
 ## Elsewhere
 
+- [LibreSky](https://thewhitewitchtm.github.io/LibreSky/) — the Bluesky client. Edit, voice, video, and chat.
 - Main site: [thewhitewitchtm.github.io/whitewitch](https://thewhitewitchtm.github.io/whitewitch/)
 - Games: [/games/](https://thewhitewitchtm.github.io/whitewitch/games/)
 - Tools: [/tools/](https://thewhitewitchtm.github.io/whitewitch/tools/)

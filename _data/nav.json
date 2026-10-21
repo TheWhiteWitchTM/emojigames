@@ -9,7 +9,8 @@
         { "separator": true },
         { "title": "🚀 Galaxy Hunt", "url": "/games/galaxy-hunt/" },
         { "title": "🐂 The Oregon Trail", "url": "/games/oregon-trail/" },
-        { "title": "🗡️ Hack", "url": "/games/hack/" }
+        { "title": "🗡️ Hack", "url": "/games/hack/" },
+        { "title": "🪨 Boulders", "url": "/games/boulders/" }
       ]
     },
     { "title": "🔮 About", "url": "/about/" }
