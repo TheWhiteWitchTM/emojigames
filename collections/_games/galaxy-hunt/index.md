@@ -6,7 +6,7 @@ image: /games/galaxy-hunt/banner.jpg
 permalink: /games/galaxy-hunt/
 tags: [terminal, action]
 featured: true
-feature_rank: 1
+feature_rank: 2
 ---
 
 <div id="game-manual" class="doc-panel" hidden>

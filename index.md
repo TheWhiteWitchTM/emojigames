@@ -30,6 +30,12 @@ Argue with the code, not the caption.
 
 The menu carries these three. The [catalog]({{ '/games/' | relative_url }}) still has the whole shelf, and the [release notes]({{ '/releases/' | relative_url }}) are the log.
 
+### [⚓ Carriers]({{ '/games/carriers/' | relative_url }})
+
+<img class="home-banner" src="{{ '/games/carriers/banner.jpg' | relative_url }}" alt="">
+
+Seven battles from the Pacific war. Coral Sea, Midway, the Eastern Solomons, Santa Cruz, the Philippine Sea, Cape Engaño, and Pearl Harbor. Pick a side. Click one of yours, click one of theirs, click a square, and commit. Fighters stay over their own ship. A ship you cannot see cannot be struck.
+
 ### [🚀 Galaxy Hunt]({{ '/games/galaxy-hunt/' | relative_url }})
 
 <img class="home-banner" src="{{ '/games/galaxy-hunt/banner.jpg' | relative_url }}" alt="">
@@ -44,14 +50,9 @@ The same mission stands up in [🚀 Galaxy Hunt 3D]({{ '/games/galaxy-hunt-3d/' 
 
 A wagon, five names, and the road from Independence to the Willamette. Banker, carpenter, or farmer. Matt sells the oxen. The rivers want a choice, the hunt wants the arrows, and the Columbia wants a raft that can find the channel. A score is written only if someone arrives. Return leaves the title. The trail after that is the one you already know: a number, then Return.
 
-### [🗡️ Hack]({{ '/games/hack/' | relative_url }})
-
-<img class="home-banner" src="{{ '/games/hack/banner.jpg' | relative_url }}" alt="">
-
-Rooms, corridors, and things that walk toward you. Weapons get wielded when they are better than the one in your hand. Armor takes the edge off a hit. `P` drinks a potion. The Amulet of Yendor is on the sixth floor. Pick it up and the delve is over.
-
 ## Also on the shelf
 
+- [🗡️ Hack]({{ '/games/hack/' | relative_url }}) — rooms, corridors, and an amulet on the sixth floor.
 - [🏓 Pong]({{ '/games/pong/' | relative_url }}) — first to 5. You are the left paddle.
 - [🐍 Snake]({{ '/games/snake/' | relative_url }}) — eat, grow, and don’t hit the furniture. One hundred points clears the board.
 - [🪨 Boulders]({{ '/games/boulders/' | relative_url }}) — dig the dirt. The rocks fall. The diamonds open the door.
@@ -63,8 +64,6 @@ Rooms, corridors, and things that walk toward you. Weapons get wielded when they
 - [🧙 A Witch's Tale]({{ '/games/witch-tales/' | relative_url }}) — a chaptered tile tale. You are a witch.
 - [🖥️ Witch I]({{ '/games/witch-1/' | relative_url }}) — a 40-column machine. It speaks WASIC.
 - [🖥️ Basic I]({{ '/games/basic-1/' | relative_url }}) — a 40-column computer for learning BASIC. Getting Started, a tutorial, and eleven built-in lessons.
-- [✨ Magic]({{ '/games/magic/' | relative_url }}) — a small language, Lua with the sharp corners filed off. 2d, 3d, and ui are already in the room.
-- [🖥️ Basic Learn]({{ '/games/basic-learn/' | relative_url }}) — BASIC with the picture, colored words, and plain errors. Basic I is the 40-column machine.
 - [🛸 Elite]({{ '/games/elite/' | relative_url }}) — a Cobra at Lave. Trade, fight, and dock. Eight galaxies.
 - [🌙 Pale March]({{ '/games/pale-march/' | relative_url }}) — you are the White Witch. Four seals, then the gate.
 - [🚀 Galaxy Hunt 3D]({{ '/games/galaxy-hunt-3d/' | relative_url }}) — the same hunt, in the quadrant. Written in Magic.

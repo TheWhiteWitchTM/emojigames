@@ -6,7 +6,7 @@ image: /games/oregon-trail/banner.jpg
 permalink: /games/oregon-trail/
 tags: [terminal, strategy]
 featured: true
-feature_rank: 2
+feature_rank: 3
 ---
 
 <div id="game-manual" class="doc-panel" hidden>

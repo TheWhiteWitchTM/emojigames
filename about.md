@@ -60,7 +60,9 @@ The same day, the other games moved onto the emoji engine. A title waits for Ret
 
 [Pale March]({{ '/games/pale-march/' | relative_url }}). You are the White Witch. Four seals, then a gate that is writing your name. The map is flat. The field stands up. [Notes]({{ '/releases/2026-10-18-pale-march/' | relative_url }}).
 
-[Magic]({{ '/games/magic/' | relative_url }}) is a small language. Lua, with the sharp corners filed off. [Basic Learn]({{ '/games/basic-learn/' | relative_url }}) is BASIC with the picture, colored words, and plain errors. Basic I stays the 40-column machine. [Notes]({{ '/releases/2026-10-18-magic-and-basic-learn/' | relative_url }}).
+Magic and Basic Learn were the two learning desks. Both left the shelf on 22 October. Basic I stays the 40-column machine. [Notes]({{ '/releases/2026-10-18-magic-and-basic-learn/' | relative_url }}).
+
+**22 October.** [Carriers]({{ '/games/carriers/' | relative_url }}). Seven battles from the Pacific war. The flagship. [Notes]({{ '/releases/2026-10-22-carriers/' | relative_url }}).
 
 [Galaxy Hunt 3D]({{ '/games/galaxy-hunt-3d/' | relative_url }}). The same eight-by-eight hunt, written in Magic. Charts on the flat engine, the quadrant on the solid one, orders on the bridge. [Notes]({{ '/releases/2026-10-18-galaxy-hunt-3d/' | relative_url }}).
 

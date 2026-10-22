@@ -7,6 +7,7 @@
       "dropdown": [
         { "title": "📂 All Games", "url": "/games/" },
         { "separator": true },
+        { "title": "⚓ Carriers", "url": "/games/carriers/" },
         { "title": "🚀 Galaxy Hunt", "url": "/games/galaxy-hunt/" },
         { "title": "🐂 The Oregon Trail", "url": "/games/oregon-trail/" },
         { "title": "🗡️ Hack", "url": "/games/hack/" },

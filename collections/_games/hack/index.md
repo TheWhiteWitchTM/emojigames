@@ -5,8 +5,6 @@ description: Rooms, corridors, and an amulet on the sixth floor.
 image: /games/hack/banner.jpg
 permalink: /games/hack/
 tags: [terminal, roguelike]
-featured: true
-feature_rank: 3
 ---
 
 <div id="game-manual" class="doc-panel" hidden>

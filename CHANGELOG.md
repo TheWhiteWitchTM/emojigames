@@ -2,6 +2,14 @@
 
 The glass keeps this record. Newest first.
 
+## 2026-10-22
+
+### Carriers
+
+Seven battles. Coral Sea, Midway, the Eastern Solomons, Santa Cruz, the Philippine Sea, Cape Engaño, and Pearl Harbor. Pick a side. Click a ship, click a target, click a square, commit. Fighters stay over their own ship. Play fills the screen. Escape brings the page back.
+
+Basic Learn and Magic, the two learning desks, are off the shelf. Basic I stays. The prompt there is still READY. Galaxy Hunt 3D still runs its Magic program.
+
 ## 2026-10-21
 
 ### Boulders
