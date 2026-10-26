@@ -14,23 +14,117 @@
 <link rel="manifest" href="{{ '/manifest.webmanifest' | relative_url }}">
 {% include install-capture.html %}
 
-{% if page.noindex %}
+{% if page.url == "/404.html" or page.noindex %}
 <meta name="robots" content="noindex">
+{% else %}
+<meta name="robots" content="index, follow, max-image-preview:large">
 {% endif %}
-<title>{{ page.title | default: site.title }}</title>
-<meta name="description" content="{{ page.description | default: site.description }}">
+<title>{{ page.title | default: site.title | escape }}</title>
+<meta name="description" content="{{ page.description | default: site.description | escape }}">
+<meta name="keywords" content="{{ page.keywords | default: site.keywords | escape }}">
+<meta name="author" content="The White Witch">
+<link rel="author" href="https://thewhitewitchtm.github.io/">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link rel="describedby" href="{{ '/llms.txt' | absolute_url }}" type="text/plain" title="Site summary">
+
+{% assign share = page.image | default: site.image %}
+{% if share contains "://" %}
+  {% assign share_url = share %}
+{% else %}
+  {% assign share_url = share | absolute_url %}
+{% endif %}
+{% assign share_type = "image/jpeg" %}
+{% if share_url contains ".png" %}
+  {% assign share_type = "image/png" %}
+{% elsif share_url contains ".webp" %}
+  {% assign share_type = "image/webp" %}
+{% elsif share_url contains ".gif" %}
+  {% assign share_type = "image/gif" %}
+{% endif %}
+{% assign share_alt = page.image_alt | default: page.title | default: site.title %}
 
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
-<meta property="og:title" content="{{ page.title | default: site.title }}">
-<meta property="og:description" content="{{ page.description | default: site.description }}">
-<meta property="og:site_name" content="{{ site.title }}">
-<meta property="og:image" content="{{ page.image | default: site.image | absolute_url }}">
-<meta property="og:image:alt" content="{{ page.title | default: site.title }}">
+<meta property="og:title" content="{{ page.title | default: site.title | escape }}">
+<meta property="og:description" content="{{ page.description | default: site.description | escape }}">
+<meta property="og:site_name" content="{{ site.title | escape }}">
+<meta property="og:image" content="{{ share_url }}">
+<meta property="og:image:secure_url" content="{{ share_url }}">
+<meta property="og:image:type" content="{{ share_type }}">
+<meta property="og:image:alt" content="{{ share_alt | escape }}">
+{% if page.image_width and page.image_height %}
+<meta property="og:image:width" content="{{ page.image_width }}">
+<meta property="og:image:height" content="{{ page.image_height }}">
+{% elsif share == "/assets/images/preview.jpg" or share == site.image %}
+<meta property="og:image:width" content="1168">
+<meta property="og:image:height" content="784">
+{% endif %}
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@TheWhiteWitchTM">
-<meta name="twitter:title" content="{{ page.title | default: site.title }}">
-<meta name="twitter:description" content="{{ page.description | default: site.description }}">
-<meta name="twitter:image" content="{{ page.image | default: site.image | absolute_url }}">
-<meta name="twitter:image:alt" content="{{ page.title | default: site.title }}">
+<meta name="twitter:creator" content="@TheWhiteWitchTM">
+<meta name="twitter:title" content="{{ page.title | default: site.title | escape }}">
+<meta name="twitter:description" content="{{ page.description | default: site.description | escape }}">
+<meta name="twitter:image" content="{{ share_url }}">
+<meta name="twitter:image:alt" content="{{ share_alt | escape }}">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": {{ "/" | absolute_url | append: "#website" | jsonify }},
+      "name": "Emoji Games",
+      "url": {{ "/" | absolute_url | jsonify }},
+      "description": {{ page.description | default: site.description | jsonify }},
+      "inLanguage": "en",
+      "publisher": { "@id": {{ "/" | absolute_url | append: "#person" | jsonify }} }
+    },
+    {
+      "@type": "Person",
+      "@id": {{ "/" | absolute_url | append: "#person" | jsonify }},
+      "name": "The White Witch",
+      "alternateName": ["Mira", "TheWhiteWitchTM"],
+      "url": "https://thewhitewitchtm.github.io/",
+      "email": "thewhitewitchtm@google.com",
+      "sameAs": [
+        "https://github.com/TheWhiteWitchTM",
+        "https://x.com/TheWhiteWitchTM",
+        "https://youtube.com/@TheWhiteWitchTM",
+        "https://bsky.app/profile/thewhitewitchtm.sociallydead.me",
+        "https://thewhitewitchtm.github.io/whitewitch/",
+        "https://thewhitewitchtm.github.io/mira/",
+        "https://thewhitewitchtm.github.io/whitewitch/magic/"
+      ]
+    }{% if page.url == "/" %},
+    {
+      "@type": "ItemList",
+      "name": "Emoji Games shelf",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Carriers", "url": "https://thewhitewitchtm.github.io/emojigames/games/carriers/" },
+        { "@type": "ListItem", "position": 2, "name": "Galaxy Hunt", "url": "https://thewhitewitchtm.github.io/emojigames/games/galaxy-hunt/" },
+        { "@type": "ListItem", "position": 3, "name": "The Oregon Trail", "url": "https://thewhitewitchtm.github.io/emojigames/games/oregon-trail/" },
+        { "@type": "ListItem", "position": 4, "name": "Hack", "url": "https://thewhitewitchtm.github.io/emojigames/games/hack/" },
+        { "@type": "ListItem", "position": 5, "name": "Rogue", "url": "https://thewhitewitchtm.github.io/emojigames/games/rogue/" },
+        { "@type": "ListItem", "position": 6, "name": "Elite", "url": "https://thewhitewitchtm.github.io/emojigames/games/elite/" }
+      ]
+    }{% elsif page.collection == "games" %},
+    {
+      "@type": "VideoGame",
+      "name": {{ page.title | jsonify }},
+      "url": {{ page.url | absolute_url | jsonify }},
+      "description": {{ page.description | default: site.description | jsonify }},
+      "image": {{ share_url | jsonify }},
+      "genre": "Emoji game",
+      "playMode": "SinglePlayer",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@id": {{ "/" | absolute_url | append: "#person" | jsonify }} }
+    }{% endif %}
+  ]
+}
+</script>

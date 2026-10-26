@@ -1,0 +1,33 @@
+# Emoji Games
+
+> Old games drawn with emoji, by The White Witch. No accounts. The shelf opened on 12 October 2026.
+
+## Shelf
+
+- [Emoji Games](https://thewhitewitchtm.github.io/emojigames/)
+- [Carriers](https://thewhitewitchtm.github.io/emojigames/games/carriers/)
+- [Galaxy Hunt](https://thewhitewitchtm.github.io/emojigames/games/galaxy-hunt/)
+- [Galaxy Hunt 3D](https://thewhitewitchtm.github.io/emojigames/games/galaxy-hunt-3d/)
+- [The Oregon Trail](https://thewhitewitchtm.github.io/emojigames/games/oregon-trail/)
+- [Hack](https://thewhitewitchtm.github.io/emojigames/games/hack/)
+- [Rogue](https://thewhitewitchtm.github.io/emojigames/games/rogue/)
+- [Elite](https://thewhitewitchtm.github.io/emojigames/games/elite/)
+- [Pong](https://thewhitewitchtm.github.io/emojigames/games/pong/)
+- [Snake](https://thewhitewitchtm.github.io/emojigames/games/snake/)
+- [Boulders](https://thewhitewitchtm.github.io/emojigames/games/boulders/)
+- [Adventureland](https://thewhitewitchtm.github.io/emojigames/games/adventureland/)
+- [Pirate Adventure](https://thewhitewitchtm.github.io/emojigames/games/pirate/)
+- [Witch Hunt](https://thewhitewitchtm.github.io/emojigames/games/witch-hunt/)
+- [A Witch's Tale](https://thewhitewitchtm.github.io/emojigames/games/witch-tales/)
+- [Witch I](https://thewhitewitchtm.github.io/emojigames/games/witch-1/)
+- [Basic I](https://thewhitewitchtm.github.io/emojigames/games/basic-1/)
+- [Pale March](https://thewhitewitchtm.github.io/emojigames/games/pale-march/)
+- [Catalog](https://thewhitewitchtm.github.io/emojigames/games/)
+
+## Elsewhere
+
+- [The card](https://thewhitewitchtm.github.io/)
+- [The White Witch](https://thewhitewitchtm.github.io/whitewitch/)
+- [Mira's World](https://thewhitewitchtm.github.io/mira/)
+- [MAGIC](https://thewhitewitchtm.github.io/whitewitch/magic/)
+- [GitHub](https://github.com/TheWhiteWitchTM/emojigames)

@@ -38,7 +38,7 @@
       <p class="game-hint">Play fills the screen. Escape brings you back here.</p>
       {% endif %}
       {% if page.image %}
-      <img class="game-banner" src="{{ page.image | relative_url }}" alt="">
+      <img class="game-banner" src="{{ page.image | relative_url }}" alt="{{ page.title | escape }}">
       {% endif %}
       <div class="game-copy">
         {{ content }}
