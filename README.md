@@ -17,9 +17,9 @@
 
 <p align="center">
   <a href="https://thewhitewitchtm.github.io/">The card</a> ·
-  <a href="https://thewhitewitchtm.github.io/whitewitch/">The White Witch</a> ·
-  <a href="https://thewhitewitchtm.github.io/mira/">Mira's World</a> ·
-  <a href="https://thewhitewitchtm.github.io/whitewitch/magic/">MAGIC</a>
+  <a href="https://thewhitewitchtm.sociallydead.me/">The White Witch</a> ·
+  <a href="https://miratechtm.sociallydead.me/">Mira's World</a> ·
+  <a href="https://thewhitewitchtm.sociallydead.me/magic/">MAGIC</a>
 </p>
 
 Witch I is the 40-column machine. The walls she keeps are in [SYSTEM.md](SYSTEM.md). Changes are in [CHANGELOG.md](CHANGELOG.md).

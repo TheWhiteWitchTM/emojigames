@@ -10,7 +10,7 @@ image: /assets/images/preview.jpg
 
 **A White Witch spinoff.**
 
-From [The White Witch™](https://thewhitewitchtm.github.io/whitewitch/)  
+From [The White Witch™](https://thewhitewitchtm.sociallydead.me/)  
 ([@TheWhiteWitchTM](https://x.com/TheWhiteWitchTM))
 
 Politics broke me, so I started porting old games.  
@@ -72,8 +72,8 @@ A wagon, five names, and the road from Independence to the Willamette. Banker, c
 ## Elsewhere
 
 - [The card](https://thewhitewitchtm.github.io/) — LibreSky, MAGIC, RETRO MAGIC, and the rest of the desk.
-- [The White Witch](https://thewhitewitchtm.github.io/whitewitch/) — politics, tools, and the long pages.
-- [Mira's World](https://thewhitewitchtm.github.io/mira/) — the lab, the tools, and the dev blog.
-- [MAGIC](https://thewhitewitchtm.github.io/whitewitch/magic/) — the language these games grew out of.
-- [LibreSky](https://thewhitewitchtm.github.io/LibreSky/) — the Bluesky client. Edit, voice, video, and chat.
-- [SociallyDead](https://thewhitewitchtm.github.io/sociallydead/) — a directory of social media.
+- [The White Witch](https://thewhitewitchtm.sociallydead.me/) — politics, tools, and the long pages.
+- [Mira's World](https://miratechtm.sociallydead.me/) — the lab, the tools, and the dev blog.
+- [MAGIC](https://thewhitewitchtm.sociallydead.me/magic/) — the language these games grew out of.
+- [LibreSky](https://libresky.sociallydead.me/) — the Bluesky client. Edit, voice, video, and chat.
+- [SociallyDead](https://sociallydead.me/) — a directory of social media.

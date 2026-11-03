@@ -7,7 +7,7 @@ description: Why Emoji Games exists, and what has shipped.
 
 # 🔮 About
 
-Emoji Games is a corner of [The White Witch™](https://thewhitewitchtm.github.io/whitewitch/) ([@TheWhiteWitchTM](https://x.com/TheWhiteWitchTM)). Old terminal games, redrawn with emoji, played in the page you already have open.
+Emoji Games is a corner of [The White Witch™](https://thewhitewitchtm.sociallydead.me/) ([@TheWhiteWitchTM](https://x.com/TheWhiteWitchTM)). Old terminal games, redrawn with emoji, played in the page you already have open.
 
 Politics broke me, so I started porting old games. Then I got bored of those too and decided the emojis needed their own corner. This is that corner.
 
@@ -70,6 +70,6 @@ The [catalog]({{ '/games/' | relative_url }}) is how you browse. The [release no
 
 ## Elsewhere
 
-- Main site: [thewhitewitchtm.github.io/whitewitch](https://thewhitewitchtm.github.io/whitewitch/)
-- Games: [/games/](https://thewhitewitchtm.github.io/whitewitch/games/)
-- Tools: [/tools/](https://thewhitewitchtm.github.io/whitewitch/tools/)
+- Main site: [thewhitewitchtm.sociallydead.me](https://thewhitewitchtm.sociallydead.me/)
+- Games: [/games/](https://thewhitewitchtm.sociallydead.me/games/)
+- Tools: [/tools/](https://thewhitewitchtm.sociallydead.me/tools/)

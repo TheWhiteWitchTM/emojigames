@@ -27,7 +27,7 @@
 ## Elsewhere
 
 - [The card](https://thewhitewitchtm.github.io/)
-- [The White Witch](https://thewhitewitchtm.github.io/whitewitch/)
-- [Mira's World](https://thewhitewitchtm.github.io/mira/)
-- [MAGIC](https://thewhitewitchtm.github.io/whitewitch/magic/)
+- [The White Witch](https://thewhitewitchtm.sociallydead.me/)
+- [Mira's World](https://miratechtm.sociallydead.me/)
+- [MAGIC](https://thewhitewitchtm.sociallydead.me/magic/)
 - [GitHub](https://github.com/TheWhiteWitchTM/emojigames)
